@@ -11,3 +11,6 @@ module Domain =
         a.name
     z()
 
+    type IGetDataService = interface 
+        abstract GetData : value:string -> string
+    end

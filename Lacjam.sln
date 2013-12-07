@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{EF428338-36FC-4973-A2BD-6589DFAAC6C8}"
 	ProjectSection(SolutionItems) = preProject
 		Scripts\Test.fsx = Scripts\Test.fsx
+		WebCrawler.fsx = WebCrawler.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{84D58B37-48B1-49A7-8452-7CA1A78CC1EF}"
