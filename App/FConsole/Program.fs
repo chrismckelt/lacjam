@@ -15,7 +15,7 @@ let main argv =
     match wtf with 
     | _-> () 
     let siteRetriever = Lacjam.Core.Jobs.SiteScraper("Bedlam", "http://www.bedlam.net.au/") :> Lacjam.Core.Jobs.IAmAJob
-    let result = siteRetriever.Execute()
+    let result = siteRetriever.Execute
     Console.WriteLine(siteRetriever.Name)
     Console.WriteLine(result)
     Console.ReadLine()

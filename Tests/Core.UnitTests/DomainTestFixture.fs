@@ -28,7 +28,7 @@ let ``Bedlam site scrape`` () =
     match wtf with 
     | _-> () 
     let siteRetriever = Lacjam.Core.Jobs.SiteScraper("Bedlam", url) :> Lacjam.Core.Jobs.IAmAJob
-    let result = siteRetriever.Execute()
+    let result = siteRetriever.Execute
     Debug.WriteLine(siteRetriever.Name)
     Debug.WriteLine(result)
 

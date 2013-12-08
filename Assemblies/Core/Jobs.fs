@@ -15,20 +15,20 @@ module Jobs =
 
     type IAmAJob =  
         inherit IMessage
-        abstract Name : string
-        abstract member CreateDate : DateTime
-        abstract member Url : string 
-        abstract member Execute : unit -> string
+        abstract Name : string with get
+        abstract member CreateDate : DateTime with get
+        abstract member Url : string  with get
+        abstract member Execute : unit -> string with get
     
     type SiteScraper(name:string, url:string) =
         interface IAmAJob with
-           member this.Name = name
-           member this.CreateDate = DateTime.UtcNow
-           member this.Url = System.String.Empty
-           member this.Execute() = 
-                    let client = new System.Net.WebClient()
-                    let result = client.DownloadString(url)
-                    result
+           member this.Name = name 
+           member this.CreateDate = DateTime.UtcNow 
+           member this.Url = System.String.Empty 
+           member this.Execute =
+                let client = new System.Net.WebClient()
+                let result = client.DownloadString(url)
+                result
         
 
 type JobNames =

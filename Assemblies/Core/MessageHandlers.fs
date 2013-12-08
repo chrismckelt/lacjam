@@ -8,8 +8,8 @@ module MessageHandlers =
 
     type BedlamPollHandler() =
          interface IHandleMessages<Lacjam.Core.Messages.BedlamPoll> with
-              member this.Handle(bp :Lacjam.Core.Messages.BedlamPoll) = 
-                let result = bp.Scraper.Execute()
+              member this.Handle(bp) = 
+                let result = bp.JobName
                 Console.WriteLine(result)
                 
     

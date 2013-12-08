@@ -20,6 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{EF42
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{84D58B37-48B1-49A7-8452-7CA1A78CC1EF}"
+	ProjectSection(SolutionItems) = preProject
+		Common\log4net.config = Common\log4net.config
+	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Core", "Assemblies\Core\Core.fsproj", "{C3A6A4B8-8BE0-4E91-A7A7-62D05C6C1161}"
 EndProject

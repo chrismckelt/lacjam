@@ -1,15 +1,16 @@
-﻿namespace Lacjam.Core
+﻿namespace Lacjam.Core.Messages
 open System
+open System.Runtime.Serialization
 open NServiceBus
 open Lacjam.Core.Jobs
 
-module Messages =
-    
-    type Schedule = 
-        | EveryFiveMinutes of TimeSpan
-        | OncePerDay of DateTime
+type Schedule = 
+    | EveryFiveMinutes of TimeSpan
+    | OncePerDay of DateTime
 
-    type BedlamPoll() =
-        interface IMessage
-        member this.Scraper:IAmAJob = new Lacjam.Core.Jobs.SiteScraper("Bedlam", "http://www.bedlam.net.au/") :> IAmAJob
-        member this.Schedule = EveryFiveMinutes
+[<Serializable>]
+type BedlamPoll() = 
+    member val JobName = "" with get, set
+    //member this.Schedule = EveryFiveMinutes
+    interface IMessage
+        
