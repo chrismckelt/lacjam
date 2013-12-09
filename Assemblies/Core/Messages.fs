@@ -10,7 +10,8 @@ type Schedule =
 
 [<Serializable>]
 type BedlamPoll() = 
-    member val JobName = "" with get, set
+    
+    member val JobName = "BedlamPoll" with get, set
     //member this.Schedule = EveryFiveMinutes
     interface IMessage
         

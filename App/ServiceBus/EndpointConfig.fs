@@ -44,6 +44,7 @@ namespace Lacjam.ServiceBus
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
                     let message = new Lacjam.Core.Messages.BedlamPoll()
+                    message.JobName <- "BedlamPoll"                    
                     //let message = new TestPoll()
                     let bus = Container.Resolve<IBus>()
                     do bus.Send(message :> IMessage) |> ignore

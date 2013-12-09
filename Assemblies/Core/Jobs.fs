@@ -14,12 +14,12 @@ module Jobs =
     open System.Text.RegularExpressions
 
     type IAmAJob =  
-        inherit IMessage
         abstract Name : string with get
         abstract member CreateDate : DateTime with get
         abstract member Url : string  with get
         abstract member Execute : unit -> string with get
-    
+        inherit IMessage
+       
     type SiteScraper(name:string, url:string) =
         interface IAmAJob with
            member this.Name = name 
