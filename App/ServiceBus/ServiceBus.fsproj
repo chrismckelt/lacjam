@@ -23,7 +23,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\ServiceBus.XML</DocumentationFile>
     <StartAction>Program</StartAction>
-    <StartProgram>D:\Development\Lacjam\App\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
+    <StartProgram>C:\dev\Lacjam\App\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +35,10 @@
     <DocumentationFile>bin\Release\ServiceBus.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +57,10 @@
     </Reference>
     <Reference Include="NServiceBus.Host">
       <HintPath>..\..\packages\NServiceBus.Host.4.3.0\lib\net40\NServiceBus.Host.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.Autofac">
+      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.0\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
