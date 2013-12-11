@@ -8,9 +8,6 @@ namespace Lacjam.ServiceBus
 
     module Startup = 
 
-        let ContainerBuilder = new ContainerBuilder()
-        let Container = ContainerBuilder.Build()
-
         [<Serializable>]
         type TestPoll() = 
             member val JobName = "TestPoll" with get, set
@@ -31,7 +28,7 @@ namespace Lacjam.ServiceBus
                     Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
-                        .AutofacBuilder(Container)                   
+                        .AutofacBuilder(Lacjam.Core.Ioc.Container)                   
                         .InMemorySagaPersister()
                         .InMemoryFaultManagement()      
                         .UseTransport<Msmq>()
@@ -40,19 +37,23 @@ namespace Lacjam.ServiceBus
                         .UnicastBus() |> ignore
 
          type ServiceBusStartUp() =              
+            let receiveCallBack (result) = Console.WriteLine(result.ToString())
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
                     let message = new Lacjam.Core.Messages.BedlamPoll()
                     message.JobName <- "BedlamPoll"                    
                     //let message = new TestPoll()
-                    let bus = Container.Resolve<IBus>()
-                    do bus.Send(message :> IMessage) |> ignore
+                    let bus = Ioc.Container.Resolve<IBus>()
+                    let cb = bus.Send(message :> IMessage) |> fun cb -> cb.Register(receiveCallBack)
+                    
                     let d = Convert.ToDouble(30)
                     Schedule.Every(System.TimeSpan.FromSeconds(d)).Action(fun a->
                                                                 Console.WriteLine("Another 30 seconds have elapsed.")
                                                                 do bus.Send(message :> IMessage) |> ignore
                                                                 )
                 member this.Stop() = (Console.WriteLine("-- Service Bus Stopped --"))
+
+              
    
 
