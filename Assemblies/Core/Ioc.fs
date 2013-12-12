@@ -5,7 +5,10 @@
     open NServiceBus.Features
     open Lacjam.Core
     open Lacjam.Core.Jobs
-    module Ioc  = 
-        let ContainerBuilder = new ContainerBuilder()
-        let Container = ContainerBuilder.Build()
+    module Ioc = 
+    let Container = 
+                    let cb = new ContainerBuilder()
+                    let con = cb.Build()
+                    con :> IContainer
+
 

@@ -7,7 +7,7 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core.Jobs
 
     module Startup = 
-
+    
         [<Serializable>]
         type TestPoll() = 
             member val JobName = "TestPoll" with get, set
@@ -24,11 +24,10 @@ namespace Lacjam.ServiceBus
                     Configure.Transactions.Enable() |> ignore
                     Configure.Serialization.Xml() |> ignore
                     Configure.Features.Enable<Sagas>() |> ignore
-
                     Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
-                        .AutofacBuilder(Lacjam.Core.Ioc.Container)                   
+                        .AutofacBuilder()                   
                         .InMemorySagaPersister()
                         .InMemoryFaultManagement()      
                         .UseTransport<Msmq>()
@@ -44,7 +43,7 @@ namespace Lacjam.ServiceBus
                     let message = new Lacjam.Core.Messages.BedlamPoll()
                     message.JobName <- "BedlamPoll"                    
                     //let message = new TestPoll()
-                    let bus = Ioc.Container.Resolve<IBus>()
+                    let bus = Lacjam.Core.Ioc.Container.Resolve<IBus>()
                     let cb = bus.Send(message :> IMessage) |> fun cb -> cb.Register(receiveCallBack)
                     
                     let d = Convert.ToDouble(30)
