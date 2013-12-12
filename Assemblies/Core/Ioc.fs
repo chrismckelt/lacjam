@@ -6,9 +6,9 @@
     open Lacjam.Core
     open Lacjam.Core.Jobs
     module Ioc = 
-    let Container = 
-                    let cb = new ContainerBuilder()
-                    let con = cb.Build()
-                    con :> IContainer
+        let Container = 
+                        let cb = new ContainerBuilder()
+                        let con = cb.Build()
+                        con :> IContainer
 
 
