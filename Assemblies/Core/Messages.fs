@@ -9,6 +9,13 @@ type Schedule =
     | OncePerDay of DateTime
 
 [<Serializable>]
+type SiteRetrieverResult() = 
+    
+    member val Html = "BedlamPoll" with get, set
+    //member this.Schedule = EveryFiveMinutes
+    interface IMessage
+
+[<Serializable>]
 type BedlamPoll() = 
     
     member val JobName = "BedlamPoll" with get, set
