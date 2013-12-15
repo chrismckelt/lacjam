@@ -27,7 +27,7 @@ namespace Lacjam.ServiceBus
                     Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
-                        .AutofacBuilder()                   
+                        .AutofacBuilder(Ioc.Container)                   
                         .InMemorySagaPersister()
                         .InMemoryFaultManagement()      
                         .UseTransport<Msmq>()

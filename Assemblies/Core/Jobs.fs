@@ -31,6 +31,8 @@ module Jobs =
                 result
         
 
+    type Batch = {Id:System.Guid; Jobs:seq<IAmAJob>}
+
 type JobNames =
 | SiteScraperJob of Jobs.IAmAJob
 | AuditJob 
