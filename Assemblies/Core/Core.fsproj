@@ -52,13 +52,13 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <None Include="Script.fsx" />
+    <Compile Include="Jobs.fs" />
+    <Compile Include="Ioc.fs" />
     <Compile Include="Domain.fs" />
     <None Include="packages.config" />
-    <Compile Include="Jobs.fs" />
     <Compile Include="Messages.fs" />
     <Compile Include="MessageHandlers.fs" />
     <Compile Include="Settings.fs" />
-    <Compile Include="Ioc.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Autofac">
