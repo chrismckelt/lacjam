@@ -4,17 +4,19 @@ namespace Lacjam.ServiceBus
     open NServiceBus
     open NServiceBus.Features
     open Lacjam.Core
+    open Lacjam.Core.Runtime
     open Lacjam.Core.Jobs
-    open Lacjam.Core.Messages
 
     module Startup = 
-
-        let Container = Ioc.Container
 
         let CallBackReceiver (result:CompletionResult) = 
                 Console.WriteLine("--- CALLBACK ---")
                 let msg = (Seq.head result.Messages) :?> SiteRetrieverResult
-                Console.WriteLine(msg.Html)
+                let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+                try
+                    log.Write(LogMessage.Debug("--- Message Received ---"))
+                    log.Write(LogMessage.Debug(msg.Html))
+                with | ex -> printf "%A" ex
             
         [<Serializable>]
         type TestPoll() = 
@@ -35,7 +37,7 @@ namespace Lacjam.ServiceBus
                     Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
-                        .AutofacBuilder(Container)                   
+                        .AutofacBuilder(Ioc)                   
                         .InMemorySagaPersister()
                         .InMemoryFaultManagement()      
                         .UseTransport<Msmq>()
@@ -48,10 +50,10 @@ namespace Lacjam.ServiceBus
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
-                    let message = new Lacjam.Core.Messages.BedlamPoll()
+                    let message = Lacjam.Core.Jobs.BedlamPoll()
                     message.JobName <- "BedlamPoll"                    
                     //let message = new TestPoll()
-                    let bus = Lacjam.Core.Ioc.Container.Resolve<IBus>()
+                    let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let cb = bus.Send(message :> IMessage).Register(CallBackReceiver)
                     
                     let d = Convert.ToDouble(30)

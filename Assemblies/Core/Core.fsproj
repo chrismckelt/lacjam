@@ -52,12 +52,11 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <None Include="Script.fsx" />
-    <Compile Include="Jobs.fs" />
-    <Compile Include="Ioc.fs" />
     <Compile Include="Domain.fs" />
+    <Compile Include="Runtime.fs" />
+    <Compile Include="Jobs.fs" />
     <None Include="packages.config" />
-    <Compile Include="Messages.fs" />
-    <Compile Include="MessageHandlers.fs" />
+    <Compile Include="JobHandlers.fs" />
     <Compile Include="Settings.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +85,9 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
