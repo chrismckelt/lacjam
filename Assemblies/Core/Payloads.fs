@@ -65,14 +65,20 @@
                 override this.ToString() = String.Format("{0} {1} {2} {3}", this.Id, this.ResultForJobId, this.CreateDate, this.Success.ToString())
                 interface IMessage
 
-            type SiteScraper(name:string, url:string) =
+            type SiteScraper(name:string, url:option<string>) =
                 inherit JobBase() with
                    override this.Name with get() = name
-                   member this.Url with get() = url
+                   let Url = url
                    override this.Execute =
-                        let client = new System.Net.WebClient()
-                        let result = client.DownloadString(url)
-                        result
+                        match url with 
+                        | None ->
+                            let client = new System.Net.WebClient()
+                            let result = client.DownloadString("http://www.bedlam.net.au")
+                            result
+                        | a -> 
+                            let client = new System.Net.WebClient()
+                            let result = client.DownloadString(a.Value)
+                            result
                     
 
     //         type JobType =

@@ -20,8 +20,9 @@ module JobHandlers =
                 let html = job.Execute
                 let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                 try
-                    let rv = Jobs.SiteScraper("Bedlam", "http://www.bedlam.net.au")
-                    let jr = JobResult(rv.Id,true,rv.Execute)
+                    let rv = Jobs.SiteScraper("Bedlam", Some("http://www.bedlam.net.au"))
+                    let html = rv.Execute
+                    let jr = JobResult(rv.Id,true,html)
                     bus.Reply(jr)
                 with | ex -> logger.Write(LogMessage.Error(job.Name, ex, true))
                 
