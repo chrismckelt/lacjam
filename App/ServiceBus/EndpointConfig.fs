@@ -5,24 +5,19 @@ namespace Lacjam.ServiceBus
     open NServiceBus.Features
     open Lacjam.Core
     open Lacjam.Core.Runtime
-    open Lacjam.Core.Jobs
+    open Lacjam.Core.Payloads
+    open Lacjam.Core.Payloads.Jobs
 
     module Startup = 
 
         let CallBackReceiver (result:CompletionResult) = 
                 Console.WriteLine("--- CALLBACK ---")
-                let msg = (Seq.head result.Messages) :?> SiteRetrieverResult
+                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Payloads.Jobs.JobResult
                 let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                 try
                     log.Write(LogMessage.Debug("--- Message Received ---"))
-                    log.Write(LogMessage.Debug(msg.Html))
+                    log.Write(LogMessage.Debug(msg.Id.ToString()))
                 with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
-            
-        [<Serializable>]
-        type TestPoll() = 
-            member val JobName = "TestPoll" with get, set
-            //member this.Schedule = EveryFiveMinutes
-            interface IMessage
 
         type EndpointConfig() =
             interface IConfigureThisEndpoint
@@ -50,15 +45,14 @@ namespace Lacjam.ServiceBus
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
-                    let message = Lacjam.Core.Jobs.BedlamPoll()
-                    message.JobName <- "BedlamPoll"                    
+                    let message = new SiteScraper("Bedlam", Some("http://www.bedlam.net.au"))                 
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let cb = bus.Send(message).Register(CallBackReceiver)
                     
                     let d = Convert.ToDouble(30)
                     Schedule.Every(System.TimeSpan.FromSeconds(d)).Action(fun a->
                                                                 Console.WriteLine("Another 30 seconds have elapsed.")
-                                                                do bus.Send(message :> IMessage) |> ignore
+                                                                do bus.Send(message) |> ignore
                                                                 )
                 member this.Stop() = (Console.WriteLine("-- Service Bus Stopped --"))
 

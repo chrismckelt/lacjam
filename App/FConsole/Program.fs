@@ -3,7 +3,7 @@ open System.Net
 open System.Net.Http
 open Lacjam
 open Lacjam.Core
-open Lacjam.Core.Jobs
+
   
 
 [<EntryPoint>]
