@@ -16,7 +16,7 @@ namespace Lacjam.ServiceBus
                 try
                     log.Write(LogMessage.Debug("--- Message Received ---"))
                     log.Write(LogMessage.Debug(msg.Html))
-                with | ex -> printf "%A" ex
+                with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
             
         [<Serializable>]
         type TestPoll() = 
@@ -52,9 +52,8 @@ namespace Lacjam.ServiceBus
                     Console.WriteLine("-- Service Bus Started --")
                     let message = Lacjam.Core.Jobs.BedlamPoll()
                     message.JobName <- "BedlamPoll"                    
-                    //let message = new TestPoll()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                    let cb = bus.Send(message :> IMessage).Register(CallBackReceiver)
+                    let cb = bus.Send(message).Register(CallBackReceiver)
                     
                     let d = Convert.ToDouble(30)
                     Schedule.Every(System.TimeSpan.FromSeconds(d)).Action(fun a->
