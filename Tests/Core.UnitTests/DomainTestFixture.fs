@@ -6,7 +6,6 @@ open Xunit
 open FsUnit.Xunit
 open Lacjam
 open Lacjam.Core
-open Lacjam.Core.Jobs
 
 [<Literal>]
 let url = "http://www.bedlam.net.au"
@@ -22,16 +21,16 @@ let printThreadId note =
 let ``FSharp Test`` () =
     Domain.z().ToString().Length |> should equal 3
 
-[<Fact>]
-let ``Bedlam site scrape`` () =
-    let wtf = JobType.SiteScraperType
-    Debug.WriteLine(wtf.ToString())
-    match wtf with 
-    | _-> () 
-    let siteRetriever = Lacjam.Core.Jobs.SiteScraper("Bedlam", url) :> IAmAJob
-    let result = siteRetriever.Execute
-    Debug.WriteLine(siteRetriever.Name)
-    Debug.WriteLine(result)
+//[<Fact>]
+//let ``Bedlam site scrape`` () =
+//    let wtf = JobType.SiteScraperType
+//    Debug.WriteLine(wtf.ToString())
+//    match wtf with 
+//    | _-> () 
+//    let siteRetriever = Lacjam.Core.Jobs.SiteScraper("Bedlam", url) :> JobBase
+//    let result = siteRetriever.Execute
+//    Debug.WriteLine(siteRetriever.Name)
+//    Debug.WriteLine(result)
 
 [<Fact>]
 let ``mailbox test`` () =

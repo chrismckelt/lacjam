@@ -13,6 +13,9 @@
     type IncidentsServiceWsdl = WsdlService< @"http://localhost/incident.xml" > //, ForceUpdate = false, LocalSchemaFile = @"C:\dev\FSharpTypeProvidersSpike\ConsoleF\ServiceNowWsdl\incident.wsdlschema" >
     type UserServiceWsdl = WsdlService< @"http://localhost/sys_user.xml" >
     type ChangeRequestWsdl = WsdlService< @"http://localhost/change_request.xml" >
+//    type IncidentsServiceWsdl = WsdlService< @"https://challenger.service-now.com/incident.do?WSDL" > //, ForceUpdate = false, LocalSchemaFile = @"C:\dev\FSharpTypeProvidersSpike\ConsoleF\ServiceNowWsdl\incident.wsdlschema" >
+//    type UserServiceWsdl = WsdlService< @"https://challenger.service-now.com/sys_user.do?WSDL" >
+//    type ChangeRequestWsdl = WsdlService< @"https://challenger.service-now.com/change_request.do?WSDL" >
 
     let binding =  new System.ServiceModel.BasicHttpBinding()
     binding.MaxReceivedMessageSize <- 10000000L

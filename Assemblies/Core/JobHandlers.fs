@@ -9,21 +9,20 @@ module JobHandlers =
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Runtime
-    open Lacjam.Core.Jobs
+    open Lacjam.Core.Payloads
 
-    type BedlamPollHandler(logger:ILogWriter) =
-        interface IHandleMessages<Lacjam.Core.Jobs.BedlamPoll> with      
-            member this.Handle(bp) = 
-                let result = bp.JobName
-                logger.Write(LogMessage.Debug("Received: " + bp.JobName))
-                let job = new SiteScraper("Bedlam", "http://www.bedlam.net.au") 
-                let html = (job :> IAmAJob).Execute
+    type SiteScraperHandler(logger:ILogWriter, bus:IBus) =
+        interface IHandleMessages<Lacjam.Core.Payloads.Jobs.SiteScraper> with      
+            member this.Handle(sc) = 
+                let job = (sc:>JobBase)
+                logger.Write(LogMessage.Debug(job.CreateDate.ToString() + "   " + job.Name))
+                let html = job.Execute
                 let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                 try
-                    let rv = new SiteRetrieverResult()
+                    let rv = Jobs.SiteScraperResult()
                     rv.Html <- html
                     bus.Reply(rv)
-                with | ex -> logger.Write(LogMessage.Error(bp.JobName, ex, true))
+                with | ex -> logger.Write(LogMessage.Error(job.Name, ex, true))
                 
                 //Console.WriteLine(html)
                 
