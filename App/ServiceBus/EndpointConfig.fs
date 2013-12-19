@@ -12,11 +12,11 @@ namespace Lacjam.ServiceBus
 
         let CallBackReceiver (result:CompletionResult) = 
                 Console.WriteLine("--- CALLBACK ---")
-                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Payloads.Jobs.SiteScraperResult
+                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Payloads.Jobs.JobResult
                 let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                 try
                     log.Write(LogMessage.Debug("--- Message Received ---"))
-                    log.Write(LogMessage.Debug(msg.Html))
+                    log.Write(LogMessage.Debug(msg.Result.ToString()))
                 with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
 
         type EndpointConfig() =
@@ -45,7 +45,7 @@ namespace Lacjam.ServiceBus
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
-                    let message = SiteScraper("Bedlam", "http://www.bedlam.net.au")                 
+                    let message = new SiteScraper("Bedlam", "http://www.bedlam.net.au")                 
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let cb = bus.Send(message).Register(CallBackReceiver)
                     

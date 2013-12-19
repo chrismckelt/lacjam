@@ -10,8 +10,9 @@ module JobHandlers =
     open Lacjam.Core
     open Lacjam.Core.Runtime
     open Lacjam.Core.Payloads
+    open Lacjam.Core.Payloads.Jobs
 
-    type SiteScraperHandler(logger:ILogWriter, bus:IBus) =
+    type SiteScraperHandler(logger:ILogWriter) =
         interface IHandleMessages<Lacjam.Core.Payloads.Jobs.SiteScraper> with      
             member this.Handle(sc) = 
                 let job = (sc:>JobBase)
@@ -19,9 +20,9 @@ module JobHandlers =
                 let html = job.Execute
                 let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                 try
-                    let rv = Jobs.SiteScraperResult()
-                    rv.Html <- html
-                    bus.Reply(rv)
+                    let rv = Jobs.SiteScraper("Bedlam", "http://www.bedlam.net.au")
+                    let jr = JobResult(rv.Id,true,rv.Execute)
+                    bus.Reply(jr)
                 with | ex -> logger.Write(LogMessage.Error(job.Name, ex, true))
                 
                 //Console.WriteLine(html)
