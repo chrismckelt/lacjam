@@ -56,7 +56,7 @@
                 interface IMessage
 
     
-            type JobResult(resultForJobId, success, result:string) =
+            type JobResult(resultForJobId:Guid, success:bool, result:string) =
                 member this.Id with get() = Guid.NewGuid  
                 member this.ResultForJobId with get() = resultForJobId
                 member this.CreateDate with get() = DateTime.UtcNow
