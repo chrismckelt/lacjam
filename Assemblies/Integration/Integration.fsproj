@@ -120,7 +120,6 @@
   <ItemGroup>
     <Compile Include="Library1.fs" />
     <None Include="Script.fsx" />
-    <Compile Include="ServiceNow.fs" />
     <None Include="packages.config" />
     <Compile Include="Jira.fs" />
     <Compile Include="LogFileAnalyser.fs" />

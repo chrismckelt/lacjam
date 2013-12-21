@@ -5,14 +5,14 @@ namespace Lacjam.ServiceBus
     open NServiceBus.Features
     open Lacjam.Core
     open Lacjam.Core.Runtime
-    open Lacjam.Core.Payloads
-    open Lacjam.Core.Payloads.Jobs
+    open Lacjam.Core.Scheduler
+    open Lacjam.Core.Scheduler.Jobs
 
     module Startup = 
 
         let CallBackReceiver (result:CompletionResult) = 
                 Console.WriteLine("--- CALLBACK ---")
-                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Payloads.Jobs.JobResult
+                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
                 let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                 try
                     log.Write(LogMessage.Debug("--- Message Received ---"))
@@ -29,33 +29,21 @@ namespace Lacjam.ServiceBus
                     Configure.Transactions.Enable() |> ignore
                     Configure.Serialization.Xml() |> ignore
                     Configure.Features.Enable<Sagas>() |> ignore
-                    Configure.With()
-                        .DefineEndpointName("lacjam.servicebus")
-                        .Log4Net()
-                        .AutofacBuilder(Ioc)                   
-                        .InMemorySagaPersister()
-                        .InMemoryFaultManagement()      
-                        .UseTransport<Msmq>()
-                        .DoNotCreateQueues()
-                        .PurgeOnStartup(false)
-                        .UnicastBus() |> ignore
-
+                    Configure.With().DefineEndpointName("lacjam.servicebus").Log4Net().AutofacBuilder(Ioc).DisableTimeoutManager().InMemorySagaPersister().InMemoryFaultManagement().UseTransport<Msmq>().PurgeOnStartup(false).UnicastBus() |> ignore
+                    
          type ServiceBusStartUp() =              
-          
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")
-                    let message = new SiteScraper("Bedlam", Some("http://www.bedlam.net.au"))                 
+                    let message = new SiteScraper("Bedlam", ("http://www.bedlam.net.au"))                 
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let cb = bus.Send(message).Register(CallBackReceiver)
                     
                     let d = Convert.ToDouble(30)
                     Schedule.Every(System.TimeSpan.FromSeconds(d)).Action(fun a->
                                                                 Console.WriteLine("Another 30 seconds have elapsed.")
-                                                                do bus.Send(message) |> ignore
+                                                                do bus.Send(message).Register(CallBackReceiver).Start()
                                                                 )
-                member this.Stop() = (Console.WriteLine("-- Service Bus Stopped --"))
-
-              
-   
-
+                member this.Stop() = 
+                    (Console.WriteLine("-- Service Bus Stopped --"))                    
+                    Ioc.Dispose()
