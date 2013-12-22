@@ -84,6 +84,23 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Core.fsproj">
+      <Name>Core</Name>
+      <Project>{c3a6a4b8-8be0-4e91-a7a7-62d05c6c1161}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Integration\Integration.fsproj">
+      <Name>Integration</Name>
+      <Project>{5e4ecb51-1038-4528-af68-3aff927f6360}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\ServiceBus\ServiceBus.fsproj">
+      <Name>ServiceBus</Name>
+      <Project>{32c366a0-28f5-4c04-903e-1b444704589f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>

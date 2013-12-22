@@ -59,5 +59,5 @@ module Runtime =
         let cb = new ContainerBuilder()
         cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
         let con = cb.Build()
-        con :> IContainer 
+        con 
      
