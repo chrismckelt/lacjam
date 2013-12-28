@@ -4,17 +4,13 @@ namespace Lacjam.ServiceBus
     open NServiceBus
     open NServiceBus.Features
     open Lacjam.Core
+    open Lacjam.Core.Utility
     open Lacjam.Core.Runtime
     open Lacjam.Core.Scheduler
     open Lacjam.Core.Scheduler.Jobs
+    open StartupBatchJobs
 
     module Startup = 
-        open NServiceBus
-        open NServiceBus.Features
-        open Lacjam.Core
-        open Lacjam.Core.Runtime
-        open Lacjam.Core.Scheduler
-        open Lacjam.Core.Scheduler.Jobs
 
         let CallBackReceiver (result:CompletionResult) = 
                 Console.WriteLine("--- CALLBACK ---")
@@ -30,6 +26,9 @@ namespace Lacjam.ServiceBus
             interface AsA_Server
             interface IWantCustomInitialization with
                 member this.Init() = 
+                     Configure.Transactions.Enable() |> ignore
+                     Configure.Serialization.Xml() |> ignore
+                     Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore)
                      Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
@@ -40,27 +39,32 @@ namespace Lacjam.ServiceBus
                         .UseInMemoryTimeoutPersister()  
                         .UseTransport<Msmq>()
                         .DoNotCreateQueues()
-                        .PurgeOnStartup(false)
+                        .PurgeOnStartup(true)
                         .UnicastBus() |> ignore
                           
          type ServiceBusStartUp() =              
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
+                    Console.WriteLine("-- Service Bus Started --")          
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-                    Console.WriteLine("-- Service Bus Started --")
-                    
-                    let message = new SiteScraper("Bedlam", ("http://www.bedlam.net.au"))                 
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                    //let cb = bus.Send(message).Register(CallBackReceiver)
                     let thirty = Convert.ToDouble(30)
-                    Schedule.Every(System.TimeSpan.FromSeconds(thirty)).Action(fun a->
+
+                    let now = System.DateTime.Now
+                    let batch = StartupBatchJobs.BedlamBatch
+                    let shed = batch.RunOnSchedule
+                    Schedule.Every(shed).Action(fun a->
                         try
                             log.Write(LogMessage.Debug("Another 30 seconds have elapsed."))
-                            let cb = bus.Send(message:>IMessage).Register(CallBackReceiver)
-                            cb.Start()
+                            
+                            for wl in batch.Jobs do
+                                let cb = bus.Send(wl)
+                                cb.Register(CallBackReceiver) |> ignore                                          
+
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
-                     ) 
+                    )
+
                     
                     Console.WriteLine("-- Schedule Started --")
 

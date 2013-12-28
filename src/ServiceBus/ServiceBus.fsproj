@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="StartupBatchJobs.fs" />
     <Compile Include="EndpointConfig.fs" />
     <None Include="App.config" />
     <None Include="..\..\Common\log4net.config">
