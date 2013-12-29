@@ -8,12 +8,17 @@
     open Lacjam.Core.Scheduler
     open Lacjam.Core.Scheduler.Jobs
 
-    let ssJob = SiteScraper()
-    ssJob.Payload <- "http://www.bedlam.net.au"
-        
-    let BedlamBatch = {
+    let j1 = SiteScraper(Payload="http://www.bedlam.net.au") :> Job
+    let j2 = SiteScraper(Payload="http://www.mckelt.com")  :> Job
+    let j3 = SiteScraper(Payload="http://www.mckelt.com/blog") :> Job
+    let batchJobs = seq [j1; j2; j3;]
+       
+    let Batches = {
         Batch.Id = Guid.NewGuid(); 
-        Batch.Name = "BB" ; 
-        Batch.Jobs = seq [| ssJob |] 
+        Batch.Name = "site-wakeup" ; 
+        Batch.Jobs = batchJobs 
         Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
         }
+
+
+    

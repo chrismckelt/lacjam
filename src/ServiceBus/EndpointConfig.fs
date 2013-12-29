@@ -51,7 +51,7 @@ namespace Lacjam.ServiceBus
                     let thirty = Convert.ToDouble(30)
 
                     let now = System.DateTime.Now
-                    let batch = StartupBatchJobs.BedlamBatch
+                    let batch = StartupBatchJobs.Batches
                     let shed = batch.RunOnSchedule
                     Schedule.Every(shed).Action(fun a->
                         try
