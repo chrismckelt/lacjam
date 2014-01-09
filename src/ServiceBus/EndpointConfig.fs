@@ -8,6 +8,7 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core.Runtime
     open Lacjam.Core.Scheduler
     open Lacjam.Core.Scheduler.Jobs
+    open Lacjam.Integration
     open StartupBatchJobs
 
     module Startup = 
@@ -38,7 +39,7 @@ namespace Lacjam.ServiceBus
                         .InMemorySubscriptionStorage()
                         .UseInMemoryTimeoutPersister()  
                         .UseTransport<Msmq>()
-                        .DoNotCreateQueues()
+                       // .DoNotCreateQueues()
                         .PurgeOnStartup(true)
                         .UnicastBus() |> ignore
                           
@@ -50,23 +51,38 @@ namespace Lacjam.ServiceBus
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let thirty = Convert.ToDouble(30)
 
-                    let now = System.DateTime.Now
-                    let batch = StartupBatchJobs.Batches
-                    let shed = batch.RunOnSchedule
-                    Schedule.Every(shed).Action(fun a->
-                        try
-                            log.Write(LogMessage.Debug("Another 30 seconds have elapsed."))
+//                    let now = System.DateTime.Now
+//                    let batch = StartupBatchJobs.Batches
+//                    let shed = batch.RunOnSchedule
+//                    Schedule.Every(shed).Action(fun a->
+//                        try
+//                            log.Write(LogMessage.Debug("Another 30 seconds have elapsed."))
+//                            
+//                            for wl in batch.Jobs do
+//                                let cb = bus.Send(wl)
+//                                cb.Register(CallBackReceiver) |> ignore                                          
+//
+//                        with 
+//                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
+                    let jiraJob = new Lacjam.Integration.Jobs.JiraRoadMapOutputJob()
+                    try 
+                         bus.Send("lacjam.servicebus", jiraJob :> IMessage).Register(CallBackReceiver) |> ignore
+                    with 
+                        | ex ->  log.Write(LogMessage.Error("Init job failed in startup:",ex, true)) 
+
+                    Console.WriteLine("-- Schedule Started --")
+
+                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(3))).Action(fun a->
+                       try
+                            log.Write(LogMessage.Debug("Schedule running for JIRA Roadmap Job."))
                             
-                            for wl in batch.Jobs do
-                                let cb = bus.Send(wl)
-                                cb.Register(CallBackReceiver) |> ignore                                          
+                            bus.Send("lacjam.servicebus", jiraJob :> IMessage).Register(CallBackReceiver) |> ignore
 
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
-                    )
+                       )
 
-                    
-                    Console.WriteLine("-- Schedule Started --")
 
                 member this.Stop() = 
                     (Console.WriteLine("-- Service Bus Stopped --"))                    

@@ -7,6 +7,7 @@
     open Lacjam.Core.Runtime
     open Lacjam.Core.Scheduler
     open Lacjam.Core.Scheduler.Jobs
+    open Lacjam.Integration
 
     let j1 = SiteScraper(Payload="http://www.bedlam.net.au") :> Job
     let j2 = SiteScraper(Payload="http://www.mckelt.com")  :> Job
@@ -21,4 +22,5 @@
         }
 
 
-    
+
+        

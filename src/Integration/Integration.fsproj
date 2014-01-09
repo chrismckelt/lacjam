@@ -88,6 +88,10 @@
       <HintPath>..\..\packages\FSharpx.TypeProviders.Xrm.1.8.41\lib\40\FSharpx.TypeProviders.Xrm.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Crm.Services.Utility">
       <HintPath>..\..\packages\FSharpx.TypeProviders.Xrm.1.8.41\lib\40\Microsoft.Crm.Services.Utility.dll</HintPath>
       <Private>True</Private>
@@ -102,6 +106,14 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.3.0\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\packages\NServiceBus.4.3.0\lib\net40\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp">
@@ -127,6 +139,7 @@
     <None Include="packages.config" />
     <Compile Include="Jira.fs" />
     <Compile Include="LogFileAnalyser.fs" />
+    <Compile Include="Jobs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">

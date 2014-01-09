@@ -1,5 +1,21 @@
 ﻿namespace Lacjam.Integration
 
+open System
+open System.ServiceModel
+open System.Linq
+open System.Runtime.Serialization.Json
+open System.Diagnostics
+open Microsoft.FSharp.Linq
+open Microsoft.FSharp.Data.TypeProviders
+open Newtonsoft.Json
+open log4net
+open Lacjam
+open Lacjam.Core
+open Lacjam.Core.Runtime
+open Lacjam.Core.User
+open Lacjam.Core.Domain
+open Lacjam.Core.Scheduler
+
 module Jira  =
     open System
     open System.ServiceModel
@@ -9,10 +25,13 @@ module Jira  =
     open Microsoft.FSharp.Linq
     open Microsoft.FSharp.Data.TypeProviders
     open Newtonsoft.Json
+    open log4net
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Runtime
     open Lacjam.Core.User
+    open Lacjam.Core.Domain
+    open Lacjam.Core.Scheduler
 
 
     type Project = {key:string}
@@ -148,7 +167,9 @@ module Jira  =
             Debug.WriteLine(json.Total)
             Debug.WriteLine(json.MaxResults)  
             let sb = new System.Text.StringBuilder()
-            let sss = JsonConvert.SerializeObject(jil.Distinct())
+            
+            let op = jil.Distinct().OrderBy(fun x-> x.Start)
+            let sss = JsonConvert.SerializeObject(op)
             sb.Append(sss.Replace("@", "")) |> ignore
     //
             System.IO.File.Delete(temp)
@@ -165,3 +186,4 @@ module Jira  =
                 | innerExn -> innerExn.Message
             printfn "An exception occurred:\n %s\n %s" exn.Message innerMessage
         | exn -> printfn "An exception occurred: %s" exn.Message
+

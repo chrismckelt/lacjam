@@ -36,6 +36,7 @@ module Scheduler =
 
         type JobType =
             | SiteScrape
+            | Execute
             | Audit
             | Email
             | Tweet
@@ -72,6 +73,9 @@ module Scheduler =
         type SiteScraper() =
             inherit Job()
             member x.JobType=JobType.SiteScrape
+
+
+       
         
 
     type Batch =
