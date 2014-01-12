@@ -5,16 +5,17 @@
     open Microsoft.FSharp.Collections
 
     module Domain =
+
+        type Audit = {Id:int;AuditType:string;Message:string;CreatedDate:DateTime}
     
-        type Result() = class end
+        type Setting =  {Id:int;Name:string;Value:string;CreatedDate:DateTime}
 
-        type Xxx = {name:string}
-        type Yyy = {name:string}
-        let z() = 
-            let (a:Xxx) = {name="aaa"}
-            a.name
-        z()
-
-        type IGetDataService = interface 
-            abstract GetData : value:string -> string
-        end
+        type Investor() =
+            member val Id = int with get, set
+            member val CreatedDate = DateTime.UtcNow with get
+            member val GivenName = "" with get, set
+            member val Surname = "" with get, set
+            member val Title = "" with get, set
+            member val IsActive = Boolean() with get, set
+            with override x.ToString() = (String.Format("{0} {1} ", x.GivenName, x.Surname))
+            //new() = new Investor()

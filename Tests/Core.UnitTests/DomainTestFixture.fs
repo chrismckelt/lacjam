@@ -18,8 +18,8 @@ let printThreadId note =
     printfn "%d : %s" System.Threading.Thread.CurrentThread.ManagedThreadId note
 
 [<Fact>] 
-let ``FSharp Test`` () =
-    Domain.z().ToString().Length |> should equal 3
+let ``Investor.ToString should write name`` () =
+    Domain.Investor().ToString().Length |> should equal 13
 
 //[<Fact>]
 //let ``Bedlam site scrape`` () =
@@ -37,14 +37,13 @@ let ``mailbox test`` () =
     let agent = MailboxProcessor<Message>.Start(fun aaa ->        
         async {
             try
-                let! (message, replyChannel) = aaa.Receive();
+                let! (message, replyChannel) = aaa.Receive()
                 printThreadId "MailboxProcessor" 
                 if (message > 5) then
                     replyChannel.Reply(message+1)
                 else
                     replyChannel.Reply(message+10)
-             with
-            | :? Exception as x -> printf "%s" x.Message
+             with | ex -> printf "%s" ex.Message
         })
         
 

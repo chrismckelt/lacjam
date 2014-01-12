@@ -65,23 +65,14 @@ namespace Lacjam.ServiceBus
 //                        with 
 //                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-                    let jiraJob = new Lacjam.Integration.Jobs.JiraRoadMapOutputJob()
-                    try 
-                         bus.Send("lacjam.servicebus", jiraJob :> IMessage).Register(CallBackReceiver) |> ignore
-                    with 
-                        | ex ->  log.Write(LogMessage.Error("Init job failed in startup:",ex, true)) 
+                    log.Write(Info("-- Schedule Started --"))
 
-                    Console.WriteLine("-- Schedule Started --")
-
-                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(3))).Action(fun a->
-                       try
-                            log.Write(LogMessage.Debug("Schedule running for JIRA Roadmap Job."))
-                            
-                            bus.Send("lacjam.servicebus", jiraJob :> IMessage).Register(CallBackReceiver) |> ignore
-
-                        with 
-                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
-                       )
+                    //let scheduleJira = StartupBatchJobs.scheduleJiraRoadmapOutput 
+                    //scheduleJira
+                    let surfBatch = StartupBatchJobs.surfReportBatch 
+                    let lst = List.ofSeq surfBatch.Jobs
+                    for xJob in lst do
+                        bus.Send(xJob).Register(CallBackReceiver)
 
 
                 member this.Stop() = 
