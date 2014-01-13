@@ -33,36 +33,31 @@ module Scheduler =
         open System.Runtime.Serialization
         open System.Text.RegularExpressions
 
-        type JobType =
-            | None
-            | PageScrape
-            | Execute
-            | Audit
-            | Email
-            | Tweet
 
         [<Serializable>]
+        [<AbstractClass>]
         type Job() =
-            member val Id = Guid.NewGuid with get
-            member val BatchId = Guid.NewGuid with get, set
+            member val Id = Guid.Empty with get,set
+            member val BatchId = Guid.Empty with get,set
             member val CreatedDate = DateTime.UtcNow with get
-            member val NextJobType = JobType.Audit with get, set
             member val Payload = "" with get, set
             member val Status = false with get, set
             interface IMessage
 
         [<Serializable>]
-        type JobResult(resultForJobId : Guid, success : bool, result : string) =
+        type JobResult(id : Guid, resultForJobId : Guid, success : bool, result : string) =
+            let mutable i = id
+            let mutable r = resultForJobId
             let mutable suc = success
-            member x.Id with get () = Guid.NewGuid, set
-            member x.ResultForJobId with get () = resultForJobId
-            member x.CreatedDate : DateTime = DateTime.UtcNow
+            let mutable res = result
+            member x.Id with get () = i and set(v) = i <- v
+            member x.ResultForJobId with get () = r and set(value) = r <- value
+            member val CreatedDate = DateTime.UtcNow with get
 
-            member x.Success
-                with get () = suc
-                and set (v : bool) = suc <- v
+            member x.Success with get () = suc and set (v : bool) = suc <- v
 
-            member val Result = result
+            member x.Result with get () = res and set(v) = res <- v
+
             override x.ToString() =
                 String.Format
                     ("{0} {1} {2} {3}", x.Id, x.ResultForJobId, x.CreatedDate,
@@ -98,27 +93,27 @@ module Scheduler =
         open System.Text.RegularExpressions
         open log4net
 
-        type JobResultHandler(logger : Lacjam.Core.Runtime.ILogWriter) =
+        type JobResultHandler(log : Lacjam.Core.Runtime.ILogWriter) =
             interface NServiceBus.IHandleMessages<Jobs.JobResult> with
                 member x.Handle(jr) =
                     try
-                        logger.Write(LogMessage.Debug(jr.ToString()))
+                        log.Write(LogMessage.Debug(jr.ToString()))
                     with ex ->
-                        logger.Write(LogMessage.Error(jr.ToString(), ex, true))
+                        log.Write(LogMessage.Error(jr.ToString(), ex, true))
 
-        type PagejobraperHandler(logger : ILogWriter) =
+        type PageScraperJobHandler(log : ILogWriter) =
             interface IHandleMessages<Jobs.PageScraperJob> with
                 member x.Handle(job) =
                     match job.Payload with
                     | "" -> failwith "Job.Payload empty"
                     | _ ->
-                        logger.Write
+                        log.Write
                             (LogMessage.Debug
                                  (job.CreatedDate.ToString() + "   "
                                   + job.GetType().ToString()))
                         let html =
                             match Some(job.Payload) with
-                            | None -> failwith "URL to jobrape required"
+                            | None -> failwith "URL to job scrape required"
                             | Some(a) ->
                                 let client = new System.Net.WebClient()
                                 let result = client.DownloadString(a)
@@ -126,9 +121,9 @@ module Scheduler =
 
                         let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                         try
-                            let jr = Jobs.JobResult(job.Id(), true, html)
+                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, html)
                             bus.Reply(jr)
                         with ex ->
-                            logger.Write
+                            log.Write
                                 (LogMessage.Error
                                      (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)

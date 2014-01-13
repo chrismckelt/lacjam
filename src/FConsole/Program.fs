@@ -17,6 +17,7 @@ let main argv =
    
     //http://www.swellnet.com/reports/australia/new-south-wales/cronulla
 
+    Jira.outputRoadmap() |> ignore
 
     Console.ReadLine()  |> ignore
     0 // return an integer exit code

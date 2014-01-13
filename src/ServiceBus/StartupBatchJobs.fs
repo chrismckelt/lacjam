@@ -14,7 +14,7 @@
     let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> Job
     let batchJobs = seq [j1; j2; j3;]
        
-    let PingBatches = {
+    let pingBatches = {
         Batch.Id = Guid.NewGuid(); 
         Batch.Name = "site-wakeup" ; 
         Batch.Jobs = batchJobs 
@@ -31,13 +31,14 @@
                                                                                             | ex ->  Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                                 )
                                 ()
-
+    let createG = Guid.NewGuid
+    let guidId = createG()
     let surfReportBatch = {
-        Batch.Id = Guid.NewGuid(); 
+        Batch.Id = guidId; 
         Batch.Name = "surf-report" ; 
         Batch.Jobs = seq    [|
-                                new PageScraperJob(Payload = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla")
-                                new Jobs.SwellNetRatingJob()
+                                new PageScraperJob(BatchId=guidId, Id=guidId, Payload = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla")
+                                new Jobs.SwellNetRatingJob(BatchId=guidId,Id=guidId)
                             |] 
         Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
     }    

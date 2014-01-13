@@ -1,5 +1,6 @@
 namespace Lacjam.ServiceBus 
     open System
+    open System.IO
     open Autofac
     open NServiceBus
     open NServiceBus.Features
@@ -67,13 +68,34 @@ namespace Lacjam.ServiceBus
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
                     log.Write(Info("-- Schedule Started --"))
 
-                    //let scheduleJira = StartupBatchJobs.scheduleJiraRoadmapOutput 
-                    //scheduleJira
-                    let surfBatch = StartupBatchJobs.surfReportBatch 
-                    let lst = List.ofSeq surfBatch.Jobs
-                    for xJob in lst do
-                        bus.Send(xJob).Register(CallBackReceiver)
+//                    StartupBatchJobs.surfReportBatch.Jobs
+//                    |> Seq.iter(fun a -> 
+//                                        let x = downcast a
+//                                        try
+//                                            bus.Send(x).Register(CallBackReceiver) |> ignore
+//                                        with | ex -> log.Write(Error("Batch failed", ex, true)))
 
+                    let kickOff = Seq.head StartupBatchJobs.surfReportBatch.Jobs
+                    try
+                       bus.Send(kickOff).Register(
+                                                    fun (result:CompletionResult) -> (
+                                                                                        try
+                                                                                            let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
+                                                                                            log.Write(LogMessage.Debug("--- Message Received ---"))
+                                                                                            log.Write(LogMessage.Debug(msg.Id.ToString()))
+
+                                                                                            StartupBatchJobs.surfReportBatch.Jobs
+                                                                                            |> Seq.skipWhile(fun a -> a.Id <> msg.ResultForJobId)
+                                                                                            |> Seq.skip 1
+                                                                                            |> Seq.head
+                                                                                            |> (fun a -> 
+                                                                                                        a.Payload <- msg.Result
+                                                                                                        bus.Send(a).Register(CallBackReceiver))  |> ignore
+
+                                                                                        with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
+                                                                  )
+                       ) |> ignore
+                    with | ex -> log.Write(Error("Batch failed", ex, true))
 
                 member this.Stop() = 
                     (Console.WriteLine("-- Service Bus Stopped --"))                    
