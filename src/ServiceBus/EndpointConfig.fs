@@ -11,6 +11,11 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core.Scheduler.Jobs
     open Lacjam.Integration
     open StartupBatchJobs
+    open Quartz
+    open Quartz.Spi
+    open Autofac
+    open NServiceBus.ObjectBuilder
+    open NServiceBus.ObjectBuilder.Common
 
     module Startup = 
 
@@ -23,6 +28,34 @@ namespace Lacjam.ServiceBus
                     log.Write(LogMessage.Debug(msg.Id.ToString()))
                 with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
 
+
+        type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
+                
+                let run = 
+                        let typeOfJob = typedefof<'a>
+                        let jobName = typeOfJob.Name
+                        let jobKey = new JobKey(jobName)
+
+                        let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
+                        let trigger = SchedulerSetup<'a>(scheduler).createTrigger.ForJob(jobDetail).Build()
+                        match scheduler.GetJobDetail(jobKey) with 
+                        | null -> scheduler.ScheduleJob(jobDetail, trigger)
+                        | _ -> 
+                             let triggerName = (typedefof<'a>.Name + "-CronTrigger")
+                             let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
+                             if (result.HasValue) then 
+                                result.Value
+                             else
+                                DateTimeOffset.Now
+                abstract member createTrigger : TriggerBuilder 
+
+                interface IWantToRunWhenBusStartsAndStops with
+                    member this.Start() =  run |> ignore
+                    member this.Stop() =   run |> ignore
+
+                default val createTrigger = TriggerBuilder.Create().StartNow()
+                
+
         type EndpointConfig() =
             interface IConfigureThisEndpoint
             interface AsA_Server
@@ -31,6 +64,14 @@ namespace Lacjam.ServiceBus
                      Configure.Transactions.Enable() |> ignore
                      Configure.Serialization.Json() |> ignore
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore)
+                     Configure.Component<IJobFactory>(DependencyLifecycle.InstancePerUnitOfWork) |> ignore
+                     Configure.Component<IScheduler>(fun (x:<'a>) -> new Func<'a>(),DependencyLifecycle.InstancePerUnitOfWork) |> ignore
+//                                                            let factoryx = new StdSchedulerFactory()
+//                                                            factoryx.Initialize()
+//                                                            let scheduler = factoryx.GetScheduler()
+//                                                            scheduler.JobFactory = Configure.Instance.Builder.Build<IJobFactory>()
+//                                                            scheduler
+                                                  
                      Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
@@ -66,8 +107,8 @@ namespace Lacjam.ServiceBus
 //                        with 
 //                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-                    log.Write(Info("-- Schedule Started --"))
-
+                    log.Write(Info("-- Quartz Schedule Started --"))
+                    Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Start()
 //                    StartupBatchJobs.surfReportBatch.Jobs
 //                    |> Seq.iter(fun a -> 
 //                                        let x = downcast a
@@ -98,5 +139,8 @@ namespace Lacjam.ServiceBus
                     with | ex -> log.Write(Error("Batch failed", ex, true))
 
                 member this.Stop() = 
-                    (Console.WriteLine("-- Service Bus Stopped --"))                    
+                    let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+                    log.Write(Info("-- Quartz Scheduler Stopped --"))
+                    Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
+                                       
                     Ioc.Dispose()

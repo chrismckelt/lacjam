@@ -14,6 +14,9 @@ module Scheduler =
     open System.Net.Http
     open System.Runtime.Serialization
     open System.Text.RegularExpressions
+    open Quartz
+    open Quartz.Spi
+
 
     /// Fantomas
     /// Ctrl + K D   -- format document
@@ -32,7 +35,16 @@ module Scheduler =
         open System.Net.Http
         open System.Runtime.Serialization
         open System.Text.RegularExpressions
+        open Quartz
+        open Quartz.Spi
+        open Autofac
+        open NServiceBus.ObjectBuilder
+        open NServiceBus.ObjectBuilder.Common
 
+        type QuartzJobFactory(container:IBuilder) = 
+            interface IJobFactory with 
+                override x.NewJob((bundle:TriggerFiredBundle), scheduler:IScheduler) = container.Build(bundle.JobDetail.JobType) :?> IJob
+                override x.ReturnJob(job:IJob) =  ()
 
         [<Serializable>]
         [<AbstractClass>]

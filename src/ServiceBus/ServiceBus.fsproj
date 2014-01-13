@@ -25,7 +25,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\ServiceBus.XML</DocumentationFile>
     <StartAction>Program</StartAction>
-    <StartProgram>c:\dev\Lacjam\src\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
+    <StartProgram>d:\development\Lacjam\src\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +39,10 @@
   <ItemGroup>
     <Reference Include="Autofac">
       <HintPath>..\..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack">
@@ -81,6 +85,10 @@
       <HintPath>..\..\packages\NServiceBus.PowerShell.4.2.1\lib\net40\NServiceBus.PowerShell.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +106,7 @@
       <Link>log4net.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">

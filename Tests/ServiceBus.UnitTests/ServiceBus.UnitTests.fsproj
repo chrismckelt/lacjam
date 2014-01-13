@@ -39,6 +39,10 @@
       <HintPath>..\..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FsUnit.CustomMatchers">
       <HintPath>..\..\packages\FsUnit.xUnit.1.2.1.2\Lib\Net40\FsUnit.CustomMatchers.dll</HintPath>
       <Private>True</Private>
@@ -79,6 +83,10 @@
       <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -96,6 +104,7 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <Compile Include="EndpointConfigTestFixture.fs" />
+    <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Core.fsproj">

@@ -11,6 +11,7 @@ module Runtime =
     open NServiceBus.Features
     open NServiceBus.Mailer
     open Lacjam.Core
+    open Quartz
 
     type LogMessage =
         | Debug of string
@@ -67,7 +68,10 @@ module Runtime =
 
     let Ioc =
         let cb = new ContainerBuilder()
+        let sf = new Quartz.Impl.StdSchedulerFactory()
         cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
         cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
+        cb.Register(fun x -> sf).As<ISchedulerFactory>() |> ignore
+        cb.Register(fun x -> sf.GetScheduler()).As<IScheduler>() |> ignore
         let con = cb.Build()
         con
