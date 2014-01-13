@@ -13,6 +13,7 @@ namespace Lacjam.ServiceBus
     open StartupBatchJobs
     open Quartz
     open Quartz.Spi
+    open Quartz.Impl
     open Autofac
     open NServiceBus.ObjectBuilder
     open NServiceBus.ObjectBuilder.Common
@@ -27,34 +28,7 @@ namespace Lacjam.ServiceBus
                     log.Write(LogMessage.Debug("--- Message Received ---"))
                     log.Write(LogMessage.Debug(msg.Id.ToString()))
                 with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
-
-
-        type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
-                
-                let run = 
-                        let typeOfJob = typedefof<'a>
-                        let jobName = typeOfJob.Name
-                        let jobKey = new JobKey(jobName)
-
-                        let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
-                        let trigger = SchedulerSetup<'a>(scheduler).createTrigger.ForJob(jobDetail).Build()
-                        match scheduler.GetJobDetail(jobKey) with 
-                        | null -> scheduler.ScheduleJob(jobDetail, trigger)
-                        | _ -> 
-                             let triggerName = (typedefof<'a>.Name + "-CronTrigger")
-                             let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
-                             if (result.HasValue) then 
-                                result.Value
-                             else
-                                DateTimeOffset.Now
-                abstract member createTrigger : TriggerBuilder 
-
-                interface IWantToRunWhenBusStartsAndStops with
-                    member this.Start() =  run |> ignore
-                    member this.Stop() =   run |> ignore
-
-                default val createTrigger = TriggerBuilder.Create().StartNow()
-                
+       
 
         type EndpointConfig() =
             interface IConfigureThisEndpoint
@@ -64,14 +38,6 @@ namespace Lacjam.ServiceBus
                      Configure.Transactions.Enable() |> ignore
                      Configure.Serialization.Json() |> ignore
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore)
-                     Configure.Component<IJobFactory>(DependencyLifecycle.InstancePerUnitOfWork) |> ignore
-                     Configure.Component<IScheduler>(fun (x:<'a>) -> new Func<'a>(),DependencyLifecycle.InstancePerUnitOfWork) |> ignore
-//                                                            let factoryx = new StdSchedulerFactory()
-//                                                            factoryx.Initialize()
-//                                                            let scheduler = factoryx.GetScheduler()
-//                                                            scheduler.JobFactory = Configure.Instance.Builder.Build<IJobFactory>()
-//                                                            scheduler
-                                                  
                      Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
@@ -84,8 +50,19 @@ namespace Lacjam.ServiceBus
                        // .DoNotCreateQueues()
                         .PurgeOnStartup(true)
                         .UnicastBus() |> ignore
+         
+       type CustomInitialization() =
+           let sf = new System.Func<IScheduler>(fun _->  let factoryx = new StdSchedulerFactory()
+                                                         factoryx.Initialize()
+                                                         let scheduler = factoryx.GetScheduler()
+                                                         scheduler.JobFactory <- Configure.Instance.Builder.Build<IJobFactory>()
+                                                         scheduler)
+           interface IWantCustomInitialization with
+                member this.Init() = 
+                     Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
+                     Configure.Instance.Configurer.ConfigureComponent<IScheduler>(sf, DependencyLifecycle.SingleInstance) |> ignore 
                           
-         type ServiceBusStartUp() =              
+       type ServiceBusStartUp() =              
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")          
@@ -131,7 +108,7 @@ namespace Lacjam.ServiceBus
                                                                                             |> Seq.head
                                                                                             |> (fun a -> 
                                                                                                         a.Payload <- msg.Result
-                                                                                                        bus.Send(a).Register(CallBackReceiver))  |> ignore
+                                                                                                        bus.Send(a).Register(Startup.CallBackReceiver))  |> ignore
 
                                                                                         with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
                                                                   )
@@ -144,3 +121,29 @@ namespace Lacjam.ServiceBus
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
                                        
                     Ioc.Dispose()
+
+//        type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
+//                
+//                let run = 
+//                        let typeOfJob = typedefof<'a>
+//                        let jobName = typeOfJob.Name
+//                        let jobKey = new JobKey(jobName)
+//
+//                        let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
+//                        let trigger = SchedulerSetup<'a>(scheduler).createTrigger.ForJob(jobDetail).Build()
+//                        match scheduler.GetJobDetail(jobKey) with 
+//                        | null -> scheduler.ScheduleJob(jobDetail, trigger)
+//                        | _ -> 
+//                             let triggerName = (typedefof<'a>.Name + "-CronTrigger")
+//                             let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
+//                             if (result.HasValue) then 
+//                                result.Value
+//                             else
+//                                DateTimeOffset.Now
+//                abstract member createTrigger : TriggerBuilder 
+//
+//                interface IWantToRunWhenBusStartsAndStops with
+//                    member this.Start() =  run |> ignore
+//                    member this.Stop() =  ()
+//
+//                default val createTrigger = TriggerBuilder.Create().StartNow()
