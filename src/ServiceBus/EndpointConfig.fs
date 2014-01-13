@@ -29,7 +29,7 @@ namespace Lacjam.ServiceBus
             interface IWantCustomInitialization with
                 member this.Init() = 
                      Configure.Transactions.Enable() |> ignore
-                     Configure.Serialization.Xml() |> ignore
+                     Configure.Serialization.Json() |> ignore
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore)
                      Configure.With()
                         .DefineEndpointName("lacjam.servicebus")

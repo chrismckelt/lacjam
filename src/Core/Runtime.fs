@@ -3,11 +3,13 @@
 module Runtime =
     open System
     open System.IO
+    open System.Net.Mail
     open Autofac
     open log4net
     open log4net.Core
     open NServiceBus
     open NServiceBus.Features
+    open NServiceBus.Mailer
     open Lacjam.Core
 
     type LogMessage =
@@ -18,6 +20,14 @@ module Runtime =
 
     type ILogWriter =
         abstract member Write : LogMessage -> unit
+
+    [<Literal>]
+    let mailDir = @"c:\temp\mails"
+
+    type ToDirectorySmtpBuilder() =
+                       interface ISmtpBuilder with
+                            member x.BuildClient() = new SmtpClient(DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory,PickupDirectoryLocation = mailDir)
+                       
 
     let t = Lacjam.Core.Domain.Investor()
     let private _logger = log4net.LogManager.GetLogger(t.GetType()).Logger
@@ -58,5 +68,6 @@ module Runtime =
     let Ioc =
         let cb = new ContainerBuilder()
         cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
+        cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
         let con = cb.Build()
         con

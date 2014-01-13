@@ -75,8 +75,8 @@ module Jobs =
                                         To = al,
                                         
                                         From = "chris@mckelt.com",
-                                        Body = "body", //rating.Value.OwnerNode.InnerHtml,
-                                        Subject = "subject" //rating.Value.OwnerNode.InnerHtml
+                                        Body = rating.Value.OwnerNode.InnerHtml,
+                                        Subject = rating.Value.OwnerNode.InnerHtml
                                     )
                         bus.SendMail(mail)
                 with ex -> log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
