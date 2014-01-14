@@ -9,9 +9,9 @@
     open Lacjam.Core.Scheduler.Jobs
     open Lacjam.Integration
 
-    let j1 = PageScraperJob(Payload="http://www.bedlam.net.au") :> Job
-    let j2 = PageScraperJob(Payload="http://www.mckelt.com")  :> Job
-    let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> Job
+    let j1 = PageScraperJob(Payload="http://www.bedlam.net.au") :> JobPayload
+    let j2 = PageScraperJob(Payload="http://www.mckelt.com")  :> JobPayload
+    let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> JobPayload
     let batchJobs = seq [j1; j2; j3;]
        
     let pingBatches = {

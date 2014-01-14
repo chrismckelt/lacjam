@@ -19,15 +19,6 @@ namespace Lacjam.ServiceBus
     open NServiceBus.ObjectBuilder.Common
 
     module Startup = 
-
-        let CallBackReceiver (result:CompletionResult) = 
-                Console.WriteLine("--- CALLBACK ---")
-                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
-                let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-                try
-                    log.Write(LogMessage.Debug("--- Message Received ---"))
-                    log.Write(LogMessage.Debug(msg.Id.ToString()))
-                with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
        
 
         type EndpointConfig() =
@@ -108,7 +99,7 @@ namespace Lacjam.ServiceBus
                                                                                             |> Seq.head
                                                                                             |> (fun a -> 
                                                                                                         a.Payload <- msg.Result
-                                                                                                        bus.Send(a).Register(Startup.CallBackReceiver))  |> ignore
+                                                                                                        bus.Send(a).Register(Scheduler.callBackReceiver))  |> ignore
 
                                                                                         with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
                                                                   )
@@ -121,29 +112,3 @@ namespace Lacjam.ServiceBus
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
                                        
                     Ioc.Dispose()
-
-//        type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
-//                
-//                let run = 
-//                        let typeOfJob = typedefof<'a>
-//                        let jobName = typeOfJob.Name
-//                        let jobKey = new JobKey(jobName)
-//
-//                        let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
-//                        let trigger = SchedulerSetup<'a>(scheduler).createTrigger.ForJob(jobDetail).Build()
-//                        match scheduler.GetJobDetail(jobKey) with 
-//                        | null -> scheduler.ScheduleJob(jobDetail, trigger)
-//                        | _ -> 
-//                             let triggerName = (typedefof<'a>.Name + "-CronTrigger")
-//                             let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
-//                             if (result.HasValue) then 
-//                                result.Value
-//                             else
-//                                DateTimeOffset.Now
-//                abstract member createTrigger : TriggerBuilder 
-//
-//                interface IWantToRunWhenBusStartsAndStops with
-//                    member this.Start() =  run |> ignore
-//                    member this.Stop() =  ()
-//
-//                default val createTrigger = TriggerBuilder.Create().StartNow()

@@ -16,6 +16,10 @@ module Jobs =
     open NServiceBus.MessageInterfaces
     open NServiceBus.Mailer
     open log4net
+    open Autofac
+    open Quartz
+    open Quartz.Impl
+    open Quartz.Spi
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Runtime
@@ -29,7 +33,7 @@ module Jobs =
     
     [<Serializable>]
     type JiraRoadMapOutputJob() =
-        inherit Lacjam.Core.Scheduler.Jobs.Job()
+        inherit Lacjam.Core.Scheduler.Jobs.JobPayload()
         interface NServiceBus.IMessage
 
 
@@ -44,9 +48,17 @@ module Jobs =
 
 
     [<Serializable>]
-    type SwellNetRatingJob() =
-        inherit Lacjam.Core.Scheduler.Jobs.Job()
+    type SwellNetRatingJob() as x =
+        inherit Lacjam.Core.Scheduler.Jobs.JobPayload()
         interface NServiceBus.IMessage
+        interface Quartz.IJob with
+            override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)
+                                          fire |> ignore  
+
+    type SwellNetRatingJobScheduler(scheduler) =   
+        inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) with
+            member this.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInDays(1)|> ignore)
+            
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         interface NServiceBus.IHandleMessages<SwellNetRatingJob> with

@@ -16,6 +16,36 @@ module Scheduler =
     open System.Text.RegularExpressions
     open Quartz
     open Quartz.Spi
+    open Autofac
+
+    [<AbstractClass>]
+    type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
+                
+            abstract member createTrigger : TriggerBuilder 
+
+            interface IWantToRunWhenBusStartsAndStops with
+                member this.Start() =  
+                                let typeOfJob = typedefof<'a>
+                                let jobName = typeOfJob.Name
+                                let jobKey = new JobKey(jobName)
+
+                                let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
+                                let trigger =  this.createTrigger.ForJob(jobDetail).Build()
+                                match scheduler.GetJobDetail(jobKey) with 
+                                | null -> let result = scheduler.ScheduleJob(jobDetail, trigger)
+                                          Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " scheduled at " + result.ToString()))
+                                | _ -> 
+                                        let triggerName = (typedefof<'a>.Name + "-CronTrigger")
+                                        let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
+                                        if (result.HasValue) then 
+                                            Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " scheduled at " + result.ToString()))
+                                        else
+                                            Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " NOT scheduled at " + result.ToString()))
+
+
+                member this.Stop() =  ()
+
+            default val createTrigger = TriggerBuilder.Create().StartNow()
 
 
     /// Fantomas
@@ -48,7 +78,7 @@ module Scheduler =
 
         [<Serializable>]
         [<AbstractClass>]
-        type Job() =
+        type JobPayload() =
             member val Id = Guid.Empty with get,set
             member val BatchId = Guid.Empty with get,set
             member val CreatedDate = DateTime.UtcNow with get
@@ -78,14 +108,14 @@ module Scheduler =
 
         [<Serializable>]
         type PageScraperJob() =
-            inherit Job()
+            inherit JobPayload()
             interface IMessage
 
      type Batch =
         { Id : System.Guid
           Name : string
           RunOnSchedule : TimeSpan
-          Jobs : seq<Jobs.Job> }
+          Jobs : seq<Jobs.JobPayload> }
 
     module JobHandlers =
         open Autofac
@@ -139,3 +169,12 @@ module Scheduler =
                             log.Write
                                 (LogMessage.Error
                                      (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+        
+    let callBackReceiver (result:CompletionResult) = 
+        Console.WriteLine("--- CALLBACK ---")
+        let msg = (Seq.head result.Messages) :?> Jobs.JobResult
+        let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+        try
+            log.Write(LogMessage.Debug("--- Message Received ---"))
+            log.Write(LogMessage.Debug(msg.Id.ToString()))
+        with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
