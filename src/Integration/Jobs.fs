@@ -57,7 +57,7 @@ module Jobs =
 
     type SwellNetRatingJobScheduler(scheduler) =   
         inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) with
-            member this.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInDays(1)|> ignore)
+            override x.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInDays(1)|> ignore)
             
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
