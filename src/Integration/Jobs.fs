@@ -17,6 +17,7 @@ module Jobs =
     open NServiceBus.Mailer
     open log4net
     open Autofac
+    open NServiceBus
     open Quartz
     open Quartz.Impl
     open Quartz.Spi
@@ -57,7 +58,11 @@ module Jobs =
 
     type SwellNetRatingJobScheduler(scheduler) =   
         inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) with
-            override x.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInDays(1)|> ignore)
+            override x.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInMinutes(1)|> ignore)
+//        inherit IWantToRunWhenBusStartsAndStops with
+//                member this.Start() = x.createTrigger()
+//                member this.Stop() = ()
+
             
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
