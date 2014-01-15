@@ -25,7 +25,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\ServiceBus.XML</DocumentationFile>
     <StartAction>Program</StartAction>
-    <StartProgram>c:\dev\Lacjam\src\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
+    <StartProgram>d:\development\Lacjam\src\ServiceBus\bin\Debug\NServiceBus.Host.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

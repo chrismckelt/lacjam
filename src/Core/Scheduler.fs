@@ -78,7 +78,7 @@ module Scheduler =
 
         [<Serializable>]
         [<AbstractClass>]
-        type JobPayload() =
+        type JobMessage() =
             member val Id = Guid.Empty with get,set
             member val BatchId = Guid.Empty with get,set
             member val CreatedDate = DateTime.UtcNow with get
@@ -108,14 +108,15 @@ module Scheduler =
 
         [<Serializable>]
         type PageScraperJob() =
-            inherit JobPayload()
+            inherit JobMessage()
             interface IMessage
 
-     type Batch =
-        { Id : System.Guid
-          Name : string
-          RunOnSchedule : TimeSpan
-          Jobs : seq<Jobs.JobPayload> }
+     type BatchJob() =
+            member val Id = Guid.Empty with get,set
+            member val Name = String.Empty with get,set
+            member val BatchId = Guid.Empty with get,set
+            member val CreatedDate = DateTime.UtcNow with get
+            member val Jobs = new List<Jobs.JobMessage>() with get,set
 
     module JobHandlers =
         open Autofac

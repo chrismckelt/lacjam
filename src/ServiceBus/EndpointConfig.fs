@@ -52,59 +52,49 @@ namespace Lacjam.ServiceBus
                 member this.Init() = 
                      Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
                      Configure.Instance.Configurer.ConfigureComponent<IScheduler>(sf, DependencyLifecycle.SingleInstance) |> ignore 
+                     Configure.Instance.Configurer.ConfigureComponent<Jobs.SwellNetRatingJob>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
                           
        type ServiceBusStartUp() =              
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
-                    Console.WriteLine("-- Service Bus Started --")          
+                    Console.WriteLine("-- Service Bus Started --")   
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
+                           
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let thirty = Convert.ToDouble(30)
+                    
 
-//                    let now = System.DateTime.Now
-//                    let batch = StartupBatchJobs.Batches
-//                    let shed = batch.RunOnSchedule
-//                    Schedule.Every(shed).Action(fun a->
-//                        try
-//                            log.Write(LogMessage.Debug("Another 30 seconds have elapsed."))
-//                            
-//                            for wl in batch.Jobs do
-//                                let cb = bus.Send(wl)
-//                                cb.Register(CallBackReceiver) |> ignore                                          
-//
-//                        with 
-//                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
                     log.Write(Info("-- Quartz Schedule Started --"))
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Start()
-//                    StartupBatchJobs.surfReportBatch.Jobs
-//                    |> Seq.iter(fun a -> 
-//                                        let x = downcast a
-//                                        try
-//                                            bus.Send(x).Register(CallBackReceiver) |> ignore
-//                                        with | ex -> log.Write(Error("Batch failed", ex, true)))
+                    
 
-                    let kickOff = Seq.head StartupBatchJobs.surfReportBatch.Jobs
-                    try
-                       bus.Send(kickOff).Register(
-                                                    fun (result:CompletionResult) -> (
-                                                                                        try
-                                                                                            let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
-                                                                                            log.Write(LogMessage.Debug("--- Message Received ---"))
-                                                                                            log.Write(LogMessage.Debug(msg.Id.ToString()))
+                    let kickOff = (StartupBatchJobs.surfReportBatch)
+                    let ij = { new IJob with member x.Execute(ctx)=
+                    
+                                                                       try
+                                                                           bus.Send(kickOff).Register(
+                                                                                                        fun (result:CompletionResult) -> (
+                                                                                                                                            try
+                                                                                                                                                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
+                                                                                                                                                log.Write(LogMessage.Debug("--- Message Received ---"))
+                                                                                                                                                log.Write(LogMessage.Debug(msg.Id.ToString()))
 
-                                                                                            StartupBatchJobs.surfReportBatch.Jobs
-                                                                                            |> Seq.skipWhile(fun a -> a.Id <> msg.ResultForJobId)
-                                                                                            |> Seq.skip 1
-                                                                                            |> Seq.head
-                                                                                            |> (fun a -> 
-                                                                                                        a.Payload <- msg.Result
-                                                                                                        bus.Send(a).Register(Scheduler.callBackReceiver))  |> ignore
+                                                                                                                                                StartupBatchJobs.surfReportBatch.Jobs
+                                                                                                                                                |> Seq.skipWhile(fun a -> a.Id <> msg.ResultForJobId)
+                                                                                                                                                |> Seq.skip 1
+                                                                                                                                                |> Seq.head
+                                                                                                                                                |> (fun a -> 
+                                                                                                                                                            a.Payload <- msg.Result
+                                                                                                                                                            bus.Send(a).Register(Scheduler.callBackReceiver))  |> ignore
 
-                                                                                        with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
-                                                                  )
-                       ) |> ignore
-                    with | ex -> log.Write(Error("Batch failed", ex, true))
+                                                                                                                                            with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
+                                                                                                                      )
+                                                                           ) |> ignore
+                                                                        with | ex -> log.Write(Error("Batch failed", ex, true))
+                                                                    }
+              
+                    ij  |> ignore
 
                 member this.Stop() = 
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()

@@ -33,7 +33,7 @@ module Jobs =
     
     [<Serializable>]
     type JiraRoadMapOutputJob() =
-        inherit Lacjam.Core.Scheduler.Jobs.JobPayload()
+        inherit Lacjam.Core.Scheduler.Jobs.JobMessage()
         interface NServiceBus.IMessage
 
 
@@ -49,7 +49,7 @@ module Jobs =
 
     [<Serializable>]
     type SwellNetRatingJob() as x =
-        inherit Lacjam.Core.Scheduler.Jobs.JobPayload()
+        inherit Lacjam.Core.Scheduler.Jobs.JobMessage()
         interface NServiceBus.IMessage
         interface Quartz.IJob with
             override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)

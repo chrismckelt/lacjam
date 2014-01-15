@@ -9,17 +9,17 @@
     open Lacjam.Core.Scheduler.Jobs
     open Lacjam.Integration
 
-    let j1 = PageScraperJob(Payload="http://www.bedlam.net.au") :> JobPayload
-    let j2 = PageScraperJob(Payload="http://www.mckelt.com")  :> JobPayload
-    let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> JobPayload
+    let j1 = PageScraperJob(Payload="http://www.bedlam.net.au") :> JobMessage
+    let j2 = PageScraperJob(Payload="http://www.mckelt.com")  :> JobMessage
+    let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> JobMessage
     let batchJobs = seq [j1; j2; j3;]
        
-    let pingBatches = {
-        Batch.Id = Guid.NewGuid(); 
-        Batch.Name = "site-wakeup" ; 
-        Batch.Jobs = batchJobs 
-        Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
-        }
+//    let pingBatches = {
+//        Batch.Id = Guid.NewGuid(); 
+//        Batch.Name = "site-wakeup" ; 
+//        Batch.Jobs = batchJobs 
+//        Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
+//        }
 
     let scheduleJiraRoadmapOutput() =
                                 let jiraJob = new Jobs.JiraRoadMapOutputJob() 
@@ -33,12 +33,9 @@
                                 ()
     let createG = Guid.NewGuid
     let guidId = createG()
-    let surfReportBatch = {
-        Batch.Id = guidId; 
-        Batch.Name = "surf-report" ; 
-        Batch.Jobs = seq    [|
-                                new PageScraperJob(BatchId=guidId, Id=guidId, Payload = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla")
-                                new Jobs.SwellNetRatingJob(BatchId=guidId,Id=guidId)
-                            |] 
-        Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
-    }    
+    let surfReportBatch = Scheduler.BatchJob()
+    surfReportBatch.Id <- guidId; 
+    surfReportBatch.Name <- "surf-report" ; 
+    //surfReportBatch.Jobs <- [| new PageScraperJob(BatchId=guidId, Id=guidId, Payload = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla"), new Jobs.SwellNetRatingJob(BatchId=guidId,Id=guidId)|] 
+    
+        
