@@ -49,21 +49,20 @@ module Jobs =
 
 
     [<Serializable>]
-    type SwellNetRatingJob() as x =
+    type SwellNetRatingJob() =
         inherit Lacjam.Core.Scheduler.Jobs.JobMessage()
         interface NServiceBus.IMessage
+            
         interface Quartz.IJob with
             override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)
                                           fire |> ignore  
 
-    type SwellNetRatingJobScheduler(scheduler) =   
-        inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) with
-            override x.createTrigger = (Quartz.TriggerBuilder.Create()).WithCalendarIntervalSchedule(fun b -> b.WithIntervalInMinutes(1)|> ignore)
-//        inherit IWantToRunWhenBusStartsAndStops with
-//                member this.Start() = x.createTrigger()
-//                member this.Stop() = ()
-
-            
+    type SwellNetRatingJobScheduler(scheduler) = 
+         inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) 
+         interface IWantToRunWhenBusStartsAndStops with
+                member x.Start() =  (base.scheduleJob |> ignore)
+                member x.Stop() = ()
+      
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         interface NServiceBus.IHandleMessages<SwellNetRatingJob> with

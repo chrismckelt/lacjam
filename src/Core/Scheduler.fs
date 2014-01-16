@@ -20,19 +20,25 @@ module Scheduler =
 
     [<AbstractClass>]
     type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
-                
-            abstract member createTrigger : TriggerBuilder 
+            
+            let typeOfJob = typedefof<'a>
+            let jobName = typeOfJob.Name
+            let jobKey = new JobKey(jobName)
+
+            abstract member JobDetail : IJobDetail
+            default val JobDetail =  JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
+               
+            abstract createTrigger : TriggerBuilder 
+            default val createTrigger = TriggerBuilder.Create().StartNow()
+
+            member public  x.scheduleJob =  (scheduler.ScheduleJob(x.JobDetail, x.createTrigger.Build()) |> ignore)
+
 
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() =  
-                                let typeOfJob = typedefof<'a>
-                                let jobName = typeOfJob.Name
-                                let jobKey = new JobKey(jobName)
-
-                                let jobDetail = JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
-                                let trigger =  this.createTrigger.ForJob(jobDetail).Build()
+                                let trigger =  this.createTrigger.ForJob(this.JobDetail).Build() 
                                 match scheduler.GetJobDetail(jobKey) with 
-                                | null -> let result = scheduler.ScheduleJob(jobDetail, trigger)
+                                | null -> let result = scheduler.ScheduleJob(this.JobDetail, trigger)
                                           Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " scheduled at " + result.ToString()))
                                 | _ -> 
                                         let triggerName = (typedefof<'a>.Name + "-CronTrigger")
@@ -45,7 +51,7 @@ module Scheduler =
 
                 member this.Stop() =  ()
 
-            default val createTrigger = TriggerBuilder.Create().StartNow()
+            
 
 
     /// Fantomas
@@ -84,7 +90,33 @@ module Scheduler =
             member val CreatedDate = DateTime.UtcNow with get
             member val Payload = "" with get, set
             member val Status = false with get, set
+//            member val JobDetail =   { new IJobDetail with 
+//                                         member this.Description = "job default description"
+//                                         member this.Key = new JobKey("job")
+//                                         member this.ConcurrentExecutionDisallowed = false
+//                                         member this.GetJobBuilder() = (JobBuilder.Create())
+//                                         member this.JobType =  typedefof<JobMessage>
+//                                         member this.JobDataMap = null
+//                                         member this.RequestsRecovery = false
+//                                         member this.PersistJobDataAfterExecution = false
+//                                         member this.Durable = false
+//                                         member this.Clone() = new obj()
+//                                     }  with get, set
             interface IMessage
+
+
+//        type ScheduledJobMessage(jobMessage) =
+//            interface IJobDetail with 
+//                member this.Description = name
+//                member this.Key = new JobKey(name)
+//                member this.ConcurrentExecutionDisallowed = false
+//                member this.GetJobBuilder() = (JobBuilder.Create())
+//                member this.JobType =  typedefof<JobMessage>
+//                member this.JobDataMap = null
+//                member this.RequestsRecovery = false
+//                member this.PersistJobDataAfterExecution = false
+//                member this.Durable = false
+                member this.Clone() = new obj()
 
         [<Serializable>]
         type JobResult(id : Guid, resultForJobId : Guid, success : bool, result : string) =

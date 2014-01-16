@@ -99,6 +99,8 @@ namespace Lacjam.ServiceBus
                 member this.Stop() = 
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     log.Write(Info("-- Quartz Scheduler Stopped --"))
-                    Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
-                                       
+                    Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);    
                     Ioc.Dispose()
+
+//            interface ISpecifyMessageHandlerOrdering  with
+//                member x.SpecifyOrder(order)  = order.Specify(First<NServiceBus.Timeout.TimeoutMessageHandler>.Then<SagaMessageHandler>())
