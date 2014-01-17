@@ -1,6 +1,7 @@
 ﻿namespace Lacjam.Core
 
 module Scheduler =
+    open Autofac
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Domain
@@ -16,43 +17,45 @@ module Scheduler =
     open System.Text.RegularExpressions
     open Quartz
     open Quartz.Spi
-    open Autofac
 
     [<AbstractClass>]
-    type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler) = 
+    type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler, log:ILogWriter)= 
             
-            let typeOfJob = typedefof<'a>
-            let jobName = typeOfJob.Name
-            let jobKey = new JobKey(jobName)
-
-            abstract member JobDetail : IJobDetail
-            default val JobDetail =  JobBuilder.Create<'a:>IJob>().WithIdentity(jobKey).Build()
-               
             abstract createTrigger : TriggerBuilder 
-            default val createTrigger = TriggerBuilder.Create().StartNow()
+            default val createTrigger = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute).Build() |> ignore))
+            
+            abstract member JobDetail : IJobDetail
+            default val JobDetail =  (JobBuilder.Create<'a:>IJob>().WithIdentity(typedefof<'a>.Name + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString()).Build())
+              
+            abstract member Run :  unit -> unit
+            default this.Run() =
+                                if not <| (scheduler.IsStarted) then
+                                    scheduler.Start()
+                                    log.Write(Info("-- Quartz Schedule Started --"))
+                                    let jf = Lacjam.Core.Runtime.Ioc.Resolve<IJobFactory>()
+                                    log.Write(Info("IJobFactory = " + jf.ToString()))
 
-            member public  x.scheduleJob =  (scheduler.ScheduleJob(x.JobDetail, x.createTrigger.Build()) |> ignore)
-
+                                scheduler.ScheduleJob(this.JobDetail, this.createTrigger.Build())  |> ignore
 
             interface IWantToRunWhenBusStartsAndStops with
-                member this.Start() =  
-                                let trigger =  this.createTrigger.ForJob(this.JobDetail).Build() 
-                                match scheduler.GetJobDetail(jobKey) with 
-                                | null -> let result = scheduler.ScheduleJob(this.JobDetail, trigger)
-                                          Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " scheduled at " + result.ToString()))
-                                | _ -> 
-                                        let triggerName = (typedefof<'a>.Name + "-CronTrigger")
-                                        let result = scheduler.RescheduleJob(new TriggerKey(triggerName), trigger)
-                                        if (result.HasValue) then 
-                                            Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " scheduled at " + result.ToString()))
-                                        else
-                                            Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Debug(jobName + " NOT scheduled at " + result.ToString()))
-
-
+                member this.Start() =
+                                do log.Write(Debug("SwellNetRatingJobScheduler.IWantToRunWhenBusStartsAndStops.Start -- Run"))  
+                                do this.Run()
                 member this.Stop() =  ()
 
-            
+    type QuartzJobFactory(container:NServiceBus.ObjectBuilder.IBuilder) = 
+        interface IJobFactory with 
+            override x.NewJob((bundle:TriggerFiredBundle), scheduler:IScheduler) = container.Build(bundle.JobDetail.JobType) :?> IJob
+            override x.ReturnJob(job:IJob) =  ()
 
+    let callBackReceiver (result:CompletionResult) = 
+            Console.WriteLine("--- CALLBACK ---")
+//            let msg = (Seq.head result.Messages) :?> Jobs.JobResult
+//            let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+//            try
+//                log.Write(LogMessage.Debug("--- Message Received ---"))
+//                log.Write(LogMessage.Debug(msg.Id.ToString()))
+//            with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
 
     /// Fantomas
     /// Ctrl + K D   -- format document
@@ -76,11 +79,6 @@ module Scheduler =
         open Autofac
         open NServiceBus.ObjectBuilder
         open NServiceBus.ObjectBuilder.Common
-
-        type QuartzJobFactory(container:IBuilder) = 
-            interface IJobFactory with 
-                override x.NewJob((bundle:TriggerFiredBundle), scheduler:IScheduler) = container.Build(bundle.JobDetail.JobType) :?> IJob
-                override x.ReturnJob(job:IJob) =  ()
 
         [<Serializable>]
         [<AbstractClass>]
@@ -203,11 +201,3 @@ module Scheduler =
                                 (LogMessage.Error
                                      (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
         
-    let callBackReceiver (result:CompletionResult) = 
-        Console.WriteLine("--- CALLBACK ---")
-        let msg = (Seq.head result.Messages) :?> Jobs.JobResult
-        let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-        try
-            log.Write(LogMessage.Debug("--- Message Received ---"))
-            log.Write(LogMessage.Debug(msg.Id.ToString()))
-        with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))

@@ -62,12 +62,13 @@ namespace Lacjam.ServiceBus
                            
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                    let thirty = Convert.ToDouble(30)
-                    
-
-                    log.Write(Info("-- Quartz Schedule Started --"))
-                    Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Start()
-                    
+                    let scheduler = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
+                   
+                    if not <| (scheduler.IsStarted) then
+                                    scheduler.Start()
+                                    log.Write(Info("-- Quartz Schedule Started --"))
+                                    let jf = Lacjam.Core.Runtime.Ioc.Resolve<IJobFactory>()
+                                    log.Write(Info("IJobFactory = " + jf.ToString()))
 
                     let kickOff = (StartupBatchJobs.surfReportBatch)
                     let ij = { new IJob with member x.Execute(ctx)=

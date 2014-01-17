@@ -49,20 +49,27 @@ module Jobs =
 
 
     [<Serializable>]
-    type SwellNetRatingJob() =
+    type SwellNetRatingJob(log:ILogWriter) =
         inherit Lacjam.Core.Scheduler.Jobs.JobMessage()
+        do log.Write(Debug("SwellNetRatingJob ctr"))
         interface NServiceBus.IMessage
-            
         interface Quartz.IJob with
-            override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)
+            override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send("lacjam.servicebus",x).Register(Scheduler.callBackReceiver)
+                                          do log.Write(Debug("SwellNetRatingJob fire"))
                                           fire |> ignore  
 
-    type SwellNetRatingJobScheduler(scheduler) = 
-         inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler) 
-         interface IWantToRunWhenBusStartsAndStops with
-                member x.Start() =  (base.scheduleJob |> ignore)
-                member x.Stop() = ()
-      
+    type SwellNetRatingJobScheduler(scheduler:IScheduler, log:ILogWriter) = 
+         inherit Scheduler.SchedulerSetup<SwellNetRatingJob>(scheduler, log)
+         do log.Write(Debug("SwellNetRatingJobScheduler ctr"))
+         override this.Run() = 
+                                let trg = TriggerBuilder.Create().StartNow().Build()
+                                scheduler.ScheduleJob(this.JobDetail, trg)  |> ignore
+                                scheduler.TriggerJob(this.JobDetail.Key)
+                                let jobby = SwellNetRatingJob(log) :> IJob
+                                let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)
+                                do log.Write(Debug("SwellNetRatingJob fire"))
+                                fire |> ignore
+          
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         interface NServiceBus.IHandleMessages<SwellNetRatingJob> with
