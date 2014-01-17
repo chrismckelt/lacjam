@@ -66,7 +66,7 @@ module Jobs =
                                 scheduler.ScheduleJob(this.JobDetail, trg)  |> ignore
                                 scheduler.TriggerJob(this.JobDetail.Key)
                                 let jobby = SwellNetRatingJob(log) :> IJob
-                                let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduler.callBackReceiver)
+                                let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(this).Register(Scheduler.callBackReceiver)
                                 do log.Write(Debug("SwellNetRatingJob fire"))
                                 fire |> ignore
           
