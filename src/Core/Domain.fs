@@ -6,9 +6,14 @@
 
     module Domain =
 
+        [<CLIMutable>]
         type Audit = {Id:int;AuditType:string;Message:string;CreatedDate:DateTime}
-    
+
+        [<CLIMutable>]            
         type Setting =  {Id:int;Name:string;Value:string;CreatedDate:DateTime}
+
+        [<CLIMutable>]
+        type Site     =  {Id:int;Name:string;Url:string;CreatedDate:DateTime}
 
         type Investor() =
             member val Id = int with get, set

@@ -14,7 +14,7 @@ open Lacjam.Core
 open Lacjam.Core.Runtime
 open Lacjam.Core.User
 open Lacjam.Core.Domain
-open Lacjam.Core.Scheduler
+open Lacjam.Core.Scheduling
 
 module Jira  =
     open System
@@ -31,7 +31,7 @@ module Jira  =
     open Lacjam.Core.Runtime
     open Lacjam.Core.User
     open Lacjam.Core.Domain
-    open Lacjam.Core.Scheduler
+    open Lacjam.Core.Scheduling
 
 
     type Project = {key:string}

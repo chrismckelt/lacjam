@@ -98,6 +98,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="job_scheduling_data_2_0.xsd" />
+    <None Include="..\..\common\log4net.config">
+      <Link>log4net.config</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">

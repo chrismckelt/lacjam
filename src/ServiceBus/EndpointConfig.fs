@@ -7,8 +7,8 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core
     open Lacjam.Core.Utility
     open Lacjam.Core.Runtime
-    open Lacjam.Core.Scheduler
-    open Lacjam.Core.Scheduler.Jobs
+    open Lacjam.Core.Scheduling
+    open Lacjam.Core.Jobs
     open Lacjam.Integration
     open StartupBatchJobs
     open Quartz
@@ -43,16 +43,23 @@ namespace Lacjam.ServiceBus
                         .UnicastBus() |> ignore
          
        type CustomInitialization() =
-           let sf = new System.Func<IScheduler>(fun _->  let factoryx = new StdSchedulerFactory()
-                                                         factoryx.Initialize()
-                                                         let scheduler = factoryx.GetScheduler()
+           let sf = new System.Func<IScheduler>(fun _->  let fac = new StdSchedulerFactory()
+                                                         fac.Initialize()
+                                                         let scheduler = fac.GetScheduler()
                                                          scheduler.JobFactory <- Configure.Instance.Builder.Build<IJobFactory>()
-                                                         scheduler)
+                                                         scheduler.Start()
+                                                         scheduler
+                                                         )
            interface IWantCustomInitialization with
                 member this.Init() = 
-                     Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
+                    // Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
+                   //  Configure.Instance.Configurer.ConfigureComponent<QuartzJobFactory>(new System.Func<QuartzJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder)), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
                      Configure.Instance.Configurer.ConfigureComponent<IScheduler>(sf, DependencyLifecycle.SingleInstance) |> ignore 
-                     Configure.Instance.Configurer.ConfigureComponent<Jobs.SwellNetRatingJob>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
+
+
+//
+//                     Configure.Instance.Configurer.ConfigureComponent<BatchJobs.SwellNetRatingJob>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
+//                     Configure.Instance.Configurer.ConfigureComponent<SchedulingBatchJobs.SwellNetRatingJobScheduler>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
                           
        type ServiceBusStartUp() =              
             interface IWantToRunWhenBusStartsAndStops with
@@ -62,40 +69,11 @@ namespace Lacjam.ServiceBus
                            
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                    let scheduler = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
-                   
-                    if not <| (scheduler.IsStarted) then
-                                    scheduler.Start()
-                                    log.Write(Info("-- Quartz Schedule Started --"))
-                                    let jf = Lacjam.Core.Runtime.Ioc.Resolve<IJobFactory>()
-                                    log.Write(Info("IJobFactory = " + jf.ToString()))
+                    let sched = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
 
-                    let kickOff = (StartupBatchJobs.surfReportBatch)
-                    let ij = { new IJob with member x.Execute(ctx)=
-                    
-                                                                       try
-                                                                           bus.Send(kickOff).Register(
-                                                                                                        fun (result:CompletionResult) -> (
-                                                                                                                                            try
-                                                                                                                                                let msg = (Seq.head result.Messages) :?> Lacjam.Core.Scheduler.Jobs.JobResult
-                                                                                                                                                log.Write(LogMessage.Debug("--- Message Received ---"))
-                                                                                                                                                log.Write(LogMessage.Debug(msg.Id.ToString()))
-
-                                                                                                                                                StartupBatchJobs.surfReportBatch.Jobs
-                                                                                                                                                |> Seq.skipWhile(fun a -> a.Id <> msg.ResultForJobId)
-                                                                                                                                                |> Seq.skip 1
-                                                                                                                                                |> Seq.head
-                                                                                                                                                |> (fun a -> 
-                                                                                                                                                            a.Payload <- msg.Result
-                                                                                                                                                            bus.Send(a).Register(Scheduler.callBackReceiver))  |> ignore
-
-                                                                                                                                            with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
-                                                                                                                      )
-                                                                           ) |> ignore
-                                                                        with | ex -> log.Write(Error("Batch failed", ex, true))
-                                                                    }
-              
-                    ij  |> ignore
+                    let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
+                    js.processBatch(StartupBatchJobs.surfReportBatch)
+                    ()
 
                 member this.Stop() = 
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()

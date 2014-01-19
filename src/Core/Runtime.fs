@@ -39,7 +39,8 @@ module Runtime =
             if  File.Exists lFile then
                 log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(lFile)) |> ignore
             else
-                failwith "log4net.config not found"
+                //failwith "log4net.config not found"
+                Console.WriteLine("log4net.config not found")
 
         interface ILogWriter  with
             member x.Write lm  =
@@ -66,12 +67,16 @@ module Runtime =
                     _logger.Log(le)
                     //TODO alert B
 
+    let ContainerBuilder = 
+                                let cb = new ContainerBuilder()
+                                let sf = new Quartz.Impl.StdSchedulerFactory()
+                                cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
+                                cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
+                                cb.Register(fun x -> sf).As<ISchedulerFactory>() |> ignore
+                                cb.Register(fun x -> sf.GetScheduler()).As<IScheduler>() |> ignore
+                                
+                                cb
+    
     let Ioc =
-        let cb = new ContainerBuilder()
-        let sf = new Quartz.Impl.StdSchedulerFactory()
-        cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
-        cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
-        cb.Register(fun x -> sf).As<ISchedulerFactory>() |> ignore
-        cb.Register(fun x -> sf.GetScheduler()).As<IScheduler>() |> ignore
-        let con = cb.Build()
+        let con = ContainerBuilder.Build()
         con

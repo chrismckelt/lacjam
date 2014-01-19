@@ -43,6 +43,10 @@
       <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Foq">
+      <HintPath>..\..\packages\Foq.1.0\Lib\net45\Foq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FsUnit.CustomMatchers">
       <HintPath>..\..\packages\FsUnit.xUnit.1.2.1.2\Lib\Net40\FsUnit.CustomMatchers.dll</HintPath>
       <Private>True</Private>
@@ -83,6 +87,14 @@
       <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.3.16.4\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoFoq">
+      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.16.4\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
@@ -105,6 +117,8 @@
     <None Include="packages.config" />
     <Compile Include="EndpointConfigTestFixture.fs" />
     <None Include="job_scheduling_data_2_0.xsd" />
+    <None Include="Foq.Usage.fsx" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Core.fsproj">
