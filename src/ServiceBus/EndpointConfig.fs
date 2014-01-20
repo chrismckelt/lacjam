@@ -72,7 +72,10 @@ namespace Lacjam.ServiceBus
                     let sched = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
 
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
-                    js.processBatch(StartupBatchJobs.surfReportBatch)
+                    let trig = TriggerBuilder.Create().StartNow().Build()
+                    let batch =  StartupBatchJobs.surfReportBatch
+                    let result = js.scheduleBatch<ProcessBatch>(batch,trig)
+//                    js.processBatch(StartupBatchJobs.surfReportBatch)
                     ()
 
                 member this.Stop() = 

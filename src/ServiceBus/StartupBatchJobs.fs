@@ -39,9 +39,10 @@ module StartupBatchJobs =
     let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
     swJob.BatchId  <- guidId
     let swJobs = [
-                                StartUpJob(BatchId=guidId, Payload="http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage
-                                PageScraperJob(BatchId=guidId, Id=guidId, Payload = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage
+                                StartUpJob(BatchId=guidId) :> JobMessage
+                                PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage
                                 swJob :> JobMessage
+                                SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                  ]
 
     let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SwellNet";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting}

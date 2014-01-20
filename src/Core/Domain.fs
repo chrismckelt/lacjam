@@ -15,6 +15,7 @@
         [<CLIMutable>]
         type Site     =  {Id:int;Name:string;Url:string;CreatedDate:DateTime}
 
+
         type Investor() =
             member val Id = int with get, set
             member val CreatedDate = DateTime.UtcNow with get

@@ -71,23 +71,17 @@ module CustomJobs =
                     let lastUpdatedSpan = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-date") )
 
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
-                    let dt = lastUpdated.Value.OwnerNode.InnerText |> System.Convert.ToDateTime
+                    let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText.Replace("am", String.Empty)
+                    cleaned <- cleaned.Replace("pm", String.Empty)
+                    let dt = cleaned|> System.Convert.ToDateTime
                     log.Write(Debug(dt.ToString()))
 
                     if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
                         let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
                         let rating = findNodesByClassName(ratingSpan, "field-content")
-                        log.Write(Debug(rating.Value.OwnerNode.InnerHtml))
-                        let al = new AddressList()
-                        al.Add("chris@mckelt.com")
-                        let mail = new Mail(
-                                        To = al,
-                                        
-                                        From = "chris@mckelt.com",
-                                        Body = rating.Value.OwnerNode.InnerHtml,
-                                        Subject = rating.Value.OwnerNode.InnerHtml
-                                    )
-                        bus.SendMail(mail)
+                        log.Write(Debug(cleaned))
+                        let jr = new Jobs.JobResult(Guid.NewGuid(),job.Id, true, rating.Value.OwnerNode.InnerText)
+                        bus.Reply(jr)
                 with ex -> log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
 
 

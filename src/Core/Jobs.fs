@@ -88,6 +88,17 @@ open NServiceBus.ObjectBuilder.Common
         [<Serializable>]
         type PageScraperJob() =
             inherit JobMessage()
+            member val Url = String.Empty with get, set
+            interface IMessage
+            
+
+        [<CLIMutable>]
+        type Email = {To:string;From:string;Subject:string;Body:string;}
+        
+        [<Serializable>]
+        type SendEmailJob() =
+            inherit JobMessage()
+            member val Email:Email = {Email.To="";Email.From="";Email.Subject="";Email.Body=""} with get, set
             interface IMessage
      
 //     [<AbstractClass>]
@@ -126,6 +137,10 @@ open NServiceBus.ObjectBuilder.Common
         open System.Runtime.Serialization
         open System.Text.RegularExpressions
         open log4net
+        open Newtonsoft.Json
+        open Newtonsoft.Json.Serialization
+        open NServiceBus.MessageInterfaces
+        open NServiceBus.Mailer
 
         type JobResultHandler(log : Lacjam.Core.Runtime.ILogWriter) =
             interface NServiceBus.IHandleMessages<Jobs.JobResult> with
@@ -138,37 +153,36 @@ open NServiceBus.ObjectBuilder.Common
         type StartupJobHandler(log : ILogWriter) =
             interface IHandleMessages<Jobs.StartUpJob> with
                 member x.Handle(job) =
-                    match job.Payload with
-                    | "" -> failwith "Job.Payload empty"
-                    | _ ->
-                        log.Write
-                            (LogMessage.Debug
-                                 (job.CreatedDate.ToString() + "   "
-                                  + job.GetType().ToString()))
+                    log.Write
+                        (LogMessage.Debug
+                                (job.CreatedDate.ToString() + "   "
+                                + job.GetType().ToString()))
                        
-
-                        let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                        try
-                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, job.Payload)
-                            bus.Reply(jr)
-                        with ex ->
-                            log.Write
-                                (LogMessage.Error
-                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                    //TODO get all jobs in batch and list them
+                    // any prenotifications
+                    let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
+                    try
+                        let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, job.GetType().ToString() + " Completed" )
+                        bus.Reply(jr)
+                    with ex ->
+                        log.Write
+                            (LogMessage.Error
+                                    (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                      
 
 
         type PageScraperJobHandler(log : ILogWriter) =
             interface IHandleMessages<Jobs.PageScraperJob> with
                 member x.Handle(job) =
-                    match job.Payload with
-                    | "" -> failwith "Job.Payload empty"
+                    match job.Url with
+                    | "" -> failwith "Job.Url empty"
                     | _ ->
                         log.Write
                             (LogMessage.Debug
                                  (job.CreatedDate.ToString() + "   "
                                   + job.GetType().ToString()))
                         let html =
-                            match Some(job.Payload) with
+                            match Some(job.Url) with
                             | None -> failwith "URL to job scrape required"
                             | Some(a) ->
                                 let client = new System.Net.WebClient()
@@ -184,3 +198,44 @@ open NServiceBus.ObjectBuilder.Common
                                 (LogMessage.Error
                                      (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
 
+        type SendEmailJobHandler(log : ILogWriter) =
+            let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
+            interface IHandleMessages<Jobs.SendEmailJob> with
+                member x.Handle(job) =
+                    match job.Email.To with
+                    | "" -> failwith "Job.Email.To empty"
+                    | _ ->
+                        log.Write
+                            (LogMessage.Debug
+                                 (job.CreatedDate.ToString() + "   "
+                                  + job.GetType().ToString()))                                           
+                        
+                        try
+                            let mail = new Mail()
+                            let al = new AddressList()
+                            al.Add(job.Email.To)
+                            let subject = match job.Email.Subject.Contains("{") with
+                                            | true ->  String.Format(job.Email.Subject, job.Payload)
+                                            | false -> job.Payload
+
+                            let body = match job.Email.Body.Contains("{") with
+                                            | true ->  String.Format(job.Email.Body, job.Payload)
+                                            | false -> job.Payload
+
+
+                            let mail = new Mail(
+                                            To = al,
+                                            From = job.Email.From,
+                                            Subject = subject,
+                                            Body = body
+                                        )
+                        
+                            bus.SendMail(mail)
+                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body))
+                            bus.Reply(jr)
+                        with ex ->
+                            log.Write
+                                (LogMessage.Error
+                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                        
+                       
