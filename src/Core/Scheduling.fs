@@ -28,6 +28,7 @@ module Scheduling =
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
             abstract createTrigger : unit -> TriggerBuilder 
+    
 
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
 
@@ -105,13 +106,19 @@ module Scheduling =
         interface IJob with
             member this.Execute(context : IJobExecutionContext)  =      let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                                                                         let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                                                                        let tw = context.JobDetail.Key.Name
-                                                                        Console.WriteLine(tw)
+                                                                        let batchName = context.JobDetail.Key.Name
+                                                                        Console.WriteLine(batchName)
                                                                         Console.WriteLine("Job is executing - {0}.", DateTime.Now)
                                                                         try
                                                                             let js = Ioc.Resolve<IJobScheduler>()  :> IJobScheduler
-                                                                            let batch = Activator.CreateInstance("Lacjam.ServiceBus", "Lacjam.ServiceBus.StartupBatchJobs.surfReportBatch").InitializeLifetimeService() :?> Batch
-                                                                            js.processBatch(batch) 
+                                                                            let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
+                                                                            for ass in asses do
+                                                                                let types = ass.GetTypes()
+                                                                                for ty in types do
+                                                                                    if ty.Name.Contains(batchName) then
+                                                                                        let batch = Activator.CreateInstanceFrom(ass.Location, ty.FullName).InitializeLifetimeService() :?> Batch
+                                                                                        js.processBatch(batch) 
+                                                                               
                                                                         with | ex -> log.Write(Error("Job failed", ex, false)) 
              
             

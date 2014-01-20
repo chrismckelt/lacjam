@@ -1,5 +1,7 @@
 ﻿namespace Lacjam.ServiceBus
 
+
+
 module StartupBatchJobs =
     open System
     open Autofac
@@ -45,6 +47,9 @@ module StartupBatchJobs =
                                 SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                  ]
 
-    let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SwellNet";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting}
+    let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting}
+
+//    interface IContainBatches with
+//        member x.Batches = []
     
         
