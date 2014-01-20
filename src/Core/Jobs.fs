@@ -120,7 +120,7 @@ open NServiceBus.ObjectBuilder.Common
      type Batch =  {Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : Jobs.JobMessage list; Status:BatchStatus}
 
      type IContainBatches = 
-            abstract Batch : Batch list
+            abstract Batches : Batch list
 
     module JobHandlers =
         open Lacjam

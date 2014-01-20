@@ -10,7 +10,6 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core.Scheduling
     open Lacjam.Core.Jobs
     open Lacjam.Integration
-    open StartupBatchJobs
     open Quartz
     open Quartz.Spi
     open Quartz.Impl
@@ -75,9 +74,11 @@ namespace Lacjam.ServiceBus
                     con.Update(Ioc)
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
                     let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> (a.WithInterval(TimeSpan.FromSeconds(Convert.ToDouble(10))).Build() |> ignore)).StartNow().Build()
-                    let batch =  StartupBatchJobs.surfReportBatch
+                    let suJobs = new StartupBatchJobs() :> IContainBatches
+
+                    let batch = suJobs.Batches.Head
                     let result = js.scheduleBatch<ProcessBatch>(batch,trig)
-//                    js.processBatch(StartupBatchJobs.surfReportBatch)
+                    js.processBatch(batch)
                     ()
 
                 member this.Stop() = 

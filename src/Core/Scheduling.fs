@@ -115,9 +115,13 @@ module Scheduling =
                                                                             for ass in asses do
                                                                                 let types = ass.GetTypes()
                                                                                 for ty in types do
-                                                                                    if ty.Name.Contains(batchName) then
-                                                                                        let batch = Activator.CreateInstanceFrom(ass.Location, ty.FullName).InitializeLifetimeService() :?> Batch
-                                                                                        js.processBatch(batch) 
+                                                                                    let cb = ty.GetInterface(typedefof<IContainBatches>.FullName)
+                                                                                    match cb with
+                                                                                        | null -> ()
+                                                                                        | _ -> 
+                                                                                                let batches = Activator.CreateInstance(ty) :?> IContainBatches
+                                                                                                let b = batches.Batches.FirstOrDefault()
+                                                                                                js.processBatch(b) 
                                                                                
                                                                         with | ex -> log.Write(Error("Job failed", ex, false)) 
              
