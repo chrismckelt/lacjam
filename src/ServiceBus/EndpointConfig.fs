@@ -70,9 +70,11 @@ namespace Lacjam.ServiceBus
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let sched = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
-
+                    let con = new ContainerBuilder()
+                    con.Register(fun x -> new JobScheduler(log,sched,bus)).As<Scheduling.IJobScheduler>() |> ignore
+                    con.Update(Ioc)
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
-                    let trig = TriggerBuilder.Create().StartNow().Build()
+                    let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> (a.WithInterval(TimeSpan.FromSeconds(Convert.ToDouble(10))).Build() |> ignore)).StartNow().Build()
                     let batch =  StartupBatchJobs.surfReportBatch
                     let result = js.scheduleBatch<ProcessBatch>(batch,trig)
 //                    js.processBatch(StartupBatchJobs.surfReportBatch)

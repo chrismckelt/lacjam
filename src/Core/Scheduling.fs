@@ -108,20 +108,11 @@ module Scheduling =
                                                                         let tw = context.JobDetail.Key.Name
                                                                         Console.WriteLine(tw)
                                                                         Console.WriteLine("Job is executing - {0}.", DateTime.Now)
-                                                                      //  let msg = AppDomain.CurrentDomain.CreateInstanceFrom(@"Lacjam.Core.dll", tw).CreateObjRef(typedefof<Jobs.SwellNetRatingJob>)
-                                                                        let act = (Activator.CreateInstance("Lacjam.Integration", "Lacjam.Integration.Jobs.SwellNetRatingJob").InitializeLifetimeService()  :?> IMessage)
-                                                                        let batchProcessor = MailboxProcessor<Batch>.Start(fun batch ->        
-                                                                            async {
-                                                                                try
-                                                                                    let! ba = batch.Receive()
-                                                                                    Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(Info("Processing Batch " + ba.BatchId.ToString()))
-//                                                                                    if (ba > 5) then
-//                                                                                        replyChannel.Reply(message+1)
-//                                                                                    else
-//                                                                                        replyChannel.Reply(message+10)
-                                                                                 with | ex -> printf "%s" ex.Message
-                                                                            })
-                                                                        ()
+                                                                        try
+                                                                            let js = Ioc.Resolve<IJobScheduler>()  :> IJobScheduler
+                                                                            let batch = Activator.CreateInstance("Lacjam.ServiceBus", "Lacjam.ServiceBus.StartupBatchJobs.surfReportBatch").InitializeLifetimeService() :?> Batch
+                                                                            js.processBatch(batch) 
+                                                                        with | ex -> log.Write(Error("Job failed", ex, false)) 
              
             
 
