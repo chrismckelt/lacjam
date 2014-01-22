@@ -3,6 +3,12 @@
 
 A scheduling/publishing framework - with future pivots 
 
+TODO
+-- Web Scraping
+-- Monitoring
+-- Analysis
+-- Reports
+
 <table>
   <caption>Summary of solution folders</caption>
   <thead>
