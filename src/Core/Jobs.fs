@@ -4,6 +4,7 @@ open Lacjam.Core
 open Lacjam.Core.Domain
 open Lacjam.Core.Runtime
 open NServiceBus
+open NServiceBus.ObjectBuilder.Common
 open System
 open System.Collections.Concurrent
 open System.Collections.Generic
@@ -15,8 +16,8 @@ open System.Text.RegularExpressions
 open Quartz
 open Quartz.Spi
 open Autofac
-open NServiceBus.ObjectBuilder
-open NServiceBus.ObjectBuilder.Common
+open LinqToTwitter
+
   
   
    /// Fantomas
@@ -99,6 +100,13 @@ open NServiceBus.ObjectBuilder.Common
         type SendEmailJob() =
             inherit JobMessage()
             member val Email:Email = {Email.To="";Email.From="";Email.Subject="";Email.Body=""} with get, set
+            interface IMessage
+
+        [<Serializable>]
+        type SendTweetJob() =
+            inherit JobMessage()
+            member val Settings:Lacjam.Core.Settings.TwitterSettings = Settings.getTwitterSettings with get, set
+            member val To:string = String.Empty with get,set
             interface IMessage
      
 //     [<AbstractClass>]
@@ -233,6 +241,41 @@ open NServiceBus.ObjectBuilder.Common
                         
                             bus.SendMail(mail)
                             let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body))
+                            bus.Reply(jr)
+                        with ex ->
+                            log.Write
+                                (LogMessage.Error
+                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+
+
+         type SendTweetJobHandler(log : ILogWriter) =
+            let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
+            interface IHandleMessages<Jobs.SendTweetJob> with
+                member x.Handle(job) =
+                    match job.To with
+                    | "" -> failwith "Job.To empty"
+                    | _ ->
+                        log.Write
+                            (LogMessage.Debug
+                                 (job.CreatedDate.ToString() + "   "
+                                  + job.GetType().ToString()))                                           
+                        
+                        try
+                           
+                            let cred = new LinqToTwitter.SingleUserInMemoryCredentialStore()
+                            cred.ConsumerKey <- job.Settings.ConsumerKey
+                            cred.ConsumerSecret <- job.Settings.ConsumerSecret
+                            cred.AccessToken <- job.Settings.AccessToken
+                            cred.AccessTokenSecret <- job.Settings.AccessTokenSecret
+                            cred.OAuthToken <- job.Settings.OAuthToken
+                            cred.OAuthTokenSecret <- job.Settings.OAuthTokenSecret
+                            cred.ScreenName <- job.Settings.ScreenName
+                            let auth = new SingleUserAuthorizer()
+                            auth.CredentialStore <- cred
+                            let twitter = new TwitterContext(auth)
+                            let result = twitter.NewDirectMessageAsync(job.To, job.Payload + "  " + DateTime.Now.ToShortDateString())                        
+                            result.Wait()
+                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
                             bus.Reply(jr)
                         with ex ->
                             log.Write

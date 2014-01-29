@@ -8,6 +8,7 @@
     open Lacjam.Core.Runtime
     open Lacjam.Core.Scheduling
     open Lacjam.Core.Jobs
+    open Lacjam.Core.Settings
     open Lacjam.Integration
 
     type StartupBatchJobs() =
@@ -47,8 +48,10 @@
                                                                         StartUpJob(BatchId=guidId) :> JobMessage
                                                                         PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage
                                                                         swJob :> JobMessage
-                                                                        SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
+                                                                        SendTweetJob(To="chris_mckelt") :> JobMessage
+                                                                        //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                                          ]
 
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting}
-                                            [surfReportBatch]
+                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting}
+                                            [surfReportBatch;jiraRoadmapBatch]

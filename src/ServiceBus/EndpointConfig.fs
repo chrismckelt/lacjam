@@ -64,21 +64,23 @@ namespace Lacjam.ServiceBus
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
                     Console.WriteLine("-- Service Bus Started --")   
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-                           
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     let sched = Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>()
                     let con = new ContainerBuilder()
                     con.Register(fun x -> new JobScheduler(log,sched,bus)).As<Scheduling.IJobScheduler>() |> ignore
                     con.Update(Ioc)
-                    let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
-                    let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> (a.WithInterval(TimeSpan.FromSeconds(Convert.ToDouble(10))).Build() |> ignore)).StartNow().Build()
-                    let suJobs = new StartupBatchJobs() :> IContainBatches
 
-                    let batch = suJobs.Batches.Head
-                    let result = js.scheduleBatch<ProcessBatch>(batch,trig)
-                    js.processBatch(batch)
+                    // schedule startup jobs
+                    let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
+                    //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                    let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
+                    //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
+                    let suJobs = new StartupBatchJobs() :> IContainBatches
+                    for batch in suJobs.Batches do
+                        js.scheduleBatch<ProcessBatch>(batch,trig)
+                         
                     ()
 
                 member this.Stop() = 

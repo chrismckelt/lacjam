@@ -73,7 +73,10 @@ module CustomJobs =
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
                     let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText.Replace("am", String.Empty)
                     cleaned <- cleaned.Replace("pm", String.Empty)
-                    let dt = cleaned|> System.Convert.ToDateTime
+                    let dt = 
+                            try
+                                cleaned |> System.Convert.ToDateTime
+                            with | ex -> DateTime.Now
                     log.Write(Debug(dt.ToString()))
 
                     if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
