@@ -60,10 +60,11 @@ namespace Lacjam.ServiceBus
 //                     Configure.Instance.Configurer.ConfigureComponent<BatchJobs.SwellNetRatingJob>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
 //                     Configure.Instance.Configurer.ConfigureComponent<SchedulingBatchJobs.SwellNetRatingJobScheduler>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
                           
-       type ServiceBusStartUp() =              
+       type ServiceBusStartUp() =     
+            let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()         
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
-                    Console.WriteLine("-- Service Bus Started --")   
+                    log.Write(Info("-- Service Bus Started --"))   
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
                     let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
@@ -71,12 +72,13 @@ namespace Lacjam.ServiceBus
                     let con = new ContainerBuilder()
                     con.Register(fun x -> new JobScheduler(log,sched,bus)).As<Scheduling.IJobScheduler>() |> ignore
                     con.Update(Ioc)
-
+                    log.Write(Info("-- Scheduler added --"))   
                     // schedule startup jobs
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                   // let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
+                   // let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
                     let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                    //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
                     let suJobs = new StartupBatchJobs() :> IContainBatches
                     for batch in suJobs.Batches do
                         js.scheduleBatch<ProcessBatch>(batch,trig)
@@ -84,9 +86,8 @@ namespace Lacjam.ServiceBus
                     ()
 
                 member this.Stop() = 
-                    let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-                    log.Write(Info("-- Quartz Scheduler Stopped --"))
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);    
+                    log.Write(Info("-- Scheduler Stopped --"))
                     Ioc.Dispose()
 
 //            interface ISpecifyMessageHandlerOrdering  with

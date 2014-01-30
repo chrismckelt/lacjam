@@ -278,8 +278,8 @@ open LinqToTwitter
                             let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
                             bus.Reply(jr)
                         with ex ->
-                            log.Write
-                                (LogMessage.Error
-                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                            log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                            let fail = Jobs.JobResult(Guid.NewGuid(),job.Id, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
+                            bus.Reply(fail)
                         
                        

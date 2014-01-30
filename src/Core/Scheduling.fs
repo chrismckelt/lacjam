@@ -37,6 +37,7 @@ module Scheduling =
 //        do sf.Initialize() |> ignore
 //        let sc = sf.GetScheduler()
         do sched.Start() |> ignore
+        do log.Write(Info("-- Scheduler started --"))   
         let mutable trigger = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute).Build() |> ignore))
         //new() = new JobScheduler()
         interface IJobScheduler with 

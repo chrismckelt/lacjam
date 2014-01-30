@@ -18,7 +18,9 @@
         module Html  =
 
             let rec findNodesByClassName (node:HtmlNode, className:string) =
-                match node.HasChildNodes with 
+                match node with 
+                    | null -> None
+                    | _ ->  match node.HasChildNodes with 
                             | false -> None
                             | true  ->  let o =  (node.ChildNodes) 
                                                     |> Seq.choose (fun x -> 
