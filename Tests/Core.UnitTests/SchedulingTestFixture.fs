@@ -37,12 +37,17 @@ let ``BatchProcessor handles replies submits job``() =
                 
                 let log = {new ILogWriter with member this.Write str = Debug.WriteLine(str)}
                 let sched = fixture.Create<Quartz.IScheduler>()
-                let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> Scheduling.callBackReceiver(new CompletionResult())).Create()
+                let cr = new CompletionResult()
+                let objList = new System.Collections.Generic.List<obj>()
+                objList.Add(new JobResult(Guid.NewGuid(), Guid.NewGuid(),true,"test"))
+                cr.Messages <- objList.ToArray()
+                let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> cr).Create()
                 let cb = new ContainerBuilder()
                 cb.Register(fun x -> log).As<ILogWriter>() |> ignore
                 cb.Register(fun x -> sched).As<IScheduler>() |> ignore
                 cb.Register(fun x -> bus).As<ILogWriter>() |> ignore
 
                 let js = new JobScheduler(log, sched, bus) :> IJobScheduler
-                js.processBatch(batch)
+                let trig = TriggerBuilder.Create().Build()
+                js.scheduleBatch(batch, trig)
                 

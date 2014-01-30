@@ -27,7 +27,7 @@ module Scheduling =
             abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * Quartz.ITrigger -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
-            abstract createTrigger : unit -> TriggerBuilder 
+            abstract member createTrigger : TriggerBuilder  with get, set
     
 
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
@@ -37,12 +37,12 @@ module Scheduling =
 //        do sf.Initialize() |> ignore
 //        let sc = sf.GetScheduler()
         do sched.Start() |> ignore
+        let mutable trigger = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute).Build() |> ignore))
         //new() = new JobScheduler()
         interface IJobScheduler with 
-                member this.createTrigger() = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute).Build() |> ignore))
+                override this.createTrigger with get() = trigger  and set(v) = trigger <- v           
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trigger:Quartz.ITrigger) = 
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
-                                                                //let trigger = TriggerBuilder.Create().WithSimpleSchedule(fun a-> (a.WithInterval(TimeSpan.FromSeconds(Convert.ToDouble(10))).Build() |> ignore)).ForJob(jobDetail).StartNow().Build()
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
@@ -67,14 +67,13 @@ module Scheduling =
                                                                                                                                                                                                                             if (a.ErrorCode > 0 ) then
                                                                                                                                                                                                                                 log.Write(Info("ErrorCode-returned: " + a.ErrorCode.ToString()))  
 
-                                                                                                                                                                                                                            let b = (a.Messages.FirstOrDefault())
-                                                                                                                                                                                                                            match b with
+                                                                                                                                                                                                                            match a.Messages.FirstOrDefault() with
                                                                                                                                                                                                                             | null ->  
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- not returned messages for JobResult")) 
                                                                                                                                                                                                                                     log.Write(Debug("Async State -- " + a.State.ToString()))
                                                                                                                                                                                                                                     replyChannel.Reply(new Jobs.JobResult(jobMessage.Id, jobMessage.Id, true, "No result result but ok")) 
                                                                                                                                                                                                 
-                                                                                                                                                                                                                            | _ ->
+                                                                                                                                                                                                                            | b ->
                                                                                                                                                                                                                                     let jr = (b :?> Jobs.JobResult)
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- " + jr.GetType().Name))
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- " + jr.ToString())) 

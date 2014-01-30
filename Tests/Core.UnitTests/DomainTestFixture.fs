@@ -19,7 +19,7 @@ let printThreadId note =
 
 [<Fact>] 
 let ``Investor.ToString should write name`` () =
-    Domain.Investor().ToString().Length |> should equal 13
+    Domain.Investor().ToString().Length |> should equal 2
 
 //[<Fact>]
 //let ``Bedlam site scrape`` () =
