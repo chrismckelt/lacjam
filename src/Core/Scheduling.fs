@@ -54,6 +54,7 @@ module Scheduling =
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
+                                                           
                 
                 member this.processBatch(batch) =   
                                                     let agent = MailboxProcessor<BatchMessage>.Start(fun proc -> 

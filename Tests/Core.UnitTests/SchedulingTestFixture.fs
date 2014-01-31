@@ -50,4 +50,5 @@ let ``BatchProcessor handles replies submits job``() =
                 let js = new JobScheduler(log, sched, bus) :> IJobScheduler
                 let trig = TriggerBuilder.Create()
                 js.scheduleBatch(batch, trig)
+                Mock.Verify(<@ sched.ScheduleJob(any(),any()) @>, once)
                 
