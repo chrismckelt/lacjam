@@ -83,7 +83,7 @@ namespace Lacjam.ServiceBus
                     let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
                     trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
                     trig.StartTimeUtc <- DateTimeOffset.UtcNow
-                    trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(6, 0, 0)
+                    trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(8, 50, 0)
                     trig.RepeatIntervalUnit <- IntervalUnit.Minute
                     trig.RepeatInterval <- 1
                     trig.RepeatCount <- 10

@@ -71,10 +71,12 @@ module CustomJobs =
                     let lastUpdatedSpan = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-date") )
 
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
-                    let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText.Replace("am", String.Empty)
-                    cleaned <- cleaned.Replace("pm", String.Empty)
+                    
                     let dt = 
                             try
+                                let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
+                                cleaned <- cleaned.Replace("pm", String.Empty)
+                                cleaned <- cleaned.Replace("am", String.Empty)
                                 cleaned |> System.Convert.ToDateTime
                             with | ex -> DateTime.Now
                     log.Write(Debug(dt.ToString()))
@@ -82,7 +84,7 @@ module CustomJobs =
                     if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
                         let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
                         let rating = findNodesByClassName(ratingSpan, "field-content")
-                        log.Write(Debug(cleaned))
+                        if rating.IsSome then log.Write(Debug(rating.Value.Value))
                         let jr = new Jobs.JobResult(Guid.NewGuid(),job.Id, true, rating.Value.OwnerNode.InnerText)
                         bus.Reply(jr)
                 with ex -> log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
