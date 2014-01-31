@@ -24,7 +24,7 @@ module Scheduling =
                                                                         
    
     type IJobScheduler = 
-            abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * Quartz.ITrigger -> unit
+            abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * TriggerBuilder -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
             abstract member createTrigger : TriggerBuilder  with get, set
@@ -38,13 +38,14 @@ module Scheduling =
 //        let sc = sf.GetScheduler()
         do sched.Start() |> ignore
         do log.Write(Info("-- Scheduler started --"))   
-        let mutable trigger = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute).Build() |> ignore))
+        let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
         //new() = new JobScheduler()
         interface IJobScheduler with 
-                override this.createTrigger with get() = trigger  and set(v) = trigger <- v           
-                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trigger:Quartz.ITrigger) = 
+                override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
+                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) = 
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
+                                                                let trigger = trgBuilder.StartNow().Build()
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore

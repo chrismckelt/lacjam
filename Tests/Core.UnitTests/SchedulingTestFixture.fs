@@ -48,6 +48,6 @@ let ``BatchProcessor handles replies submits job``() =
                 cb.Register(fun x -> bus).As<ILogWriter>() |> ignore
 
                 let js = new JobScheduler(log, sched, bus) :> IJobScheduler
-                let trig = TriggerBuilder.Create().Build()
+                let trig = TriggerBuilder.Create()
                 js.scheduleBatch(batch, trig)
                 

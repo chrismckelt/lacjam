@@ -76,12 +76,21 @@ namespace Lacjam.ServiceBus
                     // schedule startup jobs
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                   // let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                   // let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
-                    let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
+                    //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow()
+                    //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
+                    //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
+                  
+                    let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
+                    trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
+                    trig.StartTimeUtc <- DateTimeOffset.UtcNow
+                    trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(17, 00, 0)
+                    trig.RepeatIntervalUnit <- IntervalUnit.Minute
+                    trig.RepeatInterval <- 1
+                    trig.TimeZone <- TimeZoneInfo.Utc
+                    
                     let suJobs = new StartupBatchJobs() :> IContainBatches
                     for batch in suJobs.Batches do
-                        js.scheduleBatch<ProcessBatch>(batch,trig)
+                        js.scheduleBatch<ProcessBatch>(batch,trig.GetTriggerBuilder())
                          
                     ()
 
