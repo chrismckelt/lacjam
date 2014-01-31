@@ -45,7 +45,7 @@ module Scheduling =
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) = 
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
-                                                                let trigger = trgBuilder.StartNow().Build()
+                                                                let trigger = trgBuilder.Build()
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
