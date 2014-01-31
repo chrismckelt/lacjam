@@ -10,6 +10,9 @@
     open Lacjam.Core.Jobs
     open Lacjam.Core.Settings
     open Lacjam.Integration
+    open Quartz
+    open Quartz.Impl
+    open Quartz.Core
 
     type StartupBatchJobs() =
    
@@ -43,6 +46,22 @@
                                             let createG = Guid.NewGuid
                                             let guidId = createG()
                                             let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
+
+                                            
+                                            //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                                            //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow()
+                                            //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
+                                            //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
+                  
+                                            let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
+                                            trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
+                                            trig.StartTimeUtc <- DateTimeOffset.UtcNow
+                                            trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(10, 10,0)
+                                            trig.RepeatIntervalUnit <- IntervalUnit.Minute
+                                            trig.RepeatInterval <- 1
+                                            trig.RepeatCount <- 10
+                                            trig.TimeZone <- TimeZoneInfo.Utc
+
                                             swJob.BatchId  <- guidId
                                             let swJobs = [
                                                                         StartUpJob(BatchId=guidId) :> JobMessage
@@ -52,6 +71,6 @@
                                                                         //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                                          ]
 
-                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting}
-                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting}
+                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
+                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
                                             [surfReportBatch;jiraRoadmapBatch]

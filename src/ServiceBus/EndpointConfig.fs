@@ -54,11 +54,6 @@ namespace Lacjam.ServiceBus
                     // Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
                    //  Configure.Instance.Configurer.ConfigureComponent<QuartzJobFactory>(new System.Func<QuartzJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder)), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
                      Configure.Instance.Configurer.ConfigureComponent<IScheduler>(sf, DependencyLifecycle.SingleInstance) |> ignore 
-
-
-//
-//                     Configure.Instance.Configurer.ConfigureComponent<BatchJobs.SwellNetRatingJob>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
-//                     Configure.Instance.Configurer.ConfigureComponent<SchedulingBatchJobs.SwellNetRatingJobScheduler>(DependencyLifecycle.InstancePerUnitOfWork)  |> ignore 
                           
        type ServiceBusStartUp() =     
             let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()         
@@ -75,24 +70,9 @@ namespace Lacjam.ServiceBus
                     log.Write(Info("-- Scheduler added --"))   
                     // schedule startup jobs
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
-                    //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow()
-                    //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
-                    //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                  
-                    let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
-                    trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
-                    trig.StartTimeUtc <- DateTimeOffset.UtcNow
-                    trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(8, 50, 0)
-                    trig.RepeatIntervalUnit <- IntervalUnit.Minute
-                    trig.RepeatInterval <- 1
-                    trig.RepeatCount <- 10
-                    trig.TimeZone <- TimeZoneInfo.Utc
-                    
                     let suJobs = new StartupBatchJobs() :> IContainBatches
                     for batch in suJobs.Batches do
-                        js.scheduleBatch<ProcessBatch>(batch,trig.GetTriggerBuilder())
-                         
+                        js.scheduleBatch<ProcessBatch>(batch)   
                     ()
 
                 member this.Stop() = 

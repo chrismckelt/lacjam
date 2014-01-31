@@ -33,7 +33,7 @@ let ``BatchProcessor handles replies submits job``() =
                                             Jobs.PageScraperJob(BatchId=guid, Id=Guid.NewGuid(), Payload = "http://www.mckelt.com") :> JobMessage
                              ]
 
-                let batch = {Batch.BatchId=guid; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Test";Batch.Jobs=testJobs; Batch.Status=BatchStatus.Waiting}
+                let batch = {Batch.BatchId=guid; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Test";Batch.Jobs=testJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerBuilder=TriggerBuilder.Create();}
                 
                 let log = {new ILogWriter with member this.Write str = Debug.WriteLine(str)}
                 let sched = fixture.Create<Quartz.IScheduler>()

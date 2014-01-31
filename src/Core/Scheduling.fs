@@ -25,6 +25,7 @@ module Scheduling =
    
     type IJobScheduler = 
             abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * TriggerBuilder -> unit
+            abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
             abstract member createTrigger : TriggerBuilder  with get, set
@@ -33,19 +34,23 @@ module Scheduling =
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
 
     type JobScheduler(log:ILogWriter, sched:IScheduler, bus:IBus) = 
-//        let sf = new StdSchedulerFactory()
-//        do sf.Initialize() |> ignore
-//        let sc = sf.GetScheduler()
         do sched.Start() |> ignore
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
-        //new() = new JobScheduler()
         interface IJobScheduler with 
                 override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) = 
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
                                                                 let trigger = trgBuilder.Build()
+                                                                match found with 
+                                                                    | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
+                                                                    | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
+                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) = 
+                                                                let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
+                                                                let found = sched.GetJobDetail(jobDetail.Key)
+                                                                let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
+                                                                let trigger = triggerBuilder.Build()
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
@@ -73,12 +78,13 @@ module Scheduling =
                                                                                                                                                                                                                             | null ->  
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- not returned messages for JobResult")) 
                                                                                                                                                                                                                                     log.Write(Debug("Async State -- " + a.State.ToString()))
-                                                                                                                                                                                                                                    replyChannel.Reply(new Jobs.JobResult(jobMessage.Id, jobMessage.Id, true, "No result result but ok")) 
+                                                                                                                                                                                                                                    replyChannel.Reply(new Jobs.JobResult(jobMessage.Id, jobMessage.Id, true, "No messages results")) 
                                                                                                                                                                                                 
                                                                                                                                                                                                                             | b ->
                                                                                                                                                                                                                                     let jr = (b :?> Jobs.JobResult)
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- " + jr.GetType().Name))
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- " + jr.ToString())) 
+                                                                                                                                                                                                                                    //TODO send original job message update
                                                                                                                                                                                                                                     replyChannel.Reply(jr) 
                                                                                                                                                                                                                 with | ex -> log.Write(Error("Job failed", ex, false))
                                                                                                                                                                                                                              replyChannel.Reply(new Jobs.JobResult(Guid.NewGuid(), Guid.NewGuid(), false, "Error: " + ex.Message))   
@@ -111,7 +117,7 @@ module Scheduling =
                                                                         Console.WriteLine(batchName)
                                                                         Console.WriteLine("Job is executing - {0}.", DateTime.Now)
                                                                         try
-                                                                            let js = Ioc.Resolve<IJobScheduler>()  :> IJobScheduler
+                                                                            let js = Ioc.Resolve<IJobScheduler>()
                                                                             let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
                                                                             for ass in asses do
                                                                                 let types = ass.GetTypes()
@@ -121,44 +127,16 @@ module Scheduling =
                                                                                         | null -> ()
                                                                                         | _ -> 
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
-                                                                                                let b = batches.Batches.FirstOrDefault()
+                                                                                                let b = batches.Batches.Head
                                                                                                 js.processBatch(b) 
                                                                                
                                                                         with | ex -> log.Write(Error("Job failed", ex, false)) 
              
             
 
-//    [<AbstractClass>]
-//    type SchedulerSetup<'a when 'a :> IJob>(scheduler:IScheduler, log:ILogWriter)= 
-//            
-//            abstract createTrigger : TriggerBuilder 
-//            default val createTrigger = TriggerBuilder.Create().WithDescription("10-Second-Intervals-Forever").WithSimpleSchedule(fun a-> a.WithIntervalInSeconds((10)).RepeatForever().Build() |> ignore).StartNow()
-//            
-//            abstract member JobDetail : IJobDetail
-//            default val JobDetail =  (JobBuilder.Create<'a:>IJob>().WithIdentity(typedefof<'a>.Name + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString()).Build())
-//              
-//            abstract member Run :  unit -> unit
-//            default this.Run() = scheduler.ScheduleJob(this.JobDetail, this.createTrigger.ForJob(this.JobDetail).Build())  |> ignore
-//
-//            interface IWantToRunWhenBusStartsAndStops with
-//                member this.Start() =
-//                                do log.Write(Debug(typedefof<'a>.Name + ".IWantToRunWhenBusStartsAndStops.Start -- Run"))  
-//                                do this.Run()
-//                member this.Stop() =  ()
-
-//    type QuartzJobFactory(container:NServiceBus.ObjectBuilder.IBuilder) = 
-//        interface IJobFactory with 
-//            override x.NewJob((bundle:TriggerFiredBundle), scheduler:IScheduler) = container.Build(bundle.JobDetail.JobType) :?> IJob
-//            override x.ReturnJob(job:IJob) =  ()
-
     let callBackReceiver (result:CompletionResult) = 
             Console.WriteLine("--- CALLBACK ---")
-//            let msg = (Seq.head result.Messages) :?> Jobs.JobResult
-//            let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-//            try
-//                log.Write(LogMessage.Debug("--- Message Received ---"))
-//                log.Write(LogMessage.Debug(msg.Id.ToString()))
-//            with | ex -> log.Write(LogMessage.Warn("Callback failed for " + result.ErrorCode.ToString(), ex))
+            // TODO Audit
 
    
         
