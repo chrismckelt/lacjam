@@ -1,4 +1,4 @@
-﻿$Arguments = "/uninstall /startManually /serviceName:{0} /displayName:{0}  NServiceBus.Production /username:{1} /password:{2} /description:{3}' -f 'lacjam.servicebus', 'MyUsername', 'MyPassword', 'www.mckelt.com'  "
+﻿$Arguments = '/uninstall /startManually /serviceName:{0} /displayName:{0}  NServiceBus.Production /username:{1}  /description:{2}' -f 'lacjam.servicebus', 'LOCALSERVICE',  'www.mckelt.com' 
 
 $nServiceBus = Resolve-Path -Path nServiceBus.Host.exe;
 
