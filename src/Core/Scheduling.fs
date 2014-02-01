@@ -33,7 +33,32 @@ module Scheduling =
 
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
 
-    type JobScheduler(log:ILogWriter, sched:IScheduler, bus:IBus) = 
+    type JobSchedulerListener(log:ILogWriter, bus:IBus) =
+        interface Quartz.ISchedulerListener with
+            override this.JobAdded(jd) = log.Write(Debug("JobAdded: " + jd.JobType.Name.ToString() + " " + jd.Key.Group + " " + jd.Key.Name))
+            override this.JobDeleted(jd) = log.Write(Debug("JobDeleted: " + jd.Group + " " + jd.Name))
+            override this.JobPaused(jd) = log.Write(Debug("JobPaused: " + jd.Group + " " + jd.Name))
+            override this.JobsPaused(jd) = log.Write(Debug("JobsPaused: " + jd))
+            override this.JobResumed(jd) = log.Write(Debug("JobResumed: " + jd.Group + " " + jd.Name))
+            override this.JobsResumed(jd) = log.Write(Debug("JobsResumed: " + jd))
+            override this.JobScheduled(jd) = log.Write(Debug("JobScheduled: " + jd.JobKey.Group + " " + jd.JobKey.Name + " " + jd.Key.Group + " " + jd.Key.Name))
+            override this.JobUnscheduled(jd) = log.Write(Debug("JobUnScheduled: " + jd.Group + " " + jd.Name))
+            override this.TriggerFinalized(trg) = log.Write(Debug("TriggerFinalized: " + trg.Key.Group + " " + trg.Key.Name))
+            override this.TriggerPaused(trg) = log.Write(Debug("TriggerPaused: " + trg.Group + " " + trg.Name))
+            override this.TriggersPaused(trg) = log.Write(Debug("TriggersPaused: " + trg))
+            override this.TriggerResumed(trg) = log.Write(Debug("TriggerResumed: " + trg.Group + " " + trg.Name))
+            override this.TriggersResumed(trg) = log.Write(Debug("TriggersResumed: " + trg))
+            override this.SchedulerError(msg, ex) = log.Write(Error("SchedulerError: " + msg,ex,false))
+            override this.SchedulerInStandbyMode() = log.Write(Info("SchedulerInStandbyMode: "))
+            override this.SchedulerStarted() = log.Write(Info("SchedulerStarted: "))
+            override this.SchedulerStarting() = log.Write(Info("SchedulerStarting: "))
+            override this.SchedulerShutdown() = log.Write(Info("SchedulerShutdown: "))
+            override this.SchedulerShuttingdown() = log.Write(Info("SchedulerShuttingdown: "))
+            override this.SchedulingDataCleared() = log.Write(Info("SchedulingDataCleared: "))
+           
+            
+
+    type JobScheduler(log:ILogWriter, sched:IScheduler, bus:IBus) =        
         do sched.Start() |> ignore
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
@@ -42,7 +67,8 @@ module Scheduling =
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) = 
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
-                                                                let trigger = trgBuilder.Build()
+                                                                let trigger = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                                                                
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
@@ -50,7 +76,7 @@ module Scheduling =
                                                                 let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
                                                                 let found = sched.GetJobDetail(jobDetail.Key)
                                                                 let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
-                                                                let trigger = triggerBuilder.Build()
+                                                                let trigger = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
                                                                 match found with 
                                                                     | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                     | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
@@ -67,7 +93,7 @@ module Scheduling =
                                                                                                                                                                                                         match a with
                                                                                                                                                                                                             | null ->   let msg = "No Completion Result reply for NServiceBus Job"
                                                                                                                                                                                                                         log.Write(Info(msg))  
-                                                                                                                                                                                                                        replyChannel.Reply(new Jobs.JobResult(Guid.NewGuid(), Guid.NewGuid(), false, msg))   
+                                                                                                                                                                                                                        replyChannel.Reply(new Jobs.JobResult(jobMessage,false, msg))   
                                                                                                                                                                                                             | _     ->
                                                                                                                                                                                                                 
                                                                                                                                                                                 
@@ -79,7 +105,7 @@ module Scheduling =
                                                                                                                                                                                                                             | null ->  
                                                                                                                                                                                                                                     log.Write(Debug("JobResult -- not returned messages for JobResult")) 
                                                                                                                                                                                                                                     log.Write(Debug("Async State -- " + a.State.ToString()))
-                                                                                                                                                                                                                                    replyChannel.Reply(new Jobs.JobResult(jobMessage.Id, jobMessage.Id, true, "No messages results")) 
+                                                                                                                                                                                                                                    replyChannel.Reply(new Jobs.JobResult(jobMessage,true, "No messages results")) 
                                                                                                                                                                                                 
                                                                                                                                                                                                                             | b ->
                                                                                                                                                                                                                                     let jr = (b :?> Jobs.JobResult)
@@ -88,7 +114,7 @@ module Scheduling =
                                                                                                                                                                                                                                     //TODO send original job message update
                                                                                                                                                                                                                                     replyChannel.Reply(jr) 
                                                                                                                                                                                                                 with | ex -> log.Write(Error("Job failed", ex, false))
-                                                                                                                                                                                                                             replyChannel.Reply(new Jobs.JobResult(Guid.NewGuid(), Guid.NewGuid(), false, "Error: " + ex.Message))   
+                                                                                                                                                                                                                             replyChannel.Reply(new Jobs.JobResult(jobMessage, false, "Error: " + ex.Message))   
                                                                                                                                                                            )  |> ignore
                                                                                                                                                                            
                                                                                                                                           with | ex -> log.Write(Error("Job failed", ex, false))
@@ -130,6 +156,7 @@ module Scheduling =
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
                                                                                                 let b = batches.Batches.Head
                                                                                                 js.processBatch(b) 
+                                                                                                context.Result <- true 
                                                                                
                                                                         with | ex -> log.Write(Error("Job failed", ex, false)) 
              

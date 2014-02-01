@@ -85,7 +85,7 @@ module CustomJobs =
                         let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
                         let rating = findNodesByClassName(ratingSpan, "field-content")
                         if rating.IsSome then log.Write(Debug(rating.Value.Value))
-                        let jr = new Jobs.JobResult(Guid.NewGuid(),job.Id, true, rating.Value.OwnerNode.InnerText)
+                        let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
                         bus.Reply(jr)
                 with ex -> log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
 

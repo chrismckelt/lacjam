@@ -39,7 +39,7 @@ let ``BatchProcessor handles replies submits job``() =
                 let sched = fixture.Create<Quartz.IScheduler>()
                 let cr = new CompletionResult()
                 let objList = new System.Collections.Generic.List<obj>()
-                objList.Add(new JobResult(Guid.NewGuid(), Guid.NewGuid(),true,"test"))
+                objList.Add(new JobResult(new Jobs.SendEmailJob(),true,"test"))
                 cr.Messages <- objList.ToArray()
                 let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> cr).Create()
                 let cb = new ContainerBuilder()

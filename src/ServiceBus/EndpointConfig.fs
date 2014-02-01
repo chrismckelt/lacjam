@@ -45,7 +45,7 @@ namespace Lacjam.ServiceBus
            let sf = new System.Func<IScheduler>(fun _->  let fac = new StdSchedulerFactory()
                                                          fac.Initialize()
                                                          let scheduler = fac.GetScheduler()
-                                                         scheduler.JobFactory <- Configure.Instance.Builder.Build<IJobFactory>()
+                                                         scheduler.ListenerManager.AddSchedulerListener(new Scheduling.JobSchedulerListener(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>(), Lacjam.Core.Runtime.Ioc.Resolve<IBus>()))
                                                          scheduler.Start()
                                                          scheduler
                                                          )
@@ -67,7 +67,6 @@ namespace Lacjam.ServiceBus
                     let con = new ContainerBuilder()
                     con.Register(fun x -> new JobScheduler(log,sched,bus)).As<Scheduling.IJobScheduler>() |> ignore
                     con.Update(Ioc)
-                    log.Write(Info("-- Scheduler added --"))   
                     // schedule startup jobs
                     let js = new Scheduling.JobScheduler(log,sched,bus) :> IJobScheduler
                     let suJobs = new StartupBatchJobs() :> IContainBatches
@@ -77,8 +76,8 @@ namespace Lacjam.ServiceBus
 
                 member this.Stop() = 
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);    
-                    log.Write(Info("-- Scheduler Stopped --"))
                     Ioc.Dispose()
+                    log.Write(Info("-- Service Bus Stopped --"))  
 
 //            interface ISpecifyMessageHandlerOrdering  with
 //                member x.SpecifyOrder(order)  = order.Specify(First<NServiceBus.Timeout.TimeoutMessageHandler>.Then<SagaMessageHandler>())

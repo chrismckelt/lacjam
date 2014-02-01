@@ -56,9 +56,9 @@
                                             let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
                                             trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
                                             trig.StartTimeUtc <- DateTimeOffset.UtcNow
-                                            trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(10, 10,0)
+                                            trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(5, 30,0)
                                             trig.RepeatIntervalUnit <- IntervalUnit.Minute
-                                            trig.RepeatInterval <- 1
+                                            trig.RepeatInterval <- 10
                                             trig.RepeatCount <- 10
                                             trig.TimeZone <- TimeZoneInfo.Utc
 

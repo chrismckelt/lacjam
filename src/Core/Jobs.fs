@@ -62,13 +62,13 @@ open LinqToTwitter
                 member this.Clone() = new obj()
 
         [<Serializable>]
-        type JobResult(id : Guid, resultForJobId : Guid, success : bool, result : string) =
-            let mutable i = id
-            let mutable r = resultForJobId
+        type JobResult(jm:JobMessage, success : bool, result : string) =
+            let mutable j = jm
             let mutable suc = success
             let mutable res = result
-            member x.Id with get () = i and set(v) = i <- v
-            member x.ResultForJobId with get () = r and set(value) = r <- value
+            let mutable r = Guid.NewGuid()
+            member x.JobMessage with get() =j and set(value) = j <- value
+            member x.JobResultId with get () = r and set(value) = r <- value
             member val CreatedDate = DateTime.UtcNow with get
 
             member x.Success with get () = suc and set (v : bool) = suc <- v
@@ -77,8 +77,7 @@ open LinqToTwitter
 
             override x.ToString() =
                 String.Format
-                    ("{0} {1} {2} {3}", x.Id, x.ResultForJobId, x.CreatedDate,
-                     x.Success.ToString())
+                    ("Finished :: Job: {0} ResultId: {1} CreatedDate: {2} JobMessage: {3}", x.JobMessage.GetType(), x.JobResultId, x.CreatedDate, x.JobMessage.ToString()  )
             interface IMessage
 
         [<Serializable>]
@@ -171,7 +170,7 @@ open LinqToTwitter
                     // any prenotifications
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                     try
-                        let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, job.GetType().ToString() + " Completed" )
+                        let jr = Jobs.JobResult(job, true, job.GetType().ToString() + " Completed" )
                         bus.Reply(jr)
                     with ex ->
                         log.Write
@@ -200,7 +199,7 @@ open LinqToTwitter
 
                         let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                         try
-                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, html)
+                            let jr = Jobs.JobResult(job, true, html)
                             bus.Reply(jr)
                         with ex ->
                             log.Write
@@ -240,7 +239,7 @@ open LinqToTwitter
                                         )
                         
                             bus.SendMail(mail)
-                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body))
+                            let jr = Jobs.JobResult(job, true, String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body))
                             bus.Reply(jr)
                         with ex ->
                             log.Write
@@ -275,11 +274,11 @@ open LinqToTwitter
                             let twitter = new TwitterContext(auth)
                             let result = twitter.NewDirectMessageAsync(job.To, job.Payload + "  " + DateTime.Now.ToShortDateString())                        
                             result.Wait()
-                            let jr = Jobs.JobResult(Guid.NewGuid(),job.Id, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
+                            let jr = Jobs.JobResult(job, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
                             bus.Reply(jr)
                         with ex ->
                             log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
-                            let fail = Jobs.JobResult(Guid.NewGuid(),job.Id, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
+                            let fail = Jobs.JobResult(job, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
                             bus.Reply(fail)
                         
                        
