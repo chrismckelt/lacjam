@@ -59,8 +59,9 @@
                                             trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(5, 30,0)
                                             trig.RepeatIntervalUnit <- IntervalUnit.Minute
                                             trig.RepeatInterval <- 10
-                                            trig.RepeatCount <- 10
+                                            trig.RepeatCount <- 6
                                             trig.TimeZone <- TimeZoneInfo.Utc
+                                            
 
                                             swJob.BatchId  <- guidId
                                             let swJobs = [
@@ -72,5 +73,5 @@
                                                          ]
 
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
-                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
-                                            [surfReportBatch;jiraRoadmapBatch]
+                                            //let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
+                                            [surfReportBatch]

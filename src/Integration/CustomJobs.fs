@@ -87,6 +87,9 @@ module CustomJobs =
                         if rating.IsSome then log.Write(Debug(rating.Value.Value))
                         let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
                         bus.Reply(jr)
-                with ex -> log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                with ex -> 
+                        log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                        let fail = new Jobs.JobResult(job, false, ex.Message)
+                        bus.Reply(fail)
 
 

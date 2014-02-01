@@ -62,24 +62,21 @@ module Scheduling =
         do sched.Start() |> ignore
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
+        let handleBatch (batch:Batch) (trigger:ITrigger) (tp:'a) =      let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
+                                                                        let found = sched.GetJobDetail(jobDetail.Key)
+                                                                        match found with 
+                                                                            | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
+                                                                            | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
         interface IJobScheduler with 
                 override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
-                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) = 
-                                                                let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
-                                                                let found = sched.GetJobDetail(jobDetail.Key)
-                                                                let trigger = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) =   trgBuilder.WithIdentity(batch.Name + " " + batch.BatchId.ToString()) |> ignore
+                                                                                                                        let trig = trgBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                                                                                                                        handleBatch batch trig typedefof<'a>
                                                                 
-                                                                match found with 
-                                                                    | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
-                                                                    | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) = 
-                                                                let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<'a>)
-                                                                let found = sched.GetJobDetail(jobDetail.Key)
-                                                                let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
-                                                                let trigger = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
-                                                                match found with 
-                                                                    | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
-                                                                    | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
+                                                                                                                        let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
+                                                                                                                        let trig = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                                                                                                                        handleBatch batch trig typedefof<'a>
                                                            
                 
                 member this.processBatch(batch) =   

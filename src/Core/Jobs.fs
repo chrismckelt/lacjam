@@ -151,20 +151,19 @@ open LinqToTwitter
         open NServiceBus.Mailer
 
         type JobResultHandler(log : Lacjam.Core.Runtime.ILogWriter) =
+            do log.Write(Info("JobResultHandler"))
             interface NServiceBus.IHandleMessages<Jobs.JobResult> with
                 member x.Handle(jr) =
                     try
-                        log.Write(LogMessage.Debug(jr.ToString()))
+                        log.Write(LogMessage.Info("Handling Job Result : " + jr.ToString()))
                     with ex ->
                         log.Write(LogMessage.Error(jr.ToString(), ex, true))
 
         type StartupJobHandler(log : ILogWriter) =
+            do log.Write(Info("StartupJobHandler"))
             interface IHandleMessages<Jobs.StartUpJob> with
                 member x.Handle(job) =
-                    log.Write
-                        (LogMessage.Debug
-                                (job.CreatedDate.ToString() + "   "
-                                + job.GetType().ToString()))
+                    log.Write(Info(job.ToString()))
                        
                     //TODO get all jobs in batch and list them
                     // any prenotifications
@@ -175,11 +174,12 @@ open LinqToTwitter
                     with ex ->
                         log.Write
                             (LogMessage.Error
-                                    (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                                    ("StartupJobHandler" + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
                       
 
 
         type PageScraperJobHandler(log : ILogWriter) =
+            do log.Write(Info("PageScraperJobHandler"))
             interface IHandleMessages<Jobs.PageScraperJob> with
                 member x.Handle(job) =
                     match job.Url with
@@ -208,6 +208,7 @@ open LinqToTwitter
 
         type SendEmailJobHandler(log : ILogWriter) =
             let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
+            do log.Write(Info("SendEmailJobHandler"))
             interface IHandleMessages<Jobs.SendEmailJob> with
                 member x.Handle(job) =
                     match job.Email.To with
@@ -237,9 +238,11 @@ open LinqToTwitter
                                             Subject = subject,
                                             Body = body
                                         )
-                        
+                            log.Write(Info("Sending email"))
+                            let s = String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body)
+                            log.Write(Info(s))
                             bus.SendMail(mail)
-                            let jr = Jobs.JobResult(job, true, String.Format("{0} {1} {2} {3}",mail.To, mail.From, mail.Subject, mail.Body))
+                            let jr = Jobs.JobResult(job, true, s)
                             bus.Reply(jr)
                         with ex ->
                             log.Write
@@ -248,12 +251,14 @@ open LinqToTwitter
 
 
          type SendTweetJobHandler(log : ILogWriter) =
+            do log.Write(Info("SendTweetJobHandler"))
             let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
             interface IHandleMessages<Jobs.SendTweetJob> with
                 member x.Handle(job) =
                     match job.To with
                     | "" -> failwith "Job.To empty"
                     | _ ->
+                        log.Write(Info("Sending tweet for " + job.ToString()))
                         log.Write
                             (LogMessage.Debug
                                  (job.CreatedDate.ToString() + "   "
@@ -277,7 +282,7 @@ open LinqToTwitter
                             let jr = Jobs.JobResult(job, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
                             bus.Reply(jr)
                         with ex ->
-                            log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                            log.Write(LogMessage.Error("SendTweet error: " + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
                             let fail = Jobs.JobResult(job, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
                             bus.Reply(fail)
                         
