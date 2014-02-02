@@ -46,8 +46,9 @@
                                             let createG = Guid.NewGuid
                                             let guidId = createG()
                                             let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
+                                            let log = Ioc.Resolve<ILogWriter>()
+                                            log.Write(Debug("StartupBatchJobs init"))
 
-                                            
                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow()
                                             //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
@@ -55,14 +56,15 @@
                   
                                             let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
                                             trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
-                                            trig.StartTimeUtc <- DateTimeOffset.UtcNow
+                                            let startTomorrow =  Quartz.DateBuilder.TomorrowAt(5,20,0)
+                                            trig.StartTimeUtc <- startTomorrow
                                             trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(5, 30,0)
                                             trig.RepeatIntervalUnit <- IntervalUnit.Minute
                                             trig.RepeatInterval <- 10
                                             trig.RepeatCount <- 6
-                                            trig.TimeZone <- TimeZoneInfo.Utc
+                                            trig.TimeZone <- TimeZoneInfo.Local
+                                           
                                             
-
                                             swJob.BatchId  <- guidId
                                             let swJobs = [
                                                                         StartUpJob(BatchId=guidId) :> JobMessage

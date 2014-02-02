@@ -63,10 +63,15 @@ module Scheduling =
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
         let handleBatch (batch:Batch) (trigger:ITrigger) (tp:'a) =      let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
+                                                                        
                                                                         let found = sched.GetJobDetail(jobDetail.Key)
                                                                         match found with 
                                                                             | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
                                                                             | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
+                                                                        let dto = trigger.GetNextFireTimeUtc()
+                                                                        match dto.HasValue with
+                                                                        | true -> log.Write(Info(jobDetail.Name + " next fire time (local) " + dto.Value.ToLocalTime().ToString()))
+                                                                        | false -> log.Write(Info(jobDetail.Name + " not scheduled triggers" ))
         interface IJobScheduler with 
                 override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) =   trgBuilder.WithIdentity(batch.Name + " " + batch.BatchId.ToString()) |> ignore
