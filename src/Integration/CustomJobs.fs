@@ -62,6 +62,20 @@ module CustomJobs =
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         do log.Write (LogMessage.Debug("SwellNetRatingHandler"))
+        let processJob (doc:HtmlAgilityPack.HtmlDocument) (dt:DateTime) (job:SwellNetRatingJob) =          if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
+                                                                                                                let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
+                                                                                                                let rating = findNodesByClassName(ratingSpan, "field-content")
+                                                                                                                match rating with
+                                                                                                                | Some(a) ->    log.Write(Debug("Rating is " + rating.Value.OwnerNode.InnerText))
+                                                                                                                                let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
+                                                                                                                                bus.Reply(jr)
+                                                                                                                | None ->   let mins = DateTime.Now.AddMinutes(double 10)
+                                                                                                                            let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
+                                                                                                                            deferJob log bus job msg mins
+                                                                                                            else
+                                                                                                                    let mins = DateTime.Now.AddMinutes(double 10)
+                                                                                                                    let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
+                                                                                                                    deferJob log bus job msg mins
         interface NServiceBus.IHandleMessages<SwellNetRatingJob> with
             member x.Handle(job) =                   
                 log.Write (LogMessage.Info(job.ToString()))    
@@ -75,29 +89,17 @@ module CustomJobs =
 
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
                     
-                    let dt = 
-                            try
-                                let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
-                                cleaned <- cleaned.Replace("pm", String.Empty)
-                                cleaned <- cleaned.Replace("am", String.Empty)
-                                cleaned |> System.Convert.ToDateTime
-                            with | ex -> DateTime.Now
-                    log.Write(Debug(dt.ToString()))
+                    try
+                            let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
+                            cleaned <- cleaned.Replace("pm", String.Empty)
+                            cleaned <- cleaned.Replace("am", String.Empty)
+                            let result = cleaned |> System.Convert.ToDateTime  
+                            log.Write(Debug("SwellNetJob parse date on page success : " + result.ToString()))
+                            processJob doc result job 
+                    with | ex -> 
+                           log.Write(Error("SwellNetJob parsing date on page",ex,false))
+                           
 
-                    if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
-                        let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
-                        let rating = findNodesByClassName(ratingSpan, "field-content")
-                        match rating with
-                        | Some(a) ->    log.Write(Debug("Rating is " + rating.Value.OwnerNode.InnerText))
-                                        let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
-                                        bus.Reply(jr)
-                        | None ->   let mins = DateTime.Now.AddMinutes(double 10)
-                                    let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
-                                    deferJob log bus job msg mins
-                    else
-                        let mins = DateTime.Now.AddMinutes(double 10)
-                        let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
-                        deferJob log bus job msg mins
                 with ex -> 
                         log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
                         let fail = new Jobs.JobResult(job, false, ex.Message)
