@@ -59,9 +59,9 @@
                                             let startTomorrow =  Quartz.DateBuilder.TomorrowAt(5,20,0)
                                             trig.StartTimeUtc <- startTomorrow
                                             trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(5, 30,0)
-                                            trig.RepeatIntervalUnit <- IntervalUnit.Minute
-                                            trig.RepeatInterval <- 10
-                                            trig.RepeatCount <- 6
+                                            trig.RepeatIntervalUnit <- IntervalUnit.Day
+                                            trig.RepeatInterval <- 1
+                                            trig.RepeatCount <- 3
                                             trig.TimeZone <- TimeZoneInfo.Local
                                            
                                             

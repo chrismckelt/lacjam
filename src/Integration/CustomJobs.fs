@@ -58,10 +58,10 @@ module CustomJobs =
           
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
+        do log.Write (LogMessage.Debug("SwellNetRatingHandler"))
         interface NServiceBus.IHandleMessages<SwellNetRatingJob> with
-            member x.Handle(job) =
-                log.Write (LogMessage.Debug(job.CreatedDate.ToString() + "   " + job.GetType().ToString()))                    
-                log.Write (LogMessage.Debug(job.Payload))    
+            member x.Handle(job) =                   
+                log.Write (LogMessage.Info(job.ToString()))    
                 try
                     let doc = new HtmlAgilityPack.HtmlDocument()
                     doc.OptionFixNestedTags<-true;
@@ -87,6 +87,11 @@ module CustomJobs =
                         if rating.IsSome then log.Write(Debug(rating.Value.Value))
                         let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
                         bus.Reply(jr)
+                    else
+                        let defer = DateTime.Now.AddMinutes(double 10)
+                        log.Write (LogMessage.Debug("SwellNetRating - incorrect day found on page"))
+                        log.Write (LogMessage.Debug("Resubmitting job for processing at : " + defer.ToLongTimeString()))
+                        bus.Defer(defer, job).Register(Scheduling.callBackReceiver) |> ignore
                 with ex -> 
                         log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
                         let fail = new Jobs.JobResult(job, false, ex.Message)
