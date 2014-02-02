@@ -55,7 +55,10 @@ module CustomJobs =
             override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduling.callBackReceiver)
                                           do log.Write(Debug("SwellNetRatingJob fire ------"))
                                           fire |> ignore  
-          
+    
+    let deferJob (log:ILogWriter) (bus:IBus) (job:Jobs.JobMessage) (msg:String) (mins:DateTime) =           log.Write (LogMessage.Info(msg))
+                                                                                                            log.Write (LogMessage.Info("Defer send again until " + mins.ToLongTimeString()))
+                                                                                                            bus.Defer(mins, job).Register(Scheduling.callBackReceiver) |> ignore      
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         do log.Write (LogMessage.Debug("SwellNetRatingHandler"))
@@ -84,14 +87,17 @@ module CustomJobs =
                     if (dt.DayOfWeek = System.DateTime.Now.DayOfWeek) then
                         let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
                         let rating = findNodesByClassName(ratingSpan, "field-content")
-                        if rating.IsSome then log.Write(Debug(rating.Value.Value))
-                        let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
-                        bus.Reply(jr)
+                        match rating with
+                        | Some(a) ->    log.Write(Debug("Rating is " + rating.Value.OwnerNode.InnerText))
+                                        let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
+                                        bus.Reply(jr)
+                        | None ->   let mins = DateTime.Now.AddMinutes(double 10)
+                                    let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
+                                    deferJob log bus job msg mins
                     else
-                        let defer = DateTime.Now.AddMinutes(double 10)
-                        log.Write (LogMessage.Debug("SwellNetRating - incorrect day found on page"))
-                        log.Write (LogMessage.Debug("Resubmitting job for processing at : " + defer.ToLongTimeString()))
-                        bus.Defer(defer, job).Register(Scheduling.callBackReceiver) |> ignore
+                        let mins = DateTime.Now.AddMinutes(double 10)
+                        let msg =  ("SwellNetRating - incorrect day found on page - " + "Resubmitting job for processing at : " + mins.ToLongTimeString())
+                        deferJob log bus job msg mins
                 with ex -> 
                         log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
                         let fail = new Jobs.JobResult(job, false, ex.Message)
