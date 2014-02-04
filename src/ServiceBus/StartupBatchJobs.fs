@@ -50,23 +50,12 @@
                                             log.Write(Debug("StartupBatchJobs init"))
 
                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                                            //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow()
-                                            //let trig = TriggerBuilder.Create().WithSimpleSchedule(fun a-> a.WithIntervalInSeconds(30)|>ignore).StartNow().Build()
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local) |> ignore).Build()
-    
-//                                            let trig = new Quartz.Impl.Triggers.DailyTimeIntervalTriggerImpl()
-//                                            trig.Name <- "trig-daily " + Guid.NewGuid().ToString()
-//                                            let startTomorrow =  Quartz.DateBuilder.TomorrowAt(5,20,0)
-//                                            trig.StartTimeUtc <- startTomorrow
-//                                            trig.StartTimeOfDay <- TimeOfDay.HourMinuteAndSecondOfDay(5, 30,0)
-//                                            trig.RepeatIntervalUnit <- IntervalUnit.Day
-//                                           // trig.RepeatInterval <- 24
-//                                            //trig.RepeatCount <- 3
-//                                            trig.EndTimeOfDay  <- TimeOfDay.HourMinuteAndSecondOfDay(6, 30,0)
-//                                            trig.TimeZone <- TimeZoneInfo.Local
+                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).Build() |> ignore).Build()
+
                                             let spi = trig :?> Spi.IOperableTrigger
                                             let times = TriggerUtils.ComputeFireTimes(spi, null,10)
+                                            log.Write(Debug("Next 10 fire times scheduled for..."))
                                             for time in times do
                                                  log.Write(Debug(time.ToLocalTime().ToString()))
 
