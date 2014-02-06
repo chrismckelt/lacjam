@@ -51,7 +51,7 @@
 
                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).EndingDailyAfterCount(10).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().Build() |> ignore).Build()
+                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).EndingDailyAfterCount(1).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().Build() |> ignore).Build()
 
                                             let spi = trig :?> Spi.IOperableTrigger
                                             let times = TriggerUtils.ComputeFireTimes(spi, null,10)

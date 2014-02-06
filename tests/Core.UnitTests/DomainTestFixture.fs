@@ -33,7 +33,7 @@ let ``Investor.ToString should write name`` () =
 //    Debug.WriteLine(result)
 
 [<Fact>]
-let ``mailbox test`` () =
+let ``Mailbox test`` () =
     let agent = MailboxProcessor<Message>.Start(fun aaa ->        
         async {
             try
@@ -50,16 +50,5 @@ let ``mailbox test`` () =
     let mutable count = 0
     let reply = agent.PostAndReply(fun replyChannel -> 15, replyChannel)
     Console.WriteLine("Reply: %s" + reply.ToString())
-
-//    while count < 0 do
-//        let input = count
-//        printThreadId("Console loop")
-//        let reply = agent.PostAndReply(fun replyChannel -> input, replyChannel)
-//        if (reply > 3) then
-//            Console.WriteLine("Reply: %s" + reply.ToString())
-//        else
-//            ()
-//        count = count+1 
-//        |> ignore
 
 
