@@ -51,14 +51,15 @@
 
                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).Build() |> ignore).Build()
+                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).EndingDailyAfterCount(10).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().Build() |> ignore).Build()
 
                                             let spi = trig :?> Spi.IOperableTrigger
                                             let times = TriggerUtils.ComputeFireTimes(spi, null,10)
                                             log.Write(Debug("Next 10 fire times scheduled for..."))
                                             for time in times do
                                                  log.Write(Debug(time.ToLocalTime().ToString()))
-
+                                           
+                                            
                                             swJob.BatchId  <- guidId
                                             let swJobs = [
                                                                         StartUpJob(BatchId=guidId) :> JobMessage
@@ -69,5 +70,5 @@
                                                          ]
 
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="surfReportBatch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
-                                            //let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
-                                            [surfReportBatch]
+                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="jiraRoadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
+                                            [surfReportBatch; jiraRoadmapBatch]
