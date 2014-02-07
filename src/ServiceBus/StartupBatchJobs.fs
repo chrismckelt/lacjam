@@ -51,13 +51,17 @@
 
                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a->a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).EndingDailyAfterCount(1).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().Build() |> ignore).Build()
+                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a-> 
+                                                                                                                        ( 
+                                                                                                                            let x = a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().WithRepeatCount(3).WithIntervalInMinutes(15).Build()
+                                                                                                                            let spi = x :?> Spi.IOperableTrigger
+                                                                                                                            let times = TriggerUtils.ComputeFireTimes(spi, null,10)
+                                                                                                                            log.Write(Debug("Next 10 fire times scheduled for..."))
+                                                                                                                            for time in times do
+                                                                                                                                 log.Write(Debug(time.ToLocalTime().ToString()))
+                                                                                                                        )).Build()
 
-                                            let spi = trig :?> Spi.IOperableTrigger
-                                            let times = TriggerUtils.ComputeFireTimes(spi, null,10)
-                                            log.Write(Debug("Next 10 fire times scheduled for..."))
-                                            for time in times do
-                                                 log.Write(Debug(time.ToLocalTime().ToString()))
+                                           
                                            
                                             
                                             swJob.BatchId  <- guidId
