@@ -98,8 +98,8 @@ module CustomJobs =
                             processJob doc result job 
                     with | ex -> 
                            log.Write(Error("SwellNetJob parsing date on page",ex,false))
-                           log.Write(Info("Deferring job for execution for 30 minutes: " + job.ToString()))
-                           bus.Defer(DateTime.Now.AddMinutes(double 30),job) |> ignore
+                           let msg = "Deferring job for execution for 30 minutes: " + job.ToString()
+                           deferJob log bus job msg (DateTime.Now.AddMinutes(double 30))
                            
 
                 with ex -> 
