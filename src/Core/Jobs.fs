@@ -124,7 +124,7 @@ open LinqToTwitter
         | Failed
 
      [<CLIMutable>]
-     type Batch =  {Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : Jobs.JobMessage list; Status:BatchStatus; TriggerBuilder:TriggerBuilder}
+     type Batch =  {mutable Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : Jobs.JobMessage list; Status:BatchStatus; TriggerBuilder:TriggerBuilder}
 
      type IContainBatches = 
             abstract Batches : Batch list

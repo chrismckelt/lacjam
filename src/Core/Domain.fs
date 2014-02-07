@@ -4,6 +4,7 @@
     open Microsoft.FSharp.Core
     open Microsoft.FSharp.Collections
 
+    [<AutoOpen>]
     module Domain =
 
         [<CLIMutable>]

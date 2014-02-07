@@ -2,6 +2,7 @@
     open System
     open SettingsProviderNet
 
+    [<AutoOpen>]
     module Settings = 
 
         [<CLIMutable>]

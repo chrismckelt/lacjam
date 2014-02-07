@@ -1,9 +1,11 @@
 ﻿namespace Lacjam.Core
 
+[<AutoOpen>]
 module Runtime =
     open System
     open System.IO
     open System.Net.Mail
+    open System.Configuration       
     open Autofac
     open log4net
     open log4net.Core
@@ -12,6 +14,10 @@ module Runtime =
     open NServiceBus.Mailer
     open Lacjam.Core
     open Quartz
+    open Raven
+    open Raven.Client
+    open Raven.Client.Connection 
+    open Raven.Client.Document
 
     type LogMessage =
         | Debug of string
@@ -74,5 +80,21 @@ module Runtime =
                                 cb
     
     let Ioc =
+        ContainerBuilder.Register(fun a->
+                                          let store = new DocumentStore(Url = System.Configuration.ConfigurationManager.AppSettings.Item("RavenDBUrl"))
+                                          store.DefaultDatabase <- "Lacjam"
+                                          store.Initialize()
+                                          store
+                                 ).As<IDocumentStore>().SingleInstance()
+
+        ContainerBuilder.Register(fun a -> a.Resolve<IDocumentStore>().OpenSession())
+           .As<IDocumentSession>()
+           .InstancePerLifetimeScope()
+           .OnRelease(fun b ->
+                       // When the scope is released, save changes
+                       //  before disposing the session.
+                       b.SaveChanges();
+                       b.Dispose();
+            )
         let con = ContainerBuilder.Build()
         con

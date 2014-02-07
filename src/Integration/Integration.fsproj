@@ -144,6 +144,14 @@
       <HintPath>..\..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -153,6 +161,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services" />
@@ -184,6 +193,7 @@
     <Compile Include="LogFileAnalyser.fs" />
     <Compile Include="CustomJobs.fs" />
     <None Include="job_scheduling_data_2_0.xsd" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">
