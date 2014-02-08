@@ -6,15 +6,22 @@
     open Lacjam
     open Lacjam.Core
     open HtmlAgilityPack
+    open Raven
+    open Raven.Client
+    open Raven.Client.Document
+    open Raven.Abstractions.Data
 
     [<AutoOpen>]
     module Utility =
          
-         ///http://books.google.com.au/books?id=MH3-T2jGFsEC&pg=PA22&lpg=PA22&dq=daniel+mohl+nullcheck&source=bl&ots=a8vv40Iklg&sig=j21km-HFd3Jan9uqoIPIyBLzmvU&hl=en&sa=X&ei=Nma-UoGcO4XMkQXi8YDwDQ&ved=0CEMQ6AEwAw#v=onepage&q=daniel%20mohl%20nullcheck&f=false
+            ///http://books.google.com.au/books?id=MH3-T2jGFsEC&pg=PA22&lpg=PA22&dq=daniel+mohl+nullcheck&source=bl&ots=a8vv40Iklg&sig=j21km-HFd3Jan9uqoIPIyBLzmvU&hl=en&sa=X&ei=Nma-UoGcO4XMkQXi8YDwDQ&ved=0CEMQ6AEwAw#v=onepage&q=daniel%20mohl%20nullcheck&f=false
         let NullCheck = function
             | v when v <> null -> Some v
             | _ -> None
 
+        module RavenDB =
+            let deleteAll<'a> (session:IDocumentSession) = session.Advanced.DocumentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", (new IndexQuery(Query = ("Tag:" + typedefof<'a>.Name))),true)
+            
 
         module Html  =
 
@@ -36,6 +43,8 @@
                                         else
                                             None
 
+      
+      
       module HtmlAgilityPackFSharp =
             ///http://blog.codebeside.org/blog/2013/10/14/fsharp-for-screen-scraping/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+CodeBeside+%28Code+Beside%29
             open HtmlAgilityPack

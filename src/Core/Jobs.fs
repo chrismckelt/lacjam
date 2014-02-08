@@ -86,11 +86,16 @@ open LinqToTwitter
             interface IMessage
 
         [<Serializable>]
+        type AuditJob() =
+            inherit JobMessage()
+            member val Audit:Domain.Audit option = None with get,set
+            interface IMessage
+
+        [<Serializable>]
         type PageScraperJob() =
             inherit JobMessage()
             member val Url = String.Empty with get, set
             interface IMessage
-            
 
         [<CLIMutable>]
         type Email = {To:string;From:string;Subject:string;Body:string;}

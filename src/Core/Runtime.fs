@@ -83,9 +83,9 @@ module Runtime =
         ContainerBuilder.Register(fun a->
                                           let store = new DocumentStore(Url = System.Configuration.ConfigurationManager.AppSettings.Item("RavenDBUrl"))
                                           store.DefaultDatabase <- "Lacjam"
-                                          store.Initialize()
-                                          store
-                                 ).As<IDocumentStore>().SingleInstance()
+                                          store.Initialize() |> ignore
+                                          store  
+                                 ).As<IDocumentStore>().SingleInstance() |> ignore
 
         ContainerBuilder.Register(fun a -> a.Resolve<IDocumentStore>().OpenSession())
            .As<IDocumentSession>()
@@ -93,8 +93,8 @@ module Runtime =
            .OnRelease(fun b ->
                        // When the scope is released, save changes
                        //  before disposing the session.
-                       b.SaveChanges();
-                       b.Dispose();
-            )
+                       b.SaveChanges() |> ignore
+                       b.Dispose()  |> ignore
+            ) |> ignore
         let con = ContainerBuilder.Build()
         con

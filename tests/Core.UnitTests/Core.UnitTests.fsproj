@@ -62,8 +62,8 @@
     </None>
     <None Include="job_scheduling_data_2_0.xsd" />
     <Compile Include="SchedulingTestFixture.fs" />
-    <None Include="Foq.Usage.fsx" />
     <None Include="app.config" />
+    <None Include="Foq.Usage.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Autofac">
@@ -75,15 +75,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Foq">
-      <HintPath>..\..\packages\Foq.1.0\Lib\net45\Foq.dll</HintPath>
+      <HintPath>..\..\packages\Foq.1.6\Lib\net45\Foq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.CustomMatchers">
-      <HintPath>..\..\packages\FsUnit.xUnit.1.2.1.2\Lib\Net40\FsUnit.CustomMatchers.dll</HintPath>
+      <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\FsUnit.CustomMatchers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.Xunit">
-      <HintPath>..\..\packages\FsUnit.xUnit.1.2.1.2\Lib\Net40\FsUnit.Xunit.dll</HintPath>
+      <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\FsUnit.Xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack">
@@ -111,7 +111,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NHamcrest">
-      <HintPath>..\..\packages\FsUnit.xUnit.1.2.1.2\Lib\Net40\NHamcrest.dll</HintPath>
+      <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\NHamcrest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
@@ -124,6 +124,10 @@
     </Reference>
     <Reference Include="NServiceBus.Mailer">
       <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.Autofac">
+      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.0\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ploeh.AutoFixture">

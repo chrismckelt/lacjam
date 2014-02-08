@@ -41,7 +41,9 @@ let ``BatchProcessor handles replies submits job``() =
                 let objList = new System.Collections.Generic.List<obj>()
                 objList.Add(new JobResult(new Jobs.SendEmailJob(),true,"test"))
                 cr.Messages <- objList.ToArray()
-                let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> cr).Create()
+                //let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> cr).Create()
+//                let callback =  { new ICallback member x.Value = ""}
+                let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> Foq.Mock<ICallback>().Create()).Create()
                 let cb = new ContainerBuilder()
                 cb.Register(fun x -> log).As<ILogWriter>() |> ignore
                 cb.Register(fun x -> sched).As<IScheduler>() |> ignore

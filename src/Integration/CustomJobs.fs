@@ -50,11 +50,6 @@ module CustomJobs =
     type SwellNetRatingJob(log:ILogWriter) =
         inherit Lacjam.Core.Jobs.JobMessage()
         do log.Write(Debug("SwellNetRatingJob ctr"))
-        interface NServiceBus.IMessage
-        interface Quartz.IJob with
-            override x.Execute(context) = let fire = Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send(x).Register(Scheduling.callBackReceiver)
-                                          do log.Write(Debug("SwellNetRatingJob fire ------"))
-                                          fire |> ignore  
     
     let deferJob (log:ILogWriter) (bus:IBus) (job:Jobs.JobMessage) (msg:String) (mins:DateTime) =           log.Write (LogMessage.Info(msg))
                                                                                                             log.Write (LogMessage.Info("Defer send again until " + mins.ToLongTimeString()))
@@ -93,9 +88,15 @@ module CustomJobs =
                             let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
                             cleaned <- cleaned.Replace("pm", String.Empty)
                             cleaned <- cleaned.Replace("am", String.Empty)
-                            let result = cleaned |> System.Convert.ToDateTime  
-                            log.Write(Debug("SwellNetJob parse date on page success : " + result.ToString()))
-                            processJob doc result job 
+                            let parsed = cleaned |> System.DateTime.TryParse
+                            match parsed with 
+                            | (true, dt) ->
+                                log.Write(Debug("SwellNetJob parse date on page success : " + dt.ToString()))
+                                processJob doc dt job 
+                            | (false, noDt) -> 
+                                log.Write(Info("SwellNetJob parsing date on page"))
+                                let msg = "Deferring job for execution for 30 minutes: " + job.ToString()
+                                deferJob log bus job msg (DateTime.Now.AddMinutes(double 30))
                     with | ex -> 
                            log.Write(Error("SwellNetJob parsing date on page",ex,false))
                            let msg = "Deferring job for execution for 30 minutes: " + job.ToString()

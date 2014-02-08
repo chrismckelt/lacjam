@@ -8,13 +8,13 @@
     module Domain =
 
         [<CLIMutable>]
-        type Audit = {Id:int;AuditType:string;Message:string;CreatedDate:DateTime}
+        type Audit = {mutable Id:Guid;AuditType:string;Message:string;CreatedDate:DateTime}
 
         [<CLIMutable>]            
-        type Setting =  {Id:int;Name:string;Value:string;CreatedDate:DateTime}
+        type Setting =  {mutable Id:Guid;Name:string;Value:string;CreatedDate:DateTime}
 
         [<CLIMutable>]
-        type Site     =  {Id:int;Name:string;Url:string;CreatedDate:DateTime}
+        type Site     =  {mutable Id:Guid;Name:string;Url:string;CreatedDate:DateTime}
 
 
         type Investor() =

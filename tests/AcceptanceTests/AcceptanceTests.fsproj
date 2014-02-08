@@ -60,9 +60,9 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="job_scheduling_data_2_0.xsd" />
-    <None Include="Foq.Usage.fsx" />
     <None Include="app.config" />
-    <Compile Include="DomainTestFixture.fs" />
+    <Compile Include="DomainIntegrationTestFixture.fs" />
+    <None Include="Foq.Usage.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Autofac">
@@ -74,7 +74,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Foq">
-      <HintPath>..\..\packages\Foq.1.0\Lib\net45\Foq.dll</HintPath>
+      <HintPath>..\..\packages\Foq.1.6\Lib\net45\Foq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.CustomMatchers">
