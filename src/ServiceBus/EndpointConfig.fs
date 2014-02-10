@@ -23,8 +23,11 @@ namespace Lacjam.ServiceBus
 
         type EndpointConfig() =
          
-
-            do Runtime.ContainerBuilder.Register(fun _ -> 
+            
+            do 
+                (
+                    let cb = new ContainerBuilder()
+                    cb.Register(fun _ -> 
                                                                 let fac = new StdSchedulerFactory()
                                                                 fac.Initialize()
                                                                 let scheduler = fac.GetScheduler()
@@ -32,8 +35,9 @@ namespace Lacjam.ServiceBus
                                                                 scheduler.Start()
                                                                 scheduler
                                                             ).As<Quartz.IScheduler>().SingleInstance() |> ignore
-            do Runtime.ContainerBuilder.RegisterType<JobScheduler>().As<Scheduling.IJobScheduler>().SingleInstance() |> ignore
-            do Runtime.ContainerBuilder.Update(Ioc)
+                    cb.RegisterType<JobScheduler>().As<Scheduling.IJobScheduler>().SingleInstance() |> ignore
+                    cb.Update(Ioc)
+                )
 
             interface IConfigureThisEndpoint
             interface AsA_Server
