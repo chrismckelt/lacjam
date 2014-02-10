@@ -58,17 +58,11 @@ module Scheduling =
            
             
 
-    type JobScheduler(log:ILogWriter, bus:IBus) =        
-        let shed =  (fun _ ->   let fac = new StdSchedulerFactory()
-                                fac.Initialize()
-                                let scheduler = fac.GetScheduler()
-                                scheduler.ListenerManager.AddSchedulerListener(new JobSchedulerListener(log, bus))
-                                scheduler.Start()
-                                scheduler )
+    type JobScheduler(log:ILogWriter, bus:IBus, scheduler:IScheduler) =        
+       
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
         let handleBatch (batch:Batch) (trigger:ITrigger) (tp:'a) =      let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
-                                                                        let scheduler = shed()
                                                                         let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         match found with 
                                                                             | null -> scheduler.ScheduleJob(jobDetail, trigger) |> ignore
@@ -140,12 +134,7 @@ module Scheduling =
                                                     
                                                     ()
                 
-                member this.Scheduler =     let fac = new StdSchedulerFactory()
-                                            fac.Initialize()
-                                            let scheduler = fac.GetScheduler()
-                                            scheduler.ListenerManager.AddSchedulerListener(new JobSchedulerListener(log, bus))
-                                            scheduler.Start()
-                                            scheduler
+                member this.Scheduler =  scheduler
 
 
       type ProcessBatch() =

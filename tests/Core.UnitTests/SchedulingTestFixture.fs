@@ -44,13 +44,8 @@ let ``BatchProcessor handles replies submits job``() =
                 //let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> cr).Create()
 //                let callback =  { new ICallback member x.Value = ""}
                 let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.Head)  @>).Returns(fun b -> Foq.Mock<ICallback>().Create()).Create()
-                let cb = new ContainerBuilder()
-                cb.Register(fun x -> log).As<ILogWriter>() |> ignore
-                cb.Register(fun x -> sched).As<IScheduler>() |> ignore
-                cb.Register(fun x -> bus).As<ILogWriter>() |> ignore
-
-                let js = Ioc.Resolve<IJobScheduler>()
+                let js = new JobScheduler(log,bus, sched) :> IJobScheduler
                 let trig = TriggerBuilder.Create()
                 js.scheduleBatch(batch, trig)
-                Mock.Verify(<@ sched.ScheduleJob(any(),any()) @>, once)
+                Mock.Verify(<@ js.Scheduler.ScheduleJob(any(),any()) @>, once)
                 

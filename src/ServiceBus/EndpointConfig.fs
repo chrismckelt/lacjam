@@ -42,19 +42,18 @@ namespace Lacjam.ServiceBus
                         .PurgeOnStartup(true)
                         .UnicastBus() |> ignore
          
-//       type CustomInitialization() =
-//           let sf =     let fac = new StdSchedulerFactory()
-//                        fac.Initialize()
-//                        let scheduler = fac.GetScheduler()
-//                        scheduler.ListenerManager.AddSchedulerListener(new Scheduling.JobSchedulerListener(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>(), Lacjam.Core.Runtime.Ioc.Resolve<IBus>()))
-//                        scheduler.Start()
-//                        scheduler
-//           interface IWantCustomInitialization with
-//                member this.Init() = 
-                    // Configure.Instance.Configurer.ConfigureComponent<IJobFactory>(new System.Func<IJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder):>IJobFactory), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
-                   //  Configure.Instance.Configurer.ConfigureComponent<QuartzJobFactory>(new System.Func<QuartzJobFactory>(fun a-> new QuartzJobFactory(Configure.Instance.Builder)), DependencyLifecycle.InstancePerUnitOfWork) |> ignore
-                   
-                   // Configure.Instance.Configurer.ConfigureComponent<IScheduler>(sf, DependencyLifecycle.SingleInstance) |> ignore 
+       type CustomInitialization() =
+           let sf =     let fac = new StdSchedulerFactory()
+                        fac.Initialize()
+                        let scheduler = fac.GetScheduler()
+                        scheduler.ListenerManager.AddSchedulerListener(new Scheduling.JobSchedulerListener(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>(), Lacjam.Core.Runtime.Ioc.Resolve<IBus>()))
+                        scheduler.Start()
+                        scheduler
+           interface IWantCustomInitialization with
+                member this.Init() = 
+                        Runtime.ContainerBuilder.Register(fun _ -> sf).As<Quartz.IScheduler>().SingleInstance() |> ignore
+                        Runtime.ContainerBuilder.Update(Ioc)
+                        Configure.Instance.Configurer.ConfigureComponent<IScheduler>(DependencyLifecycle.SingleInstance) |> ignore 
                           
        type ServiceBusStartUp() =     
             let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>() 
@@ -65,11 +64,10 @@ namespace Lacjam.ServiceBus
                     log.Write(Info("-- Service Bus Started --"))   
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
 
-                    let con = new ContainerBuilder()
                     //con.RegisterInstance(sf).As<Quartz.IScheduler>().SingleInstance() |> ignore
-                    con.RegisterType<JobScheduler>().As<Scheduling.IJobScheduler>().SingleInstance() |> ignore
+                    Runtime.ContainerBuilder.RegisterType<JobScheduler>().As<Scheduling.IJobScheduler>().SingleInstance() |> ignore
                     //con.Build() |> ignore
-                    con.Update(Ioc)
+                    Runtime.ContainerBuilder.Update(Ioc)
                     // schedule startup jobs
                     let js = Ioc.Resolve<IJobScheduler>()
                     log.Write(Info("EndpointConfig.Init :: SchedulerName = " + js.Scheduler.SchedulerName))
