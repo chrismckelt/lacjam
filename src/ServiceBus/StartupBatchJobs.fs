@@ -53,7 +53,7 @@
                                             //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
                                             let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a-> 
                                                                                                                         ( 
-                                                                                                                            let x = a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 15)).InTimeZone(TimeZoneInfo.Local).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().WithRepeatCount(3).WithIntervalInMinutes(15).Build()
+                                                                                                                            let x = a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 30)).InTimeZone(TimeZoneInfo.Local).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().Build()
                                                                                                                             let spi = x :?> Spi.IOperableTrigger
                                                                                                                             let times = TriggerUtils.ComputeFireTimes(spi, null,10)
                                                                                                                             log.Write(Debug("Next 10 fire times scheduled for..."))

@@ -58,16 +58,21 @@ module Scheduling =
            
             
 
-    type JobScheduler(log:ILogWriter, sched:IScheduler, bus:IBus) =        
-        do sched.Start() |> ignore
+    type JobScheduler(log:ILogWriter, bus:IBus) =        
+        let shed =  (fun _ ->   let fac = new StdSchedulerFactory()
+                                fac.Initialize()
+                                let scheduler = fac.GetScheduler()
+                                scheduler.ListenerManager.AddSchedulerListener(new JobSchedulerListener(log, bus))
+                                scheduler.Start()
+                                scheduler )
         do log.Write(Info("-- Scheduler started --"))   
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
         let handleBatch (batch:Batch) (trigger:ITrigger) (tp:'a) =      let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
-                                                                        
-                                                                        let found = sched.GetJobDetail(jobDetail.Key)
+                                                                        let scheduler = shed()
+                                                                        let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         match found with 
-                                                                            | null -> sched.ScheduleJob(jobDetail, trigger) |> ignore
-                                                                            | _ -> sched.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
+                                                                            | null -> scheduler.ScheduleJob(jobDetail, trigger) |> ignore
+                                                                            | _ -> scheduler.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
                                                                         let dto = trigger.GetNextFireTimeUtc()
                                                                         match dto.HasValue with
                                                                         | true -> log.Write(Info(jobDetail.Name + " next fire time (local) " + dto.Value.ToLocalTime().ToString()))
@@ -135,7 +140,12 @@ module Scheduling =
                                                     
                                                     ()
                 
-                member this.Scheduler = sched
+                member this.Scheduler =     let fac = new StdSchedulerFactory()
+                                            fac.Initialize()
+                                            let scheduler = fac.GetScheduler()
+                                            scheduler.ListenerManager.AddSchedulerListener(new JobSchedulerListener(log, bus))
+                                            scheduler.Start()
+                                            scheduler
 
 
       type ProcessBatch() =

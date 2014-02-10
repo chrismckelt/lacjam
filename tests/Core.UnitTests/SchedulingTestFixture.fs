@@ -49,7 +49,7 @@ let ``BatchProcessor handles replies submits job``() =
                 cb.Register(fun x -> sched).As<IScheduler>() |> ignore
                 cb.Register(fun x -> bus).As<ILogWriter>() |> ignore
 
-                let js = new JobScheduler(log, sched, bus) :> IJobScheduler
+                let js = Ioc.Resolve<IJobScheduler>()
                 let trig = TriggerBuilder.Create()
                 js.scheduleBatch(batch, trig)
                 Mock.Verify(<@ sched.ScheduleJob(any(),any()) @>, once)

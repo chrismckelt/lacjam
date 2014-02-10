@@ -13,7 +13,7 @@
                                         TwitterSettings.ConsumerSecret = "boSzSvntgZyVeECnsWqiI7ZO42igWmmiTa8rb8AI0";
                                         TwitterSettings.UserId = "lacjam"; 
                                         TwitterSettings.ScreenName = "lacjam"; 
-                                        TwitterSettings.OAuthToken = "2195787894-760NvbldEQrNPFPSMFrBaD3IxbRICYe6yV9UGNG"; 
+                                        TwitterSettings.OAuthToken = "2195787894-oRUiJuIVw1aPgpKqVSQYptKcTXlDdFcMsbPPrfY"; 
                                         TwitterSettings.OAuthTokenSecret = "kyqBaoGqT2H3ZPmpgl8mwSvN2hzYs6pgNnLr3gZsdRUsk" ;
                                         TwitterSettings.AccessToken = "2195787894-oRUiJuIVw1aPgpKqVSQYptKcTXlDdFcMsbPPrfY" ;
                                         TwitterSettings.AccessTokenSecret = "kyqBaoGqT2H3ZPmpgl8mwSvN2hzYs6pgNnLr3gZsdRUsk"; 
