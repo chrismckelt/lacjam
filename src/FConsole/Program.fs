@@ -31,7 +31,6 @@ let main argv =
     printfn "%A" argv    
     do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
 
-    let re = Settings.getTwitterSettings
-    Console.WriteLine(re.ConsumerKey)
+    Integration.Jira.outputRoadmap()
     Console.ReadLine()  |> ignore
     0 // return an integer exit code

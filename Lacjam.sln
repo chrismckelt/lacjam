@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{13E9AD02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{EF428338-36FC-4973-A2BD-6589DFAAC6C8}"
 	ProjectSection(SolutionItems) = preProject
+		scripts\Lacjam-Deploy-Remote.ps1 = scripts\Lacjam-Deploy-Remote.ps1
+		scripts\Lacjam-Deploy.bat = scripts\Lacjam-Deploy.bat
 		Scripts\NServiceBus-Install.ps1 = Scripts\NServiceBus-Install.ps1
 		Scripts\NServiceBus-Uninstall.ps1 = Scripts\NServiceBus-Uninstall.ps1
 		Scripts\PortCheck.ps1 = Scripts\PortCheck.ps1
