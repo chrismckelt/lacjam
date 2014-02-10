@@ -119,8 +119,9 @@ module Jira  =
         try
             let url = "https://atlassian.au.challenger.net/jira/rest/api/2/search?jql=project=DPMIT-PROJECTS&fields=id,key,status,customfield_10360,customfield_11075,duedate,summary,environment,status,issuelinks&maxResults=100"
             let result = getRestResponse url
-            let json = OutputRoadmapJsonSchema.Parse(result.Content)
+            
             try
+                let json = OutputRoadmapJsonSchema.Parse(result.Content)
                 for issue in json.Issues do
                     let startDate = checkNullDate issue.Fields.Customfield10360
                     let dueDate =  checkNullDate issue.Fields.Duedate
@@ -171,21 +172,25 @@ module Jira  =
                     if (ji.Status <> "DONE") then
                         jil.Add(ji)
 
+                    Debug.WriteLine(json.Total)
+                    Debug.WriteLine(json.MaxResults)  
+
             with | ex -> printf "%A" ex
 
-            Debug.WriteLine(json.Total)
-            Debug.WriteLine(json.MaxResults)  
+           
             let sb = new System.Text.StringBuilder()
             
             let op = jil.Distinct().OrderBy(fun x-> x.Start)
             let sss = JsonConvert.SerializeObject(op)
             sb.Append(sss.Replace("@", "")) |> ignore
     //
-            System.IO.File.Delete(temp)
-            System.IO.File.AppendAllText(temp,sb.ToString())
+            if (IO.Directory.Exists(temp)) then
+                System.IO.File.Delete(temp)
+                System.IO.File.AppendAllText(temp,sb.ToString())
 
-            System.IO.File.Delete(remote)
-            System.IO.File.AppendAllText(remote,sb.ToString())
+            if (IO.Directory.Exists(remote)) then
+                System.IO.File.Delete(remote)
+                System.IO.File.AppendAllText(remote,sb.ToString())
 
         with
         | :? ServerTooBusyException as exn ->

@@ -42,21 +42,22 @@ namespace Lacjam.ServiceBus
                      Configure.Transactions.Enable() |> ignore
                      Configure.Serialization.Json() |> ignore
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
-                     Configure.With()
-                        .DefineEndpointName("lacjam.servicebus")
-                        .Log4Net()
-                        .AutofacBuilder(Ioc)                   
-                        .InMemorySagaPersister()
-                        .InMemoryFaultManagement()
-                        .InMemorySubscriptionStorage()
-                        .UseInMemoryTimeoutPersister()  
-                        .UseTransport<Msmq>()
-                       // .DoNotCreateQueues()
-                        .PurgeOnStartup(true)
-                        .UnicastBus() |> ignore
+                     
+                     try
+                         Configure.With()
+                            .DefineEndpointName("lacjam.servicebus")
+                            .Log4Net()
+                            .AutofacBuilder(Ioc)                   
+                            .InMemorySagaPersister()
+                            .InMemoryFaultManagement()
+                            .InMemorySubscriptionStorage()
+                            .UseInMemoryTimeoutPersister()  
+                            .UseTransport<Msmq>()
+                           // .DoNotCreateQueues()
+                            .PurgeOnStartup(true)
+                            .UnicastBus() |> ignore
+                     with | ex -> printfn "%A" ex
 
-
-           
          
 //       type CustomInitialization() =
 //          

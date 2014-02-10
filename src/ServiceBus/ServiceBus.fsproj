@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac">
-      <HintPath>..\..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
+      <HintPath>..\..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
@@ -54,11 +54,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="LinqToTwitter.AspNet">
-      <HintPath>..\..\packages\LinqToTwitter.3.0.1-beta3\lib\net45\LinqToTwitter.AspNet.dll</HintPath>
+      <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitter.AspNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LinqToTwitterPcl">
-      <HintPath>..\..\packages\LinqToTwitter.3.0.1-beta3\lib\net45\LinqToTwitterPcl.dll</HintPath>
+      <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitterPcl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
@@ -70,19 +70,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.3.0\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.3.4\lib\net40\NServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.3.0\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.3.4\lib\net40\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Host">
-      <HintPath>..\..\packages\NServiceBus.Host.4.3.0\lib\net40\NServiceBus.Host.exe</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Host.4.3.4\lib\net40\NServiceBus.Host.exe</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Mailer">
@@ -90,23 +90,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.Autofac">
-      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.0\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.4\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.PowerShell">
-      <HintPath>..\..\packages\NServiceBus.PowerShell.4.2.1\lib\net40\NServiceBus.PowerShell.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.PowerShell.4.3.0\lib\net40\NServiceBus.PowerShell.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\..\packages\AutoFixture.3.16.4\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.3.16.5\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ploeh.AutoFixture.AutoFoq">
-      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.16.4\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.16.5\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz">
-      <HintPath>..\..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
+      <HintPath>..\..\packages\Quartz.2.2.2\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Raven.Abstractions">
@@ -149,8 +149,9 @@
       <Link>log4net.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="job_scheduling_data_2_0.xsd" />
     <None Include="Foq.Usage.fsx" />
+    <None Include="EndpointConfig.cs" />
+    <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">
