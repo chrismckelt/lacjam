@@ -41,10 +41,7 @@ namespace Lacjam.ServiceBus
                 member this.Init() = 
                      Configure.Transactions.Enable() |> ignore
                      Configure.Serialization.Json() |> ignore
-                     Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore)
-                     
-                     //Lacjam.Core.Runtime.ContainerBuilder.Update(Ioc)
-                    // Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance) |> ignore 
+                     Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      Configure.With()
                         .DefineEndpointName("lacjam.servicebus")
                         .Log4Net()
@@ -78,7 +75,7 @@ namespace Lacjam.ServiceBus
                 member this.Start() = 
                     log.Write(Info("-- Service Bus Started --"))   
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
-
+                    Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance) |> ignore
                     
                     try
                         // schedule startup jobs
