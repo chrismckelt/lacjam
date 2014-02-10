@@ -14,6 +14,7 @@ module Runtime =
     open NServiceBus.Mailer
     open Lacjam.Core
     open Quartz
+    open Quartz.Impl
     open Raven
     open Raven.Client
     open Raven.Client.Connection 
@@ -97,7 +98,6 @@ module Runtime =
                        b.Dispose()  |> ignore
             ) |> ignore
     
-
 
         let con = ContainerBuilder.Build()
         con
