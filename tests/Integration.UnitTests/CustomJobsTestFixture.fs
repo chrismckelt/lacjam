@@ -8,6 +8,9 @@ module CustomJobsTestFixture  =
     open NServiceBus    
     open NServiceBus.ObjectBuilder.Common
     open Foq
+    open System
+    open System.Linq
+    open System.Collections
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Domain
@@ -617,17 +620,15 @@ module CustomJobsTestFixture  =
                                                 let log = (Foq.Mock<ILogWriter>()).Create()
                                                 let bus = Foq.Mock<IBus>().Create()
                                                 let cj = fixture.Create<CustomJobs.SwellNetRatingJob>()
-                                                cj.Payload <- htmlContent
+                                                let htmlContentWithTodaysDate = htmlContent.Replace("Sun 9 February 6:36am", DateTime.Now.ToLongDateString())
+                                                cj.Payload <- htmlContentWithTodaysDate
                                                 let handler = new CustomJobs.SwellNetRatingHandler(log,bus)
                                                 (handler:>NServiceBus.IHandleMessages<CustomJobs.SwellNetRatingJob>).Handle(cj)
-                                                verify(<@ bus.Reply(It.IsAny<NServiceBus.IMessage>()) @>)
-                                                verify(<@ bus.Reply(It.IsAny<NServiceBus.Address>()) @>)
-//                                                try
-//                                                   
-//                                                  // Mock.Verify(<@ bus.Reply(It.IsAny<NServiceBus.IMessage>()) @>, once)
-//                                                  // Mock.Verify(<@ log.Write(Info(any())) @>, once)
-//                                                   //Mock.Verify(<@ bus.Defer(System.TimeSpan.FromSeconds(float 10),cj)@>, never)
-//                                                with | ex -> printfn "%A" ex
+                                                Mock.Verify(<@ log.Write (LogMessage.Info(cj.ToString())) @>, Foq.Times.AtLeastOnce)
+                                                let jr = new Jobs.JobResult(cj, true, "4/10")
+                                                try
+                                                    Mock.Verify(<@ bus.Reply(jr) @>, Foq.Times.AtMostOnce)
+                                                with | ex -> printfn "%A" ex
                                                 ()
                                
 
