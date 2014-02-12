@@ -72,12 +72,12 @@ module Scheduling =
         interface IJobScheduler with 
                 override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) =   trgBuilder.WithIdentity(batch.Name + " " + batch.BatchId.ToString()) |> ignore
-                                                                                                                        let trig = trgBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                                                                                                                        let trig = trgBuilder.WithPriority(1).WithDescription(batch.CreatedDate.ToString("yyyyMMddHHmmss") + "-" + batch.BatchId.ToString()).WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
                                                                                                                         handleBatch batch trig typedefof<'a>
                                                                 
                 override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) = 
                                                                                                                         let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
-                                                                                                                        let trig = triggerBuilder.WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
+                                                                                                                        let trig = triggerBuilder.WithPriority(1).WithDescription(batch.CreatedDate.ToString("yyyyMMddHHmmss") + "-" + batch.BatchId.ToString()).WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
                                                                                                                         handleBatch batch trig typedefof<'a>
                                                            
                 
@@ -169,7 +169,7 @@ module Scheduling =
                         log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))
                         js.scheduleBatch<ProcessBatch>(job.Batch)
                     with ex ->
-                        log.Write(LogMessage.Error(job.ToString(), ex, true))        
+                        log.Write(LogMessage.Error("ERROR- BatchSubmitterJobHandler : " + job.ToString(), ex, true))        
 
     
     let callBackReceiver (result:CompletionResult) = 
