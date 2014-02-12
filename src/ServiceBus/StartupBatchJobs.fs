@@ -76,14 +76,18 @@
                                                                                                                         )).StartNow().WithPriority(1).WithDescription("Hourly").Build()
                                             
                                             swJob.BatchId  <- guidId
-                                            let swJobs = [
-                                                                        StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage
-                                                                        PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage
-                                                                        swJob :> JobMessage
-                                                                        SendTweetJob(To="chris_mckelt") :> JobMessage
-                                                                        //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
-                                                         ]
+                                            let swJobs = new Collections.Generic.List<Jobs.JobMessage>()
+                                            swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
+                                            swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage)
+                                            swJobs.Add(swJob :> JobMessage)
+                                            SendTweetJob(To="chris_mckelt") :> JobMessage
+                                            //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
+                                                         
 
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
-                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=[CustomJobs.JiraRoadMapOutputJob()]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=hourlyTrigger.GetTriggerBuilder();}
+
+                                            let jiraJobs = new Collections.Generic.List<JobMessage>()
+                                            jiraJobs.Add(CustomJobs.JiraRoadMapOutputJob())
+
+                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=hourlyTrigger.GetTriggerBuilder();}
                                             [surfReportBatch; jiraRoadmapBatch]

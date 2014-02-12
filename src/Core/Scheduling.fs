@@ -121,7 +121,7 @@ module Scheduling =
                                                                                                                 }
                                                                                                             loop 0)
                                                                                                 
-                                                    let mutable payload = batch.Jobs.Head.Payload
+                                                    let mutable payload = batch.Jobs.FirstOrDefault().Payload
                                                     for job in batch.Jobs do
                                                         try
                                                             job.Payload <- payload

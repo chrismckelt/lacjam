@@ -131,7 +131,7 @@ open LinqToTwitter
         | Failed
 
      [<CLIMutable>]
-     type Batch =  {mutable Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : Jobs.JobMessage list; Status:BatchStatus; TriggerBuilder:TriggerBuilder}
+     type Batch =  {mutable Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : System.Collections.Generic.List<Jobs.JobMessage>; Status:BatchStatus; TriggerBuilder:TriggerBuilder}
 
      type IContainBatches = 
             abstract Batches : Batch list
@@ -139,7 +139,7 @@ open LinqToTwitter
     [<Serializable>]
     type BatchSubmitterJob() =
         inherit Jobs.JobMessage()
-        member val Batch:Batch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SeedBatchJob";Batch.Jobs=[]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=TriggerBuilder.Create();} with get, set
+        member val Batch:Batch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SeedBatchJob";Batch.Jobs=new System.Collections.Generic.List<Jobs.JobMessage>(); Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=TriggerBuilder.Create();} with get, set
         interface IMessage
 
     module JobHandlers =
