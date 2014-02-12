@@ -19,9 +19,7 @@ module Scheduling =
     open Quartz
     open Quartz.Spi
     open Quartz.Impl
-
-
-                                                                        
+                                                                 
    
     type IJobScheduler = 
             abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * TriggerBuilder -> unit
@@ -136,7 +134,19 @@ module Scheduling =
                 
                 member this.Scheduler =  scheduler
 
-
+      type BatchSubmitterJobHandler(log : Lacjam.Core.Runtime.ILogWriter, js : IJobScheduler) =
+            do log.Write(Info("BatchSubmitterJob"))
+            interface NServiceBus.IHandleMessages<BatchSubmitterJob> with
+                member x.Handle(job) =
+                    try
+                        log.Write(LogMessage.Info("Handling Batch  : " + job.ToString()))
+                        log.Write(Info("EndpointConfig.Init :: SchedulerName = " + js.Scheduler.SchedulerName))
+                        log.Write(Info("EndpointConfig.Init :: IsStarted = " + js.Scheduler.IsStarted.ToString()))
+                        log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))
+                        js.scheduleBatch(job.Batch.Value)
+                    with ex ->
+                        log.Write(LogMessage.Error(job.ToString(), ex, true))
+      
       type ProcessBatch() =
         interface IJob with
             member this.Execute(context : IJobExecutionContext)  =      let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()

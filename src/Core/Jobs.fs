@@ -80,6 +80,8 @@ open LinqToTwitter
                     ("Finished :: Job: {0} ResultId: {1} CreatedDate: {2} JobMessage: {3}", x.JobMessage.GetType(), x.JobResultId, x.CreatedDate, x.JobMessage.ToString()  )
             interface IMessage
 
+        
+        
         [<Serializable>]
         type StartUpJob() =
             inherit JobMessage()
@@ -134,6 +136,12 @@ open LinqToTwitter
      type IContainBatches = 
             abstract Batches : Batch list
 
+    [<Serializable>]
+    type BatchSubmitterJob() =
+        inherit Jobs.JobMessage()
+        member val Batch:Batch option = None with get,set
+        interface IMessage
+
     module JobHandlers =
         open Lacjam
         open Lacjam.Core
@@ -154,6 +162,8 @@ open LinqToTwitter
         open Newtonsoft.Json.Serialization
         open NServiceBus.MessageInterfaces
         open NServiceBus.Mailer
+
+
 
         type JobResultHandler(log : Lacjam.Core.Runtime.ILogWriter) =
             do log.Write(Info("JobResultHandler"))

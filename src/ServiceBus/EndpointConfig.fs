@@ -90,8 +90,11 @@ namespace Lacjam.ServiceBus
                         log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))
                         let suJobs = new StartupBatchJobs() :> IContainBatches
                         for batch in suJobs.Batches do
-                            js.scheduleBatch<ProcessBatch>(batch)   
+                            let startBatchJob = new BatchSubmitterJob() 
+                            startBatchJob.Batch <- Some(batch)
+                            bus.Send(startBatchJob) |> ignore
                         ()
+                        
                     with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))
                    
 
