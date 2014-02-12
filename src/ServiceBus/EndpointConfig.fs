@@ -91,7 +91,7 @@ namespace Lacjam.ServiceBus
                         let suJobs = new StartupBatchJobs() :> IContainBatches
                         for batch in suJobs.Batches do
                             let startBatchJob = new BatchSubmitterJob() 
-                            startBatchJob.Batch <- Some(batch)
+                            startBatchJob.Batch <- batch
                             bus.Send(startBatchJob) |> ignore
                         ()
                         

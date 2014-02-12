@@ -139,7 +139,7 @@ open LinqToTwitter
     [<Serializable>]
     type BatchSubmitterJob() =
         inherit Jobs.JobMessage()
-        member val Batch:Batch option = None with get,set
+        member val Batch:Batch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SeedBatchJob";Batch.Jobs=[]; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=TriggerBuilder.Create();} with get, set
         interface IMessage
 
     module JobHandlers =
