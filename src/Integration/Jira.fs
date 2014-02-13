@@ -184,11 +184,11 @@ module Jira  =
             let sss = JsonConvert.SerializeObject(op)
             sb.Append(sss.Replace("@", "")) |> ignore
     //
-            if (IO.Directory.Exists(temp)) then
+            if not <| (IO.Directory.Exists(temp)) then
                 System.IO.File.Delete(temp)
                 System.IO.File.AppendAllText(temp,sb.ToString())
 
-            if (IO.Directory.Exists(remote)) then
+            if not <| (IO.Directory.Exists(remote)) then
                 System.IO.File.Delete(remote)
                 System.IO.File.AppendAllText(remote,sb.ToString())
 
