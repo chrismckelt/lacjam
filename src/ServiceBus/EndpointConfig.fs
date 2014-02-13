@@ -82,9 +82,22 @@ namespace Lacjam.ServiceBus
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
                     Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance) |> ignore
                     
+                    let js = Ioc.Resolve<IJobScheduler>()
+
+                    // add triggers
+                    let ht =    TriggerBuilder.Create().ForJob(typedefof<ProcessBatch>.Name).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
+                    let found = js.Scheduler.GetTrigger(new TriggerKey(ht.Key.Name))
+                    match found with 
+                    | null ->   log.Write(Info("Adding hourly trigger"))
+                                let job = new JobDetailImpl(typedefof<ProcessBatch>.Name,typedefof<ProcessBatch>)
+                                job.Durable <- true
+                                js.Scheduler.AddJob(job,true)
+                                js.Scheduler.ScheduleJob(ht)  |> ignore
+                    | _ ->      log.Write(Info("NOT Adding hourly trigger as it already exists"))
+
                     try
                         // schedule startup jobs
-                        let js = Ioc.Resolve<IJobScheduler>()
+                        
                         log.Write(Info("EndpointConfig.Init :: SchedulerName = " + js.Scheduler.SchedulerName))
                         log.Write(Info("EndpointConfig.Init :: IsStarted = " + js.Scheduler.IsStarted.ToString()))
                         log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))

@@ -35,7 +35,7 @@ let ``BatchProcessor handles replies submits job``() =
                 testJobs.Add(Jobs.PageScraperJob(BatchId=guid, Id=Guid.NewGuid(), Payload = "http://www.mckelt.com") :> JobMessage )
                              
 
-                let batch = {Batch.BatchId=guid; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Test";Batch.Jobs=testJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerBuilder=TriggerBuilder.Create();}
+                let batch = {Batch.BatchId=guid; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Test";Batch.Jobs=testJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName="test-trigger";}
                 
                 let log = {new ILogWriter with member this.Write str = Debug.WriteLine(str)}
                 let sched = fixture.Create<Quartz.IScheduler>()
@@ -48,6 +48,6 @@ let ``BatchProcessor handles replies submits job``() =
                 let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.First())  @>).Returns(fun b -> Foq.Mock<ICallback>().Create()).Create()
                 let js = new JobScheduler(log,bus, sched) :> IJobScheduler
                 let trig = TriggerBuilder.Create()
-                js.scheduleBatch(batch, trig)
+                js.scheduleBatch(batch)
                 Mock.Verify(<@ js.Scheduler.ScheduleJob(any(),any()) @>, once)
                 

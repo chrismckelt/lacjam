@@ -39,7 +39,13 @@
 //                                    )
 //                                    ()
     
-
+        let printTimes (x:ITrigger) =   let log = Ioc.Resolve<ILogWriter>()
+                                        let spi = x :?> Spi.IOperableTrigger
+                                        let times = TriggerUtils.ComputeFireTimes(spi, null,10)
+                                        log.Write(Debug(x.Key.Name))
+                                        log.Write(Debug("Next 10 fire times scheduled for..."))
+                                        for time in times do
+                                                log.Write(Debug(time.ToLocalTime().ToString()))
 
         interface IContainBatches with
             override this.Batches = 
@@ -49,45 +55,25 @@
                                             let log = Ioc.Resolve<ILogWriter>()
                                             log.Write(Debug("StartupBatchJobs init"))
 
-                                            //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                                            //let trig = TriggerBuilder.Create().WithSchedule(CronScheduleBuilder.CronSchedule("0 0/5 5 * * ?").WithMisfireHandlingInstructionFireAndProceed()).StartNow().Build()
-                                            let trig =  TriggerBuilder.Create().WithDailyTimeIntervalSchedule(fun a-> 
-                                                                                                                        ( 
-                                                                                                                            let x = a.WithIntervalInHours(24).StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 30)).InTimeZone(TimeZoneInfo.Local).OnEveryDay().WithMisfireHandlingInstructionFireAndProceed().WithRepeatCount(5).Build()
-                                                                                                                            let spi = x :?> Spi.IOperableTrigger
-                                                                                                                            let times = TriggerUtils.ComputeFireTimes(spi, null,10)
-                                                                                                                            log.Write(Debug("DailyTrigger"))
-                                                                                                                            log.Write(Debug("Next 10 fire times scheduled for..."))
-                                                                                                                            for time in times do
-                                                                                                                                 log.Write(Debug(time.ToLocalTime().ToString()))
-                                                                                                                        )).StartNow().WithPriority(1).WithDescription("Daily").Build()
-
-
-
-                                            let hourlyTrigger = TriggerBuilder.Create().WithSimpleSchedule(fun a-> 
-                                                                                                                        ( 
-                                                                                                                            let x = a.WithIntervalInHours(1).RepeatForever().WithMisfireHandlingInstructionFireNow().Build()
-                                                                                                                            let spi = x :?> Spi.IOperableTrigger
-                                                                                                                            let times = TriggerUtils.ComputeFireTimes(spi, null,10)
-                                                                                                                            log.Write(Debug("HourlyTrigger"))
-                                                                                                                            log.Write(Debug("Next 10 fire times scheduled for..."))
-                                                                                                                            for time in times do
-                                                                                                                                 log.Write(Debug(time.ToLocalTime().ToString()))
-                                                                                                                        )).StartNow().WithPriority(1).WithDescription("Hourly").Build()
-                                            
-                                            swJob.BatchId  <- guidId
+                                          
+                                          
+                                            swJob.BatchId <- guidId
                                             let swJobs = new Collections.Generic.List<Jobs.JobMessage>()
                                             swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
                                             swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage)
                                             swJobs.Add(swJob :> JobMessage)
-                                            SendTweetJob(To="chris_mckelt") :> JobMessage
+                                            SendTweetJob(To="chris_mckelt") :> JobMessage  |> ignore
                                             //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
-                                                         
+                                            
+                                                                                        //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                                            let ht = TriggerBuilder.Create().StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
-                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=trig.GetTriggerBuilder();}
+                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Hourly.ToString();}
 
                                             let jiraJobs = new Collections.Generic.List<JobMessage>()
                                             jiraJobs.Add(CustomJobs.JiraRoadMapOutputJob())
 
-                                            let jiraRoadmapBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerBuilder=hourlyTrigger.GetTriggerBuilder();}
+                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Hourly.ToString();}
+
+
                                             [surfReportBatch; jiraRoadmapBatch]

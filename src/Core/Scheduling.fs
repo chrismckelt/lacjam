@@ -22,11 +22,10 @@ module Scheduling =
                                                                  
    
     type IJobScheduler = 
-            abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch * TriggerBuilder -> unit
             abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
-            abstract member createTrigger : TriggerBuilder  with get, set
+         //   abstract member createTrigger : TriggerBuilder  with get, set
     
 
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
@@ -58,27 +57,31 @@ module Scheduling =
 
     type JobScheduler(log:ILogWriter, bus:IBus, scheduler:IScheduler) =        
        
-        do log.Write(Info("-- Scheduler started --"))   
+        do log.Write(Info("-- Scheduler started --"))  
+        let getJobName (batch:Batch) = (batch.BatchId.ToString() + "-" + batch.Name)
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
-        let handleBatch (batch:Batch) (trigger:ITrigger) (tp:'a) =      let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
+        let handleBatch (batch:Batch) (tp:'a)  =                        let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
                                                                         let found = scheduler.GetJobDetail(jobDetail.Key)
-                                                                        match found with 
-                                                                            | null -> scheduler.ScheduleJob(jobDetail, trigger) |> ignore
+                                                                        let trigger = match scheduler.GetTrigger(new TriggerKey(batch.TriggerName)) with
+                                                                                          | null -> TriggerBuilder.Create().ForJob(jobDetail).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
+                                                                                          | trg -> trg
+                                                                        
+                                                                        jobDetail.Durable <- true
+                                                                        jobDetail.Name <- getJobName batch
+                                                                        jobDetail.RequestsRecovery <- true
+                                                                        jobDetail.Description <- batch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+
+                                                                        match trigger with 
+                                                                            | null -> 
+                                                                                scheduler.ScheduleJob(jobDetail, trigger) |> ignore
                                                                             | _ -> scheduler.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
                                                                         let dto = trigger.GetNextFireTimeUtc()
                                                                         match dto.HasValue with
                                                                         | true -> log.Write(Info(jobDetail.Name + " next fire time (local) " + dto.Value.ToLocalTime().ToString()))
                                                                         | false -> log.Write(Info(jobDetail.Name + " not scheduled triggers" ))
         interface IJobScheduler with 
-                override this.createTrigger with get() = triggerBuilder  and set(v) = triggerBuilder <- v           
-                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch, trgBuilder:TriggerBuilder) =   trgBuilder.WithIdentity(batch.Name + " " + batch.BatchId.ToString()) |> ignore
-                                                                                                                        let trig = trgBuilder.WithPriority(1).WithDescription(batch.CreatedDate.ToString("yyyyMMddHHmmss") + "-" + batch.BatchId.ToString()).WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
-                                                                                                                        handleBatch batch trig typedefof<'a>
                                                                 
-                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) = 
-                                                                                                                        let triggerBuilder = match batch.TriggerBuilder with | null -> triggerBuilder | _ -> batch.TriggerBuilder
-                                                                                                                        let trig = triggerBuilder.WithPriority(1).WithDescription(batch.CreatedDate.ToString("yyyyMMddHHmmss") + "-" + batch.BatchId.ToString()).WithIdentity(batch.Name + "  " + batch.BatchId.ToString()).Build()
-                                                                                                                        handleBatch batch trig typedefof<'a>
+                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) =  handleBatch batch typedefof<'a>
                                                            
                 
                 member this.processBatch(batch) =   
@@ -139,8 +142,8 @@ module Scheduling =
             member this.Execute(context : IJobExecutionContext)  =      let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
                                                                         let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
                                                                         let batchName = context.JobDetail.Key.Name
-                                                                        Console.WriteLine(batchName)
-                                                                        Console.WriteLine("Job is executing - {0}.", DateTime.Now)
+                                                                        log.Write(Info(batchName))
+                                                                        log.Write(Info("Job is executing - {0}." + DateTime.Now.ToString()))
                                                                         try
                                                                             let js = Ioc.Resolve<IJobScheduler>()
                                                                             let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
@@ -153,10 +156,13 @@ module Scheduling =
                                                                                         | _ -> 
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
                                                                                                 let b = batches.Batches.Head
+                                                                                                log.Write(Debug("ProcessBatch.Execute:" + b.Name))
                                                                                                 js.processBatch(b) 
+                                                                                                log.Write(Debug("ProcessBatch.Execute: SUCCESS"))
                                                                                                 context.Result <- true 
                                                                                
-                                                                        with | ex -> log.Write(Error("Job failed", ex, false)) 
+                                                                        with | ex ->    log.Write(Debug("ProcessBatch.Execute: FAILED"))
+                                                                                        log.Write(Error("Job failed", ex, false)) 
              
      type BatchSubmitterJobHandler(log : Lacjam.Core.Runtime.ILogWriter, js : IJobScheduler) =
             do log.Write(Info("BatchSubmitterJob"))
