@@ -184,13 +184,15 @@ module Jira  =
             let sss = JsonConvert.SerializeObject(op)
             sb.Append(sss.Replace("@", "")) |> ignore
     //
-            if not <| (IO.Directory.Exists(temp)) then
-                System.IO.File.Delete(temp)
-                System.IO.File.AppendAllText(temp,sb.ToString())
+            if (IO.File.Exists(temp)) then
+                   System.IO.File.Delete(temp)
+                
 
-            if not <| (IO.Directory.Exists(remote)) then
-                System.IO.File.Delete(remote)
-                System.IO.File.AppendAllText(remote,sb.ToString())
+            if (IO.File.Exists(remote)) then
+                   System.IO.File.Delete(remote)
+                
+            System.IO.File.AppendAllText(temp,sb.ToString())
+            System.IO.File.AppendAllText(remote,sb.ToString())
 
         with
         | :? ServerTooBusyException as exn ->
