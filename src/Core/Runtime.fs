@@ -54,9 +54,10 @@ module Runtime =
                 match lm with
                 | Debug(s) ->
                     let le = new LoggingEvent(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType,_logger.Repository, lm.GetType().Name, log4net.Core.Level.Debug,s, null)
-                    printfn "%A" lm
-                    le.Properties.Item("EventID") <- 100
-                    _logger.Log(le)
+                    if not <| (s.Contains("Polling next retrieval is")) then
+                        printfn "%A" lm
+                        le.Properties.Item("EventID") <- 100
+                        _logger.Log(le)
                 | Info(s) ->
                     let le = new LoggingEvent(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType,_logger.Repository, lm.GetType().Name, log4net.Core.Level.Debug,s, null)
                     printfn "%A" lm
