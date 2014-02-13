@@ -134,7 +134,7 @@ open LinqToTwitter
         | Hourly = 'h' | Daily ='d'
 
      [<CLIMutable>]
-     type Batch =  {mutable Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : System.Collections.Generic.List<Jobs.JobMessage>; Status:BatchStatus; TriggerName:string}
+     type Batch =  {mutable Id: Guid; Name: String; BatchId : Guid; CreatedDate : DateTime; Jobs : System.Collections.Generic.List<Jobs.JobMessage>; Status:BatchStatus; mutable TriggerName:string}
 
      type IContainBatches = 
             abstract Batches : Batch list

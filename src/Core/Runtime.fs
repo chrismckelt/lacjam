@@ -42,6 +42,8 @@ module Runtime =
 
     type LogWriter() =
         let lFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"log4net.config")
+        let excludeFromLoggingList = ["Polling for timeouts";"Polling next retrieval is"]
+        let exclude str list  = List.exists (fun elem -> elem = str) list
         do
             if  File.Exists lFile then
                 log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(lFile)) |> ignore
@@ -54,7 +56,7 @@ module Runtime =
                 match lm with
                 | Debug(s) ->
                     let le = new LoggingEvent(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType,_logger.Repository, lm.GetType().Name, log4net.Core.Level.Debug,s, null)
-                    if not <| (s.Contains("Polling next retrieval is")) then
+                    if not <| (exclude s excludeFromLoggingList) then
                         printfn "%A" lm
                         le.Properties.Item("EventID") <- 100
                         _logger.Log(le)

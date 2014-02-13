@@ -49,14 +49,10 @@
 
         interface IContainBatches with
             override this.Batches = 
-                                            let createG = Guid.NewGuid
-                                            let guidId = createG()
-                                            let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
                                             let log = Ioc.Resolve<ILogWriter>()
                                             log.Write(Debug("StartupBatchJobs init"))
-
-                                          
-                                          
+                                            let guidId = Guid.NewGuid()
+                                            let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
                                             swJob.BatchId <- guidId
                                             let swJobs = new Collections.Generic.List<Jobs.JobMessage>()
                                             swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
@@ -65,15 +61,37 @@
                                             SendTweetJob(To="chris_mckelt") :> JobMessage  |> ignore
                                             //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                             
-                                                                                        //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                                            let ht = TriggerBuilder.Create().StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-
-                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Hourly.ToString();}
+                                                                                                           
+                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName="";}
 
                                             let jiraJobs = new Collections.Generic.List<JobMessage>()
                                             jiraJobs.Add(CustomJobs.JiraRoadMapOutputJob())
 
-                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Hourly.ToString();}
+                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName="";}
 
+                                            let sjobDetail = new JobDetailImpl(surfReportBatch.GetType().Name,  surfReportBatch.Name, typedefof<ProcessBatch>)
+                                            sjobDetail.Durable <- true
+                                            sjobDetail.Name <- surfReportBatch.Name
+                                            sjobDetail.RequestsRecovery <- true
+                                            sjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                                            let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.GetType().Name,  jiraRoadmapBatch.Name, typedefof<ProcessBatch>)
+                                            jjobDetail.Durable <- true
+                                            jjobDetail.Name <- surfReportBatch.Name
+                                            jjobDetail.RequestsRecovery <- true
+                                            jjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                                            
 
+                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                                            let dt = TriggerBuilder.Create().ForJob(sjobDetail).StartAt(DateBuilder.FutureDate(10,IntervalUnit.Minute)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                                            let ht = TriggerBuilder.Create().ForJob(jjobDetail).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                                            
+                                            surfReportBatch.TriggerName <- dt.Key.Name
+                                            jiraRoadmapBatch.TriggerName <- ht.Key.Name
+                                            
+                                            let js = Ioc.Resolve<IJobScheduler>();
+                                            
+                                            js.Scheduler.AddJob(sjobDetail,true) |> ignore
+                                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
+                                            js.Scheduler.ScheduleJob(ht) |> ignore
+                                            js.Scheduler.ScheduleJob(dt) |> ignore
                                             [surfReportBatch; jiraRoadmapBatch]

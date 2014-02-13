@@ -58,16 +58,15 @@ module Scheduling =
     type JobScheduler(log:ILogWriter, bus:IBus, scheduler:IScheduler) =        
        
         do log.Write(Info("-- Scheduler started --"))  
-        let getJobName (batch:Batch) = (batch.BatchId.ToString() + "-" + batch.Name)
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
-        let handleBatch (batch:Batch) (tp:'a)  =                        let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp)
+        let handleBatch (batch:Batch) (tp:'a)  =                        let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp,true,true)
                                                                         let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         let trigger = match scheduler.GetTrigger(new TriggerKey(batch.TriggerName)) with
                                                                                           | null -> TriggerBuilder.Create().ForJob(jobDetail).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
                                                                                           | trg -> trg
                                                                         
                                                                         jobDetail.Durable <- true
-                                                                        jobDetail.Name <- getJobName batch
+                                                                        jobDetail.Name <- batch.Name
                                                                         jobDetail.RequestsRecovery <- true
                                                                         jobDetail.Description <- batch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
 
@@ -157,7 +156,10 @@ module Scheduling =
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
                                                                                                 for b in batches.Batches do
                                                                                                     log.Write(Debug("ProcessBatch.Execute:" + b.Name))
-                                                                                                    js.processBatch(b) 
+                                                                                                    try
+                                                                                                        js.processBatch(b) 
+                                                                                                    with | ex ->    log.Write(Error("ProcessBatch.Execute: Individual batch failed: " + b.Name, ex, false)) 
+                                                                                                                    log.Write(Debug(b.ToString()))
                                                                                                 
                                                                                                 log.Write(Debug("ProcessBatch.Execute: SUCCESS"))
                                                                                                 context.Result <- true 
