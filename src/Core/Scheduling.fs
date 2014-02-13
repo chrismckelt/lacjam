@@ -152,12 +152,13 @@ module Scheduling =
                                                                                 for ty in types do
                                                                                     let cb = ty.GetInterface(typedefof<IContainBatches>.FullName)
                                                                                     match cb with
-                                                                                        | null -> ()
+                                                                                        | null ->  log.Write(Warn("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND", new InvalidOperationException("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND")))
                                                                                         | _ -> 
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
-                                                                                                let b = batches.Batches.Head
-                                                                                                log.Write(Debug("ProcessBatch.Execute:" + b.Name))
-                                                                                                js.processBatch(b) 
+                                                                                                for b in batches.Batches do
+                                                                                                    log.Write(Debug("ProcessBatch.Execute:" + b.Name))
+                                                                                                    js.processBatch(b) 
+                                                                                                
                                                                                                 log.Write(Debug("ProcessBatch.Execute: SUCCESS"))
                                                                                                 context.Result <- true 
                                                                                
