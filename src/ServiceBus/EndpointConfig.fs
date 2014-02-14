@@ -121,8 +121,10 @@ namespace Lacjam.ServiceBus
                     let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(6,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                     let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
-                    addJob surfReportBatch dt
-                    addJob jiraRoadmapBatch dt
+                    try
+                        addJob surfReportBatch dt
+                        addJob jiraRoadmapBatch dt
+                    with | ex -> log.Write(Error(" addJob surfReportBatch dt", ex,true))
 
                     if (System.Environment.MachineName.ToLower() = "earth") then
                         if not <| (js.Scheduler.CheckExists(new TriggerKey(surfReportBatch.TriggerName)))  then
