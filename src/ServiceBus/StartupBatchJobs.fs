@@ -50,6 +50,8 @@
         interface IContainBatches with
             override this.Batches = 
                                             let log = Ioc.Resolve<ILogWriter>()
+                                            let js = Ioc.Resolve<IJobScheduler>();
+
                                             log.Write(Debug("StartupBatchJobs init"))
                                             let guidId = Guid.NewGuid()
                                             let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
@@ -60,7 +62,6 @@
                                             swJobs.Add(swJob :> JobMessage)
                                             swJobs.Add(SendTweetJob(To="chris_mckelt") :> JobMessage)  |> ignore
                                             //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
-                                            
                                                                                                            
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName="";}
 
@@ -69,32 +70,8 @@
 
                                             let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName="";}
 
-                                            let sjobDetail = new JobDetailImpl(surfReportBatch.GetType().Name,  surfReportBatch.Name, typedefof<ProcessBatch>)
-                                            sjobDetail.Durable <- true
-                                            sjobDetail.Name <- surfReportBatch.Name
-                                            sjobDetail.RequestsRecovery <- true
-                                            sjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                                            let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.GetType().Name,  jiraRoadmapBatch.Name, typedefof<ProcessBatch>)
-                                            jjobDetail.Durable <- true
-                                            jjobDetail.Name <- surfReportBatch.Name
-                                            jjobDetail.RequestsRecovery <- true
-                                            jjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
                                             
-
-                                             //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                                            let dt = TriggerBuilder.Create().ForJob(sjobDetail).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-                                            let ht = TriggerBuilder.Create().ForJob(jjobDetail).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                                            surfReportBatch.TriggerName <- Lacjam.Core.BatchSchedule.Daily.ToString()
+                                            jiraRoadmapBatch.TriggerName <- Lacjam.Core.BatchSchedule.Hourly.ToString()                                            
                                             
-                                            surfReportBatch.TriggerName <- dt.Key.Name
-                                            jiraRoadmapBatch.TriggerName <- ht.Key.Name
-                                            
-                                            let js = Ioc.Resolve<IJobScheduler>();
-                                            
-                                            if (Environment.MachineName = "Earth") then
-                                                js.Scheduler.AddJob(sjobDetail,true) |> ignore
-                                                js.Scheduler.ScheduleJob(dt) |> ignore
-                                            else
-                                                js.Scheduler.AddJob(jjobDetail,true) |> ignore
-                                                js.Scheduler.ScheduleJob(ht) |> ignore
-
-                                            [surfReportBatch]
+                                            [surfReportBatch ; jiraRoadmapBatch]

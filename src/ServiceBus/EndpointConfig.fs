@@ -95,6 +95,24 @@ namespace Lacjam.ServiceBus
                                 js.Scheduler.ScheduleJob(ht)  |> ignore
                     | _ ->      log.Write(Info("NOT Adding hourly trigger as it already exists"))
 
+                    let startup = new StartupBatchJobs() :> IContainBatches
+                    let surfReportBatch = startup.Batches.Head                    
+                    let jiraRoadmapBatch = startup.Batches.Tail.Head
+                    let sjobDetail = new JobDetailImpl(surfReportBatch.GetType().Name,  surfReportBatch.Name, typedefof<ProcessBatch>)
+                    sjobDetail.Durable <- true
+                    sjobDetail.Name <- surfReportBatch.Name
+                    sjobDetail.RequestsRecovery <- true
+                    sjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                    let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.GetType().Name,  jiraRoadmapBatch.Name, typedefof<ProcessBatch>)
+                    jjobDetail.Durable <- true
+                    jjobDetail.Name <- jiraRoadmapBatch.Name
+                    jjobDetail.RequestsRecovery <- true
+                    jjobDetail.Description <- jiraRoadmapBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                                            
+                    //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
+                    let dt = TriggerBuilder.Create().WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).ForJob(sjobDetail).StartAt(DateBuilder.TodayAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let ht = TriggerBuilder.Create().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).ForJob(jjobDetail).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+
                     try
                         // schedule startup jobs
                         
