@@ -45,14 +45,14 @@ module Jira  =
         let rc = new RestSharp.RestClient(url)
         let request = new RestSharp.RestRequest(Method = RestSharp.Method.GET)
         //request.AddHeader("Content-Type", "application/json")
-        request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}:{1}", System.Environment.UserName, User.WindowsAccount.getPassword())))) |> ignore
+        //request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}:{1}", "CHALLENGERAU\saSYDAAppDevBuilder", User.WindowsAccount.getPassword())))) |> ignore
         request
 
     let getRestResponse url =  
         let rc = new RestSharp.RestClient(url)
         let request = new RestSharp.RestRequest(Method = RestSharp.Method.GET)
         //request.AddHeader("Content-Type", "application/json")
-        request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}:{1}", System.Environment.UserName, User.WindowsAccount.getPassword())))) |> ignore
+        //request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}:{1}", "CHALLENGERAU\saSYDAAppDevBuilder", User.WindowsAccount.getPassword())))) |> ignore
         let result = rc.Execute(request)
         result
 
@@ -122,6 +122,7 @@ module Jira  =
         
         try
             let url = "https://atlassian.au.challenger.net/jira/rest/api/2/search?jql=project=DPMIT-PROJECTS&fields=id,key,status,customfield_10360,customfield_11075,duedate,summary,environment,status,issuelinks&maxResults=100"
+            log.Write(Debug(url))
             let result = getRestResponse url
             log.Write(Debug("HTML Content Length return from REST query :" + result.Content.Length.ToString()))
             let json = OutputRoadmapJsonSchema.Parse(result.Content)
