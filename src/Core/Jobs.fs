@@ -276,32 +276,30 @@ open LinqToTwitter
                     match job.To with
                     | "" -> failwith "Job.To empty"
                     | _ ->
-                        log.Write(Info("Sending tweet for " + job.ToString()))
-                        log.Write
-                            (LogMessage.Debug
-                                 (job.CreatedDate.ToString() + "   "
-                                  + job.GetType().ToString()))                                           
+                            log.Write(Info("--- Sending tweet --- "))
+                            log.Write(Debug(job.To))                                 
+                            log.Write(Debug(job.ToString()))                                 
                         
-                        try
+                            try
                            
-                            let cred = new LinqToTwitter.SingleUserInMemoryCredentialStore()
-                            cred.ConsumerKey <- job.Settings.ConsumerKey
-                            cred.ConsumerSecret <- job.Settings.ConsumerSecret
-                            cred.AccessToken <- job.Settings.AccessToken
-                            cred.AccessTokenSecret <- job.Settings.AccessTokenSecret
-                            cred.OAuthToken <- job.Settings.OAuthToken
-                            cred.OAuthTokenSecret <- job.Settings.OAuthTokenSecret
-                            cred.ScreenName <- job.Settings.ScreenName
-                            let auth = new SingleUserAuthorizer()
-                            auth.CredentialStore <- cred
-                            let twitter = new TwitterContext(auth)
-                            let result = twitter.NewDirectMessageAsync(job.To, job.Payload + "  " + DateTime.Now.ToShortDateString())                        
-                            result.Wait()
-                            let jr = Jobs.JobResult(job, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
-                            bus.Reply(jr)
-                        with ex ->
-                            log.Write(LogMessage.Error("SendTweet error: " + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
-                            let fail = Jobs.JobResult(job, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
-                            bus.Reply(fail)
+                                let cred = new LinqToTwitter.SingleUserInMemoryCredentialStore()
+                                cred.ConsumerKey <- job.Settings.ConsumerKey
+                                cred.ConsumerSecret <- job.Settings.ConsumerSecret
+                                cred.AccessToken <- job.Settings.AccessToken
+                                cred.AccessTokenSecret <- job.Settings.AccessTokenSecret
+                                cred.OAuthToken <- job.Settings.OAuthToken
+                                cred.OAuthTokenSecret <- job.Settings.OAuthTokenSecret
+                                cred.ScreenName <- job.Settings.ScreenName
+                                let auth = new SingleUserAuthorizer()
+                                auth.CredentialStore <- cred
+                                let twitter = new TwitterContext(auth)
+                                let result = twitter.NewDirectMessageAsync(job.To, job.Payload + "  " + DateTime.Now.ToShortDateString())                        
+                                result.Wait()
+                                let jr = Jobs.JobResult(job, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
+                                bus.Reply(jr)
+                            with ex ->
+                                log.Write(LogMessage.Error("SendTweet error: " + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                                let fail = Jobs.JobResult(job, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
+                                bus.Reply(fail)
                         
                        

@@ -72,9 +72,20 @@ namespace Lacjam.ServiceBus
 //                        Runtime.ContainerBuilder.Update(Ioc)
 //                        //Configure.Instance.Configurer.ConfigureComponent<IScheduler>(DependencyLifecycle.SingleInstance) |> ignore 
                           
+      
+       
        type ServiceBusStartUp() =     
             let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>() 
             let bus = Ioc.Resolve<IBus>() 
+            let js = Ioc.Resolve<IJobScheduler>()
+            let addJob (batch:Batch) (trg:ITrigger) =           let found = js.Scheduler.GetTrigger(new TriggerKey(trg.Key.Name))
+                                                                match found with 
+                                                                | null ->   log.Write(Info("Adding trigger"))
+                                                                            let job = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<ProcessBatch>,true,true)
+                                                                            job.Durable <- true
+                                                                            js.Scheduler.AddJob(job,true)
+                                                                            js.Scheduler.ScheduleJob(job,trg)  |> ignore
+                                                                | _ ->      log.Write(Info("NOT Adding hourly trigger as it already exists"))
                 
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
@@ -82,7 +93,7 @@ namespace Lacjam.ServiceBus
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
                     Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance) |> ignore
                     
-                    let js = Ioc.Resolve<IJobScheduler>()
+                    
 
                     Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(5))).Action(fun a->
                         try
@@ -91,17 +102,6 @@ namespace Lacjam.ServiceBus
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     )
-
-                    // add triggers
-                    let ht =    TriggerBuilder.Create().ForJob(typedefof<ProcessBatch>.Name).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
-                    let found = js.Scheduler.GetTrigger(new TriggerKey(ht.Key.Name))
-                    match found with 
-                    | null ->   log.Write(Info("Adding hourly trigger"))
-                                let job = new JobDetailImpl(typedefof<ProcessBatch>.Name,typedefof<ProcessBatch>)
-                                job.Durable <- true
-                                js.Scheduler.AddJob(job,true)
-                                js.Scheduler.ScheduleJob(ht)  |> ignore
-                    | _ ->      log.Write(Info("NOT Adding hourly trigger as it already exists"))
 
                     let startup = new StartupBatchJobs() :> IContainBatches
                     let surfReportBatch = startup.Batches.Head                    
@@ -116,10 +116,22 @@ namespace Lacjam.ServiceBus
                     jjobDetail.Name <- jiraRoadmapBatch.Name
                     jjobDetail.RequestsRecovery <- true
                     jjobDetail.Description <- jiraRoadmapBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                                            
+                    
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).ForJob(sjobDetail).StartAt(DateBuilder.TodayAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-                    let ht = TriggerBuilder.Create().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).ForJob(jjobDetail).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(6,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+
+                    addJob surfReportBatch dt
+                    addJob jiraRoadmapBatch dt
+
+                    if (System.Environment.MachineName.ToLower() = "earth") then
+                        if not <| (js.Scheduler.CheckExists(new TriggerKey(surfReportBatch.TriggerName)))  then
+                            js.Scheduler.AddJob(sjobDetail,true) |> ignore
+                            js.Scheduler.ScheduleJob(dt) |> ignore                                          
+                        
+                        if not <| (js.Scheduler.CheckExists(new TriggerKey(jiraRoadmapBatch.TriggerName)))  then
+                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
+                            js.Scheduler.ScheduleJob(ht) |> ignore
 
                     try
                         // schedule startup jobs
