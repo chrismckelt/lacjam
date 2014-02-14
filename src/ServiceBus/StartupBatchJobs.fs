@@ -63,15 +63,11 @@
                                             swJobs.Add(SendTweetJob(To="chris_mckelt") :> JobMessage)  |> ignore
                                             //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                                                                                            
-                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName="";}
+                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
 
                                             let jiraJobs = new Collections.Generic.List<JobMessage>()
                                             jiraJobs.Add(CustomJobs.JiraRoadMapOutputJob())
 
-                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName="";}
+                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
 
-                                            
-                                            surfReportBatch.TriggerName <- Lacjam.Core.BatchSchedule.Daily.ToString()
-                                            jiraRoadmapBatch.TriggerName <- Lacjam.Core.BatchSchedule.Hourly.ToString()                                            
-                                            
-                                            [surfReportBatch ; jiraRoadmapBatch]
+                                            [surfReportBatch]

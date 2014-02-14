@@ -101,7 +101,7 @@ module Scheduling =
        
         do log.Write(Info("-- Scheduler started --"))  
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
-        let handleBatch (batch:Batch)         =                         let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<ProcessBatch>,true,true)
+        let handleBatch (batch:Batch)         =                         let jobDetail = new JobDetailImpl(batch.Name,  batch.TriggerName, typedefof<ProcessBatch>,true,true)
                                                                         let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         
                                                                         let tk = new TriggerKey(batch.TriggerName)

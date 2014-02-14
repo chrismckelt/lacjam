@@ -78,14 +78,6 @@ namespace Lacjam.ServiceBus
             let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>() 
             let bus = Ioc.Resolve<IBus>() 
             let js = Ioc.Resolve<IJobScheduler>()
-            let addJob (batch:Batch) (trg:ITrigger) =           let found = js.Scheduler.GetTrigger(new TriggerKey(trg.Key.Name))
-                                                                match found with 
-                                                                | null ->   log.Write(Info("Adding trigger"))
-                                                                            let job = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<ProcessBatch>,true,true)
-                                                                            job.Durable <- true
-                                                                            js.Scheduler.AddJob(job,true)
-                                                                            js.Scheduler.ScheduleJob(job,trg)  |> ignore
-                                                                | _ ->      log.Write(Info("NOT Adding hourly trigger as it already exists"))
                 
             interface IWantToRunWhenBusStartsAndStops with
                 member this.Start() = 
@@ -111,36 +103,25 @@ namespace Lacjam.ServiceBus
 
                     let startup = new StartupBatchJobs() :> IContainBatches
                     let surfReportBatch = startup.Batches.Head                    
-                    let jiraRoadmapBatch = startup.Batches.Tail.Head
-                    let sjobDetail = new JobDetailImpl(surfReportBatch.GetType().Name,  surfReportBatch.Name, typedefof<ProcessBatch>)
-                    sjobDetail.Durable <- true
-                    sjobDetail.Name <- surfReportBatch.Name
-                    sjobDetail.RequestsRecovery <- true
-                    sjobDetail.Description <- surfReportBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                    let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.GetType().Name,  jiraRoadmapBatch.Name, typedefof<ProcessBatch>)
-                    jjobDetail.Durable <- true
-                    jjobDetail.Name <- jiraRoadmapBatch.Name
-                    jjobDetail.RequestsRecovery <- true
-                    jjobDetail.Description <- jiraRoadmapBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                    //let jiraRoadmapBatch = startup.Batches.Tail.Head
+                    let sjobDetail = new JobDetailImpl(surfReportBatch.Name,  surfReportBatch.TriggerName, typedefof<ProcessBatch>,true,true)
+                  //  let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.Name,  jiraRoadmapBatch.TriggerName, typedefof<ProcessBatch>,true,true)
                     
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(7,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-                    let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(8,55,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                   // let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
                     try
-                        addJob surfReportBatch dt
-                       // addJob jiraRoadmapBatch dt
-                    with | ex -> log.Write(Error("EndpointConfig addJob surfReportBatch dt", ex,true))
-
-                    if (System.Environment.MachineName.ToLower() = "earth") then
-                        if not <| (js.Scheduler.CheckExists(new TriggerKey(surfReportBatch.TriggerName)))  then
-                            js.Scheduler.AddJob(sjobDetail,true) |> ignore
-                            js.Scheduler.ScheduleJob(dt) |> ignore                                          
+                        if (System.Environment.MachineName.ToLower() = "earth") then
+                            let tk = new TriggerKey(surfReportBatch.TriggerName)
+                            log.Write(Debug("Trigger Key = " + tk.Name))
+                            if not <| (js.Scheduler.CheckExists(tk))  then
+                                js.Scheduler.ScheduleJob(sjobDetail,dt) |> ignore                                     
                         
-                        if not <| (js.Scheduler.CheckExists(new TriggerKey(jiraRoadmapBatch.TriggerName)))  then
-                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
-                            js.Scheduler.ScheduleJob(ht) |> ignore
-
+    //                        if not <| (js.Scheduler.CheckExists(new TriggerKey(jiraRoadmapBatch.TriggerName)))  then
+    //                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
+    //                            js.Scheduler.ScheduleJob(ht) |> ignore
+                    with | ex -> log.Write(Error("EndpointConfig addJob surfReportBatch dt", ex,true))
                     try
                         // schedule startup jobs
                         
