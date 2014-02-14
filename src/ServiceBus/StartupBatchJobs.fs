@@ -82,7 +82,7 @@
                                             
 
                                              //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                                            let dt = TriggerBuilder.Create().ForJob(sjobDetail).StartAt(DateBuilder.FutureDate(10,IntervalUnit.Minute)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                                            let dt = TriggerBuilder.Create().ForJob(sjobDetail).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                                             let ht = TriggerBuilder.Create().ForJob(jjobDetail).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                                             
                                             surfReportBatch.TriggerName <- dt.Key.Name
@@ -90,8 +90,11 @@
                                             
                                             let js = Ioc.Resolve<IJobScheduler>();
                                             
-                                            js.Scheduler.AddJob(sjobDetail,true) |> ignore
-                                            //js.Scheduler.AddJob(jjobDetail,true) |> ignore
-                                            //js.Scheduler.ScheduleJob(ht) |> ignore
-                                            js.Scheduler.ScheduleJob(dt) |> ignore
-                                            [jiraRoadmapBatch]
+                                            if (Environment.MachineName = "Earth") then
+                                                js.Scheduler.AddJob(sjobDetail,true) |> ignore
+                                                js.Scheduler.ScheduleJob(dt) |> ignore
+                                            else
+                                                js.Scheduler.AddJob(jjobDetail,true) |> ignore
+                                                js.Scheduler.ScheduleJob(ht) |> ignore
+
+                                            [surfReportBatch]

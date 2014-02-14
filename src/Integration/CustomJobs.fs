@@ -85,23 +85,18 @@ module CustomJobs =
 
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
                     
-                    try
-                            let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
-                            cleaned <- cleaned.Replace("pm", String.Empty)
-                            cleaned <- cleaned.Replace("am", String.Empty)
-                            let parsed = cleaned |> System.DateTime.TryParse
-                            match parsed with 
-                            | (true, dt) ->
-                                log.Write(Debug("SwellNetJob parse date on page success : " + dt.ToString()))
-                                processJob doc dt job 
-                            | (false, noDt) -> 
-                                log.Write(Info("SwellNetJob parsing date on page"))
-                                let msg = "Deferring job for execution for 30 minutes: " + job.ToString()
-                                deferJob log bus job msg (DateTime.Now.AddMinutes(double 30))
-                    with | ex -> 
-                           log.Write(Error("SwellNetJob parsing date on page",ex,false))
-                           let msg = "Deferring job for execution for 30 minutes: " + job.ToString()
-                           deferJob log bus job msg (DateTime.Now.AddMinutes(double 30))
+                    let mutable cleaned = lastUpdated.Value.OwnerNode.InnerText
+                    cleaned <- cleaned.Replace("pm", String.Empty)
+                    cleaned <- cleaned.Replace("am", String.Empty)
+                    let parsed = cleaned |> System.DateTime.TryParse
+                    match parsed with 
+                    | (true, dt) ->
+                        log.Write(Debug("SwellNetJob parse date on page success : " + dt.ToString()))
+                        processJob doc dt job 
+                    | (false, noDt) -> 
+                        log.Write(Info("SwellNetJob parsing date on page"))
+                        let msg = "Deferring job for execution for 30 minutes: " + job.ToString()
+                        deferJob log bus job msg (DateTime.Now.AddMinutes(double 30))
                            
 
                 with ex -> 

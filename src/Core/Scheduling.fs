@@ -22,7 +22,7 @@ module Scheduling =
                                                                  
    
     type IJobScheduler = 
-            abstract scheduleBatch<'a when 'a :> IJob> : Lacjam.Core.Batch -> unit
+            abstract scheduleBatch : Lacjam.Core.Batch -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
          //   abstract member createTrigger : TriggerBuilder  with get, set
@@ -52,14 +52,56 @@ module Scheduling =
             override this.SchedulerShutdown() = log.Write(Info("SchedulerShutdown: "))
             override this.SchedulerShuttingdown() = log.Write(Info("SchedulerShuttingdown: "))
             override this.SchedulingDataCleared() = log.Write(Info("SchedulingDataCleared: "))
-           
-            
+    
+    type BatchFinder =
+        static member FindBatches:Collections.Generic.List<IContainBatches> =               let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+                                                                                            let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
+                                                                                            let batchList = new Collections.Generic.List<IContainBatches>()
+                                                                                            for ass in asses do
+                                                                                                let types = ass.GetTypes()
+                                                                                                for ty in types do
+                                                                                                    let cb = ty.GetInterface(typedefof<IContainBatches>.FullName)
+                                                                                                    match cb with
+                                                                                                        | null ->  ()//log.Write(Warn("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND", new InvalidOperationException("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND")))
+                                                                                                        | _ -> 
+                                                                                                                log.Write(Debug("BatchFinder  IContainBatches --. " + cb.FullName))
+                                                                                                                let batches = Activator.CreateInstance(ty) :?> IContainBatches
+                                                                                                                batchList.Add(batches)
+                                                                                            log.Write(Info("FindBatches count :" +  batchList.Count.ToString()))
+                                                                                            batchList       
+    
+    type ProcessBatch() =
+        interface IJob with
+            member this.Execute(context : IJobExecutionContext)  =      let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+                                                                        let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
+                                                                        let js = Ioc.Resolve<IJobScheduler>()
+                                                                        try
+                                                                            log.Write(Info("Scheduling.ProcessBatch IJob Execute - " + DateTime.Now.ToString()))
+                                                                            log.Write(Info("context.JobDetail.Key.Group" + context.JobDetail.Key.Group))
+                                                                            log.Write(Info("context.JobDetail.Key.Name" + context.JobDetail.Key.Name))
+                                                                            let batchName = context.JobDetail.Key.Name
+                                                                            log.Write(Info("Scheduling.ProcessBatch.Execute : BatchName = " + batchName))
+                                                                           
+                                                                            for icb in BatchFinder.FindBatches.ToList() do
+                                                                                for b in icb.Batches do
+                                                                                    if (b.Name = batchName) then // -------------------------- match batch name on job name to run
+                                                                                        log.Write(Info("ProcessBatch.Execute:" + b.Name))
+                                                                                        try
+                                                                                            js.processBatch(b) 
+                                                                                        with | ex ->    log.Write(Error("ProcessBatch.Execute: Individual batch failed: " + b.Name, ex, false)) 
+                                                                                                        log.Write(Debug(b.ToString()))
+                                                                                                
+                                                                                        log.Write(Debug("ProcessBatch.Execute: SUCCESS"))
+                                                                                        context.Result <- true     
+          
+                                                                        with | ex ->    log.Write(Debug("ProcessBatch.Execute: FAILED"))
+                                                                                        log.Write(Error("Job failed", ex, false))         
 
     type JobScheduler(log:ILogWriter, bus:IBus, scheduler:IScheduler) =        
        
         do log.Write(Info("-- Scheduler started --"))  
         let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
-        let handleBatch (batch:Batch) (tp:'a)  =                        let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), tp,true,true)
+        let handleBatch (batch:Batch)         =                         let jobDetail = new JobDetailImpl(batch.Name,  batch.BatchId.ToString(), typedefof<ProcessBatch>,true,true)
                                                                         let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         let trigger = match scheduler.GetTrigger(new TriggerKey(batch.TriggerName)) with
                                                                                           | null -> TriggerBuilder.Create().ForJob(jobDetail).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
@@ -70,7 +112,7 @@ module Scheduling =
                                                                         jobDetail.RequestsRecovery <- true
                                                                         jobDetail.Description <- batch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
 
-                                                                        match trigger with 
+                                                                        match found with 
                                                                             | null -> 
                                                                                 scheduler.ScheduleJob(jobDetail, trigger) |> ignore
                                                                             | _ -> scheduler.RescheduleJob(new TriggerKey(trigger.Key.Name), trigger) |> ignore
@@ -80,7 +122,7 @@ module Scheduling =
                                                                         | false -> log.Write(Info(jobDetail.Name + " not scheduled triggers" ))
         interface IJobScheduler with 
                                                                 
-                override this.scheduleBatch<'a when 'a :> IJob>(batch:Lacjam.Core.Batch) =  handleBatch batch typedefof<'a>
+                override this.scheduleBatch(batch:Lacjam.Core.Batch) =  handleBatch batch 
                                                            
                 
                 member this.processBatch(batch) =   
@@ -118,7 +160,13 @@ module Scheduling =
                                                                                                                                                                                                                              replyChannel.Reply(new Jobs.JobResult(jobMessage, false, "Error: " + ex.Message))   
                                                                                                                                                                            )  |> ignore
                                                                                                                                                                            
-                                                                                                                                          with | ex -> log.Write(Error("Job failed", ex, false))
+                                                                                                                        with | ex ->    log.Write(Info("Scheduling.processBatch -- MailboxProcessor async loop failure"))
+                                                                                                                                        log.Write(Info("--------------------------------------------------"))
+                                                                                                                                        log.Write(Info("--------------------------------------------------"))
+                                                                                                                                        log.Write(Error("Job failed", ex, false))
+                                                                                                                                        log.Write(Info("--------------------------------------------------"))
+                                                                                                                                        log.Write(Info("--------------------------------------------------"))
+                                                                       
                                                                                                                         do! loop (n + 1)
                                                                                                                 }
                                                                                                             loop 0)
@@ -131,47 +179,24 @@ module Scheduling =
                                                             log.Write(Info("-- OLD Payload --"))
                                                             log.Write(Info(job.Payload))
                                                             let reply = agent.PostAndReply(fun replyChannel -> log, bus, job, replyChannel)
-                                                            payload <- reply.Result
-                                                            log.Write(Info("-- NEW Payload --"))
-                                                            log.Write(Info(payload))
-                                                            log.Write(Info("Reply: %s" + reply.ToString()))
+                                                            log.Write(Info("JobResult received for " + job.GetType().Name))                                                            
+                                                            if (reply.Success) then
+                                                                log.Write(Info("JobResult.Success=true"))
+                                                                payload <- reply.Result
+                                                                log.Write(Info("-- NEW Payload --"))
+                                                                log.Write(Info(payload))
+                                                                log.Write(Info("Reply: %s" + reply.ToString()))
+                                                            else
+                                                                log.Write(Info("JobResult.Success=false"))
+                                                                log.Write(Info(job.ToString()))
+                                                                handleBatch batch                 //rescheduled?
                                                         with | ex -> log.Write(Error("Job failed", ex, false))
                                                     
                                                     ()
                 
                 member this.Scheduler =  scheduler
       
-      type ProcessBatch() =
-        interface IJob with
-            member this.Execute(context : IJobExecutionContext)  =      let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-                                                                        let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                                                                        let batchName = context.JobDetail.Key.Name
-                                                                        log.Write(Info(batchName))
-                                                                        log.Write(Info("Job is executing - {0}." + DateTime.Now.ToString()))
-                                                                        try
-                                                                            let js = Ioc.Resolve<IJobScheduler>()
-                                                                            let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
-                                                                            for ass in asses do
-                                                                                let types = ass.GetTypes()
-                                                                                for ty in types do
-                                                                                    let cb = ty.GetInterface(typedefof<IContainBatches>.FullName)
-                                                                                    match cb with
-                                                                                        | null ->  log.Write(Warn("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND", new InvalidOperationException("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND")))
-                                                                                        | _ -> 
-                                                                                                log.Write(Debug("IContainBatches --. " + cb.FullName))
-                                                                                                let batches = Activator.CreateInstance(ty) :?> IContainBatches
-                                                                                                for b in batches.Batches do
-                                                                                                    log.Write(Debug("ProcessBatch.Execute:" + b.Name))
-                                                                                                    try
-                                                                                                        js.processBatch(b) 
-                                                                                                    with | ex ->    log.Write(Error("ProcessBatch.Execute: Individual batch failed: " + b.Name, ex, false)) 
-                                                                                                                    log.Write(Debug(b.ToString()))
-                                                                                                
-                                                                                                log.Write(Debug("ProcessBatch.Execute: SUCCESS"))
-                                                                                                context.Result <- true 
-                                                                               
-                                                                        with | ex ->    log.Write(Debug("ProcessBatch.Execute: FAILED"))
-                                                                                        log.Write(Error("Job failed", ex, false)) 
+      
              
      type BatchSubmitterJobHandler(log : Lacjam.Core.Runtime.ILogWriter, js : IJobScheduler) =
             do log.Write(Info("BatchSubmitterJob"))
@@ -182,7 +207,7 @@ module Scheduling =
                         log.Write(Info("EndpointConfig.Init :: SchedulerName = " + js.Scheduler.SchedulerName))
                         log.Write(Info("EndpointConfig.Init :: IsStarted = " + js.Scheduler.IsStarted.ToString()))
                         log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))
-                        js.scheduleBatch<ProcessBatch>(job.Batch)
+                        js.scheduleBatch(job.Batch)
                     with ex ->
                         log.Write(LogMessage.Error("ERROR- BatchSubmitterJobHandler : " + job.ToString(), ex, true))        
 
