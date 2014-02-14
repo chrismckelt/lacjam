@@ -26,6 +26,7 @@ module Jira  =
     open Microsoft.FSharp.Data.TypeProviders
     open Newtonsoft.Json
     open log4net
+    open Autofac
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Runtime
@@ -116,10 +117,13 @@ module Jira  =
     let checkNullObj o = match box(o) with | null -> false | x -> true  
 
     let outputRoadmap() = 
+        let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
+        log.Write(Debug("-- outputRoadmap --"))
+        
         try
             let url = "https://atlassian.au.challenger.net/jira/rest/api/2/search?jql=project=DPMIT-PROJECTS&fields=id,key,status,customfield_10360,customfield_11075,duedate,summary,environment,status,issuelinks&maxResults=100"
             let result = getRestResponse url
-            
+            log.Write(Debug("HTML Content Length return from REST query :" + result.Content.Length.ToString()))
             try
                 let json = OutputRoadmapJsonSchema.Parse(result.Content)
                 for issue in json.Issues do
@@ -129,6 +133,7 @@ module Jira  =
                     //                let dd = if (checkNullObj childJson.Fields.Duedate.JsonValue ) then DateTime.Now.AddMonths(3) else Convert.ToDateTime childJson.Fields.Duedate.JsonValue
                     let linkedResult = getRestResponse ("https://atlassian.au.challenger.net/jira/rest/api/latest/issue/" +  issue.Key)
                     Debug.WriteLine linkedResult
+                    log.Write(Debug("HTML Content Length return from REST query :" + linkedResult.Content.Length.ToString()))
                     let linkedJson = LinkedIssuesJsonSchema.Parse(linkedResult.Content)
                     let mutable idealHours = 0E+0
                     for iss in linkedJson.Fields.Issuelinks do
@@ -172,34 +177,40 @@ module Jira  =
                     if (ji.Status <> "DONE") then
                         jil.Add(ji)
 
-                    Debug.WriteLine(json.Total)
-                    Debug.WriteLine(json.MaxResults)  
+
+                    log.Write(Debug("Total projects = " + json.Total.ToString()))
+                    log.Write(Debug("Total issues = " + json.Issues.Count().ToString()))  
+
 
             with | ex -> printf "%A" ex
 
+            log.Write(Debug("-- Roadmap about to write out text file --"))
            
             let sb = new System.Text.StringBuilder()
             
             let op = jil.Distinct().OrderBy(fun x-> x.Start)
             let sss = JsonConvert.SerializeObject(op)
             sb.Append(sss.Replace("@", "")) |> ignore
-    //
-            if (IO.File.Exists(temp)) then
-                   System.IO.File.Delete(temp)
                 
+            log.Write(Debug("-- Roadmap Results --"))
+            log.Write(Debug(sb.ToString()))
 
-            if (IO.File.Exists(remote)) then
+            if not <| (String.IsNullOrEmpty(sb.ToString())) && (sb.ToString().Length > 5)  then
+                if (IO.File.Exists(remote)) then
                    System.IO.File.Delete(remote)
-                
-            System.IO.File.AppendAllText(temp,sb.ToString())
-            System.IO.File.AppendAllText(remote,sb.ToString())
+                System.IO.File.AppendAllText(remote,sb.ToString())
+            else
+                log.Write(Debug("-- NO Roadmap Results !!! String is empty--"))
 
         with
         | :? ServerTooBusyException as exn ->
-            let innerMessage =
-                match (exn.InnerException) with
-                | null -> ""
-                | innerExn -> innerExn.Message
-            printfn "An exception occurred:\n %s\n %s" exn.Message innerMessage
-        | exn -> printfn "An exception occurred: %s" exn.Message
+//            let innerMessage =
+//                match (exn.InnerException) with
+//                | null -> ""
+//                | innerExn -> innerExn.Message
+//            printfn "An exception occurred:\n %s\n %s" exn.Message innerMessage
+            log.Write(Error("JIRA roadmap : ",exn, false))
+        | exn -> 
+                printfn "An exception occurred : %s" exn.Message
+                log.Write(Error("JIRA roadmap : ",exn, false))
 

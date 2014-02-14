@@ -66,11 +66,11 @@ let main argv =
     printfn "%A" argv    
     do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
     Lacjam.Integration.Jira.outputRoadmap()
-//    configureBus
-//    
-//    let startup = new Lacjam.ServiceBus.StartupBatchJobs() :> IContainBatches                                       
-//                                                                                                           
-//    let js = new JobScheduler(Ioc.Resolve<ILogWriter>(),Ioc.Resolve<IBus>(),Ioc.Resolve<IScheduler>())  :> IJobScheduler
-//    js.processBatch(startup.Batches.Head)
+    configureBus
+    
+    let startup = new Lacjam.ServiceBus.StartupBatchJobs() :> IContainBatches                                       
+                                                                                                           
+    let js = new JobScheduler(Ioc.Resolve<ILogWriter>(),Ioc.Resolve<IBus>(),Ioc.Resolve<IScheduler>())  :> IJobScheduler
+    js.processBatch(startup.Batches.Head)
     Console.ReadLine()  |> ignore
     0 // return an integer exit code
