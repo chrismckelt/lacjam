@@ -84,6 +84,14 @@ namespace Lacjam.ServiceBus
                     
                     let js = Ioc.Resolve<IJobScheduler>()
 
+                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(5))).Action(fun a->
+                        try
+                            log.Write(LogMessage.Debug("NSB -- Schedule.Every elapsed"))
+                            Lacjam.Integration.Jira.outputRoadmap()                                      
+                        with 
+                        | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
+                    )
+
                     // add triggers
                     let ht =    TriggerBuilder.Create().ForJob(typedefof<ProcessBatch>.Name).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
                     let found = js.Scheduler.GetTrigger(new TriggerKey(ht.Key.Name))
