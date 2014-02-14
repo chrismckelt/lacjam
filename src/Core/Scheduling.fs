@@ -128,9 +128,11 @@ module Scheduling =
                                                         try
                                                             job.Payload <- payload
                                                             log.Write(Info(job.GetType().Name))
-                                                            log.Write(Info("-- Payload --"))
+                                                            log.Write(Info("-- OLD Payload --"))
+                                                            log.Write(Info(job.Payload))
                                                             let reply = agent.PostAndReply(fun replyChannel -> log, bus, job, replyChannel)
                                                             payload <- reply.Result
+                                                            log.Write(Info("-- NEW Payload --"))
                                                             log.Write(Info(payload))
                                                             log.Write(Info("Reply: %s" + reply.ToString()))
                                                         with | ex -> log.Write(Error("Job failed", ex, false))

@@ -110,6 +110,7 @@ namespace Lacjam.ServiceBus
                         
                     with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))
                    
+                    Schedule.Every(TimeSpan.FromMinutes(double 30)).Action(fun a-> Lacjam.Integration.Jira.outputRoadmap())
 
                 member this.Stop() = 
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);    

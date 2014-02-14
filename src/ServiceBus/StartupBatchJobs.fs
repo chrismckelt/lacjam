@@ -90,8 +90,8 @@
                                             
                                             let js = Ioc.Resolve<IJobScheduler>();
                                             
-                                            js.Scheduler.AddJob(sjobDetail,true) |> ignore
+                                         //   js.Scheduler.AddJob(sjobDetail,true) |> ignore
                                             js.Scheduler.AddJob(jjobDetail,true) |> ignore
                                             js.Scheduler.ScheduleJob(ht) |> ignore
-                                            js.Scheduler.ScheduleJob(dt) |> ignore
-                                            [surfReportBatch]
+                                          //  js.Scheduler.ScheduleJob(dt) |> ignore
+                                            [jiraRoadmapBatch]

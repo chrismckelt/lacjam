@@ -65,20 +65,12 @@ let configureBus =
 let main argv = 
     printfn "%A" argv    
     do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-    configureBus
-    let guidId = Guid.NewGuid()
-    let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
-    swJob.BatchId <- guidId
-    let swJobs = new Collections.Generic.List<Jobs.JobMessage>()
-    swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
-    swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage)
-    swJobs.Add(swJob :> JobMessage)
-    SendTweetJob(To="chris_mckelt") :> JobMessage  |> ignore
-    //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
-    
-    let startup = new Lacjam.ServiceBus.StartupBatchJobs() :> IContainBatches                                       
-                                                                                                           
-    let js = new JobScheduler(Ioc.Resolve<ILogWriter>(),Ioc.Resolve<IBus>(),Ioc.Resolve<IScheduler>())  :> IJobScheduler
-    js.processBatch(startup.Batches.Head)
+    Lacjam.Integration.Jira.outputRoadmap()
+//    configureBus
+//    
+//    let startup = new Lacjam.ServiceBus.StartupBatchJobs() :> IContainBatches                                       
+//                                                                                                           
+//    let js = new JobScheduler(Ioc.Resolve<ILogWriter>(),Ioc.Resolve<IBus>(),Ioc.Resolve<IScheduler>())  :> IJobScheduler
+//    js.processBatch(startup.Batches.Head)
     Console.ReadLine()  |> ignore
     0 // return an integer exit code
