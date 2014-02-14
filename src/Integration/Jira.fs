@@ -124,65 +124,67 @@ module Jira  =
             let url = "https://atlassian.au.challenger.net/jira/rest/api/2/search?jql=project=DPMIT-PROJECTS&fields=id,key,status,customfield_10360,customfield_11075,duedate,summary,environment,status,issuelinks&maxResults=100"
             let result = getRestResponse url
             log.Write(Debug("HTML Content Length return from REST query :" + result.Content.Length.ToString()))
-            try
-                let json = OutputRoadmapJsonSchema.Parse(result.Content)
-                for issue in json.Issues do
-                    let startDate = checkNullDate issue.Fields.Customfield10360
-                    let dueDate =  checkNullDate issue.Fields.Duedate
+            let json = OutputRoadmapJsonSchema.Parse(result.Content)
+            for issue in json.Issues do
+                let startDate = checkNullDate issue.Fields.Customfield10360
+                let dueDate =  checkNullDate issue.Fields.Duedate
                      
-                    //                let dd = if (checkNullObj childJson.Fields.Duedate.JsonValue ) then DateTime.Now.AddMonths(3) else Convert.ToDateTime childJson.Fields.Duedate.JsonValue
-                    let linkedResult = getRestResponse ("https://atlassian.au.challenger.net/jira/rest/api/latest/issue/" +  issue.Key)
-                    Debug.WriteLine linkedResult
-                    log.Write(Debug("HTML Content Length return from REST query :" + linkedResult.Content.Length.ToString()))
-                    let linkedJson = LinkedIssuesJsonSchema.Parse(linkedResult.Content)
-                    let mutable idealHours = 0E+0
-                    for iss in linkedJson.Fields.Issuelinks do
-                        try
-                           if not <| (iss.OutwardIssue.Key.Contains("DPMITPROJ")) then
-                                if (iss.Type.Name = "CrossProjectLink")  then
-                                    let item = getRestResponse  ("https://atlassian.au.challenger.net/jira/rest/api/latest/issue/" +  (iss.OutwardIssue.Key.ToString()))
-                                    let childJson = ChildJsonSchema.Parse(item.Content)
-                                    Debug.WriteLine childJson.Fields.Customfield10162.JsonValue
-                                    let (v:double) = 
-                                        match unbox(childJson.Fields.Customfield10162.JsonValue.ToString()) with 
-                                        | null -> 0E+0
-                                        | x when x <> "null" -> 
-                                            try
-                                                Convert.ToDouble(x)
-                                            with | exn -> 
-                                                    printf "%A" exn
-                                                    0E+0
-                                        | _ -> 0E+0
-                                    idealHours <- (idealHours + v)
-                        with | exx ->  printf "%A" exx
-                    
-                    let estimatedHours = match idealHours with 
-                                            | 0E+0 -> 
-                                                try
-                                                    Convert.ToDouble(issue.Fields.Customfield11075)    // use approve estimated instead 
-                                                 with | exx ->  
-                                                            printf "%A" exx 
-                                                            0E+0
-                                            | _ -> idealHours
-                            
-                    let ji = {
-                        Key=issue.Key; 
-                        Summary=issue.Fields.Summary; 
-                        Start=startDate; 
-                        Due=dueDate;
-                        Environment=(checkNull (issue.Fields.Environment)); 
-                        Status=(issue.Fields.Status.Name) ; 
-                        IdealHours=(decimal estimatedHours)}
+                //                let dd = if (checkNullObj childJson.Fields.Duedate.JsonValue ) then DateTime.Now.AddMonths(3) else Convert.ToDateTime childJson.Fields.Duedate.JsonValue
+                let linkedResult = getRestResponse ("https://atlassian.au.challenger.net/jira/rest/api/latest/issue/" +  issue.Key)
+                Debug.WriteLine linkedResult
+                log.Write(Debug("HTML Content Length return from REST query :" + linkedResult.Content.Length.ToString()))
+                let linkedJson = LinkedIssuesJsonSchema.Parse(linkedResult.Content)
+                let mutable idealHours = 0E+0
+                for iss in linkedJson.Fields.Issuelinks do
+                    try
+                        if not <| (iss.OutwardIssue.Key.Contains("DPMITPROJ")) then
+                            if (iss.Type.Name = "CrossProjectLink")  then
+                                let uri =  ("https://atlassian.au.challenger.net/jira/rest/api/latest/issue/" +  (iss.OutwardIssue.Key.ToString()))
+                                log.Write(Debug(uri))
+                                let item = getRestResponse uri
+                                log.Write(Debug("HTML Content Length return from REST query :" + item.Content.Length.ToString()))
+                                let childJson = ChildJsonSchema.Parse(item.Content)
+                                log.Write(Debug(childJson.Fields.Customfield10162.JsonValue.ToString()))
+                                let (v:double) = 
+                                    match unbox(childJson.Fields.Customfield10162.JsonValue.ToString()) with 
+                                    | null -> 0E+0
+                                    | x when x <> "null" -> 
+                                        try
+                                            Convert.ToDouble(x)
+                                        with | exn -> 
+                                                printf "%A" exn
+                                                log.Write(Error("--  Convert.ToDouble(x) --",exn,false))
+                                                0E+0
+                                    | _ -> 0E+0
+                                idealHours <- (idealHours + v)
+                    with | exx ->  printf "%A" exx
+                                   log.Write(Error("-- Json.Issues --",exx,false))
                 
-                    if (ji.Status <> "DONE") then
-                        jil.Add(ji)
+                let estimatedHours = match idealHours with 
+                                        | 0E+0 -> 
+                                            try
+                                                Convert.ToDouble(issue.Fields.Customfield11075)    // use approve estimated instead 
+                                                with | exx ->  
+                                                        printf "%A" exx 
+                                                        0E+0
+                                        | _ -> idealHours
+                            
+                let ji = {
+                    Key=issue.Key; 
+                    Summary=issue.Fields.Summary; 
+                    Start=startDate; 
+                    Due=dueDate;
+                    Environment=(checkNull (issue.Fields.Environment)); 
+                    Status=(issue.Fields.Status.Name) ; 
+                    IdealHours=(decimal estimatedHours)}
+                
+                if (ji.Status <> "DONE") then
+                    jil.Add(ji)
 
 
-                    log.Write(Debug("Total projects = " + json.Total.ToString()))
-                    log.Write(Debug("Total issues = " + json.Issues.Count().ToString()))  
+                log.Write(Debug("Total projects = " + json.Total.ToString()))
+                log.Write(Debug("Total issues = " + json.Issues.Count().ToString()))  
 
-
-            with | ex -> printf "%A" ex
 
             log.Write(Debug("-- Roadmap about to write out text file --"))
            
