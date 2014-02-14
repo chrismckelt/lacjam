@@ -93,12 +93,18 @@ namespace Lacjam.ServiceBus
                     System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)                       
                     Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance) |> ignore
                     
-                    
-
-                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(5))).Action(fun a->
+                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(15))).Action(fun a->
                         try
                             log.Write(LogMessage.Debug("NSB -- Schedule.Every elapsed"))
-                            Lacjam.Integration.Jira.outputRoadmap()                                      
+                            let meta = js.Scheduler.GetMetaData()
+                            log.Write(Debug("-- Quartz MetaData --"))
+                            log.Write(Debug("NumberOfJobsExecuted : " + meta.NumberOfJobsExecuted.ToString()))
+                            log.Write(Debug("Started : " + meta.Started.ToString()))
+                            log.Write(Debug("RunningSince : " + meta.RunningSince.ToString()))
+                            log.Write(Debug("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString()))
+                            log.Write(Debug("ThreadPoolSize : " + meta.ThreadPoolSize.ToString()))
+                            log.Write(Debug("ThreadPoolType : " + meta.ThreadPoolType.ToString()))                            
+                            //Lacjam.Integration.Jira.outputRoadmap()                                      
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     )
@@ -118,13 +124,13 @@ namespace Lacjam.ServiceBus
                     jjobDetail.Description <- jiraRoadmapBatch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
                     
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(6,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(7,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                     let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
                     try
                         addJob surfReportBatch dt
-                        addJob jiraRoadmapBatch dt
-                    with | ex -> log.Write(Error(" addJob surfReportBatch dt", ex,true))
+                       // addJob jiraRoadmapBatch dt
+                    with | ex -> log.Write(Error("EndpointConfig addJob surfReportBatch dt", ex,true))
 
                     if (System.Environment.MachineName.ToLower() = "earth") then
                         if not <| (js.Scheduler.CheckExists(new TriggerKey(surfReportBatch.TriggerName)))  then

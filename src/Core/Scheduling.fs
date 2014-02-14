@@ -109,7 +109,7 @@ module Scheduling =
                                                                         let trigger = match scheduler.GetTrigger(tk) with
                                                                                           | null -> 
                                                                                                     log.Write(Debug("JobScheduler.handleBatch : Trigger not found - creating new one " + batch.TriggerName ))
-                                                                                                    TriggerBuilder.Create().ForJob(jobDetail).WithCronSchedule("0 0 0/1 1/1 * ? *").StartNow().WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithPriority(1).WithDescription("Hourly").Build()
+                                                                                                    TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                                                                                           | trg -> 
                                                                                                     log.Write(Debug("JobScheduler.handleBatch : Trigger found : " + batch.TriggerName ))
                                                                                                     trg
