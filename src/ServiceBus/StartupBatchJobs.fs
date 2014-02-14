@@ -58,7 +58,7 @@
                                             swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
                                             swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage)
                                             swJobs.Add(swJob :> JobMessage)
-                                            SendTweetJob(To="chris_mckelt") :> JobMessage  |> ignore
+                                            swJobs.Add(SendTweetJob(To="chris_mckelt") :> JobMessage)  |> ignore
                                             //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                             
                                                                                                            
@@ -94,4 +94,4 @@
                                             js.Scheduler.AddJob(jjobDetail,true) |> ignore
                                             js.Scheduler.ScheduleJob(ht) |> ignore
                                             js.Scheduler.ScheduleJob(dt) |> ignore
-                                            [surfReportBatch; jiraRoadmapBatch]
+                                            [surfReportBatch]

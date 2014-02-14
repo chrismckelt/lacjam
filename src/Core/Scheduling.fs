@@ -127,8 +127,11 @@ module Scheduling =
                                                     for job in batch.Jobs do
                                                         try
                                                             job.Payload <- payload
+                                                            log.Write(Info(job.GetType().Name))
+                                                            log.Write(Info("-- Payload --"))
                                                             let reply = agent.PostAndReply(fun replyChannel -> log, bus, job, replyChannel)
                                                             payload <- reply.Result
+                                                            log.Write(Info(payload))
                                                             log.Write(Info("Reply: %s" + reply.ToString()))
                                                         with | ex -> log.Write(Error("Job failed", ex, false))
                                                     
@@ -153,6 +156,7 @@ module Scheduling =
                                                                                     match cb with
                                                                                         | null ->  log.Write(Warn("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND", new InvalidOperationException("ProcessBatch.Execute: IContainBatches NO BATCH FILES FOUND")))
                                                                                         | _ -> 
+                                                                                                log.Write(Debug("IContainBatches --. " + cb.FullName))
                                                                                                 let batches = Activator.CreateInstance(ty) :?> IContainBatches
                                                                                                 for b in batches.Batches do
                                                                                                     log.Write(Debug("ProcessBatch.Execute:" + b.Name))

@@ -84,6 +84,10 @@
       <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.Autofac">
+      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.4\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.2\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
@@ -141,6 +145,11 @@
     <ProjectReference Include="..\Integration\Integration.fsproj">
       <Name>Integration</Name>
       <Project>{5e4ecb51-1038-4528-af68-3aff927f6360}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceBus\ServiceBus.fsproj">
+      <Name>ServiceBus</Name>
+      <Project>{32c366a0-28f5-4c04-903e-1b444704589f}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
