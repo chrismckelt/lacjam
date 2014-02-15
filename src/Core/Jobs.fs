@@ -30,9 +30,10 @@ open LinqToTwitter
         type JobMessage() =
             member val Id = Guid.Empty with get,set
             member val BatchId = Guid.Empty with get,set
-            member val CreatedDate = DateTime.UtcNow with get
+            member val CreatedDate = DateTime.Now with get
             member val Payload = "" with get, set
             member val Status = false with get, set
+            override this.ToString() = String.Format(" JobType: {0}   Id: {1}   BatchId: {2} CreatedId: {3} Payload: {4}  Status: {5}", this.GetType().Name,this.Id.ToString(),this.BatchId.ToString(),this.CreatedDate.ToString(),this.Payload, this.Status.ToString())
 //            member val JobDetail =   { new IJobDetail with 
 //                                         member this.Description = "job default description"
 //                                         member this.Key = new JobKey("job")
@@ -45,7 +46,9 @@ open LinqToTwitter
 //                                         member this.Durable = false
 //                                         member this.Clone() = new obj()
 //                                     }  with get, set
-            interface IMessage
+            interface IMessage 
+
+            
 
 
 //        type ScheduledJobMessage(jobMessage) =
@@ -69,7 +72,7 @@ open LinqToTwitter
             let mutable r = Guid.NewGuid()
             member x.JobMessage with get() =j and set(value) = j <- value
             member x.JobResultId with get () = r and set(value) = r <- value
-            member val CreatedDate = DateTime.UtcNow with get
+            member val CreatedDate = DateTime.Now with get
 
             member x.Success with get () = suc and set (v : bool) = suc <- v
 
@@ -121,7 +124,7 @@ open LinqToTwitter
 //            member val Id = Guid.Empty with get,set
 //            member val Name = String.Empty with get,set
 //            member val BatchId = Guid.Empty with get,set
-//            member val CreatedDate = DateTime.UtcNow with get
+//            member val CreatedDate = DateTime.Now with get
 //            member val Jobs = [] with get,set
 
      type BatchStatus = 
@@ -142,7 +145,7 @@ open LinqToTwitter
     [<Serializable>]
     type BatchSubmitterJob() =
         inherit Jobs.JobMessage()
-        member val Batch:Batch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="SeedBatchJob";Batch.Jobs=new System.Collections.Generic.List<Jobs.JobMessage>(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Daily.ToString()} with get, set
+        member val Batch:Batch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="SeedBatchJob";Batch.Jobs=new System.Collections.Generic.List<Jobs.JobMessage>(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=BatchSchedule.Daily.ToString()} with get, set
         interface IMessage
 
     module JobHandlers =
@@ -190,9 +193,9 @@ open LinqToTwitter
                         let jr = Jobs.JobResult(job, true, job.GetType().ToString() + " Completed" )
                         bus.Reply(jr)
                     with ex ->
-                        log.Write
-                            (LogMessage.Error
-                                    ("StartupJobHandler" + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                        log.Write(Error("StartupJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
+                        let fail = Jobs.JobResult(job, false, ex.ToString())
+                        bus.Reply(fail)
                       
 
 
@@ -220,9 +223,9 @@ open LinqToTwitter
                             let jr = Jobs.JobResult(job, true, html)
                             bus.Reply(jr)
                         with ex ->
-                            log.Write
-                                (LogMessage.Error
-                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                            log.Write(Error("PageScraperJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
+                            let fail = Jobs.JobResult(job, false, ex.ToString())
+                            bus.Reply(fail)
 
         type SendEmailJobHandler(log : ILogWriter) =
             let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
@@ -232,10 +235,8 @@ open LinqToTwitter
                     match job.Email.To with
                     | "" -> failwith "Job.Email.To empty"
                     | _ ->
-                        log.Write
-                            (LogMessage.Debug
-                                 (job.CreatedDate.ToString() + "   "
-                                  + job.GetType().ToString()))                                           
+                        log.Write(Info(" -- SendEmailJob --"))                                           
+                        log.Write(Info(job.ToString()))
                         
                         try
                             let mail = new Mail()
@@ -263,10 +264,9 @@ open LinqToTwitter
                             let jr = Jobs.JobResult(job, true, s)
                             bus.Reply(jr)
                         with ex ->
-                            log.Write
-                                (LogMessage.Error
-                                     (job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
-
+                            log.Write(Error("SendEmailJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
+                            let fail = Jobs.JobResult(job, false, ex.ToString())
+                            bus.Reply(fail)
 
          type SendTweetJobHandler(log : ILogWriter) =
             do log.Write(Info("SendTweetJobHandler"))
@@ -277,11 +277,13 @@ open LinqToTwitter
                     | "" -> failwith "Job.To empty"
                     | _ ->
                             log.Write(Info("--- Sending tweet --- "))
-                            log.Write(Debug(job.To))                                 
+                            log.Write(Info(job.To))                                 
                             log.Write(Debug(job.ToString()))                                 
                         
                             try
-                           
+                                if (job.Payload.Length > 140) then
+                                    failwith ("Tweet message too long - " + job.Payload)
+
                                 let cred = new LinqToTwitter.SingleUserInMemoryCredentialStore()
                                 cred.ConsumerKey <- job.Settings.ConsumerKey
                                 cred.ConsumerSecret <- job.Settings.ConsumerSecret
@@ -298,7 +300,7 @@ open LinqToTwitter
                                 let jr = Jobs.JobResult(job, true, String.Format("Tweet sent {0} {1} {2}",job.Settings.ScreenName, job.Payload, result.ToString()))
                                 bus.Reply(jr)
                             with ex ->
-                                log.Write(LogMessage.Error("SendTweet error: " + job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
+                                log.Write(Error("SendTweetJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
                                 let fail = Jobs.JobResult(job, false, String.Format("Tweet failed {0} {1} {2}",job.Settings.ScreenName, job.Payload, ex.ToString()))
                                 bus.Reply(fail)
                         

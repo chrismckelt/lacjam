@@ -104,20 +104,28 @@ namespace Lacjam.ServiceBus
                     let startup = new StartupBatchJobs() :> IContainBatches
                     let surfReportBatch = startup.Batches.Head                    
                     //let jiraRoadmapBatch = startup.Batches.Tail.Head
-                    let sjobDetail = new JobDetailImpl(surfReportBatch.Name,  surfReportBatch.TriggerName, typedefof<ProcessBatch>,true,true)
+                    let sjobDetail = new JobDetailImpl(surfReportBatch.Name, surfReportBatch.TriggerName, typedefof<ProcessBatch>,true,true)
                   //  let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.Name,  jiraRoadmapBatch.TriggerName, typedefof<ProcessBatch>,true,true)
                     
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,20,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                    // let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
                     try
                         if (System.Environment.MachineName.ToLower() = "earth") then
                             let tk = new TriggerKey(surfReportBatch.TriggerName)
                             log.Write(Debug("Trigger Key = " + tk.Name))
-                            if not <| (js.Scheduler.CheckExists(tk))  then
-                                js.Scheduler.ScheduleJob(sjobDetail,dt) |> ignore                                     
-                        
+
+
+                            if not <| (js.Scheduler.CheckExists(sjobDetail.Key))  then
+                                js.Scheduler.AddJob(sjobDetail,true) 
+                                let trigger:ITrigger =    match js.Scheduler.GetTrigger(tk) with
+                                                          | null -> js.Scheduler.ScheduleJob(dt) |> ignore 
+                                                                    dt
+                                                          | a -> a     
+                                js.Scheduler.RescheduleJob(tk,dt) |> fun a -> log.Write(Debug(a.Value.LocalDateTime.ToString()))                                                         
+                            else
+                                js.Scheduler.RescheduleJob(tk,dt) |> ignore
     //                        if not <| (js.Scheduler.CheckExists(new TriggerKey(jiraRoadmapBatch.TriggerName)))  then
     //                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
     //                            js.Scheduler.ScheduleJob(ht) |> ignore

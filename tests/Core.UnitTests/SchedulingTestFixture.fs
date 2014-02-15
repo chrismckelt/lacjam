@@ -36,9 +36,12 @@ let ``BatchProcessor handles replies submits job``() =
                              
 
                 let batch = {Batch.BatchId=guid; Batch.CreatedDate=DateTime.UtcNow; Batch.Id=Guid.NewGuid(); Batch.Name="Test";Batch.Jobs=testJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName="test-trigger";}
-                
+                let lst = new Collections.Generic.List<String>()
+                lst.Add("a")
+                let trgList = new Collections.Generic.List<ITrigger>()
+                trgList.Add(TriggerBuilder.Create().Build())
                 let log = {new ILogWriter with member this.Write str = Debug.WriteLine(str)}
-                let sched = fixture.Create<Quartz.IScheduler>()
+                let sched = Mock<Quartz.IScheduler>().Setup(fun a->  <@ a.GetTriggerGroupNames() @> ).Returns(lst).Setup(fun a -> <@ a.GetTriggersOfJob(any()) @>).Returns(trgList).Create()
                 let cr = new CompletionResult()
                 let objList = new System.Collections.Generic.List<obj>()
                 objList.Add(new JobResult(new Jobs.SendEmailJob(),true,"test"))
@@ -47,7 +50,9 @@ let ``BatchProcessor handles replies submits job``() =
 //                let callback =  { new ICallback member x.Value = ""}
                 let bus =   Mock<IBus>().Setup(fun x -> <@ x.Send(testJobs.First())  @>).Returns(fun b -> Foq.Mock<ICallback>().Create()).Create()
                 let js = new JobScheduler(log,bus, sched) :> IJobScheduler
-                let trig = TriggerBuilder.Create()
+                
+                
+
                 js.scheduleBatch(batch)
                 Mock.Verify(<@ js.Scheduler.ScheduleJob(any(),any()) @>, once)
                 

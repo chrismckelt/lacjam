@@ -19,7 +19,7 @@
 
         type Investor() =
             member val Id = int with get, set
-            member val CreatedDate = DateTime.UtcNow with get
+            member val CreatedDate = DateTime.Now with get
             member val GivenName = "" with get, set
             member val Surname = "" with get, set
             member val Title = "" with get, set

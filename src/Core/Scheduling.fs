@@ -123,12 +123,16 @@ module Scheduling =
                                                                         jobDetail.Description <- batch.TriggerName
 
                                                                         let mutable trigger = scheduler.GetTrigger(tk)
-                                                                        trigger <- trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
+                                                                        match trigger with 
+                                                                        | null ->   log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
+                                                                                    trigger <- scheduler.GetTriggersOfJob(jobDetail.Key).FirstOrDefault()
+                                                                                    log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.Key.Name))
+                                                                        | _ -> trigger <- trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
 
                                                                         match found with 
                                                                             | null -> 
                                                                                 log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + jobDetail.FullName + "  " + trigger.Key.Name )) 
-                                                                                if not <| (scheduler.CheckExists(tk))  then
+                                                                                if not <| (scheduler.CheckExists(jobDetail.Key))  then
                                                                                     log.Write(Debug("---  scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build())  ---"))
                                                                                     scheduler.ScheduleJob(jobDetail, trigger) |> ignore
                                                                                 else
