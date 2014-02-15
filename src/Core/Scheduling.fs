@@ -106,27 +106,37 @@ module Scheduling =
                                                                         
                                                                         let tk = new TriggerKey(batch.TriggerName)
                                                                         log.Write(Debug("JobScheduler.handleBatch : TriggerKey(batch.TriggerName) " + tk.Name ))
-                                                                        let trigger = match scheduler.GetTrigger(tk) with
-                                                                                          | null -> 
-                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger not found - creating new one " + batch.TriggerName ))
-                                                                                                    TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-                                                                                          | trg -> 
-                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger found : " + batch.TriggerName ))
-                                                                                                    trg
-                                                                        
+//                                                                        let trigger = match scheduler.GetTrigger(tk) with
+//                                                                                          | null -> 
+//                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger not found - creating new one " + batch.TriggerName ))
+//                                                                                                    TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+//                                                                                          | trg -> 
+//                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger found : " + batch.TriggerName ))
+//                                                                                                    trg
+                                                                        log.Write(Debug("scheduler.GetTriggerGroupNames()"))
+                                                                        for grp in scheduler.GetTriggerGroupNames() do
+                                                                            log.Write(Debug("Group = " + grp))
+                                                                       
                                                                         jobDetail.Durable <- true
                                                                         jobDetail.Name <- batch.Name
                                                                         jobDetail.RequestsRecovery <- true
-                                                                        jobDetail.Description <- batch.Name + "--" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                                                                        jobDetail.Description <- batch.TriggerName
+
+                                                                        let mutable trigger = scheduler.GetTrigger(tk)
+                                                                        trigger <- trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
 
                                                                         match found with 
                                                                             | null -> 
                                                                                 log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + jobDetail.FullName + "  " + trigger.Key.Name )) 
                                                                                 if not <| (scheduler.CheckExists(tk))  then
-                                                                                    scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build()) |> ignore
+                                                                                    log.Write(Debug("---  scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build())  ---"))
+                                                                                    scheduler.ScheduleJob(jobDetail, trigger) |> ignore
                                                                                 else
+                                                                                    log.Write(Debug("---  scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
                                                                                     scheduler.RescheduleJob(tk,trigger) |> ignore
-                                                                            | _ -> scheduler.RescheduleJob(tk,trigger) |> ignore
+                                                                            | _ -> 
+                                                                                    scheduler.RescheduleJob(tk,trigger) |> ignore
+                                                                                    log.Write(Debug("--- 2 scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
                                                                         let dto = trigger.GetNextFireTimeUtc()
                                                                         match dto.HasValue with
                                                                         | true -> log.Write(Info(jobDetail.Name + " next fire time (local) " + dto.Value.ToLocalTime().ToString()))

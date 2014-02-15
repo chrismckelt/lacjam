@@ -108,7 +108,7 @@ namespace Lacjam.ServiceBus
                   //  let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.Name,  jiraRoadmapBatch.TriggerName, typedefof<ProcessBatch>,true,true)
                     
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(8,55,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,20,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
                    // let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
 
                     try
