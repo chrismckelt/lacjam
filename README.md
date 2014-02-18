@@ -4,42 +4,43 @@
 A scheduling/publishing framework - with future pivots 
 
 
-TODO
--- Web Scraping
--- Monitoring
--- Analysis
--- Reports
+TODO<br/>	
+-- Web Scraping<br/>	
+-- Monitoring<br/>	
+-- Analysis<br/>	
+-- Reports<br/>	
 
-Sample
-
- // scheduler stats batch
- let stats = new Jobs.SchedulerStatsJob()
- let statsList = seq<Jobs.JobMessage>([stats])
- let statsBatch = {
-                   Batch.BatchId=Guid.NewGuid(); 
-                   Batch.CreatedDate=DateTime.Now; 
-                   Batch.Id=Guid.NewGuid(); 
-                   Batch.Name="Scheduler-Stats";
-                   Batch.Jobs=(statsList.ToList()); 
-                   Batch.Status=BatchStatus.Waiting;
-                   Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();
-                  }
-	
-	
+Sample<br/>	
+<br/>	
+ // scheduler stats batch<br/>	
+ let stats = new Jobs.SchedulerStatsJob()<br/>	
+ let statsList = seq<Jobs.JobMessage>([stats])<br/>	
+ let statsBatch = {<br/>	
+                   Batch.BatchId=Guid.NewGuid(); <br/>	
+                   Batch.CreatedDate=DateTime.Now; <br/>	
+                   Batch.Id=Guid.NewGuid(); <br/>	
+                   Batch.Name="Scheduler-Stats";<br/>	
+                   Batch.Jobs=(statsList.ToList()); <br/>	
+                   Batch.Status=BatchStatus.Waiting;<br/>	
+                   Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();<br/>	
+                  }<br/>	
+	<br/>	
+	<br/>	
 To have this batch run it list of jobs on a schedule, create a NServiceBus message (IMessage) and have it implement IContainBatches & return the batch (IContainBatches.Batches)
-	
-try
-    // schedule startup jobs
-    let suJobs = new StartupBatchJobs() :> IContainBatches
-    for batch in suJobs.Batches do
-         let startBatchJob = new BatchSubmitterJob() 
-         startBatchJob.Batch <- batch
-         bus.Send(startBatchJob) |> ignore
-    ()
-with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))
-
-These jobs will be executed according to their trigger schedule (Batch.TriggerName).
-				  
+<br/>	
+try<br/>	
+    // schedule startup jobs<br/>	
+    let suJobs = new StartupBatchJobs() :> IContainBatches<br/>	
+    for batch in suJobs.Batches do<br/>	
+         let startBatchJob = new BatchSubmitterJob() <br/>	
+         startBatchJob.Batch <- batch<br/>	
+         bus.Send(startBatchJob) |> ignore<br/>	
+    ()<br/>	
+with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))<br/>	
+<br/>	
+<br/>	
+These jobs will be executed according to their trigger schedule (Batch.TriggerName).<br/>	
+				  <br/>	<br/>	
 <!--
 <table>
   <caption>Summary of solution folders</caption>
