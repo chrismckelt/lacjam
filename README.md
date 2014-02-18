@@ -3,12 +3,73 @@
 
 A scheduling/publishing framework - with future pivots 
 
+
 TODO
 -- Web Scraping
 -- Monitoring
 -- Analysis
 -- Reports
 
+Sample
+
+<div class="postText">
+    
+
+    <pre class="csharpcode"> // scheduler stats batch
+ <span class="kwrd">let</span> stats = <span class="kwrd">new</span> Jobs.SchedulerStatsJob()
+ <span class="kwrd">let</span> statsList = seq&lt;Jobs.JobMessage&gt;([stats])
+ <span class="kwrd">let</span> statsBatch = {
+                   Batch.BatchId=Guid.NewGuid(); 
+                   Batch.CreatedDate=DateTime.Now; 
+                   Batch.Id=Guid.NewGuid(); 
+                   Batch.Name=<span class="str">"Scheduler-Stats"</span>;
+                   Batch.Jobs=(statsList.ToList()); 
+                   Batch.Status=BatchStatus.Waiting;
+                   Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();
+                  }</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode"><span class="kwrd">try</span>
+    
+	
+	
+To have this batch run it list of jobs on a schedule, create a NServiceBus message (IMessage) and have it implement IContainBatches & return your batch job
+	
+	
+	// schedule startup jobs
+    <span class="kwrd">let</span> suJobs = <span class="kwrd">new</span> StartupBatchJobs() :&gt; IContainBatches
+    <span class="kwrd">for</span> batch <span class="kwrd">in</span> suJobs.Batches <span class="kwrd">do</span>
+         <span class="kwrd">let</span> startBatchJob = <span class="kwrd">new</span> BatchSubmitterJob() 
+         startBatchJob.Batch &lt;- batch
+         bus.Send(startBatchJob) |&gt; ignore
+    ()
+<span class="kwrd">with</span> | ex -&gt; log.Write(<span class="kwrd">Error</span>(<span class="str">"ServiceBusStartUp"</span>, ex,<span class="kwrd">true</span>))</pre>
+<style type="text/css">.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }
+</style>
+
+These jobs will be executed according to their trigger schedule (Batch.TriggerName).
+				  
+<!--
 <table>
   <caption>Summary of solution folders</caption>
   <thead>
@@ -266,7 +327,7 @@ TODO
     </tr>
   </tbody>
 </table>
-
+-->
 ---
 
 <a href="http://pblasucci.github.io/FSharp.ProjectScaffold" target="_blank">Sample API documents available here.</a>
