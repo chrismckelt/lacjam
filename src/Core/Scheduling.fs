@@ -25,7 +25,6 @@ module Scheduling =
             abstract scheduleBatch : Lacjam.Core.Batch -> unit
             abstract member processBatch : Batch -> unit
             abstract member Scheduler : IScheduler with get 
-         //   abstract member createTrigger : TriggerBuilder  with get, set
     
 
     type BatchMessage = ILogWriter * IBus * Jobs.JobMessage * AsyncReplyChannel<Jobs.JobResult>
@@ -100,9 +99,9 @@ module Scheduling =
     type JobScheduler(log:ILogWriter, bus:IBus, scheduler:IScheduler) =        
        
         do log.Write(Info("-- Scheduler started --"))  
-        let mutable triggerBuilder = TriggerBuilder.Create().WithCalendarIntervalSchedule(fun a-> (a.WithInterval(1, IntervalUnit.Minute) |> ignore))
+
         let handleBatch (batch:Batch)         =                         let jobDetail = new JobDetailImpl(batch.Name,  batch.TriggerName, typedefof<ProcessBatch>,true,true)
-                                                                        let found = scheduler.GetJobDetail(jobDetail.Key)
+                                                                        
                                                                         
                                                                         let tk = new TriggerKey(batch.TriggerName)
                                                                         log.Write(Debug("JobScheduler.handleBatch : TriggerKey(batch.TriggerName) " + tk.Name ))
@@ -123,12 +122,17 @@ module Scheduling =
                                                                         jobDetail.Description <- batch.TriggerName
 
                                                                         let mutable trigger = scheduler.GetTrigger(tk)
-                                                                        match trigger with 
-                                                                        | null ->   log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
-                                                                                    trigger <- scheduler.GetTriggersOfJob(jobDetail.Key).FirstOrDefault()
-                                                                                    log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.Key.Name))
-                                                                        | _ -> trigger <- trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
+                                                                        let trigger = match trigger with 
+                                                                                                        | null ->   log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
+                                                                                                                    trigger <- scheduler.GetTriggersOfJob(jobDetail.Key).FirstOrDefault()
+                                                                                                                    match trigger with 
+                                                                                                                    | null ->   log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - DOES NOT EXIST - defaulting to HOURLY trigger "))
+                                                                                                                                (TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.WithIntervalInHours(1).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build())             
+                                                                                                                    | _ ->      log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.Key.Name))
+                                                                                                                                trigger
+                                                                                                        | _ -> trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
 
+                                                                        let found = scheduler.GetJobDetail(trigger.JobKey)
                                                                         match found with 
                                                                             | null -> 
                                                                                 log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + jobDetail.FullName + "  " + trigger.Key.Name )) 

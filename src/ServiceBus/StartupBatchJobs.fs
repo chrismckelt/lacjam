@@ -1,6 +1,7 @@
 ﻿namespace Lacjam.ServiceBus
 
     open System
+    open System.Linq
     open Autofac
     open NServiceBus
     open NServiceBus.Features
@@ -53,21 +54,25 @@
                                             let js = Ioc.Resolve<IJobScheduler>();
 
                                             log.Write(Debug("StartupBatchJobs init"))
+
+                                            // scheduler stats batch
+                                            let stats = new Jobs.SchedulerStatsJob()
+                                            let statsList = seq<Jobs.JobMessage>([stats])
+                                            let statsBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Scheduler-Stats";Batch.Jobs=(statsList.ToList()); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
+                                            
+                                            // swell net scraper batch
                                             let guidId = Guid.NewGuid()
                                             let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
                                             swJob.BatchId <- guidId
-                                            let swJobs = new Collections.Generic.List<Jobs.JobMessage>()
-                                            swJobs.Add(StartUpJob(BatchId=guidId, Payload="SwellNet batch started") :> JobMessage)
-                                            swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla") :> JobMessage)
-                                            swJobs.Add(swJob :> JobMessage)
-                                            swJobs.Add(SendTweetJob(To="chris_mckelt") :> JobMessage)  |> ignore
-                                            //SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
-                                                                                                           
-                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swJobs; Batch.Status=BatchStatus.Waiting; Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
+                                            let swList = seq<Jobs.JobMessage>([ StartUpJob(BatchId=guidId, Payload="SwellNet batch started");
+                                                                                PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla");
+                                                                                swJob;
+                                                                                SendTweetJob(To="chris_mckelt")                                                             
+                                                                               ])
+                                            let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swList.ToList(); Batch.Status=BatchStatus.Waiting; Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
 
-                                            let jiraJobs = new Collections.Generic.List<JobMessage>()
-                                            jiraJobs.Add(CustomJobs.JiraRoadMapOutputJob())
+                                            // jira roadmap batch
+                                            let jiraList = seq<JobMessage>([CustomJobs.JiraRoadMapOutputJob()])
+                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraList.ToList(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
 
-                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraJobs; Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
-
-                                            [surfReportBatch]
+                                            [statsBatch;jiraRoadmapBatch]

@@ -50,6 +50,7 @@ namespace Lacjam.ServiceBus
                      try
                          Configure.With()
                             .DefineEndpointName("lacjam.servicebus")
+                            .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
                             .Log4Net()
                             .AutofacBuilder(Ioc)                   
                             .InMemorySagaPersister()
@@ -96,24 +97,24 @@ namespace Lacjam.ServiceBus
                             log.Write(Debug("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString()))
                             log.Write(Debug("ThreadPoolSize : " + meta.ThreadPoolSize.ToString()))
                             log.Write(Debug("ThreadPoolType : " + meta.ThreadPoolType.ToString()))                            
-                            //Lacjam.Integration.Jira.outputRoadmap()                                      
+                            Lacjam.Integration.Jira.outputRoadmap()                                      
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     )
 
                     let startup = new StartupBatchJobs() :> IContainBatches
-                    let surfReportBatch = startup.Batches.Head                    
-                    //let jiraRoadmapBatch = startup.Batches.Tail.Head
-                    let sjobDetail = new JobDetailImpl(surfReportBatch.Name, surfReportBatch.TriggerName, typedefof<ProcessBatch>,true,true)
-                  //  let jjobDetail = new JobDetailImpl(jiraRoadmapBatch.Name,  jiraRoadmapBatch.TriggerName, typedefof<ProcessBatch>,true,true)
+                    let batch1 = startup.Batches.Head                    
+                    let batch2 = startup.Batches.Tail.Head
+                    let sjobDetail = new JobDetailImpl(batch1.Name, batch1.TriggerName, typedefof<ProcessBatch>,true,true)
+                    let jjobDetail = new JobDetailImpl(batch2.Name,  batch2.TriggerName, typedefof<ProcessBatch>,true,true)
                     
                     //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-                   // let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
+                    let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build()             
+                    let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.WithIntervalInHours(1).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build()             
 
                     try
                         if (System.Environment.MachineName.ToLower() = "earth") then
-                            let tk = new TriggerKey(surfReportBatch.TriggerName)
+                            let tk = new TriggerKey(batch1.TriggerName)
                             log.Write(Debug("Trigger Key = " + tk.Name))
 
 
@@ -126,10 +127,10 @@ namespace Lacjam.ServiceBus
                                 js.Scheduler.RescheduleJob(tk,dt) |> fun a -> log.Write(Debug(a.Value.LocalDateTime.ToString()))                                                         
                             else
                                 js.Scheduler.RescheduleJob(tk,dt) |> ignore
-    //                        if not <| (js.Scheduler.CheckExists(new TriggerKey(jiraRoadmapBatch.TriggerName)))  then
-    //                            js.Scheduler.AddJob(jjobDetail,true) |> ignore
-    //                            js.Scheduler.ScheduleJob(ht) |> ignore
-                    with | ex -> log.Write(Error("EndpointConfig addJob surfReportBatch dt", ex,true))
+                            if not <| (js.Scheduler.CheckExists(new TriggerKey(batch2.TriggerName)))  then
+                                js.Scheduler.AddJob(jjobDetail,true) |> ignore
+                                js.Scheduler.ScheduleJob(ht) |> ignore
+                    with | ex -> log.Write(Error("EndpointConfig addJob batch1 dt", ex,true))
                     try
                         // schedule startup jobs
                         
@@ -144,8 +145,6 @@ namespace Lacjam.ServiceBus
                         ()
                         
                     with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))
-                   
-                    //Schedule.Every(TimeSpan.FromHours(double 1)).Action(fun a-> Lacjam.Integration.Jira.outputRoadmap())
 
                 member this.Stop() = 
                     Lacjam.Core.Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);    

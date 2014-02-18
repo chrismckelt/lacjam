@@ -179,7 +179,8 @@ module Jira  =
                     Status=(issue.Fields.Status.Name) ; 
                     IdealHours=(decimal estimatedHours)}
                 
-                if (ji.Status <> "DONE") then
+                if (ji.Status <> "DONE") && not <| (jil.Any(fun a-> ji.Key = a.Key)) then
+                    log.Write(Info("-- Adding -- " + ji.Key))
                     jil.Add(ji)
 
 

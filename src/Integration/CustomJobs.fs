@@ -5,6 +5,7 @@ module CustomJobs =
     open System
     open System.ServiceModel
     open System.Linq
+    open System.Text
     open System.Runtime.Serialization.Json
     open System.Net.Mail;
     open System.Diagnostics
@@ -29,6 +30,8 @@ module CustomJobs =
     open Lacjam.Core.Scheduling
     open Lacjam.Integration
     open Lacjam.Core.Utility.Html
+    open Lacjam.Core.Jobs
+    
      
     [<Serializable>]
     type JiraRoadMapOutputJob() =
@@ -105,3 +108,28 @@ module CustomJobs =
                         bus.Reply(fail)
 
 
+       type SchedulerStatsJobHandler(log : ILogWriter, bus : IBus) =
+            do log.Write(Info("SchedulerStatsJobHandler"))
+            interface IHandleMessages<Lacjam.Core.Jobs.SchedulerStatsJob> with
+                member x.Handle(job) =
+                    log.Write(Info(job.ToString()))
+                       
+                    try
+                        log.Write(LogMessage.Debug("SchedulerStatsJobHandler - getting stats"))
+                        let js = Ioc.Resolve<IJobScheduler>()
+                        let sb = new StringBuilder()
+                        let meta = js.Scheduler.GetMetaData()
+                        sb.AppendLine("-- Quartz MetaData --")
+                        sb.AppendLine("NumberOfJobsExecuted : " + meta.NumberOfJobsExecuted.ToString())
+                        sb.AppendLine("Started : " + meta.Started.ToString())
+                        sb.AppendLine("RunningSince : " + meta.RunningSince.ToString())
+                        sb.AppendLine("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString())
+                        sb.AppendLine("ThreadPoolSize : " + meta.ThreadPoolSize.ToString())
+                        sb.AppendLine("ThreadPoolType : " + meta.ThreadPoolType.ToString())   
+                        log.Write(Info(sb.ToString()))  
+                        let jr = Jobs.JobResult(job, true, sb.ToString() + " Completed" )
+                        bus.Reply(jr)
+                    with ex ->
+                        log.Write(Error("SchedulerStatsJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
+                        let fail = Jobs.JobResult(job, false, ex.ToString())
+                        bus.Reply(fail)

@@ -97,6 +97,11 @@ open LinqToTwitter
             interface IMessage
 
         [<Serializable>]
+        type SchedulerStatsJob() =
+            inherit JobMessage()
+            interface IMessage
+
+        [<Serializable>]
         type PageScraperJob() =
             inherit JobMessage()
             member val Url = String.Empty with get, set
@@ -161,6 +166,7 @@ open LinqToTwitter
         open System.IO
         open System.Net
         open System.Net.Http
+        open System.Text
         open System.Runtime.Serialization
         open System.Text.RegularExpressions
         open log4net
@@ -196,8 +202,6 @@ open LinqToTwitter
                         log.Write(Error("StartupJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
                         let fail = Jobs.JobResult(job, false, ex.ToString())
                         bus.Reply(fail)
-                      
-
 
         type PageScraperJobHandler(log : ILogWriter) =
             do log.Write(Info("PageScraperJobHandler"))
