@@ -12,60 +12,31 @@ TODO
 
 Sample
 
-<div class="postText">
-    
-
-    <pre class="csharpcode"> // scheduler stats batch
- <span class="kwrd">let</span> stats = <span class="kwrd">new</span> Jobs.SchedulerStatsJob()
- <span class="kwrd">let</span> statsList = seq&lt;Jobs.JobMessage&gt;([stats])
- <span class="kwrd">let</span> statsBatch = {
+ // scheduler stats batch
+ let stats = new Jobs.SchedulerStatsJob()
+ let statsList = seq<Jobs.JobMessage>([stats])
+ let statsBatch = {
                    Batch.BatchId=Guid.NewGuid(); 
                    Batch.CreatedDate=DateTime.Now; 
                    Batch.Id=Guid.NewGuid(); 
-                   Batch.Name=<span class="str">"Scheduler-Stats"</span>;
+                   Batch.Name="Scheduler-Stats";
                    Batch.Jobs=(statsList.ToList()); 
                    Batch.Status=BatchStatus.Waiting;
                    Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();
-                  }</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode">&nbsp;</pre><pre class="csharpcode"><span class="kwrd">try</span>
-    
+                  }
 	
 	
-To have this batch run it list of jobs on a schedule, create a NServiceBus message (IMessage) and have it implement IContainBatches & return your batch job
+To have this batch run it list of jobs on a schedule, create a NServiceBus message (IMessage) and have it implement IContainBatches & return the batch (IContainBatches.Batches)
 	
-	
-	// schedule startup jobs
-    <span class="kwrd">let</span> suJobs = <span class="kwrd">new</span> StartupBatchJobs() :&gt; IContainBatches
-    <span class="kwrd">for</span> batch <span class="kwrd">in</span> suJobs.Batches <span class="kwrd">do</span>
-         <span class="kwrd">let</span> startBatchJob = <span class="kwrd">new</span> BatchSubmitterJob() 
-         startBatchJob.Batch &lt;- batch
-         bus.Send(startBatchJob) |&gt; ignore
+try
+    // schedule startup jobs
+    let suJobs = new StartupBatchJobs() :> IContainBatches
+    for batch in suJobs.Batches do
+         let startBatchJob = new BatchSubmitterJob() 
+         startBatchJob.Batch <- batch
+         bus.Send(startBatchJob) |> ignore
     ()
-<span class="kwrd">with</span> | ex -&gt; log.Write(<span class="kwrd">Error</span>(<span class="str">"ServiceBusStartUp"</span>, ex,<span class="kwrd">true</span>))</pre>
-<style type="text/css">.csharpcode, .csharpcode pre
-{
-	font-size: small;
-	color: black;
-	font-family: consolas, "Courier New", courier, monospace;
-	background-color: #ffffff;
-	/*white-space: pre;*/
-}
-.csharpcode pre { margin: 0em; }
-.csharpcode .rem { color: #008000; }
-.csharpcode .kwrd { color: #0000ff; }
-.csharpcode .str { color: #006080; }
-.csharpcode .op { color: #0000c0; }
-.csharpcode .preproc { color: #cc6633; }
-.csharpcode .asp { background-color: #ffff00; }
-.csharpcode .html { color: #800000; }
-.csharpcode .attr { color: #ff0000; }
-.csharpcode .alt 
-{
-	background-color: #f4f4f4;
-	width: 100%;
-	margin: 0em;
-}
-.csharpcode .lnum { color: #606060; }
-</style>
+with | ex -> log.Write(Error("ServiceBusStartUp", ex,true))
 
 These jobs will be executed according to their trigger schedule (Batch.TriggerName).
 				  
