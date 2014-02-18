@@ -17,29 +17,6 @@
 
     type StartupBatchJobs() =
    
-//        let j1 = PageScraperJob(Payload="http://www.bedlam.net.au") :> JobMessage
-//        let j2 = PageScraperJob(Payload="http://www.mckelt.com")  :> JobMessage
-//        let j3 = PageScraperJob(Payload="http://www.mckelt.com/blog") :> JobMessage
-//        let Batchs = seq [j1; j2; j3;]
-       
-    //    let pingBatches = {
-    //        Batch.Id = Guid.NewGuid(); 
-    //        Batch.Name = "site-wakeup" ; 
-    //        Batch.Jobs = Batchs 
-    //        Batch.RunOnSchedule =TimeSpan.FromMinutes(Convert.ToDouble(1))
-    //        }
-
-//        let scheduleJiraRoadmapOutput() =
-//                                    let jiraJob = new CustomJobs.JiraRoadMapOutputJob() 
-//                                    Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(3))).Action(fun a->
-//                                                                                                try
-//                                                                                                    Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(LogMessage.Debug("Schedule running for JIRA Roadmap Job."))
-//                                                                                                    Lacjam.Core.Runtime.Ioc.Resolve<IBus>().Send("lacjam.servicebus", jiraJob :> IMessage) |> ignore
-//                                                                                                with 
-//                                                                                                | ex ->  Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>().Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
-//                                    )
-//                                    ()
-    
         let printTimes (x:ITrigger) =   let log = Ioc.Resolve<ILogWriter>()
                                         let spi = x :?> Spi.IOperableTrigger
                                         let times = TriggerUtils.ComputeFireTimes(spi, null,10)
