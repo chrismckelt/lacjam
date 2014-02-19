@@ -97,7 +97,7 @@ namespace Lacjam.ServiceBus
                             log.Write(Debug("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString()))
                             log.Write(Debug("ThreadPoolSize : " + meta.ThreadPoolSize.ToString()))
                             log.Write(Debug("ThreadPoolType : " + meta.ThreadPoolType.ToString()))                            
-                            Lacjam.Integration.Jira.outputRoadmap()                                      
+                          //  Lacjam.Integration.Jira.outputRoadmap()                                      
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
                     )
@@ -110,7 +110,7 @@ namespace Lacjam.ServiceBus
                         let jjobDetail = new JobDetailImpl(batch2.Name,  batch2.TriggerName, typedefof<ProcessBatch>,true,true)
                     
                         //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                        let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TomorrowAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build()             
+                        let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(5,30,00)).WithDescription("daily").WithSimpleSchedule(fun a->a.WithIntervalInHours(24).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build()             
                         let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.WithIntervalInHours(1).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build()             
 
                         if (System.Environment.MachineName.ToLower() = "earth") then

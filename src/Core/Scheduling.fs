@@ -101,17 +101,8 @@ module Scheduling =
         do log.Write(Info("-- Scheduler started --"))  
 
         let handleBatch (batch:Batch)         =                         let jobDetail = new JobDetailImpl(batch.Name,  batch.TriggerName, typedefof<ProcessBatch>,true,true)
-                                                                        
-                                                                        
                                                                         let tk = new TriggerKey(batch.TriggerName)
                                                                         log.Write(Debug("JobScheduler.handleBatch : TriggerKey(batch.TriggerName) " + tk.Name ))
-//                                                                        let trigger = match scheduler.GetTrigger(tk) with
-//                                                                                          | null -> 
-//                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger not found - creating new one " + batch.TriggerName ))
-//                                                                                                    TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.RepeatForever().WithIntervalInMinutes(15).WithMisfireHandlingInstructionFireNow() |> ignore).Build()             
-//                                                                                          | trg -> 
-//                                                                                                    log.Write(Debug("JobScheduler.handleBatch : Trigger found : " + batch.TriggerName ))
-//                                                                                                    trg
                                                                         log.Write(Debug("scheduler.GetTriggerGroupNames()"))
                                                                         for grp in scheduler.GetTriggerGroupNames() do
                                                                             log.Write(Debug("Group = " + grp))

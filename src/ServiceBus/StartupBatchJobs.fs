@@ -52,4 +52,7 @@
                                             let jiraList = seq<JobMessage>([CustomJobs.JiraRoadMapOutputJob()])
                                             let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraList.ToList(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
 
-                                            [surfReportBatch;jiraRoadmapBatch]
+                                            if (System.Environment.MachineName.ToLower() = "earth") then
+                                                [surfReportBatch;statsBatch]
+                                            else
+                                                [surfReportBatch;statsBatch;jiraRoadmapBatch]
