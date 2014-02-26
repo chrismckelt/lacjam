@@ -28,7 +28,7 @@ open LinqToTwitter
         [<Serializable>]
         [<AbstractClass>]
         type JobMessage() =
-            member val Id = Guid.Empty with get,set
+            member val Id = Guid.NewGuid() with get,set
             member val BatchId = Guid.Empty with get,set
             member val CreatedDate = DateTime.Now with get
             member val Payload = "" with get, set

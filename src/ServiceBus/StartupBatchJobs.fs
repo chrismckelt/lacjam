@@ -40,9 +40,10 @@
                                             // swell net scraper batch
                                             let guidId = Guid.NewGuid()
                                             let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
+                                            swJob.Id = Guid.NewGuid() |> ignore
                                             swJob.BatchId <- guidId
                                             let swList = seq<Jobs.JobMessage>([ StartUpJob(BatchId=guidId, Payload="SwellNet batch started");
-                                                                                PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla");
+                                                                                PageScraperJob(BatchId=guidId, Id=Guid.NewGuid(), Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla");
                                                                                 swJob;
                                                                                 SendTweetJob(To="chris_mckelt")                                                             
                                                                                ])
