@@ -32,8 +32,8 @@ open LinqToTwitter
             member val BatchId = Guid.Empty with get,set
             member val CreatedDate = DateTime.Now with get
             member val Payload = "" with get, set
-            member val Status = false with get, set
-            override this.ToString() = String.Format(" JobType: {0}   Id: {1}   BatchId: {2} CreatedId: {3} Payload: {4}  Status: {5}", this.GetType().Name,this.Id.ToString(),this.BatchId.ToString(),this.CreatedDate.ToString(),this.Payload, this.Status.ToString())
+            member val IsCompleted = false with get, set
+            override this.ToString() = String.Format(" JobType: {0}   Id: {1}   BatchId: {2} CreatedId: {3} Payload: {4}  IsCompleted: {5}", this.GetType().Name,this.Id.ToString(),this.BatchId.ToString(),this.CreatedDate.ToString(),this.Payload, this.IsCompleted.ToString())
             interface IMessage 
 
             
@@ -46,6 +46,7 @@ open LinqToTwitter
             let mutable r = Guid.Empty
             let mutable rt = resubmitTime   
             let getValue = if (rt.IsSome) then rt.Value else new TimeSpan()
+            do if (success) then j.IsCompleted <- true
             member x.JobMessage with get() =j and set(value) = j <- value
             member x.JobResultId with get () = r and set(value) = r <- value
             member val CreatedDate = DateTime.Now with get

@@ -123,16 +123,20 @@ module Scheduling =
                                                                                                                                 trigger
                                                                                                         | _ -> trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
 
-                                                                        let found = scheduler.GetJobDetail(trigger.JobKey)
+                                                                        let found = scheduler.GetJobDetail(jobDetail.Key)
                                                                         match found with 
                                                                             | null -> 
                                                                                 log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + jobDetail.FullName + "  " + trigger.Key.Name )) 
-                                                                                if not <| (scheduler.CheckExists(jobDetail.Key))  then
-                                                                                    log.Write(Debug("---  scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build())  ---"))
-                                                                                    scheduler.ScheduleJob(jobDetail, trigger) |> ignore
-                                                                                else
-                                                                                    log.Write(Debug("---  scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
-                                                                                    scheduler.RescheduleJob(tk,trigger) |> ignore
+                                                                                try
+                                                                                    if not <| (scheduler.CheckExists(tk))  then
+                                                                                        log.Write(Debug("---  scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build())  ---"))
+                                                                                        scheduler.ScheduleJob(jobDetail, trigger) |> ignore
+                                                                                    else
+                                                                                        log.Write(Debug("---  scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
+                                                                                        scheduler.RescheduleJob(tk,trigger) |> ignore
+                                                                                 with | ex ->  
+                                                                                                log.Write(Error("JobScheduler.handleBatch : jobDetail.Key= " + jobDetail.Key.ToString(),ex,true))
+                                                                               
                                                                             | _ -> 
                                                                                     scheduler.RescheduleJob(tk,trigger) |> ignore
                                                                                     log.Write(Debug("--- 2 scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
@@ -192,29 +196,32 @@ module Scheduling =
                                                                                                             loop 0)
                                                                                                 
                                                     let mutable payload = batch.Jobs.FirstOrDefault().Payload
+                                                    let mutable continueProcessing = true     // poor mans break - TODO change this to use recursion
                                                     for job in batch.Jobs do
-                                                        try
-                                                            job.Payload <- payload
-                                                            log.Write(Info(job.GetType().Name))
-                                                            log.Write(Info("-- OLD Payload --"))
-                                                            log.Write(Info(job.Payload))
-                                                            let reply = agent.PostAndReply(fun replyChannel -> log, bus, job, replyChannel)
-                                                            log.Write(Info("JobResult received for " + job.GetType().Name))                                                            
-                                                            if (reply.Success) then
-                                                                log.Write(Info("JobResult.Success=true"))
-                                                                payload <- reply.Result
-                                                                log.Write(Info("-- NEW Payload --"))
-                                                                log.Write(Info(payload))
-                                                                log.Write(Info("Reply: %s" + reply.ToString()))
-                                                            else
-                                                                log.Write(Info("JobResult.Success=false"))
-                                                                log.Write(Info(job.ToString()))
-                                                                if (reply.ResubmitTime.Ticks > (0L)) then
-                                                                    log.Write(Info("Job failed - resubmitting whole batch for reprocessing at : " + DateTime.Now.AddTicks(reply.ResubmitTime.Ticks).ToString()))
-                                                                    let bsj = new BatchSubmitterJob() 
-                                                                    bsj.Batch <- batch
-                                                                    bus.Defer(DateTime.Now.AddTicks(reply.ResubmitTime.Ticks), bsj) |> ignore
-                                                        with | ex -> log.Write(Error("Job failed", ex, false))
+                                                        if (continueProcessing) then
+                                                            try
+                                                                job.Payload <- payload
+                                                                log.Write(Info(job.GetType().Name))
+                                                                log.Write(Info("-- OLD Payload --"))
+                                                                log.Write(Info(job.Payload))
+                                                                let reply = agent.PostAndReply(fun replyChannel -> log, bus, job, replyChannel)
+                                                                log.Write(Info("JobResult received for " + job.GetType().Name))                                                            
+                                                                if (reply.Success) then
+                                                                    log.Write(Info("JobResult.Success=true"))
+                                                                    payload <- reply.Result
+                                                                    log.Write(Info("-- NEW Payload --"))
+                                                                    log.Write(Info(payload))
+                                                                    log.Write(Info("Reply: %s" + reply.ToString()))
+                                                                else
+                                                                    log.Write(Info("JobResult.Success=false"))
+                                                                    log.Write(Info(job.ToString()))
+                                                                    if (reply.ResubmitTime.Ticks > (0L)) then
+                                                                        log.Write(Info("Job failed - resubmitting whole batch for reprocessing at : " + DateTime.Now.AddTicks(reply.ResubmitTime.Ticks).ToString()))
+                                                                        let bsj = new BatchSubmitterJob() 
+                                                                        bsj.Batch <- batch
+                                                                        bus.Defer(DateTime.Now.AddTicks(reply.ResubmitTime.Ticks), bsj) |> ignore
+                                                                        continueProcessing <- false
+                                                            with | ex -> log.Write(Error("Job failed", ex, false))
                                                     
                                                     ()
                 

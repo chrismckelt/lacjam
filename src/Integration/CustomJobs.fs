@@ -73,10 +73,11 @@ module CustomJobs =
                     let rating = findNodesByClassName(ratingSpan, "field-content")
                     match rating with
                     | Some(a) ->    log.Write(Debug("Rating is " + rating.Value.OwnerNode.InnerText))
+                                    job.IsCompleted <- true
                                     let jr = new Jobs.JobResult(job, true, rating.Value.OwnerNode.InnerText)
                                     bus.Reply(jr)
-                    | None ->   let msg =  ("SwellNetRating cannot parse rating for job : - " + job.ToString())
-                                failwith msg   
+                    | None ->       let msg =  ("SwellNetRating cannot parse rating for job : - " + job.ToString())
+                                    failwith msg   
 
                 with ex -> 
                         log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
