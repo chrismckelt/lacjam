@@ -53,11 +53,7 @@ module CustomJobs =
     [<Serializable>]
     type SwellNetRatingJob(log:ILogWriter) =
         inherit Lacjam.Core.Jobs.JobMessage()
-        do log.Write(Debug("SwellNetRatingJob ctr"))
-    
-    let deferJob (log:ILogWriter) (bus:IBus) (job:Jobs.JobMessage) (msg:String) (mins:DateTime) =           log.Write (LogMessage.Info(msg))
-                                                                                                            log.Write (LogMessage.Info("Defer send again until " + mins.ToLongTimeString()))
-                                                                                                            bus.Defer(mins, job).Register(Scheduling.callBackReceiver) |> ignore      
+        do log.Write(Debug("SwellNetRatingJob ctr"))   
 
     type SwellNetRatingHandler(log : ILogWriter  ,  bus : IBus) =
         do log.Write (LogMessage.Debug("SwellNetRatingHandler"))
@@ -72,7 +68,6 @@ module CustomJobs =
                     match doc.ParseErrors with | s -> if (s.Count() > 0) then failwith ("Errors" + doc.ParseErrors.First().ToString()) |> ignore
 
                     let lastUpdatedSpan = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-date") )
-
                     let lastUpdated = Utility.Html.findNodesByClassName(lastUpdatedSpan, "field-content")  
                     let (ratingSpan:HtmlNode) = doc.DocumentNode.Descendants().FirstOrDefault(fun d -> d.Attributes.Contains("class") && d.Attributes.Item("class").Value.Contains("views-field views-field-field-surf-report-rating") )
                     let rating = findNodesByClassName(ratingSpan, "field-content")
@@ -85,7 +80,7 @@ module CustomJobs =
 
                 with ex -> 
                         log.Write(LogMessage.Error(job.GetType().ToString(), ex, true)) //Console.WriteLine(html)
-                        let fail = new Jobs.JobResult(job, false, ex.Message)
+                        let fail = new Jobs.JobResult(job, false, ex.Message,TimeSpan.FromMinutes(double 15))
                         bus.Reply(fail)
 
 

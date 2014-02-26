@@ -34,42 +34,18 @@ open LinqToTwitter
             member val Payload = "" with get, set
             member val Status = false with get, set
             override this.ToString() = String.Format(" JobType: {0}   Id: {1}   BatchId: {2} CreatedId: {3} Payload: {4}  Status: {5}", this.GetType().Name,this.Id.ToString(),this.BatchId.ToString(),this.CreatedDate.ToString(),this.Payload, this.Status.ToString())
-//            member val JobDetail =   { new IJobDetail with 
-//                                         member this.Description = "job default description"
-//                                         member this.Key = new JobKey("job")
-//                                         member this.ConcurrentExecutionDisallowed = false
-//                                         member this.GetJobBuilder() = (JobBuilder.Create())
-//                                         member this.JobType =  typedefof<JobMessage>
-//                                         member this.JobDataMap = null
-//                                         member this.RequestsRecovery = false
-//                                         member this.PersistJobDataAfterExecution = false
-//                                         member this.Durable = false
-//                                         member this.Clone() = new obj()
-//                                     }  with get, set
             interface IMessage 
 
             
 
-
-//        type ScheduledJobMessage(jobMessage) =
-//            interface IJobDetail with 
-//                member this.Description = name
-//                member this.Key = new JobKey(name)
-//                member this.ConcurrentExecutionDisallowed = false
-//                member this.GetJobBuilder() = (JobBuilder.Create())
-//                member this.JobType =  typedefof<JobMessage>
-//                member this.JobDataMap = null
-//                member this.RequestsRecovery = false
-//                member this.PersistJobDataAfterExecution = false
-//                member this.Durable = false
-                member this.Clone() = new obj()
-
         [<Serializable>]
-        type JobResult(jm:JobMessage, success : bool, result : string) =
+        type JobResult(jm:JobMessage, success : bool, result : string, ?resubmitTime : TimeSpan) =
             let mutable j = jm
             let mutable suc = success
             let mutable res = result
-            let mutable r = Guid.NewGuid()
+            let mutable r = Guid.Empty
+            let mutable rt = resubmitTime   
+            let getValue = if (rt.IsSome) then rt.Value else new TimeSpan()
             member x.JobMessage with get() =j and set(value) = j <- value
             member x.JobResultId with get () = r and set(value) = r <- value
             member val CreatedDate = DateTime.Now with get
@@ -78,9 +54,11 @@ open LinqToTwitter
 
             member x.Result with get () = res and set(v) = res <- v
 
+            member x.ResubmitTime  with get() = (getValue) and set (v : TimeSpan) = rt <- (Some(v))
+
             override x.ToString() =
                 String.Format
-                    ("Finished :: Job: {0} ResultId: {1} CreatedDate: {2} JobMessage: {3}", x.JobMessage.GetType(), x.JobResultId, x.CreatedDate, x.JobMessage.ToString()  )
+                    ("Finished :: Job: {0} ResultId: {1} CreatedDate: {2} JobMessage: {3}  ResubmitTime: {4}", x.JobMessage.GetType(), x.JobResultId, x.CreatedDate, x.JobMessage.ToString(), rt.Value.ToString()  )
             interface IMessage
 
         
@@ -191,16 +169,16 @@ open LinqToTwitter
             interface IHandleMessages<Jobs.StartUpJob> with
                 member x.Handle(job) =
                     log.Write(Info(job.ToString()))
-                       
+                    
                     //TODO get all jobs in batch and list them
                     // any prenotifications
                     let bus = Lacjam.Core.Runtime.Ioc.Resolve<IBus>()
-                    try
+                    try 
                         let jr = Jobs.JobResult(job, true, job.GetType().ToString() + " Completed" )
                         bus.Reply(jr)
                     with ex ->
                         log.Write(Error("StartupJobHandler -- " + job.ToString(), ex, true)) //Console.WriteLine(html)
-                        let fail = Jobs.JobResult(job, false, ex.ToString())
+                        let fail = Jobs.JobResult(job, false, ex.ToString(), TimeSpan.FromMinutes(double 15))
                         bus.Reply(fail)
 
         type PageScraperJobHandler(log : ILogWriter) =
