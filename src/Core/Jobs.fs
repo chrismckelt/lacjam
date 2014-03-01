@@ -30,7 +30,7 @@ open LinqToTwitter
         type JobMessage() =
             member val Id = Guid.NewGuid() with get,set
             member val BatchId = Guid.Empty with get,set
-            member val CreatedDate = DateTime.Now with get
+            member val CreatedDate = DateTime.Now with get,set
             member val Payload = "" with get, set
             member val IsCompleted = false with get, set
             override this.ToString() = String.Format(" JobType: {0}   Id: {1}   BatchId: {2} CreatedId: {3} Payload: {4}  IsCompleted: {5}", this.GetType().Name,this.Id.ToString(),this.BatchId.ToString(),this.CreatedDate.ToString(),this.Payload, this.IsCompleted.ToString())
@@ -49,7 +49,7 @@ open LinqToTwitter
             do if (success) then j.IsCompleted <- true
             member x.JobMessage with get() =j and set(value) = j <- value
             member x.JobResultId with get () = r and set(value) = r <- value
-            member val CreatedDate = DateTime.Now with get
+            member val CreatedDate = DateTime.Now with get,set
 
             member x.Success with get () = suc and set (v : bool) = suc <- v
 

@@ -113,8 +113,8 @@ module Scheduling =
                                                                         jobDetail.Description <- batch.TriggerName
 
                                                                         let mutable trigger = scheduler.GetTrigger(tk)
-                                                                        let trigger = match trigger with 
-                                                                                                        | null ->   log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
+                                                                        let trigger = match Utility.NullCheck(trigger) with 
+                                                                                                        | None  ->  log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
                                                                                                                     trigger <- scheduler.GetTriggersOfJob(jobDetail.Key).FirstOrDefault()
                                                                                                                     match trigger with 
                                                                                                                     | null ->   log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - DOES NOT EXIST - defaulting to HOURLY trigger "))
@@ -133,11 +133,13 @@ module Scheduling =
                                                                                         scheduler.ScheduleJob(jobDetail, trigger) |> ignore
                                                                                     else
                                                                                         log.Write(Debug("---  scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
+                                                                                        scheduler.AddJob(jobDetail,true)
                                                                                         scheduler.RescheduleJob(tk,trigger) |> ignore
                                                                                  with | ex ->  
                                                                                                 log.Write(Error("JobScheduler.handleBatch : jobDetail.Key= " + jobDetail.Key.ToString(),ex,true))
                                                                                
                                                                             | _ -> 
+                                                                                    scheduler.AddJob(jobDetail,true)
                                                                                     scheduler.RescheduleJob(tk,trigger) |> ignore
                                                                                     log.Write(Debug("--- 2 scheduler.RescheduleJob(tk,trigger) |> ignore  ---"))
                                                                         let dto = trigger.GetNextFireTimeUtc()
@@ -223,7 +225,6 @@ module Scheduling =
                                                                         continueProcessing <- false
                                                             with | ex -> log.Write(Error("Job failed", ex, false))
                                                     
-                                                    ()
                 
                 member this.Scheduler =  scheduler
       
