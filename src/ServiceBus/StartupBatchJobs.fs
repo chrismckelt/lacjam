@@ -35,7 +35,7 @@
                                             // scheduler stats batch
                                             let stats = new Jobs.SchedulerStatsJob()
                                             let statsList = seq<Jobs.JobMessage>([stats])
-                                            let statsBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Scheduler-Stats";Batch.Jobs=(statsList.ToList()); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
+                                            let statsBatch = {Batch.BatchId=Guid.NewGuid(); Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Scheduler-Stats";Batch.Jobs=(statsList.ToList()); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
                                             
                                             // swell net scraper batch
                                             let guidId = Guid.NewGuid()
@@ -51,7 +51,7 @@
 
                                             // jira roadmap batch
                                             let jiraList = seq<JobMessage>([CustomJobs.JiraRoadMapOutputJob()])
-                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraList.ToList(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Hourly.ToString();}
+                                            let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraList.ToList(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
 
                                             if (System.Environment.MachineName.ToLower() = "earth") then
                                                 [surfReportBatch;statsBatch]

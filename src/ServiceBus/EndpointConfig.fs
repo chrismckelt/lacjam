@@ -111,7 +111,7 @@ namespace Lacjam.ServiceBus
                     
                         //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
                         let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(5,30,00)).WithDescription(Lacjam.Core.BatchSchedule.Daily.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(24).RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires() |> ignore).Build()             
-                        let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(1).RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires() |> ignore).Build()             
+                        //let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(1).RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires() |> ignore).Build()             
 
                         if (System.Environment.MachineName.ToLower() = "earth") then
                             let tk = new TriggerKey(batch1.TriggerName)
@@ -129,7 +129,7 @@ namespace Lacjam.ServiceBus
                                 js.Scheduler.RescheduleJob(tk,dt) |> ignore
                             if not <| (js.Scheduler.CheckExists(new TriggerKey(batch2.TriggerName)))  then
                                 js.Scheduler.AddJob(jjobDetail,true) |> ignore
-                                js.Scheduler.ScheduleJob(ht) |> ignore
+                                js.Scheduler.ScheduleJob(dt) |> ignore
                     with | ex -> log.Write(Error("EndpointConfig addJob batch1 dt", ex,true))
                     try
                         // schedule startup jobs

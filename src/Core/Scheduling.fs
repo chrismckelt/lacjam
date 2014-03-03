@@ -117,8 +117,10 @@ module Scheduling =
                                                                                                         | None  ->  log.Write(Debug("handleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
                                                                                                                     trigger <- scheduler.GetTriggersOfJob(jobDetail.Key).FirstOrDefault()
                                                                                                                     match trigger with 
-                                                                                                                    | null ->   log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - DOES NOT EXIST - defaulting to HOURLY trigger "))
-                                                                                                                                (TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription("hourly").WithSimpleSchedule(fun a->a.WithIntervalInHours(1).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build())             
+                                                                                                                    | null ->   let msg = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX      scheduler.GetTriggersOfJob(jobDetail.Key) - DOES NOT EXIST - XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "  + jobDetail.ToString()
+                                                                                                                                log.Write(Warn(msg,new ApplicationException(msg)))
+                                                                                                                                failwith msg
+                                                                                                                               // (TriggerBuilder.Create().ForJob(jobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription(Lacjam.Core.BatchSchedule.Daily.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(1).WithMisfireHandlingInstructionFireNow().RepeatForever() |> ignore).Build())             
                                                                                                                     | _ ->      log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.Key.Name))
                                                                                                                                 trigger
                                                                                                         | _ -> trigger.GetTriggerBuilder().ForJob(jobDetail).Build()
@@ -223,6 +225,7 @@ module Scheduling =
                                                                         bsj.Batch <- batch
                                                                         bus.Defer(DateTime.Now.AddTicks(reply.ResubmitTime.Ticks), bsj) |> ignore
                                                                         continueProcessing <- false
+                                                                        handleBatch batch
                                                             with | ex -> log.Write(Error("Job failed", ex, false))
                                                     
                 
