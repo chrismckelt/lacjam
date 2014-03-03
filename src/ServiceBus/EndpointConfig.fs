@@ -103,33 +103,12 @@ namespace Lacjam.ServiceBus
                     )
 
                     try
+                        let js = Ioc.Resolve<IJobScheduler>()
                         let startup = new StartupBatchJobs() :> IContainBatches
-                        let batch1 = startup.Batches.Head                    
-                        let batch2 = startup.Batches.Tail.Head
-                        let sjobDetail = new JobDetailImpl(batch1.Name, batch1.TriggerName, typedefof<ProcessBatch>,true,true)
-                        let jjobDetail = new JobDetailImpl(batch2.Name,  batch2.TriggerName, typedefof<ProcessBatch>,true,true)
-                    
-                        //http://quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger
-                        let dt = TriggerBuilder.Create().ForJob(sjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Daily.ToString()).StartAt(DateBuilder.TodayAt(5,30,00)).WithDescription(Lacjam.Core.BatchSchedule.Daily.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(24).RepeatForever().WithMisfireHandlingInstructionFireNow() |> ignore).WithPriority(1).Build()             
-                        //let ht = TriggerBuilder.Create().ForJob(jjobDetail).WithIdentity(Lacjam.Core.BatchSchedule.Hourly.ToString()).StartNow().WithDescription(Lacjam.Core.BatchSchedule.Hourly.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(1).RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires() |> ignore).Build()             
+                        for bat in startup.Batches do
+                            js.scheduleBatch(bat,BatchSchedule.Daily,new TimeSpan(5,30,0))
+                        
 
-                        if (System.Environment.MachineName.ToLower() = "earth") then
-                            let tk = new TriggerKey(batch1.TriggerName)
-                            log.Write(Debug("Trigger Key = " + tk.Name))
-
-
-                            if not <| (js.Scheduler.CheckExists(sjobDetail.Key))  then
-                                js.Scheduler.AddJob(sjobDetail,true) 
-                                let trigger:ITrigger =    match js.Scheduler.GetTrigger(tk) with
-                                                          | null -> js.Scheduler.ScheduleJob(dt) |> ignore 
-                                                                    dt
-                                                          | a -> a     
-                                js.Scheduler.RescheduleJob(tk,dt) |> fun a -> log.Write(Debug(a.Value.LocalDateTime.ToString()))                                                         
-                            else
-                                js.Scheduler.RescheduleJob(tk,dt) |> ignore
-                            if not <| (js.Scheduler.CheckExists(new TriggerKey(batch2.TriggerName)))  then
-                                js.Scheduler.AddJob(jjobDetail,true) |> ignore
-                                js.Scheduler.ScheduleJob(dt) |> ignore
                     with | ex -> log.Write(Error("EndpointConfig addJob batch1 dt", ex,true))
                     try
                         // schedule startup jobs

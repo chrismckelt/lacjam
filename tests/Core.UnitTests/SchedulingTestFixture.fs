@@ -53,6 +53,6 @@ let ``BatchProcessor handles replies submits job``() =
                 
                 
 
-                js.scheduleBatch(batch)
+                js.scheduleBatch(batch,BatchSchedule.Daily,new TimeSpan(5,30,0))
                 Mock.Verify(<@ js.Scheduler.ScheduleJob(any(),any()) @>, once)
                 

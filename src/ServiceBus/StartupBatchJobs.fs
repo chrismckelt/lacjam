@@ -45,7 +45,8 @@
                                             let swList = seq<Jobs.JobMessage>([ StartUpJob(BatchId=guidId, Payload="SwellNet batch started");
                                                                                 PageScraperJob(BatchId=guidId, Id=Guid.NewGuid(), Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla");
                                                                                 swJob;
-                                                                                SendTweetJob(To="chris_mckelt")                                                             
+                                                                                //SendTweetJob(To="chris_mckelt")                                                             
+                                                                                SendEmailJob(Email={Email.To="cmckelt@challenger.com.au";Email.From="cmckelt@challenger.com.au";Email.Subject="----";Email.Body="----"})
                                                                                ])
                                             let surfReportBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Surf-Report-Batch";Batch.Jobs=swList.ToList(); Batch.Status=BatchStatus.Waiting; Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
 
@@ -53,7 +54,8 @@
                                             let jiraList = seq<JobMessage>([CustomJobs.JiraRoadMapOutputJob()])
                                             let jiraRoadmapBatch = {Batch.BatchId=guidId; Batch.CreatedDate=DateTime.Now; Batch.Id=Guid.NewGuid(); Batch.Name="Jira-Roadmap";Batch.Jobs=jiraList.ToList(); Batch.Status=BatchStatus.Waiting;Batch.TriggerName=Lacjam.Core.BatchSchedule.Daily.ToString();}
 
-                                            if (System.Environment.MachineName.ToLower() = "earth") then
-                                                [surfReportBatch;statsBatch]
-                                            else
-                                                [surfReportBatch;statsBatch;jiraRoadmapBatch]
+//                                            if (System.Environment.MachineName.ToLower() = "earth") then
+//                                                [surfReportBatch;statsBatch]
+//                                            else
+//                                                [surfReportBatch;statsBatch;jiraRoadmapBatch]
+                                            [surfReportBatch;statsBatch]
