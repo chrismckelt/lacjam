@@ -224,6 +224,7 @@ module Scheduling =
                                                                         log.Write(Info("Job failed - resubmitting whole batch for reprocessing at : " + DateTime.Now.AddTicks(reply.ResubmitTime.Ticks).ToString()))
                                                                         let bsj = new BatchSubmitterJob() 
                                                                         bsj.Batch <- batch
+                                                                        log.Write(Info("RESUBMITTING batch in " + reply.ResubmitTime.TotalMinutes.ToString() + " minutes"))
                                                                         bus.Defer(DateTime.Now.AddTicks(reply.ResubmitTime.Ticks), bsj) |> ignore
                                                                         continueProcessing <- false
                                                             with | ex -> log.Write(Error("Job failed", ex, false))
