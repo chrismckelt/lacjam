@@ -22,6 +22,7 @@ open System.IO
 open System.Linq
 open System.Net
 open System.Net.Http
+open System.Text
 
 let configureBus =   
 
@@ -65,12 +66,40 @@ let configureBus =
 let main argv = 
     printfn "%A" argv    
     do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-    Lacjam.Integration.Jira.outputRoadmap()
-    configureBus
     
-    let startup = new Lacjam.ServiceBus.StartupBatchJobs() :> IContainBatches                                       
-                                                                                                           
-    let js = new JobScheduler(Ioc.Resolve<ILogWriter>(),Ioc.Resolve<IBus>(),Ioc.Resolve<IScheduler>())  :> IJobScheduler
-    js.processBatch(startup.Batches.Head)
+    let js = Ioc.Resolve<IJobScheduler>()
+    let sb = new StringBuilder()
+    let meta = js.Scheduler.GetMetaData()
+    sb.AppendLine("-- Quartz MetaData --")  |> ignore
+    sb.AppendLine("NumberOfJobsExecuted : " + meta.NumberOfJobsExecuted.ToString()) |> ignore
+    sb.AppendLine("Started : " + meta.Started.ToString()) |> ignore
+    sb.AppendLine("RunningSince : " + meta.RunningSince.ToString())    |> ignore
+    sb.AppendLine("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString())  |> ignore
+    sb.AppendLine("ThreadPoolSize : " + meta.ThreadPoolSize.ToString()) |> ignore
+    sb.AppendLine("InStandbyMode : " + meta.InStandbyMode.ToString())  |> ignore 
+    sb.AppendLine("InStandbyMode : " + meta.ToString())  |> ignore 
+    sb.AppendLine("GetCurrentlyExecutingJobs ")  |> ignore 
+    let jobs = js.Scheduler.GetCurrentlyExecutingJobs()
+    for job in jobs do
+        sb.AppendLine(job.JobDetail.Key.Name)    |> ignore 
+
+    let jobGroupsNames = js.Scheduler.GetJobGroupNames()
+    for jobGroupName in jobGroupsNames do
+        let groupMatcher = Quartz.Impl.Matchers.GroupMatcher<JobKey>.GroupContains(jobGroupName)
+        let keys = js.Scheduler.GetJobKeys(groupMatcher) 
+        for jobKey in keys do
+            let detail = js.Scheduler.GetJobDetail(jobKey);
+            let triggers = js.Scheduler.GetTriggersOfJob(jobKey);
+            sb.AppendLine(jobKey.Name) |> ignore 
+            sb.AppendLine(detail.Description)   |> ignore 
+            for trig in triggers do
+                sb.AppendLine(trig.Key.Group + " " + trig.Key.Name)   |> ignore 
+                let nextFireTime = trig.GetNextFireTimeUtc()
+                if (nextFireTime.HasValue) then
+                    sb.AppendLine(nextFireTime.Value.LocalDateTime.ToString()) |> ignore
+
+    Console.WriteLine(sb.ToString())
+
+
     Console.ReadLine()  |> ignore
     0 // return an integer exit code
