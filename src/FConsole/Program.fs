@@ -66,7 +66,7 @@ let configureBus =
 let main argv = 
     printfn "%A" argv    
     do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
-    
+    let log = Ioc.Resolve<ILogWriter>()
     let js = Ioc.Resolve<IJobScheduler>()
     let sb = new StringBuilder()
     let meta = js.Scheduler.GetMetaData()
@@ -79,6 +79,20 @@ let main argv =
     sb.AppendLine("InStandbyMode : " + meta.InStandbyMode.ToString())  |> ignore 
     sb.AppendLine("InStandbyMode : " + meta.ToString())  |> ignore 
     sb.AppendLine("GetCurrentlyExecutingJobs ")  |> ignore 
+
+
+    let groupMatcher = Quartz.Impl.Matchers.GroupMatcher<TriggerKey>.AnyGroup()
+    let keys = js.Scheduler.GetTriggerKeys(groupMatcher) 
+    keys |> Seq.iter(fun key -> 
+                        let tr = js.Scheduler.GetTrigger(key)
+                        let spi = tr :?> Spi.IOperableTrigger
+                        let times = TriggerUtils.ComputeFireTimes(spi, null,10)
+                        log.Write(Debug(tr.ToString()))
+                        log.Write(Debug("Next 10 fire times scheduled for..."))
+                        for time in times do
+                            log.Write(Debug(time.ToLocalTime().ToString()))
+                        ) |> ignore
+
     let jobs = js.Scheduler.GetCurrentlyExecutingJobs()
     for job in jobs do
         sb.AppendLine(job.JobDetail.Key.Name)    |> ignore 
