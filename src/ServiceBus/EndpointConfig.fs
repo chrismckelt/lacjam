@@ -88,7 +88,10 @@ namespace Lacjam.ServiceBus
                     
                     Schedule.Every(TimeSpan.FromMinutes(Convert.ToDouble(15))).Action(fun a->
                         try
-                            log.Write(LogMessage.Debug("NSB -- Schedule.Every elapsed"))
+                            log.Write(LogMessage.Debug("_______________________________________________________________"))
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
                             let meta = js.Scheduler.GetMetaData()
                             log.Write(Debug("-- Quartz MetaData --"))
                             log.Write(Debug("NumberOfJobsExecuted : " + meta.NumberOfJobsExecuted.ToString()))
@@ -96,7 +99,26 @@ namespace Lacjam.ServiceBus
                             log.Write(Debug("RunningSince : " + meta.RunningSince.ToString()))
                             log.Write(Debug("SchedulerInstanceId : " + meta.SchedulerInstanceId.ToString()))
                             log.Write(Debug("ThreadPoolSize : " + meta.ThreadPoolSize.ToString()))
-                            log.Write(Debug("ThreadPoolType : " + meta.ThreadPoolType.ToString()))                            
+                            log.Write(Debug("ThreadPoolType : " + meta.ThreadPoolType.ToString()))  
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
+                            let groupMatcher = Quartz.Impl.Matchers.GroupMatcher<TriggerKey>.AnyGroup()
+                            let keys = js.Scheduler.GetTriggerKeys(groupMatcher) 
+                            keys |> Seq.iter(fun key -> 
+                                                let tr = js.Scheduler.GetTrigger(key)
+                                                let spi = tr :?> Spi.IOperableTrigger
+                                                let times = TriggerUtils.ComputeFireTimes(spi, null,10)
+                                                log.Write(Debug(tr.ToString()))
+                                                log.Write(Debug("Next 10 fire times scheduled for..."))
+                                                for time in times do
+                                                    log.Write(Debug(time.ToLocalTime().ToString()))
+                                                ) |> ignore
+
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug(""))
+                            log.Write(LogMessage.Debug("_______________________________________________________________"))                          
                           //  Lacjam.Integration.Jira.outputRoadmap()                                      
                         with 
                         | ex ->  log.Write(LogMessage.Error("Schedule ACTION startup:",ex, true)) 
@@ -106,7 +128,7 @@ namespace Lacjam.ServiceBus
                         let js = Ioc.Resolve<IJobScheduler>()
                         let startup = new StartupBatchJobs() :> IContainBatches
                         for bat in startup.Batches do
-                            js.scheduleBatch(bat,BatchSchedule.Daily,new TimeSpan(5,30,0))
+                            js.scheduleBatch(bat,BatchSchedule.Daily,new TimeSpan(6,30,0))
                         
 
                     with | ex -> log.Write(Error("EndpointConfig addJob batch1 dt", ex,true))

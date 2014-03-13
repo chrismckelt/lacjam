@@ -109,9 +109,8 @@ module Scheduling =
                                                                                                         quartzJob.RequestsRecovery <- true
                                                                                                         quartzJob.Description <- batch.TriggerName
                                                                                                         let tk = new TriggerKey(batch.TriggerName,batch.Name)
-                                                                                                        let startDate = new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day, ts.Hours,ts.Minutes,ts.Seconds)
-                                                                                                        let offSet = new DateTimeOffset(startDate)
-                                                                                                        let dt = TriggerBuilder.Create().ForJob(quartzJob).WithIdentity(tk).StartAt(offSet).WithDescription(bs.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(24).RepeatForever().WithMisfireHandlingInstructionFireNow() |> ignore).WithPriority(1).Build()             
+                                                                                                        let dt = DateBuilder.DateOf(ts.Hours,ts.Minutes, ts.Seconds)
+                                                                                                        let trig = TriggerBuilder.Create().ForJob(quartzJob).WithIdentity(tk).StartAt(dt).WithDescription(bs.ToString()).WithSimpleSchedule(fun a->a.WithIntervalInHours(24).RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires().Build() |> ignore).WithPriority(1).Build()             
                                                                                                      
                                                                                                         log.Write(Debug("JobScheduler.handleBatch : TriggerKey(batch.TriggerName) " + batch.TriggerName))
                                                                                                         log.Write(Debug("scheduler.GetTriggerGroupNames()"))
@@ -124,15 +123,15 @@ module Scheduling =
                                                                                                                                         | None  ->  log.Write(Debug("scheduleBatch - trigger = scheduler.GetTrigger(tk) - trigger null  - trigger key = " + tk.Name))
                                                                                                                                                     trigger <- scheduler.GetTriggersOfJob(quartzJob.Key).FirstOrDefault()
                                                                                                                                                     match trigger with 
-                                                                                                                                                    | null ->   dt
-                                                                                                                                                    | _ ->      log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.Key.Name))
+                                                                                                                                                    | null ->   trig
+                                                                                                                                                    | _ ->      log.Write(Debug("scheduler.GetTriggersOfJob(jobDetail.Key) - trigger.Key.Name - = " + trigger.ToString()))
                                                                                                                                                                 trigger
                                                                                                                                         | _ -> trigger.GetTriggerBuilder().ForJob(quartzJob).Build()
 
                                                                                                         let found = scheduler.GetJobDetail(quartzJob.Key)
                                                                                                         match found with 
                                                                                                             | null -> 
-                                                                                                                log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + quartzJob.FullName + "  " + trigger.Key.Name )) 
+                                                                                                                log.Write(Debug("JobScheduler.handleBatch : calling scheduler.ScheduleJob(jobDetail, trigger) " + quartzJob.FullName + "  " + trigger.ToString() )) 
                                                                                                                 try
                                                                                                                     if not <| (scheduler.CheckExists(tk))  then
                                                                                                                         log.Write(Debug("---  scheduler.ScheduleJob(jobDetail, trigger.GetTriggerBuilder().ForJob(jobDetail).Build())  ---"))
@@ -243,7 +242,7 @@ module Scheduling =
                         log.Write(Info("EndpointConfig.Init :: SchedulerName = " + js.Scheduler.SchedulerName))
                         log.Write(Info("EndpointConfig.Init :: IsStarted = " + js.Scheduler.IsStarted.ToString()))
                         log.Write(Info("EndpointConfig.Init :: SchedulerInstanceId = " + js.Scheduler.SchedulerInstanceId.ToString()))                
-                        js.scheduleBatch(job.Batch,BatchSchedule.Daily,new TimeSpan(5,30,0))
+                        js.scheduleBatch(job.Batch,BatchSchedule.Daily,new TimeSpan(6,30,0))
                     with ex ->
                         log.Write(LogMessage.Error("ERROR- BatchSubmitterJobHandler : " + job.ToString(), ex, true))        
 

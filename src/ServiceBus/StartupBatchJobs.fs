@@ -16,14 +16,6 @@
     open Quartz.Core
 
     type StartupBatchJobs() =
-   
-        let printTimes (x:ITrigger) =   let log = Ioc.Resolve<ILogWriter>()
-                                        let spi = x :?> Spi.IOperableTrigger
-                                        let times = TriggerUtils.ComputeFireTimes(spi, null,10)
-                                        log.Write(Debug(x.Key.Name))
-                                        log.Write(Debug("Next 10 fire times scheduled for..."))
-                                        for time in times do
-                                                log.Write(Debug(time.ToLocalTime().ToString()))
 
         interface IContainBatches with
             override this.Batches = 
