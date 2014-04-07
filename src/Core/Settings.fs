@@ -29,6 +29,7 @@
 
         let getTwitterSettings =    saveTwitterSettings lacjamTwitterSettings
                                     let sp = new SettingsProvider(new RoamingAppDataStorage("lacjam"))
-                                    sp.GetSettings<TwitterSettings>()
+                                    //sp.GetSettings<TwitterSettings>()
+                                    lacjamTwitterSettings
 
 
