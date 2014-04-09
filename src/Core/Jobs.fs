@@ -13,6 +13,7 @@ open System.Net
 open System.Net.Http
 open System.Runtime.Serialization
 open System.Text.RegularExpressions
+open System.Linq.Expressions
 open Quartz
 open Quartz.Spi
 open Autofac

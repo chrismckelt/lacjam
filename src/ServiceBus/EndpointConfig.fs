@@ -128,7 +128,7 @@ namespace Lacjam.ServiceBus
                         let js = Ioc.Resolve<IJobScheduler>()
                         let startup = new StartupBatchJobs() :> IContainBatches
                         for bat in startup.Batches do
-                            js.scheduleBatch(bat,BatchSchedule.Daily,new TimeSpan(6,30,0))
+                            js.scheduleBatch(bat,BatchSchedule.Daily,new TimeSpan(6,00,0))
                         
 
                     with | ex -> log.Write(Error("EndpointConfig addJob batch1 dt", ex,true))

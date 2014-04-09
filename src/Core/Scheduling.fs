@@ -54,7 +54,7 @@ module Scheduling =
     
     type BatchFinder =
         static member FindBatches:Collections.Generic.List<IContainBatches> =               let log = Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>()
-                                                                                            let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun a-> a.FullName.Contains("Lacjam"))
+                                                                                            let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (a : Reflection.Assembly) -> a.FullName.Contains("Lacjam"))
                                                                                             let batchList = new Collections.Generic.List<IContainBatches>()
                                                                                             for ass in asses do
                                                                                                 let types = ass.GetTypes()
