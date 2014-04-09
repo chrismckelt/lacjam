@@ -10,11 +10,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Core.UnitTests</RootNamespace>
     <AssemblyName>Lacjam.Core.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>Core.UnitTests</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,12 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <ItemGroup>
     <None Include="Script.fsx" />
     <None Include="packages.config" />
@@ -71,7 +78,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Foq">
@@ -102,12 +113,16 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
     <Reference Include="NHamcrest">
@@ -115,11 +130,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.3.4\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.4.2\lib\net40\NServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.3.4\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.4.2\lib\net40\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Mailer">
@@ -127,27 +142,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.Autofac">
-      <HintPath>..\..\packages\NServiceBus.Autofac.4.3.4\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Autofac.4.4.2\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\..\packages\AutoFixture.3.16.5\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.3.17.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ploeh.AutoFixture.AutoFoq">
-      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.16.5\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.17.0\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.2\lib\net40\Quartz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp">
@@ -176,20 +183,12 @@
       <HintPath>..\..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Core.fsproj">
       <Name>Core</Name>
       <Project>{c3a6a4b8-8be0-4e91-a7a7-62d05c6c1161}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

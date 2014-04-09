@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{66C97E4D-2EAB-4C9A-B9CE-74540BFAAD89}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>0.9</TypeScriptToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap\bootstrap.css">
+      <DependentUpon>bootstrap.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\media.css">
+      <DependentUpon>media.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins.css">
+      <DependentUpon>mixins.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\normalize.css">
+      <DependentUpon>normalize.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\print.css">
+      <DependentUpon>print.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\theme.css">
+      <DependentUpon>theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\variables.css">
+      <DependentUpon>variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css">
+      <DependentUpon>font-awesome.css</DependentUpon>
+    </Content>
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\toastr.css">
+      <DependentUpon>toastr.less</DependentUpon>
+    </Content>
+    <Content Include="Content\toastr.min.css">
+      <DependentUpon>toastr.css</DependentUpon>
+    </Content>
+    <None Include="Views\Index.cshtml" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery-2.0.3-vsdoc.js" />
+    <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-2.0.3.min.js" />
+    <Content Include="Scripts\moment-with-langs.js" />
+    <Content Include="Scripts\moment-with-langs.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\spin.js" />
+    <Content Include="Scripts\spin.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
+    <Content Include="web.config" />
+    <Content Include="Scripts\toastr.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\bootstrap.css.map">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\media.css.map">
+      <DependentUpon>media.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\normalize.css.map">
+      <DependentUpon>normalize.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\print.css.map">
+      <DependentUpon>print.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\theme.css.map">
+      <DependentUpon>theme.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\toastr.less" />
+    <Content Include="Content\toastr.css.map">
+      <DependentUpon>toastr.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-2.0.3.min.map" />
+    <Content Include="Views\crap.sshtml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="App\app.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-resource.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-scenario.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\breeze\breeze.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\q\Q.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\spin\spin.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\underscore\underscore.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Breeze.ContextProvider">
+      <HintPath>..\..\packages\Breeze.Server.ContextProvider.1.4.11\lib\Breeze.ContextProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Breeze.WebApi2">
+      <HintPath>..\..\packages\Breeze.Server.WebApi2.1.4.11\lib\Breeze.WebApi2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.OData.5.6.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy">
+      <HintPath>..\..\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Bootstrappers.Autofac">
+      <HintPath>..\..\packages\Nancy.Bootstrappers.Autofac.0.22.2\lib\net40\Nancy.Bootstrappers.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Aspnet">
+      <HintPath>..\..\packages\Nancy.Hosting.Aspnet.0.22.2\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor">
+      <HintPath>..\..\packages\Nancy.Viewengines.Razor.0.22.2\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.OData.5.0.0\lib\net45\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor.Unofficial">
+      <HintPath>..\..\packages\System.Web.Razor.Unofficial.2.0.2\lib\net40\System.Web.Razor.Unofficial.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivator">
+      <HintPath>..\..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App\directives\" />
+    <Folder Include="App\version\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Modules\BreezeModule.cs" />
+    <Compile Include="Modules\IndexModule.cs" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Lacjam.Web.WebClient</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>Lacjam.Web.WebClient</AssemblyName>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55058</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1111/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:1111</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+if $(ConfigurationName) == Debug (
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.22.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.22.2\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
+)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

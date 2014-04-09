@@ -175,7 +175,7 @@ module Jira  =
                     Summary=issue.Fields.Summary; 
                     Start=startDate; 
                     Due=dueDate;
-                    Environment=(checkNull (issue.Fields.Environment)); 
+                    Environment=(checkNull (issue.Fields.Environment.Value)); 
                     Status=(issue.Fields.Status.Name) ; 
                     IdealHours=(decimal estimatedHours)}
                 

@@ -6,10 +6,7 @@
     open Lacjam
     open Lacjam.Core
     open HtmlAgilityPack
-    open Raven
-    open Raven.Client
-    open Raven.Client.Document
-    open Raven.Abstractions.Data
+
 
     [<AutoOpen>]
     module Utility =
@@ -19,8 +16,8 @@
             | v when v <> null -> Some v
             | _ -> None
 
-        module RavenDB =
-            let deleteAll<'a> (session:IDocumentSession) = session.Advanced.DocumentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", (new IndexQuery(Query = ("Tag:" + typedefof<'a>.Name))),true)
+        module MongoDB =
+            let deleteAll<'a> (session) = ()//session.Advanced.DocumentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", (new IndexQuery(Query = ("Tag:" + typedefof<'a>.Name))),true)
             
 
         module Html  =
