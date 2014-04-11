@@ -17,6 +17,7 @@ namespace Lacjam.ServiceBus
     open Autofac
     open NServiceBus.ObjectBuilder
     open NServiceBus.ObjectBuilder.Common
+    open System.Linq
 
     module Startup = 
        
@@ -48,6 +49,7 @@ namespace Lacjam.ServiceBus
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
+                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam"))
                          Configure.With()
                             .DefineEndpointName("lacjam.servicebus")
                             .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))

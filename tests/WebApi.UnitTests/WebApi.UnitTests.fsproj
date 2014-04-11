@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WebApi.UnitTests</RootNamespace>
     <AssemblyName>Lacjam.WebApi.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>WebApi.UnitTests</Name>
     <TargetFrameworkProfile />
@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Linq2Rest">
-      <HintPath>..\..\packages\Linq2Rest.3.3.2.0\lib\Net451\Linq2Rest.dll</HintPath>
+      <HintPath>..\..\packages\Linq2Rest.3.3.4.0\lib\Net45\Linq2Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +64,7 @@
     <Compile Include="Library1.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
