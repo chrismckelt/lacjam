@@ -35,7 +35,7 @@
                                             swJob.Id = Guid.NewGuid() |> ignore
                                             swJob.BatchId <- guidId
                                             let swList = seq<Jobs.JobMessage>([ StartUpJob(BatchId=guidId, Payload="SwellNet batch started");
-                                                                                PageScraperJob(BatchId=guidId, Id=Guid.NewGuid(), Url = "http://www.swellnet.com/reports/australia/new-south-wales/cronulla");
+                                                                                PageScraperJob(BatchId=guidId, Id=Guid.NewGuid(), Url = "http://www.swellnet.com/reports/australia/western-australia/perth");
                                                                                 swJob;
                                                                                 SendTweetJob(To="chris_mckelt")                                                             
                                                                                 //SendEmailJob(Email={Email.To="hello@smsfinder.com.au";Email.From="hello@smsfinder.com.au";Email.Subject="----";Email.Body="----"})

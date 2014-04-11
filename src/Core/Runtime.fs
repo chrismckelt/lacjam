@@ -15,10 +15,8 @@ module Runtime =
     open Lacjam.Core
     open Quartz
     open Quartz.Impl
-    open Raven
-    open Raven.Client
-    open Raven.Client.Connection 
-    open Raven.Client.Document
+    
+ 
 
     type LogMessage =
         | Debug of string

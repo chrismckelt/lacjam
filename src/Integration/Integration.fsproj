@@ -9,11 +9,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Integration</RootNamespace>
     <AssemblyName>Lacjam.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>Integration</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,15 +41,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Data">
-      <HintPath>..\..\packages\FSharp.Data.1.1.10\lib\net40\FSharp.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FSharp.Data.DesignTime">
-      <HintPath>..\..\packages\FSharp.Data.1.1.10\lib\net40\FSharp.Data.DesignTime.dll</HintPath>
+      <HintPath>..\..\packages\FSharp.Data.2.0.1\lib\net40\FSharp.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Data.TypeProviders, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -120,6 +121,14 @@
       <HintPath>..\..\packages\FSharpx.TypeProviders.Xrm.1.8.41\lib\40\microsoft.xrm.sdk.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
@@ -129,11 +138,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.3.4\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.4.2\lib\net40\NServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.3.4\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.4.2\lib\net40\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Mailer">
@@ -142,14 +151,6 @@
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.2\lib\net40\Quartz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp">
