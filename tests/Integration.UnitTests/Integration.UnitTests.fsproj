@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Integration.UnitTests</RootNamespace>
     <AssemblyName>Lacjam.Integration.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>Integration.UnitTests</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -46,10 +46,6 @@
     </Reference>
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Foq">
-      <HintPath>..\..\packages\Foq.1.6\Lib\net45\Foq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.CustomMatchers">
@@ -96,14 +92,6 @@
       <HintPath>..\..\packages\NServiceBus.Autofac.4.4.2\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\..\packages\AutoFixture.3.18.1\lib\net40\Ploeh.AutoFixture.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture.AutoFoq">
-      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.18.1\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -118,7 +106,6 @@
     <Compile Include="CustomJobsTestFixture.fs" />
     <None Include="packages.config" />
     <None Include="app.config" />
-    <None Include="Foq.Usage.fsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Core.fsproj">

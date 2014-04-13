@@ -45,7 +45,9 @@ let configureBus =
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
-                         Configure.With()
+                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.core"))
+         
+                         Configure.With(asses)
                             .DefineEndpointName("lacjam.servicebus")
                             .Log4Net()
                             .AutofacBuilder(Ioc)                   

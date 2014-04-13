@@ -3,11 +3,12 @@
     open FsUnit.Xunit 
     open Xunit
     open Quartz
-    open Ploeh.AutoFixture
-    open Ploeh.AutoFixture.AutoFoq
-    open Ploeh.AutoFixture.DataAnnotations
+//    open Ploeh.AutoFixture
+//    open Ploeh.AutoFixture.AutoFoq
+//    open Ploeh.AutoFixture.DataAnnotations
+//    
+//    open Foq
     open NServiceBus
-    open Foq
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Domain                                                               

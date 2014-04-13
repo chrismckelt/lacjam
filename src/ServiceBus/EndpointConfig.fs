@@ -50,11 +50,11 @@ namespace Lacjam.ServiceBus
                      
                      try
                          let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam"))
-                         Configure.With()
+                         Configure.With(asses)
                             .DefineEndpointName("lacjam.servicebus")
                             .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
-                            .Log4Net()
-                            .AutofacBuilder(Ioc)                   
+                            .AutofacBuilder(Ioc) 
+                            .Log4Net()                  
                             .InMemorySagaPersister()
                             .InMemoryFaultManagement()
                             .InMemorySubscriptionStorage()

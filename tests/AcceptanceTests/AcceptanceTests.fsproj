@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AcceptanceTests</RootNamespace>
     <AssemblyName>Lacjam.AcceptanceTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>AcceptanceTests</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -57,7 +57,6 @@
     <None Include="packages.config" />
     <None Include="app.config" />
     <Compile Include="DomainIntegrationTestFixture.fs" />
-    <None Include="Foq.Usage.fsx" />
     <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +70,6 @@
     </Reference>
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Foq">
-      <HintPath>..\..\packages\Foq.1.6\Lib\net45\Foq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.CustomMatchers">
@@ -125,14 +120,6 @@
       <HintPath>..\..\packages\NServiceBus.Autofac.4.4.2\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\..\packages\AutoFixture.3.18.1\lib\net40\Ploeh.AutoFixture.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture.AutoFoq">
-      <HintPath>..\..\packages\AutoFixture.AutoFoq.3.18.1\lib\net40\Ploeh.AutoFixture.AutoFoq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
@@ -146,11 +133,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.19\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.20\lib\net45\System.Net.Http.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.19\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.20\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
