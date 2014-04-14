@@ -49,7 +49,7 @@ namespace Lacjam.ServiceBus
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
-                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam"))
+                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.messages"))
                          Configure.With(asses)
                             .DefineEndpointName("lacjam.servicebus")
                             .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))

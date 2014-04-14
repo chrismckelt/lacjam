@@ -21,15 +21,15 @@
 
 
         module DomainIntegrationTestFixture = 
-            let fixture = Fixture().Customize(AutoFoqCustomization())
-            let guidId = Guid.NewGuid()
-            let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
-            let swJobs = new System.Collections.Generic.List<Jobs.JobMessage>()
-            swJobs.Add(StartUpJob(BatchId=guidId) :> JobMessage)
-            swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/western-australia/perth") :> JobMessage)
-            swJobs.Add(swJob :> JobMessage)
-            SendTweetJob(To="chris_mckelt") :> JobMessage
-            SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
+//            let fixture = Fixture().Customize(AutoFoqCustomization())
+//            let guidId = Guid.NewGuid()
+//            let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
+//            let swJobs = new System.Collections.Generic.List<Jobs.JobMessage>()
+//            swJobs.Add(StartUpJob(BatchId=guidId) :> JobMessage)
+//            swJobs.Add(PageScraperJob(BatchId=guidId, Id=guidId, Url = "http://www.swellnet.com/reports/australia/western-australia/perth") :> JobMessage)
+//            swJobs.Add(swJob :> JobMessage)
+//            SendTweetJob(To="chris_mckelt") :> JobMessage
+//            SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
                                                                      
             [<Fact>]
             let ``Clear database`` () =  ()//
