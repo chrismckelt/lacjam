@@ -24,7 +24,12 @@ open System.Net
 open System.Net.Http
 open System.Text
 
-let configureBus =   
+[<EntryPoint>]
+let main argv = 
+    printfn "%A" argv    
+    do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
+
+    let configureBus =   
 
                      do 
                      (
@@ -45,12 +50,12 @@ let configureBus =
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
-                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.core"))
-         
+                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.messages"))
                          Configure.With(asses)
                             .DefineEndpointName("lacjam.servicebus")
-                            .Log4Net()
-                            .AutofacBuilder(Ioc)                   
+                            //.LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
+                            .AutofacBuilder(Ioc) 
+                            .Log4Net()                  
                             .InMemorySagaPersister()
                             .InMemoryFaultManagement()
                             .InMemorySubscriptionStorage()
@@ -58,16 +63,10 @@ let configureBus =
                             .UseTransport<Msmq>()
                            // .DoNotCreateQueues()
                             .PurgeOnStartup(true)
-                            .UnicastBus() 
-                            .CreateBus()
-                            .Start()
-                            |> ignore
-                     with | ex -> printfn "%A" ex    
+                            .UnicastBus() |> ignore
+                     with | ex -> printfn "%A" ex
 
-[<EntryPoint>]
-let main argv = 
-    printfn "%A" argv    
-    do System.Net.ServicePointManager.ServerCertificateValidationCallback <- (fun _ _ _ _ -> true) //four underscores (and seven years ago?)
+
     let log = Ioc.Resolve<ILogWriter>()
     let js = Ioc.Resolve<IJobScheduler>()
     let sb = new StringBuilder()
