@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{FF93BD54-E60F-426A-A0DE-8FC3531DA5C9}"
+	ProjectSection(SolutionItems) = preProject
+		src\ServiceBus\EndpointConfig.cs = src\ServiceBus\EndpointConfig.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sites", "Sites", "{83152539-AC45-41AF-8FEF-79019D9C93DA}"
 EndProject
