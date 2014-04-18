@@ -49,8 +49,9 @@ namespace Lacjam.ServiceBus
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
-                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.core"))
-                         Configure.With()
+                       //  let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.core"))
+                         let tys =  [typedefof<NServiceBus.IMessage>]
+                         Configure.With(tys)
                             .DefineEndpointName("lacjam.servicebus")
                             .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
                             .AutofacBuilder(Ioc) 
@@ -63,7 +64,12 @@ namespace Lacjam.ServiceBus
                            // .DoNotCreateQueues()
                             .PurgeOnStartup(true)
                             .UnicastBus() |> ignore
-                     with | ex -> printfn "%A" ex
+                      with
+                        | :? System.Reflection.ReflectionTypeLoadException as re ->
+                                                    for rl in re.LoaderExceptions do
+                                                        Console.WriteLine(rl.Message)
+                        | exn -> Console.Write(exn.Message);        
+                                 
 
          
 //       type CustomInitialization() =

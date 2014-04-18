@@ -23,6 +23,7 @@ open System.Linq
 open System.Net
 open System.Net.Http
 open System.Text
+open System.Reflection
 
 [<EntryPoint>]
 let main argv = 
@@ -50,8 +51,10 @@ let main argv =
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
-                         let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.messages"))
-                         Configure.With(asses)
+                          //let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.messages"))
+                       
+                          let tys =  [typedefof<NServiceBus.IMessage>]
+                          Configure.With()
                             .DefineEndpointName("lacjam.servicebus")
                             //.LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
                             .AutofacBuilder(Ioc) 
