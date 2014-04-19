@@ -10,7 +10,6 @@ namespace Lacjam.ServiceBus
     open Lacjam.Core.Scheduling
     open Lacjam.Core.Jobs
     open Lacjam.Core.Runtime
-    open Lacjam.Integration
     open Quartz
     open Quartz.Spi
     open Quartz.Impl
@@ -43,32 +42,31 @@ namespace Lacjam.ServiceBus
             interface IConfigureThisEndpoint
             interface AsA_Server
             interface IWantCustomInitialization with
-                member this.Init() = 
+                member this.Init() =                                                       
                      Configure.Transactions.Enable() |> ignore
-                     Configure.Serialization.Json() |> ignore
+                     Configure.Serialization.Xml |> ignore
                      Configure.ScaleOut(fun a-> a.UseSingleBrokerQueue() |> ignore) 
                      
                      try
                        //  let asses = AppDomain.CurrentDomain.GetAssemblies().Where(fun (b:Reflection.Assembly)->b.GetName().Name.ToLowerInvariant().StartsWith("lacjam.core"))
-                         let tys =  [typedefof<NServiceBus.IMessage>]
-                         Configure.With(tys)
+                       //  let tys =  [typedefof<NServiceBus.IMessage>]
+                         Configure.With()
+                            .Log4Net()
                             .DefineEndpointName("lacjam.servicebus")
                             .LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
-                            .AutofacBuilder(Ioc) 
-                            .Log4Net()                  
+                            .AutofacBuilder(Ioc)             
                             .InMemorySagaPersister()
                             .InMemoryFaultManagement()
                             .InMemorySubscriptionStorage()
                             .UseInMemoryTimeoutPersister()  
                             .UseTransport<Msmq>()
-                           // .DoNotCreateQueues()
                             .PurgeOnStartup(true)
                             .UnicastBus() |> ignore
                       with
                         | :? System.Reflection.ReflectionTypeLoadException as re ->
                                                     for rl in re.LoaderExceptions do
-                                                        Console.WriteLine(rl.Message)
-                        | exn -> Console.Write(exn.Message);        
+                                                        Ioc.Resolve<ILogWriter>().Error(rl.Message, re)
+                        | exn -> Ioc.Resolve<ILogWriter>().Error("NServiceBus setup",exn)       
                                  
 
          

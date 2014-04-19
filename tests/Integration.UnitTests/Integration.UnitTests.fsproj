@@ -106,6 +106,7 @@
     <Compile Include="CustomJobsTestFixture.fs" />
     <None Include="packages.config" />
     <None Include="app.config" />
+    <Compile Include="StockPriceTestFixture.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Core.fsproj">

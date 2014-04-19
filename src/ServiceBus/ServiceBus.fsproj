@@ -61,10 +61,11 @@
     <None Include="packages.config" />
     <Compile Include="StartupBatchJobs.fs" />
     <Compile Include="EndpointConfig.fs" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\Common\log4net.config">
       <Link>log4net.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="..\..\common\License.xml">
       <Link>License.xml</Link>
@@ -73,6 +74,11 @@
     <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Integration\Integration.fsproj">
+      <Name>Integration</Name>
+      <Project>{5e4ecb51-1038-4528-af68-3aff927f6360}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="Autofac">
       <HintPath>..\..\packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
@@ -87,10 +93,6 @@
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="LinqToTwitter.AspNet">
-      <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitter.AspNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LinqToTwitterPcl">
@@ -156,6 +158,11 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Numerics" />
@@ -164,11 +171,13 @@
       <Project>{c3a6a4b8-8be0-4e91-a7a7-62d05c6c1161}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Integration\Integration.fsproj">
-      <Name>Integration</Name>
-      <Project>{5e4ecb51-1038-4528-af68-3aff927f6360}</Project>
-      <Private>True</Private>
-    </ProjectReference>
+    <Reference Include="System.Runtime.DurableInstancing" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

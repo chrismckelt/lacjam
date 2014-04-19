@@ -58,7 +58,7 @@ let main argv =
                             .DefineEndpointName("lacjam.servicebus")
                             //.LicensePath((IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant(), "license.xml")))
                             .AutofacBuilder(Ioc) 
-                            .Log4Net()                  
+                            .Log4Net()                 
                             .InMemorySagaPersister()
                             .InMemoryFaultManagement()
                             .InMemorySubscriptionStorage()
@@ -118,6 +118,10 @@ let main argv =
 
     Console.WriteLine(sb.ToString())
 
+//    let stock = StockPrice.Handler(Ioc.Resolve<ILogWriter>(), Ioc.Resolve<IBus>()) :> IHandleMessages<StockPrice.Job>
+//    let job = StockPrice.Job()
+//    job.StockSymbol <- "WBC"
+//    stock.Handle(job)
 
     Console.ReadLine()  |> ignore
     0 // return an integer exit code
