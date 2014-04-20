@@ -20,146 +20,148 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap\bootstrap.css">
+    <Content Include="app\services\storage.ts" />
+    <Content Include="app\types.js" />
+    <Content Include="content\bootstrap\bootstrap.css">
       <DependentUpon>bootstrap.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\media.css">
+    <Content Include="content\bootstrap\media.css">
       <DependentUpon>media.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\mixins.css">
+    <Content Include="content\bootstrap\mixins.css">
       <DependentUpon>mixins.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\normalize.css">
+    <Content Include="content\bootstrap\normalize.css">
       <DependentUpon>normalize.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\print.css">
+    <Content Include="content\bootstrap\print.css">
       <DependentUpon>print.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\theme.css">
+    <Content Include="content\bootstrap\theme.css">
       <DependentUpon>theme.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\variables.css">
+    <Content Include="content\bootstrap\variables.css">
       <DependentUpon>variables.less</DependentUpon>
     </Content>
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css">
+    <Content Include="content\font-awesome.css" />
+    <Content Include="content\font-awesome.min.css">
       <DependentUpon>font-awesome.css</DependentUpon>
     </Content>
-    <Content Include="Content\fonts\fontawesome-webfont.svg" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\toastr.css">
+    <Content Include="content\fonts\fontawesome-webfont.svg" />
+    <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="content\toastr.css">
       <DependentUpon>toastr.less</DependentUpon>
     </Content>
-    <Content Include="Content\toastr.min.css">
+    <Content Include="content\toastr.min.css">
       <DependentUpon>toastr.css</DependentUpon>
     </Content>
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.0.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.map" />
-    <None Include="Views\Index.cshtml" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\moment-with-langs.js" />
-    <Content Include="Scripts\moment-with-langs.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\spin.js" />
-    <Content Include="Scripts\spin.min.js" />
-    <Content Include="Scripts\toastr.js" />
-    <Content Include="Scripts\toastr.min.js" />
-    <Content Include="Scripts\typings\angularjs\angular-animate.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-resource.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-route.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular-scenario.d.ts" />
-    <Content Include="Scripts\typings\angularjs\angular.d.ts" />
-    <Content Include="Scripts\typings\breeze\breeze.d.ts" />
-    <Content Include="Scripts\typings\jquery\jquery.d.ts" />
-    <Content Include="Scripts\typings\q\Q.d.ts" />
-    <Content Include="Scripts\typings\requirejs\require.d.ts" />
-    <Content Include="Scripts\typings\underscore\underscore.d.ts" />
-    <Content Include="Scripts\ui-bootstrap-0.10.0.js" />
-    <Content Include="Scripts\ui-bootstrap-0.10.0.min.js" />
-    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.js" />
-    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
+    <None Include="scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="scripts\jquery-2.1.0.js" />
+    <Content Include="scripts\jquery-2.1.0.min.js" />
+    <Content Include="scripts\jquery-2.1.0.min.map" />
+    <None Include="views\Index.cshtml" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <None Include="scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="scripts\moment-with-langs.js" />
+    <Content Include="scripts\moment-with-langs.min.js" />
+    <Content Include="scripts\moment.js" />
+    <Content Include="scripts\moment.min.js" />
+    <Content Include="scripts\spin.js" />
+    <Content Include="scripts\spin.min.js" />
+    <Content Include="scripts\toastr.js" />
+    <Content Include="scripts\toastr.min.js" />
+    <Content Include="scripts\typings\angularjs\angular-animate.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-cookies.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-mocks.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-resource.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-route.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-sanitize.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular-scenario.d.ts" />
+    <Content Include="scripts\typings\angularjs\angular.d.ts" />
+    <Content Include="scripts\typings\breeze\breeze.d.ts" />
+    <Content Include="scripts\typings\jquery\jquery.d.ts" />
+    <Content Include="scripts\typings\q\Q.d.ts" />
+    <Content Include="scripts\typings\requirejs\require.d.ts" />
+    <Content Include="scripts\typings\underscore\underscore.d.ts" />
+    <Content Include="scripts\ui-bootstrap-0.10.0.js" />
+    <Content Include="scripts\ui-bootstrap-0.10.0.min.js" />
+    <Content Include="scripts\ui-bootstrap-tpls-0.10.0.js" />
+    <Content Include="scripts\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="web.config" />
-    <Content Include="Scripts\toastr.min.js.map" />
+    <Content Include="scripts\toastr.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Content\bootstrap\badges.less" />
-    <Content Include="Content\bootstrap\bootstrap.less" />
-    <Content Include="Content\bootstrap\bootstrap.css.map">
+    <Content Include="content\bootstrap\alerts.less" />
+    <Content Include="content\bootstrap\badges.less" />
+    <Content Include="content\bootstrap\bootstrap.less" />
+    <Content Include="content\bootstrap\bootstrap.css.map">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\button-groups.less" />
-    <Content Include="Content\bootstrap\buttons.less" />
-    <Content Include="Content\bootstrap\carousel.less" />
-    <Content Include="Content\bootstrap\close.less" />
-    <Content Include="Content\bootstrap\code.less" />
-    <Content Include="Content\bootstrap\component-animations.less" />
-    <Content Include="Content\bootstrap\dropdowns.less" />
-    <Content Include="Content\bootstrap\forms.less" />
-    <Content Include="Content\bootstrap\glyphicons.less" />
-    <Content Include="Content\bootstrap\grid.less" />
-    <Content Include="Content\bootstrap\input-groups.less" />
-    <Content Include="Content\bootstrap\jumbotron.less" />
-    <Content Include="Content\bootstrap\labels.less" />
-    <Content Include="Content\bootstrap\list-group.less" />
-    <Content Include="Content\bootstrap\media.less" />
-    <Content Include="Content\bootstrap\media.css.map">
+    <Content Include="content\bootstrap\breadcrumbs.less" />
+    <Content Include="content\bootstrap\button-groups.less" />
+    <Content Include="content\bootstrap\buttons.less" />
+    <Content Include="content\bootstrap\carousel.less" />
+    <Content Include="content\bootstrap\close.less" />
+    <Content Include="content\bootstrap\code.less" />
+    <Content Include="content\bootstrap\component-animations.less" />
+    <Content Include="content\bootstrap\dropdowns.less" />
+    <Content Include="content\bootstrap\forms.less" />
+    <Content Include="content\bootstrap\glyphicons.less" />
+    <Content Include="content\bootstrap\grid.less" />
+    <Content Include="content\bootstrap\input-groups.less" />
+    <Content Include="content\bootstrap\jumbotron.less" />
+    <Content Include="content\bootstrap\labels.less" />
+    <Content Include="content\bootstrap\list-group.less" />
+    <Content Include="content\bootstrap\media.less" />
+    <Content Include="content\bootstrap\media.css.map">
       <DependentUpon>media.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\mixins.less" />
-    <Content Include="Content\bootstrap\modals.less" />
-    <Content Include="Content\bootstrap\navbar.less" />
-    <Content Include="Content\bootstrap\navs.less" />
-    <Content Include="Content\bootstrap\normalize.less" />
-    <Content Include="Content\bootstrap\normalize.css.map">
+    <Content Include="content\bootstrap\mixins.less" />
+    <Content Include="content\bootstrap\modals.less" />
+    <Content Include="content\bootstrap\navbar.less" />
+    <Content Include="content\bootstrap\navs.less" />
+    <Content Include="content\bootstrap\normalize.less" />
+    <Content Include="content\bootstrap\normalize.css.map">
       <DependentUpon>normalize.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\pager.less" />
-    <Content Include="Content\bootstrap\pagination.less" />
-    <Content Include="Content\bootstrap\panels.less" />
-    <Content Include="Content\bootstrap\popovers.less" />
-    <Content Include="Content\bootstrap\print.less" />
-    <Content Include="Content\bootstrap\print.css.map">
+    <Content Include="content\bootstrap\pager.less" />
+    <Content Include="content\bootstrap\pagination.less" />
+    <Content Include="content\bootstrap\panels.less" />
+    <Content Include="content\bootstrap\popovers.less" />
+    <Content Include="content\bootstrap\print.less" />
+    <Content Include="content\bootstrap\print.css.map">
       <DependentUpon>print.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\progress-bars.less" />
-    <Content Include="Content\bootstrap\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\scaffolding.less" />
-    <Content Include="Content\bootstrap\tables.less" />
-    <Content Include="Content\bootstrap\theme.less" />
-    <Content Include="Content\bootstrap\theme.css.map">
+    <Content Include="content\bootstrap\progress-bars.less" />
+    <Content Include="content\bootstrap\responsive-utilities.less" />
+    <Content Include="content\bootstrap\scaffolding.less" />
+    <Content Include="content\bootstrap\tables.less" />
+    <Content Include="content\bootstrap\theme.less" />
+    <Content Include="content\bootstrap\theme.css.map">
       <DependentUpon>theme.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\thumbnails.less" />
-    <Content Include="Content\bootstrap\tooltip.less" />
-    <Content Include="Content\bootstrap\type.less" />
-    <Content Include="Content\bootstrap\utilities.less" />
-    <Content Include="Content\bootstrap\variables.less" />
-    <Content Include="Content\bootstrap\wells.less" />
-    <Content Include="Content\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\toastr.less" />
-    <Content Include="Content\toastr.css.map">
+    <Content Include="content\bootstrap\thumbnails.less" />
+    <Content Include="content\bootstrap\tooltip.less" />
+    <Content Include="content\bootstrap\type.less" />
+    <Content Include="content\bootstrap\utilities.less" />
+    <Content Include="content\bootstrap\variables.less" />
+    <Content Include="content\bootstrap\wells.less" />
+    <Content Include="content\fonts\fontawesome-webfont.eot" />
+    <Content Include="content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="content\fonts\fontawesome-webfont.woff" />
+    <Content Include="content\fonts\FontAwesome.otf" />
+    <Content Include="content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="content\toastr.less" />
+    <Content Include="content\toastr.css.map">
       <DependentUpon>toastr.css</DependentUpon>
     </Content>
-    <Content Include="Views\crap.sshtml">
+    <Content Include="views\crap.sshtml">
       <SubType>Designer</SubType>
     </Content>
     <None Include="web.Debug.config">
@@ -170,11 +172,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="App\app.ts" />
-    <TypeScriptCompile Include="Scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\spin\spin.d.ts" />
+    <TypeScriptCompile Include="app\app.ts" />
+    <TypeScriptCompile Include="scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
+    <TypeScriptCompile Include="scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="scripts\typings\moment\moment.d.ts" />
+    <TypeScriptCompile Include="scripts\typings\spin\spin.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -205,13 +207,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App\directives\" />
-    <Folder Include="App\version\" />
+    <Folder Include="app\account\" />
+    <Folder Include="app\directives\" />
+    <Folder Include="app\documents\" />
+    <Folder Include="app\login\" />
+    <Folder Include="app\register\" />
+    <Folder Include="app\version\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Modules\BreezeModule.cs" />
-    <Compile Include="Modules\IndexModule.cs" />
+    <Compile Include="modules\BreezeModule.cs" />
+    <Compile Include="modules\IndexModule.cs" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

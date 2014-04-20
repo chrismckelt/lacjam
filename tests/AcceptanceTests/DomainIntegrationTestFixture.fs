@@ -18,9 +18,27 @@
     open Lacjam.Core.Utility
     open Lacjam.Integration
     open Autofac
+    open MongoDB
+    open MongoDB
+    open MongoDB.Driver
+    open MongoDB.Driver.Linq
+    open MongoDB.Driver.Communication
+    open MongoDB.Driver.Communication.Security
+    open MongoDB.Bson
+    open MongoDB.Bson.Serialization
+    open System
+    open System.Configuration
+   
 
 
         module DomainIntegrationTestFixture = 
+            //let cs = System.Configuration.ConfigurationManager.AppSettings.Item("MongoDBConnectionString")
+            let cs = @"mongodb://localhost/Lacjam"
+            let db =    let client = new MongoClient(cs)// connect to localhost
+                        let server = client.GetServer()
+                        let database = server.GetDatabase("Lacjam")  
+                        database
+
 //            let fixture = Fixture().Customize(AutoFoqCustomization())
 //            let guidId = Guid.NewGuid()
 //            let swJob = CustomJobs.SwellNetRatingJob(Lacjam.Core.Runtime.Ioc.Resolve<ILogWriter>())
@@ -30,6 +48,9 @@
 //            swJobs.Add(swJob :> JobMessage)
 //            SendTweetJob(To="chris_mckelt") :> JobMessage
 //            SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
+            [<Fact>]
+            let ``Mongo is good `` () =
+                db |> should not' (Null)
                                                                      
             [<Fact>]
             let ``Clear database`` () =  ()//
@@ -39,14 +60,21 @@
 //                    session.SaveChanges()
 
             [<Fact>]
-            let ``Audit save and get`` () = ()   
-//                let aud = {Audit.Id=Guid.NewGuid();Audit.AuditType="test";Audit.CreatedDate=DateTime.Now;Audit.Message="test-message";}
-//                use session = Ioc.Resolve<IDocumentSession>()
-//                session.Store(aud)
-//                session.SaveChanges()
-//                let gotit = session.Load<Audit>(aud.Id)
+            let ``Audit save and get`` () =   
+                let aud = {Audit.Id=MongoDB.Bson.ObjectId.Empty;Audit.AuditType="test";Audit.CreatedDate=DateTime.Now;Audit.Message="test-message";}
+                let settings = new MongoCollectionSettings<Domain.Audit>(db, typedefof<Audit>.Name)
+                settings.AssignIdOnInsert   <- true;
+                settings.GuidRepresentation <-  GuidRepresentation .Standard;
+                let (collection) = db.GetCollection(settings)
+                let result = collection.Insert(aud)
+                result |> should not' (Null)    
+                for xxx in collection.FindAll() do
+                    Console.WriteLine(xxx.ToString())
+                  
 //                gotit |> should not' (Null)
-//                printfn "%A" gotit
+//                printfn "%A" gotit                                             
+                ()
+                
 
             [<Fact>]
             let ``Batch save and get`` () = ()   

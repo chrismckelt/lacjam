@@ -162,9 +162,12 @@ open LinqToTwitter
             interface NServiceBus.IHandleMessages<Jobs.JobResult> with
                 member x.Handle(jr) =
                     try
-                        log.Write(LogMessage.Info("Handling Job Result : " + jr.ToString()))
+                        if (jr.Success) then
+                            log.Write(LogMessage.Info("Success -> Job Result : " + jr.ToString()))
+                        else
+                            log.Write(LogMessage.Info("Failed -> Job Result : " + jr.ToString()))
                     with ex ->
-                        log.Write(LogMessage.Error(jr.ToString(), ex, true))
+                        log.Error("Error -> Job Result : " + jr.ToString(),ex)
 
         type StartupJobHandler(log : ILogWriter) =
             do log.Write(Info("StartupJobHandler"))

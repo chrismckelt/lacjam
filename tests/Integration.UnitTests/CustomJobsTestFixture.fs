@@ -617,7 +617,7 @@ module CustomJobsTestFixture  =
     //#endregion
    
     [<Fact>] 
-    let ``SwellNetJobHandler parses date ok`` () = 
+    let ``SwellNetJobHandler parses date ok`` () =  ()
 //                                                let log = (Foq.Mock<ILogWriter>()).Create()
 //                                                let bus = Foq.Mock<IBus>().Create()
 //                                                let cj = fixture.Create<CustomJobs.SwellNetRatingJob>()

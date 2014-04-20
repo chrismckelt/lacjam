@@ -93,9 +93,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BreezeWebApiConfig.cs" />
+    <Compile Include="app_start\BreezeWebApiConfig.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Modules\BreezeModule.cs" />
+    <Compile Include="modules\BreezeModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,7 +107,16 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.fsproj">
+      <Project>{c3a6a4b8-8be0-4e91-a7a7-62d05c6c1161}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Integration\Integration.fsproj">
+      <Project>{5e4ecb51-1038-4528-af68-3aff927f6360}</Project>
+      <Name>Integration</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
