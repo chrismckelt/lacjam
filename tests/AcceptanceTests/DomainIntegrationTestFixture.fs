@@ -33,8 +33,12 @@
 
         module DomainIntegrationTestFixture = 
             //let cs = System.Configuration.ConfigurationManager.AppSettings.Item("MongoDBConnectionString")
-            let cs = @"mongodb://localhost/Lacjam"
-            let db =    let client = new MongoClient(cs)// connect to localhost
+            let _settings = new MongoCollectionSettings()
+            do
+                        _settings.AssignIdOnInsert   <- true;
+                        _settings.GuidRepresentation <-  GuidRepresentation .Standard;
+            let _cs = @"mongodb://localhost/Lacjam"
+            let _db =   let client = new MongoClient(_cs)// connect to localhost
                         let server = client.GetServer()
                         let database = server.GetDatabase("Lacjam")  
                         database
@@ -50,7 +54,7 @@
 //            SendEmailJob(Email={To="Chris@mckelt.com";From="Chris@mckelt.com";Subject="SwellNet Rating: {0}";Body="SwellNet Rating: {0}"}) :> JobMessage
             [<Fact>]
             let ``Mongo is good `` () =
-                db |> should not' (Null)
+                _db |> should not' (Null)
                                                                      
             [<Fact>]
             let ``Clear database`` () =  ()//
@@ -62,17 +66,13 @@
             [<Fact>]
             let ``Audit save and get`` () =   
                 let aud = {Audit.Id=MongoDB.Bson.ObjectId.Empty;Audit.AuditType="test";Audit.CreatedDate=DateTime.Now;Audit.Message="test-message";}
-                let settings = new MongoCollectionSettings<Domain.Audit>(db, typedefof<Audit>.Name)
-                settings.AssignIdOnInsert   <- true;
-                settings.GuidRepresentation <-  GuidRepresentation .Standard;
-                let (collection) = db.GetCollection(settings)
+                let (collection) = _db.GetCollection(typedefof<Audit>.Name,_settings)
                 let result = collection.Insert(aud)
                 result |> should not' (Null)    
                 for xxx in collection.FindAll() do
                     Console.WriteLine(xxx.ToString())
-                  
-//                gotit |> should not' (Null)
-//                printfn "%A" gotit                                             
+                result.Ok |> should equal (true)
+                printfn "%A" result                                             
                 ()
                 
 
