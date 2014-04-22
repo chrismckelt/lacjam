@@ -5,8 +5,6 @@ open System.ServiceModel
 open System.Linq
 open System.Runtime.Serialization.Json
 open System.Diagnostics
-open Microsoft.FSharp.Linq
-open Microsoft.FSharp.Data
 open Newtonsoft.Json
 open log4net
 open Lacjam
@@ -22,8 +20,6 @@ module Jira  =
     open System.Linq
     open System.Runtime.Serialization.Json
     open System.Diagnostics
-    open Microsoft.FSharp.Linq
-    open Microsoft.FSharp.Data
     open Newtonsoft.Json
     open log4net
     open Autofac

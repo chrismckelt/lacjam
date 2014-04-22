@@ -12,8 +12,6 @@ module SwellNet =
     open Lacjam.Core.User
     open Lacjam.Core.Utility.Html
     open Lacjam.Integration
-    open Microsoft.FSharp.Data
-    open Microsoft.FSharp.Linq
     open NServiceBus
     open NServiceBus.Mailer
     open NServiceBus.MessageInterfaces

@@ -12,8 +12,7 @@ module SchedulerStats =
     open Lacjam.Core.User
     open Lacjam.Core.Utility.Html
     open Lacjam.Integration
-    open Microsoft.FSharp.Data
-    open Microsoft.FSharp.Linq
+    open Microsoft.FSharp
     open NServiceBus
     open NServiceBus.Mailer
     open NServiceBus.MessageInterfaces

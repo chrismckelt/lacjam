@@ -9,8 +9,8 @@ module CustomJobs =
     open System.Runtime.Serialization.Json
     open System.Net.Mail;
     open System.Diagnostics
-    open Microsoft.FSharp.Linq
-    open Microsoft.FSharp.Data
+    open Microsoft.FSharp
+    
     open Newtonsoft.Json
     open HtmlAgilityPack
     open NServiceBus
