@@ -166,6 +166,8 @@
     <None Include="app.config" />
     <Compile Include="SwellNet.fs" />
     <Compile Include="StockPrice.fs" />
+    <Compile Include="AsxCsvDownloader.fs" />
+    <EmbeddedResource Include="ASXListedCompaniess.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">

@@ -14,4 +14,4 @@ let ``FSharp Test`` () =
     let investor = new Investor()
     investor.GivenName <- "chris"
     investor.Surname <- "mckelt"
-    investor.ToString().Length |> should equal 13
+    investor.ToString.Length |> should equal 12

@@ -43,6 +43,7 @@ module Domain =
         member val Surname = "" with get, set
         member val Title = "" with get, set
         member val IsActive = Boolean() with get, set
+        member x.ToString = x.GivenName + " " + x.Surname
 
     [<CLIMutable>]
     //new() = new Investor()

@@ -1,9 +1,18 @@
 ﻿namespace Lacjam.Core
     open System
     open SettingsProviderNet
+    open Autofac
 
     [<AutoOpen>]
     module Settings = 
+      
+        type EmailModule() =                               //http://paulstovell.com/blog/convention-configuration
+            //inherit Autofac.Module()
+            member val Pop3Host  = "" with get, set
+            member val Pop3Ssl  = "" with get, set
+            member val Pop3User  = "" with get, set
+            member val Pop3Password  = "" with get, set
+
 
         [<CLIMutable>]
         type TwitterSettings = {ConsumerKey:string;ConsumerSecret:string;AccessToken:string;AccessTokenSecret:string;UserId:string;OAuthToken:string;OAuthTokenSecret:string;ScreenName:string;}
