@@ -15,7 +15,7 @@ module CustomJobs =
     open HtmlAgilityPack
     open NServiceBus
     open NServiceBus.MessageInterfaces
-    open NServiceBus.Mailer
+   // open NServiceBus.Mailer
     open log4net
     open Autofac
     open NServiceBus

@@ -37,8 +37,28 @@
     <DocumentationFile>bin\Release\WebApi.UnitTests.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Facilities.Logging">
+      <HintPath>..\..\packages\Castle.LoggingFacility.3.2.0\lib\net45\Castle.Facilities.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.Log4netIntegration">
+      <HintPath>..\..\packages\Castle.Core-log4net.3.2.0\lib\net45\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Linq2Rest">
       <HintPath>..\..\packages\Linq2Rest.3.3.4.0\lib\Net45\Linq2Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MongoDB.Bson">
@@ -57,6 +77,26 @@
     <Reference Include="Nancy.OData">
       <HintPath>..\..\packages\Nancy.OData.1.1.0\lib\net40\Nancy.OData.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.6.1\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\packages\NServiceBus.4.6.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\packages\NSubstitute.1.4.0.0\lib\NET40\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.3.18.5\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute">
+      <HintPath>..\..\packages\AutoFixture.AutoNSubstitute.3.18.5\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -65,7 +105,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library1.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />

@@ -2,21 +2,18 @@
     open System
     open SettingsProviderNet
     open Autofac
+    open FSharp.Configuration
 
     [<AutoOpen>]
     module Settings = 
-        type EmailModule() =
-            inherit Module()                               //http://paulstovell.com/blog/convention-configuration(
+        
+
+        type Config() = 
             member val Pop3Host  = "" with get, set
             member val Pop3Ssl  = "" with get, set
             member val Pop3User  = "" with get, set
             member val Pop3Password  = "" with get, set
-            override x.Load(builder:ContainerBuilder) = ()
-        
-        type MongoModule() =
-            inherit Module()                               //http://paulstovell.com/blog/convention-configuration(
             member val ConnectionString  = "" with get, set
-            override x.Load(builder:ContainerBuilder) = ()
 
         [<CLIMutable>]
         type TwitterSettings = {ConsumerKey:string;ConsumerSecret:string;AccessToken:string;AccessTokenSecret:string;UserId:string;OAuthToken:string;OAuthTokenSecret:string;ScreenName:string;}

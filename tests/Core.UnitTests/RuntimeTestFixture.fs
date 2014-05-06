@@ -1,6 +1,5 @@
-﻿module RuntimeTestFixture
+﻿namespace Lacjam.Core.UnitTests
 
-open Autofac
 open FsUnit.Xunit
 open Lacjam
 open Lacjam.Core

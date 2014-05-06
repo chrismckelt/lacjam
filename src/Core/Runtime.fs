@@ -9,10 +9,20 @@ module Runtime =
     open Autofac
     open log4net
     open log4net.Core
+    open Castle
+    open Castle.Core
+    open Castle.Windsor
+    open Castle.Windsor.Configuration
+    open Castle.Components.DictionaryAdapter
+    open Castle.MicroKernel
+    open Castle.MicroKernel.Facilities
+    open Castle.MicroKernel.SubSystems.Configuration
+    open Castle.Windsor
     open NServiceBus
     open NServiceBus.Features
-    open NServiceBus.Mailer
+    //open NServiceBus.Mailer
     open Lacjam.Core
+    open Castle.MicroKernel.Registration
     open Quartz
     open Quartz.Impl
     
@@ -31,13 +41,13 @@ module Runtime =
         abstract member Warn : string -> unit
         abstract member Error : string*Exception -> unit
 
-    [<Literal>]
-    let mailDir = @"c:\temp\mails"
+//    [<Literal>]
+//    let mailDir = @"c:\temp\mails"
 
-    type ToDirectorySmtpBuilder() =
-                       interface ISmtpBuilder with
-                            member x.BuildClient() = new SmtpClient(DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory,PickupDirectoryLocation = mailDir)
-                       
+//    type ToDirectorySmtpBuilder() =
+//                       interface ISmtpBuilder with
+//                            member x.BuildClient() = new SmtpClient(DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory,PickupDirectoryLocation = mailDir)
+//                       
 
     let t = Lacjam.Core.Domain.Investor()
     let private _logger = log4net.LogManager.GetLogger(t.GetType()).Logger
@@ -45,12 +55,12 @@ module Runtime =
     type LogWriter() =
         let lFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"log4net.config")
         let excludeFromLoggingList = ["Polling for timeouts";"Polling next retrieval is"]
-//        do
-//            if  File.Exists lFile then
-//                log4net.Config.XmlConfigurator.Configure(new FileInfo(lFile)) |> ignore
-//            else
-//                //failwith "log4net.config not found"
-//                Console.WriteLine("log4net.config not found")
+        do
+            if  File.Exists lFile then
+                log4net.Config.XmlConfigurator.Configure(new FileInfo(lFile)) |> ignore
+            else
+                //failwith "log4net.config not found"
+                Console.WriteLine("log4net.config not found")
 
         let writeLog (lvl:Level) str exn  =     let eveId = 100// match lvl.Name with | (Level.Debug.Name) -> 100 | Level.Info.Name -> 200  | Level.Warn.Name -> 300 | Level.Error.Name -> 400  
                                                 let le = new LoggingEvent(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType,_logger.Repository, "All", lvl,str, exn)
@@ -71,11 +81,11 @@ module Runtime =
             member x.Error(str,exn)= writeLog Level.Error str exn
 
 
-    let ContainerBuilder = 
-                                let cb = new ContainerBuilder()
-                                cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
-                                cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
-                                cb
+//    let ContainerBuilder = 
+//                                let cb = new ContainerBuilder()
+//                                cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
+//                                cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
+//                                cb
     
     let Ioc =
 //        ContainerBuilder.Register(fun a->
@@ -95,5 +105,9 @@ module Runtime =
 //                       b.Dispose()  |> ignore
 //            ) |> ignore
     
-        let con = ContainerBuilder.Build()
-        con
+        let con =  new Windsor.WindsorContainer()
+        con.Register(Castle.MicroKernel.Registration.Component.For<ILogWriter>().ImplementedBy<LogWriter>().LifestyleTransient())
+ 
+ 
+exception ValidationException of string
+ 

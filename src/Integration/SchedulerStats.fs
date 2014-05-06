@@ -14,7 +14,7 @@ module SchedulerStats =
     open Lacjam.Integration
     open Microsoft.FSharp
     open NServiceBus
-    open NServiceBus.Mailer
+   // open NServiceBus.Mailer
     open NServiceBus.MessageInterfaces
     open Newtonsoft.Json
     open Quartz

@@ -3,21 +3,13 @@
     open FsUnit.Xunit 
     open Xunit
     open Quartz
-//    open Ploeh.AutoFixture
-//    open Ploeh.AutoFixture.AutoFoq
-//    open Ploeh.AutoFixture.DataAnnotations
-//    
-//    open Foq
     open NServiceBus
     open Lacjam
     open Lacjam.Core
     open Lacjam.Core.Domain                                                               
     open Lacjam.Core.Runtime
-    open Lacjam.Core.Jobs
     open Lacjam.Core.Scheduling
     open Lacjam.Core.Utility
-    open Lacjam.Integration
-    open Autofac
     open MongoDB
     open MongoDB
     open MongoDB.Driver

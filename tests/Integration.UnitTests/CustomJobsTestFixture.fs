@@ -7,8 +7,8 @@ module CustomJobsTestFixture  =
 //    open Ploeh.AutoFixture.DataAnnotations
 // 
 //    open Foq
-    open NServiceBus    
-    open NServiceBus.ObjectBuilder.Common
+//    open NServiceBus    
+//    open NServiceBus.ObjectBuilder.Common
     open System
     open System.Linq
     open System.Collections

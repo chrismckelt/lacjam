@@ -37,14 +37,23 @@
     <DocumentationFile>bin\Release\Integration.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Configuration">
+      <HintPath>..\..\packages\FSharp.Configuration.0.2.2\lib\net40\FSharp.Configuration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Data">
       <HintPath>..\..\lib\FSharp.Data.dll</HintPath>
@@ -95,7 +104,8 @@
       <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitterPcl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Services.Utility">
       <HintPath>..\..\packages\FSharpx.TypeProviders.Xrm.1.8.41\lib\40\Microsoft.Crm.Services.Utility.dll</HintPath>
@@ -114,13 +124,16 @@
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.5.0\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.6.1\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.5.0\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.6.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.Mailer">
-      <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
+    <Reference Include="NServiceBus.ObjectBuilder.CastleWindsor">
+      <HintPath>..\..\packages\NServiceBus.CastleWindsor.4.6.1\lib\net40\NServiceBus.ObjectBuilder.CastleWindsor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
@@ -130,6 +143,10 @@
     </Reference>
     <Reference Include="SettingsProviderNet">
       <HintPath>..\..\packages\SettingsProviderNet.2.1.0\lib\net40\SettingsProviderNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpYaml">
+      <HintPath>..\..\packages\FSharp.Configuration.0.2.2\lib\net40\SharpYaml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -168,6 +185,7 @@
     <Compile Include="StockPrice.fs" />
     <Compile Include="AsxCsvDownloader.fs" />
     <EmbeddedResource Include="ASXListedCompaniess.csv" />
+    <Compile Include="StartupBatchJobs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.fsproj">

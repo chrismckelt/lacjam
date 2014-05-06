@@ -62,14 +62,31 @@
     <Compile Include="Integration\AsxCsvDownloaderTestFixture.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Facilities.Logging">
+      <HintPath>..\..\packages\Castle.LoggingFacility.3.2.0\lib\net45\Castle.Facilities.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.Log4netIntegration">
+      <HintPath>..\..\packages\Castle.Core-log4net.3.2.0\lib\net45\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Configuration">
+      <HintPath>..\..\packages\FSharp.Configuration.0.2.2\lib\net40\FSharp.Configuration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Data">
       <HintPath>..\..\lib\FSharp.Data.dll</HintPath>
@@ -93,6 +110,10 @@
     <Reference Include="LinqToTwitterPcl">
       <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitterPcl.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
@@ -107,22 +128,38 @@
       <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\NHamcrest.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.5.0\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.6.1\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.5.0\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.6.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.Mailer">
-      <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
+    <Reference Include="NServiceBus.ObjectBuilder.CastleWindsor">
+      <HintPath>..\..\packages\NServiceBus.CastleWindsor.4.6.1\lib\net40\NServiceBus.ObjectBuilder.CastleWindsor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.ObjectBuilder.Autofac">
-      <HintPath>..\..\packages\NServiceBus.Autofac.4.5.0\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\packages\NSubstitute.1.4.0.0\lib\NET40\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.3.18.5\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute">
+      <HintPath>..\..\packages\AutoFixture.AutoNSubstitute.3.18.5\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="SettingsProviderNet">
       <HintPath>..\..\packages\SettingsProviderNet.2.1.0\lib\net40\SettingsProviderNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpYaml">
+      <HintPath>..\..\packages\FSharp.Configuration.0.2.2\lib\net40\SharpYaml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -142,6 +179,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit">
       <HintPath>..\..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
     </Reference>
@@ -150,10 +188,6 @@
     <ProjectReference Include="..\..\src\Core\Core.fsproj">
       <Name>Core</Name>
       <Project>C3A6A4B8-8BE0-4E91-A7A7-62D05C6C1161</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Integration\Integration.fsproj">
-      <Name>Integration</Name>
-      <Project>5E4ECB51-1038-4528-AF68-3AFF927F6360</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

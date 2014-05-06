@@ -68,8 +68,13 @@
     <None Include="job_scheduling_data_2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
@@ -92,9 +97,6 @@
     <Reference Include="LinqToTwitterPcl">
       <HintPath>..\..\packages\linqtotwitter.3.0.2\lib\net45\LinqToTwitterPcl.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
@@ -109,16 +111,24 @@
       <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\NHamcrest.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
-      <HintPath>..\..\packages\NServiceBus.Interfaces.4.5.0\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Interfaces.4.6.1\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\packages\NServiceBus.4.5.0\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.4.6.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.Mailer">
-      <HintPath>..\..\packages\NServiceBus.Mailer.1.1.0\Lib\NET40\NServiceBus.Mailer.dll</HintPath>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\packages\NSubstitute.1.4.0.0\lib\NET40\NSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.ObjectBuilder.Autofac">
-      <HintPath>..\..\packages\NServiceBus.Autofac.4.5.0\lib\net40\NServiceBus.ObjectBuilder.Autofac.dll</HintPath>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\packages\AutoFixture.3.18.5\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute">
+      <HintPath>..\..\packages\AutoFixture.AutoNSubstitute.3.18.5\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
@@ -141,6 +151,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit">
       <HintPath>..\..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
     </Reference>

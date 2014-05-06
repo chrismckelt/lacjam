@@ -7,7 +7,7 @@ open FsUnit.Xunit
 open Lacjam
 open Lacjam.Core
 open Lacjam.Core.Domain
-open Lacjam.ServiceBus
+open Lacjam.ServiceBusF
 
 [<Fact>] 
 let ``FSharp Test`` () =

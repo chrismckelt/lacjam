@@ -4,7 +4,6 @@ open System
 open System.Diagnostics
 open Microsoft.FSharp.Control
 open Xunit
-open Autofac
 open FsUnit.Xunit
 open Quartz
 //open Ploeh.AutoFixture
@@ -16,7 +15,6 @@ open Lacjam
 open Lacjam.Core
 open Lacjam.Core.Domain
 open Lacjam.Core.Runtime
-open Lacjam.Core.Jobs
 open Lacjam.Core.Scheduling
 open Lacjam.Core.Utility
 open System.Linq

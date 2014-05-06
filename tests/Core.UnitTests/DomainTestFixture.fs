@@ -17,12 +17,12 @@ let printThreadId note =
     // Append the thread ID.
     printfn "%d : %s" System.Threading.Thread.CurrentThread.ManagedThreadId note
 
-[<Fact>] 
-let ``Investor.ToString should write name`` () =
-    let inv = new Investor()
-    inv.GivenName <- "chris"
-    inv.Surname <- "mckelt"
-    inv.ToString.Length |> should equal 12
+//[<Fact>] 
+//let ``Investor.ToString should write name`` () =
+//    let inv = new Investor()
+//    inv.GivenName <- "chris"
+//    inv.Surname <- "mckelt"
+//    inv.ToString.Length |> should equal 12
 
 //[<Fact>]
 //let ``Bedlam site scrape`` () =

@@ -1,8 +1,8 @@
 ﻿namespace Lacjam.Integration.UnitTests
 
     module StockPriceTestFixture  =  
-            open NServiceBus    
-            open NServiceBus.ObjectBuilder.Common
+//            open NServiceBus    
+//            open NServiceBus.ObjectBuilder.Common
             open System
             open System.Linq
             open System.Collections
