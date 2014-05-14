@@ -1,26 +1,22 @@
  Lacjam
 =======================
-
+<br/>
 An opinionated web stack to hit the ground running
-
--- F# Core with Castle,Log4Net, NserviceBus & MongoDB
--- C# Web API using Nancy
--- Angular TypesScript with conventions to hit the ground running
-		-- directives
-		-- dataaccess.js (restangular)
-		-- featurename
-				-- controller.js
-				-- dataaccess.js
-				-- statemanager.js 
+<br/>
+-- F# Core with Castle,Log4Net, NserviceBus & MongoDB<br/>
+-- C# Web API using Nancy<br/>
+-- Angular TypesScript with conventions to hit the ground running<br/>
+		-- directives<br/>
+		-- dataaccess.js (restangular)<br/>
+		-- featurename<br/>
+				-- controller.js<br/>
+				-- dataaccess.js<br/>
+				-- statemanager.js <br/>
 				
--- Testing via XUnit + Karma + Canopy
-	
-
-
-TODO<br/>	
--- Web Scraping<br/>	
--- Monitoring<br/>	
--- Analysis<br/>	
--- Reports<br/>	
+-- Testing via XUnit + Karma + Canopy<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
 
 <a href="https://github.com/chrismckelt/Lacjam" target="_blank">Lacjam</a>
