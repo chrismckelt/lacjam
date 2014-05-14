@@ -28,7 +28,7 @@ namespace Lacjam.Worker.Handlers
         {
             Logger.Info("Handler:Reply:" + this.GetType().Name);
             Logger.Debug(result.ToString());
-            Bus.Reply(result);
+           // Bus.Reply(result);
         }
 
 

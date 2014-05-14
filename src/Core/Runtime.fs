@@ -5,7 +5,7 @@ module Runtime =
     open System
     open System.IO
     open System.Net.Mail
-    open System.Configuration       
+    open System.Configuration
     open Autofac
     open log4net
     open log4net.Core
@@ -25,8 +25,6 @@ module Runtime =
     open Castle.MicroKernel.Registration
     open Quartz
     open Quartz.Impl
-    
- 
 
     type LogMessage =
         | Debug of string
@@ -47,7 +45,7 @@ module Runtime =
 //    type ToDirectorySmtpBuilder() =
 //                       interface ISmtpBuilder with
 //                            member x.BuildClient() = new SmtpClient(DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory,PickupDirectoryLocation = mailDir)
-//                       
+//
 
     let t = Lacjam.Core.Domain.Investor()
     let private _logger = log4net.LogManager.GetLogger(t.GetType()).Logger
@@ -62,7 +60,7 @@ module Runtime =
                 //failwith "log4net.config not found"
                 Console.WriteLine("log4net.config not found")
 
-        let writeLog (lvl:Level) str exn  =     let eveId = 100// match lvl.Name with | (Level.Debug.Name) -> 100 | Level.Info.Name -> 200  | Level.Warn.Name -> 300 | Level.Error.Name -> 400  
+        let writeLog (lvl:Level) str exn  =     let eveId = 100// match lvl.Name with | (Level.Debug.Name) -> 100 | Level.Info.Name -> 200  | Level.Warn.Name -> 300 | Level.Error.Name -> 400
                                                 let le = new LoggingEvent(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType,_logger.Repository, "All", lvl,str, exn)
                                                 le.Properties.Item("EventID") <- eveId
                                                 _logger.Log(le)
@@ -70,7 +68,7 @@ module Runtime =
         interface ILogWriter  with
             member x.Write lm  =
                 match lm with
-                | Debug(str) ->       writeLog Level.Debug str null                   
+                | Debug(str) ->       writeLog Level.Debug str null
                 | Info(str) ->        writeLog Level.Info str null
                 | Warn(str,e)->       writeLog Level.Warn str e
                 | Error(str,e,b) ->   writeLog Level.Error str e  //TODO b
@@ -80,19 +78,18 @@ module Runtime =
             member x.Warn str = writeLog Level.Warn str null
             member x.Error(str,exn)= writeLog Level.Error str exn
 
-
-//    let ContainerBuilder = 
+//    let ContainerBuilder =
 //                                let cb = new ContainerBuilder()
 //                                cb.Register(fun x -> new LogWriter()).As<ILogWriter>() |> ignore
 //                                cb.Register(fun x -> new ToDirectorySmtpBuilder()).As<ISmtpBuilder>() |> ignore
 //                                cb
-    
+
     let Ioc =
 //        ContainerBuilder.Register(fun a->
 //                                          let store = new DocumentStore(Url = System.Configuration.ConfigurationManager.AppSettings.Item("RavenDBUrl"))
 //                                          store.DefaultDatabase <- "Lacjam"
 //                                          store.Initialize() |> ignore
-//                                          store  
+//                                          store
 //                                 ).As<IDocumentStore>().SingleInstance() |> ignore
 //
 //        ContainerBuilder.Register(fun a -> a.Resolve<IDocumentStore>().OpenSession())
@@ -104,10 +101,8 @@ module Runtime =
 //                       b.SaveChanges() |> ignore
 //                       b.Dispose()  |> ignore
 //            ) |> ignore
-    
+
         let con =  new Windsor.WindsorContainer()
         con.Register(Castle.MicroKernel.Registration.Component.For<ILogWriter>().ImplementedBy<LogWriter>().LifestyleTransient())
- 
- 
+
 exception ValidationException of string
- 

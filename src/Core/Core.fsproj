@@ -59,7 +59,6 @@
     <Compile Include="Runtime.fs" />
     <Compile Include="Settings.fs" />
     <Compile Include="Services.fs" />
-    <Compile Include="Jobs.fs" />
     <Compile Include="Scheduling.fs" />
     <None Include="packages.config" />
     <Compile Include="User.fs" />

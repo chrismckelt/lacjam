@@ -33,7 +33,8 @@ namespace Lacjam.Worker.Handlers
             }
 
             var result = Tweet(message);
-            var jr = new Jobs.JobResult(message, true, String.Format("Tweet sent {0} {1} {2}", message.Settings.ScreenName, message.Payload, result.ToString()));
+            var jr = new Jobs.JobResult(message, true,
+                String.Format("Tweet sent {0} {1} {2}", message.Settings.ScreenName, message.Payload, result.ToString()));
             base.Reply(jr);
         }
 

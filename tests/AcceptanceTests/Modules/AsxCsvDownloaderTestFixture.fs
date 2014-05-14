@@ -1,4 +1,5 @@
-﻿namespace Lacjam.AcceptanceTests
+﻿namespace Lacjam.AcceptanceTests.Modules
+
     open Autofac
     open FSharp
     open FSharp.Data

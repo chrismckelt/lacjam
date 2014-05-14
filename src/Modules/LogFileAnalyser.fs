@@ -1,4 +1,6 @@
-﻿module LogFileAnalyser
+﻿namespace Lacjam.Modules
+
+module LogFileAnalyser =
     open System
     open System.IO
     open System.Collections.Generic

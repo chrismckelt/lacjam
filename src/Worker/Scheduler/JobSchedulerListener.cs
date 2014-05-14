@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lacjam.Core;
+﻿using Lacjam.Core;
 using NServiceBus;
 using Quartz;
+using System;
+using System.Globalization;
 
 namespace Lacjam.Worker.Scheduler
 {
@@ -46,7 +42,7 @@ namespace Lacjam.Worker.Scheduler
 
         public void TriggersPaused(string tg)
         {
-            _logger.Debug(string.Concat("TriggersPaused", tg.ToString(CultureInfo.InvariantCulture))); 
+            _logger.Debug(string.Concat("TriggersPaused", tg.ToString(CultureInfo.InvariantCulture)));
         }
 
         public void TriggerResumed(TriggerKey triggerKey)
@@ -56,22 +52,22 @@ namespace Lacjam.Worker.Scheduler
 
         public void TriggersResumed(string tg)
         {
-            _logger.Debug(string.Concat("TriggersPaused", tg.ToString(CultureInfo.InvariantCulture))); 
+            _logger.Debug(string.Concat("TriggersPaused", tg.ToString(CultureInfo.InvariantCulture)));
         }
 
         public void JobAdded(IJobDetail jd)
         {
-            _logger.Debug(string.Concat("JobAdded", jd.ToString())); 
+            _logger.Debug(string.Concat("JobAdded", jd.ToString()));
         }
 
         public void JobDeleted(JobKey jobKey)
         {
-            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString())); 
+            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString()));
         }
 
         public void JobPaused(JobKey jobKey)
         {
-            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString())); 
+            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString()));
         }
 
         public void JobsPaused(string jobGroup)
@@ -81,17 +77,17 @@ namespace Lacjam.Worker.Scheduler
 
         public void JobResumed(JobKey jobKey)
         {
-            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString())); 
+            _logger.Debug(string.Concat("JobDeleted", jobKey.ToString()));
         }
 
         public void JobsResumed(string jg)
         {
-            _logger.Debug(string.Concat("JobDeleted", jg.ToString(CultureInfo.InvariantCulture))); 
+            _logger.Debug(string.Concat("JobDeleted", jg.ToString(CultureInfo.InvariantCulture)));
         }
 
         public void SchedulerError(string msg, SchedulerException cause)
         {
-            _logger.Error(String.Concat("SchedulerError", msg),cause);
+            _logger.Error(String.Concat("SchedulerError", msg), cause);
         }
 
         public void SchedulerInStandbyMode()

@@ -1,6 +1,6 @@
 ﻿namespace Lacjam.Worker.Jobs
 {
-    public class SchedulerStatsJob : JobBase
+    public class PrintBatchJob : JobBase
     {
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lacjam.Core.Domain;
+﻿using Lacjam.Core.Domain;
 
 namespace Lacjam.Worker.Jobs
 {

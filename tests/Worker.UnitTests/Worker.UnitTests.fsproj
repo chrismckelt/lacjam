@@ -63,8 +63,12 @@
     <None Include="app.config" />
     <None Include="job_scheduling_data_2_0.xsd" />
     <Compile Include="Scheduler\JobSchedulerTestFixture.fs" />
-    <Compile Include="Scheduler\QuartzJobTestFixture.fs" />
+    <Compile Include="Scheduler\QuartzJobExecutorTestFixture.fs" />
     <Compile Include="Jobs\SendTweetJobHandlerTestFixture.fs" />
+    <None Include="..\..\common\log4net.config">
+      <Link>log4net.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
@@ -99,6 +103,10 @@
       <HintPath>..\..\packages\FsUnit.xUnit.1.2.2.1\Lib\net40\FsUnit.Xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LinqToTwitter.AspNet">
       <HintPath>..\..\packages\LinqToTwitter.3.0.2\lib\net45\LinqToTwitter.AspNet.dll</HintPath>
       <Private>True</Private>
@@ -113,6 +121,10 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHamcrest">

@@ -8,6 +8,6 @@ namespace Lacjam.Worker.Batches
 {
     public interface IContainBatches
     {
-        IEnumerable<IContainBatches> Batches { get; } 
+        IList<Batch> Batches { get; } 
     }
 }

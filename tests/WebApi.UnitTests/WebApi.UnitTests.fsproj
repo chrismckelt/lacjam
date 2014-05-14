@@ -77,6 +77,10 @@
     <Reference Include="Nancy.OData">
       <HintPath>..\..\packages\Nancy.OData.1.1.0\lib\net40\Nancy.OData.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\packages\NServiceBus.Interfaces.4.6.1\lib\net40\NServiceBus.dll</HintPath>
       <Private>True</Private>

@@ -1,8 +1,7 @@
 ﻿using System;
+using Lacjam.Worker.Batches;
 using Quartz;
 using Lacjam.Core;
-using Batch = Lacjam.Worker.Batches.Batch;
-
 
 namespace Lacjam.Worker.Scheduler
 {

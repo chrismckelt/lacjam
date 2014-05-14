@@ -31,13 +31,13 @@
         
 
 
-        let saveTwitterSettings lacjamTwitterSettings =  
+        let SaveTwitterSettings lacjamTwitterSettings =  
                                                     try
                                                         let sp = new SettingsProvider(new RoamingAppDataStorage("lacjam"))
                                                         sp.SaveSettings(lacjamTwitterSettings)
                                                     with | ex -> Console.Write(ex.ToString())
 
-        let getTwitterSettings =    saveTwitterSettings lacjamTwitterSettings
+        let GetTwitterSettings =    SaveTwitterSettings lacjamTwitterSettings
                                     let sp = new SettingsProvider(new RoamingAppDataStorage("lacjam"))
                                     //sp.GetSettings<TwitterSettings>()
                                     lacjamTwitterSettings

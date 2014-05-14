@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lacjam.Core;
+﻿using Lacjam.Core;
 using Lacjam.Worker.Batches;
 using Lacjam.Worker.Scheduler;
 using NServiceBus;
 using Quartz;
 using Quartz.Impl;
+using System;
+using System.Linq;
 
 namespace Lacjam.ServiceBus
 {
@@ -22,11 +19,11 @@ namespace Lacjam.ServiceBus
         {
             _logWriter = Runtime.Ioc.Resolve<Runtime.ILogWriter>();
             _bus = Runtime.Ioc.Resolve<IBus>();
-           
+
             _logWriter.Info("-- Service Bus Started --");
-            
+
             System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, certificate, chain, errors) => true; //four underscores (and seven years ago?)   
+                (sender, certificate, chain, errors) => true; //four underscores (and seven years ago?)
 
             var fac = new StdSchedulerFactory();
             fac.Initialize();
@@ -45,7 +42,7 @@ namespace Lacjam.ServiceBus
                     .LifestyleSingleton());
 
             _js = Runtime.Ioc.Resolve<IJobScheduler>();
-                    
+
             Configure.Instance.Configurer.ConfigureComponent<Quartz.IScheduler>(DependencyLifecycle.SingleInstance);
 
             var type = typeof(IContainBatches);
@@ -58,7 +55,7 @@ namespace Lacjam.ServiceBus
 
         public void Stop()
         {
-             Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
+            Runtime.Ioc.Resolve<IScheduler>().Shutdown(true);
             _logWriter.Info("-- Service Bus Stopped --");
             Runtime.Ioc.Dispose();
         }

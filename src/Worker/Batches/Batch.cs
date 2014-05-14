@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Lacjam.Worker.Jobs;
+using LinqToTwitter;
 
 namespace Lacjam.Worker.Batches
 {
-    public abstract class Batch : WorkerBase, IContainBatches
-    {   
-        public string Name { get; set; }
+    public class Batch : WorkerBase
+    {
+      
 
-        public IList<JobBase> Jobs { get; set; }
-        public TimeSpan RepeatInterval { get; set; }
+        public virtual IEnumerable<JobBase> Jobs { get; protected set; }
 
-        public IEnumerable<IContainBatches> Batches { get; protected set; }
-
-        public override string ToString()
+        public void AddJob(JobBase job)
         {
-            return string.Format("Name: {0}, Jobs: {1}, RepeatInterval: {2}, Batches: {3}", Name, Jobs, RepeatInterval, Batches);
+            job.Batch = this;
+            if (this.Jobs == null) this.Jobs = new List<JobBase>();
+
+            this.Jobs.ToList().Add(job);
         }
     }
-
 }
