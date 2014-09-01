@@ -1,0 +1,90 @@
+﻿@using Lacjam.WebClient
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" data-framework="angularjs" lang="en" ng-app="app">
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Lacjam Metastore">
+    <meta name="keywords" content="Lacjam Metastore">
+    <meta name="author" content="kiandra>
+    <title>Lacjam Metastore</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    @System.Web.Optimization.Styles.Render("~/bundles/less");
+    @System.Web.Optimization.Styles.Render("~/bundles/css");
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!--[if lte IE 8]>
+      <script>
+        document.createElement('ng-include');
+        document.createElement('ng-pluralize');
+        document.createElement('ng-view');
+        document.createElement('ng:include');
+        document.createElement('ng:pluralize');
+        document.createElement('ng:view');
+        document.createElement('delayedSearch');
+        document.createElement('st-date-picker');
+        document.createElement('st-error-span');
+        document.createElement('file-uploader');
+      </script>
+    <![endif]-->
+
+    <ng-view />
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" onclick="document.location.href ='/'" href="#">Lacjam Metastore</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right" role="form">
+                        <div class="form-group">
+                            <ul class="nav navbar-nav">
+                                <li class="active"><a href="/#/contact">Help</a></li>
+                                <li><a href="#"></a></li>
+                            </ul>
+
+                        </div>
+                    </form>
+
+                </div><!-- /.navbar-collapse -->
+            </div>
+        </div>
+    </nav>
+    <div class="container" ui-view>
+      
+    <h3>Loading...</h3>
+       
+    </div> <!-- /container -->
+    <div class="container">
+        <footer class=" panel-footer">
+            <ul class=" list-inline">
+                <li>&copy; Lacjam Metastore 2014</li>
+                <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
+            </ul>
+        </footer>
+        @System.Web.Optimization.Scripts.Render("~/bundles/js");
+        @System.Web.Optimization.Scripts.Render("~/bundles/ts");
+    </div>
+</body>
+</html>

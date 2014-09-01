@@ -1,0 +1,182 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Castle.MicroKernel.Lifestyle;
+using NHibernate;
+using Lacjam.Core.Infrastructure.Database;
+using Lacjam.Framework.Logging;
+using uNhAddIns.Adapters;
+using uNhAddIns.SessionEasier;
+using uNhAddIns.SessionEasier.Conversations;
+
+namespace Lacjam.Core.Infrastructure.Ioc.Convo
+{
+    [PersistenceConversational]
+    public class UnitOfWork : NhConversation, IUnitOfWork
+    {
+        public ISessionFactory SessionFactory {
+            get { return Session.SessionFactory; }
+        }
+
+        public ISession Session
+        {
+            get
+            {
+                if (_session == null || !_session.IsOpen || !_session.IsConnected)
+                {
+                    _logWriter.Debug("UnitOfWork - checking session");
+                    this.CheckSession();
+                }
+                return _session;
+            }
+            set { _session = value; }
+        }
+
+        private ISession _session;
+
+        private readonly ILogWriter _logWriter;
+        private readonly INHibernateFluentConfiguration _provider;
+        private IsolationLevel _level = IsolationLevel.ReadCommitted;
+
+        public UnitOfWork(ILogWriter logWriter, INHibernateFluentConfiguration provider, ISessionWrapper wrapper)
+            : base(new uNhAddIns.SessionEasier.SessionFactoryProvider(provider), wrapper)
+        {
+            _logWriter = logWriter;
+            _provider = provider;
+        }
+
+
+        public IUnitOfWork WithIsolationLevel(IsolationLevel level)
+        {
+            _level = level;
+            return this;
+        }
+
+        public T Run<T>(Func<T> guardedBlock)
+        {
+            return Run(guardedBlock, ex => Abort(), () => End());
+        }
+
+        public T Run<T>(Func<T> guardedBlock, Action<Exception> handleException, Action finallyBlock,
+            IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            try
+            {
+                Start();
+                return guardedBlock();
+            }
+            catch (Exception ex)
+            {
+                handleException(ex);
+                Abort();
+            }
+            finally
+            {
+                finallyBlock();
+                End();
+            }
+            return default(T);
+        }
+
+        public override void Start()
+        {
+            WindsorAccessor.Instance.Container.RequireScope();
+            CheckSession();
+            Resume();
+           
+        }
+
+        private void CheckSession()
+        {
+            if (Session == null) _session = WindsorAccessor.Instance.Container.Resolve<ISessionFactory>().GetCurrentSessionOrOpen();
+            CheckTransaction();
+            _session.FlushMode = FlushMode.Auto;
+            AddToContext();
+
+        }
+
+        private void CheckTransaction()
+        {
+            if (_session.Transaction == null || (!_session.Transaction.IsActive) && _session.IsOpen)
+            {
+                _session.BeginTransaction(_level);
+            }
+        }
+
+        public override void Resume()
+        {
+            base.Resume();
+
+            if (Session == null)
+                throw new AccessViolationException("Session could not be created");
+
+            if (!_session.IsConnected)
+            {
+                _session.Reconnect();
+            }
+            CheckTransaction();
+        }
+
+
+        public override void End()
+        {
+            WindsorAccessor.Instance.Container.RequireScope();
+            FlushAndCommit();
+
+            base.DoEnd();
+
+            if (_session != null && _session.IsOpen)
+            {
+                _session.Close();
+            }
+        }
+
+        public void Commit()
+        {
+            if (_session != null && (_session.Transaction != null && _session.Transaction.IsActive))
+            {
+                _session.Transaction.Commit();
+            }
+
+            foreach (KeyValuePair<ISessionFactory, ISession> keyValuePair in (IEnumerable<KeyValuePair<ISessionFactory, ISession>>)this.GetFromContext())
+            {
+                ISession sss = keyValuePair.Value;
+                if (sss != null && sss.IsOpen)
+                {
+                    if (sss.Transaction != null && sss.Transaction.IsActive)
+                    {
+                        sss.Transaction.Commit();
+                    }
+                }
+            }
+        }
+
+        public void FlushAndCommit()
+        {
+            Commit();
+            FlushAndPause();
+        }
+
+        private void AddToContext()
+        {
+            var ssf = new Dictionary<ISessionFactory, ISession> { { SessionFactory, Session } };
+
+            if (GetSession(SessionFactory) == null)
+            {
+                this.Context.Clear();
+                this.Context.Add("uNhAddIns.Conversations.NHSessions", new Dictionary<ISessionFactory, ISession>(ssf));
+            }           
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)End();
+            base.Dispose(disposing);
+        }
+
+        ~UnitOfWork()
+        {
+            Dispose(false);
+        }
+    }
+}

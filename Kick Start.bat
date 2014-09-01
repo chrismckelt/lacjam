@@ -1,0 +1,1 @@
+start powershell -Command "& { %~dp0scripts\ApplicationInstallation.ps1 Configuration-Portal.ps1; pause }"

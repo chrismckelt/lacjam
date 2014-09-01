@@ -1,0 +1,1 @@
+start powershell -NoExit -Command "& { %~dp0scripts\StartBuildShell.ps1 }"
