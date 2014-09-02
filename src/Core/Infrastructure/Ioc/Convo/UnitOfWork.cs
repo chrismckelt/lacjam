@@ -138,17 +138,34 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
 
         private static void Commit(ISession session)
         {
-            if (session.Transaction == null || !session.Transaction.IsActive)
+           if (session.Transaction == null || !session.Transaction.IsActive)
                 return;
-            session.Transaction.Commit();
+
+            try
+            {
+                session.Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                session.Transaction.Rollback();
+                throw;
+            }
         }
 
         private static void FlushAndCommit(ISession session)
         {
-            if (session.Transaction == null || !session.Transaction.IsActive)
+           if (session.Transaction == null || !session.Transaction.IsActive)
                 return;
-            session.Flush();
-            session.Transaction.Commit();
+            try
+            {
+                session.Flush();
+                session.Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                session.Transaction.Rollback();
+                throw;
+            }
         }
 
 
