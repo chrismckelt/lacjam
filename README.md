@@ -1,9 +1,9 @@
  Lacjam
 =======================
 <br/>
-A document meta data store
+A framework for building web apps.
+- C# event sourcing model
+- Typescript + Angular + Karma for UI
+- F# for unit, REST integration test suite + Canopy for UI testing
 <br/>
 
--- Testing via XUnit + Karma + Canopy<br/>
-
-<a href="https://git.kiandra.com.au/blair-davidson/Lacjam" target="_blank">Lacjam</a>
