@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lacjam.Core.Infrastructure.Database.Conventions
+namespace Structerre.MetaStore.Core.Infrastructure.Database.Conventions
 {
     public class DecimalConvention : IPropertyConvention
     {

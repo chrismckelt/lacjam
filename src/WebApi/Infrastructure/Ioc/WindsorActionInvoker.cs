@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using Castle.MicroKernel;
 
-namespace Lacjam.WebApi.Infrastructure.Ioc
+namespace Structerre.MetaStore.WebApi.Infrastructure.Ioc
 {
     public class WindsorActionInvoker : ControllerActionInvoker
     {

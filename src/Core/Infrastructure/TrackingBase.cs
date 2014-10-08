@@ -2,19 +2,28 @@
 
 namespace Lacjam.Core.Infrastructure
 {
-    public class TrackingBase 
+    public class TrackingBase
     {
         public TrackingBase()
         {
             this.CreatedUtcDate = DateTime.UtcNow;
             this.IsDeleted = false;
-            this.IsActive = false;
         }
 
-       public virtual bool IsActive { get;  set; }
-       public virtual bool IsDeleted { get; set; }
-       public virtual DateTime CreatedUtcDate { get; protected set; }
-       public virtual DateTime? LastModifiedUtcDate { get; set; }
+        public virtual TrackingBase WithUpdatedDateTime()
+        {
+            return new TrackingBase
+            {
+                CreatedUtcDate = CreatedUtcDate,
+                IsDeleted = IsDeleted,
+                LastModifiedUtcDate = DateTime.UtcNow
+            };
+        }
 
+        public virtual bool IsDeleted { get; set; }
+        public virtual DateTime CreatedUtcDate { get; protected set; }
+        public virtual DateTime? LastModifiedUtcDate { get; set; }
+
+        
     }
 }

@@ -10,7 +10,7 @@ namespace Lacjam.Framework.Model
         public static TAggregate LoadFromEvents<TAggregate>(Guid identity, IEnumerable<IEvent> events) where TAggregate : IAggregateRoot
         {
             var aggregateType = typeof (TAggregate);
-            var ctor = aggregateType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+            var ctor = aggregateType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null,
                 new Type[] {}, null);
 
             var result = (TAggregate)(ctor.Invoke(new object[] {}));

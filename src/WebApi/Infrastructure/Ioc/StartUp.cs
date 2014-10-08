@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using System.Web.Mvc;
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Lacjam.Core.Infrastructure.Ioc;
@@ -31,8 +30,6 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
           
             GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator),
                new WindsorCompositionRoot(WindsorAccessor.Instance.Container));
-            var controllerFactory = new ControllerFactory(WindsorAccessor.Instance.Container);
-            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
             WindsorAccessor.Instance.Container.Resolve<ILogWriter>().Info("Application_Start  IOC SETUP complete");
         }
     }

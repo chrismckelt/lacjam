@@ -46,5 +46,12 @@ namespace Lacjam.Framework.FP
         {
             
         }
+
+        public T Value { get; set; }
+
+        public bool Exists
+        {
+            get { return false; }
+        }
     }
 }

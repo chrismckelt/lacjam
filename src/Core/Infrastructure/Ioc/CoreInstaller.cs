@@ -14,6 +14,7 @@ using Lacjam.Core.Infrastructure.Ioc.Interceptors;
 using Lacjam.Core.Infrastructure.Projection;
 using Lacjam.Core.Infrastructure.Settings;
 using Lacjam.Core.Infrastructure.Storage;
+using Lacjam.Core.Services;
 using Lacjam.Framework.Handlers;
 using Lacjam.Framework.Projection;
 using Lacjam.Framework.Storage;
@@ -33,6 +34,17 @@ namespace Lacjam.Core.Infrastructure.Ioc
             RegisterDomainComponents(container);
             RegisterServiceComponents(container);
             RegisterStorage(container);
+            RegisterIndexers(container);
+        }
+
+        private void RegisterIndexers(IWindsorContainer container)
+        {
+            container.Register(
+                Classes.FromThisAssembly()
+                    .InSameNamespaceAs<EntityIndexer>()
+                    .If(x => x.Name.EndsWith("Indexer"))
+                    .WithServiceAllInterfaces()
+                    .LifestyleSingleton());
         }
 
         private static void RegisterDomainComponents(IWindsorContainer container)

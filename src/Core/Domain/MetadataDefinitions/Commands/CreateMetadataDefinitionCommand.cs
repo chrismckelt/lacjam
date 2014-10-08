@@ -6,11 +6,11 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Commands
 {
     public class CreateMetadataDefinitionCommand : ICommand
     {
-
-        public CreateMetadataDefinitionCommand(Guid identity, string name, string dataType, string regex, IEnumerable<string> values)
+        public CreateMetadataDefinitionCommand(Guid identity, string name, string description, string dataType, string regex, IEnumerable<string> values)
         {
             Identity = identity;
             Name = name;
+            Description = description;
             DataType = dataType;
             Regex = regex;
             Values = values;
@@ -21,5 +21,6 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Commands
         public string DataType { get; private set; }
         public string Regex { get; private set; }
         public IEnumerable<string> Values { get; private set; }
+        public string Description { get; set; }
     }
 }

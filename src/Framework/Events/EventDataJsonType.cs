@@ -49,7 +49,7 @@ namespace Lacjam.Framework.Events
         {
             try
             {
-                return(IEvent)JsonConvert.DeserializeObject(eventDataSerialized, eventType, MetaStoreSerializerSettings.Instance);
+                 return(IEvent)JsonConvert.DeserializeObject(eventDataSerialized, eventType, MetaStoreSerializerSettings.Instance);
             }
             catch (Exception e)
             {

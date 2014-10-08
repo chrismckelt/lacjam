@@ -1,3 +1,4 @@
+using Lacjam.Core.Infrastructure;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.FP;
 using Lacjam.Framework.Handlers;
@@ -10,7 +11,8 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
         IEventHandler<MetadataDefinitionCreatedEvent>,
         IEventHandler<MetadataDefinitionRegexChangedEvent>,
         IEventHandler<MetadataDefinitionDeletedEvent>,
-        IEventHandler<ReLabelMetadataDefinitionEvent>
+        IEventHandler<ReLabelMetadataDefinitionEvent>,
+        IEventHandler<ReLabelMetadataDefinitionDescriptionEvent>
     {
 
         public MetadataDefinitionProjectionEventHandler(IReadStoreRepository<MetadataDefinitionProjection> repository)
@@ -21,7 +23,17 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
         [ImmediateDispatch]
         public void Handle(MetadataDefinitionCreatedEvent @event)
         {
-             var projection = new MetadataDefinitionProjection(@event.AggregateIdentity, @event.Name.Name, @event.DataType.Tag, @event.Regex);
+
+             var projection = new MetadataDefinitionProjection
+             {
+                 Identity = @event.AggregateIdentity,
+                 Name = @event.Name.Name,
+                 Description = @event.Description.Description,
+                 DataType = @event.DataType,
+                 Regex = @event.Regex,
+                 Tracking = new TrackingBase()
+             };
+
             _repository.Save(projection.ToMaybe());
         }
 
@@ -43,6 +55,14 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
         {
            _repository.Update( from projection in _repository.Get(@event.AggregateIdentity)
                                select projection.WithNewDetails(@event.Name));
+
+        }
+
+        [ImmediateDispatch]
+        public void Handle(ReLabelMetadataDefinitionDescriptionEvent @event)
+        {
+            _repository.Update(from projection in _repository.Get(@event.AggregateIdentity)
+                               select projection.WithNewDescription(@event.Description));
 
         }
 

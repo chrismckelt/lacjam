@@ -172,7 +172,7 @@
     <Compile Include="Extensions\SerializerExtensions.cs" />
     <Compile Include="Extensions\SpellingExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
-    <Compile Include="Serialization\StructerreSerializerSettings.cs" />
+    <Compile Include="Serialization\LacjamSerializerSettings.cs" />
     <Compile Include="Exceptions\UniqueKeyException.cs" />
     <Compile Include="Utilities\DelegateAdjuster.cs" />
     <Compile Include="Utilities\EnumDto.cs" />

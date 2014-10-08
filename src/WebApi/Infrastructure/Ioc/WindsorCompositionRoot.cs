@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
+using Castle.MicroKernel.Lifestyle;
 using Castle.Windsor;
 
 namespace Lacjam.WebApi.Infrastructure.Ioc
@@ -20,6 +21,7 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
             HttpControllerDescriptor controllerDescriptor,
             Type controllerType)
         {
+            _container.BeginScope();
             var controller = (IHttpController)this._container.Resolve(
                 controllerType,
                 new
@@ -27,6 +29,7 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
                     request = request
                 });
 
+           
             request.RegisterForDispose(
                 new Release(
                     () => this._container.Release(controller)));

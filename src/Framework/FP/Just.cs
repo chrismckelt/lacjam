@@ -9,27 +9,27 @@ namespace Lacjam.Framework.FP
          [DebuggerStepThrough]
         public Just(T value)
         {
-            this.value = value;
+            this.Value = value;
         }
 
         public IMaybe<U> Fmap<U>(Func<T,U> apply)
         {
-            return new Just<U>(apply(value));
+            return new Just<U>(apply(Value));
         }
          
         public IMaybe<U> Bind<U>(Func<T,IMaybe<U>> apply)
         {
-            return apply(value);
+            return apply(Value);
         }
 
         public IMaybe<V> Bind<U, V>(Func<T, IMaybe<U>> func, Func< U, V> map)
         {
-            return func(value).Fmap(map);
+            return func(Value).Fmap(map);
         }
 
         public IMaybe<T> Filter(Func<T, bool> predicate)
         {
-            if (predicate(value))
+            if (predicate(Value))
                 return this;
             return new None<T>();
         }
@@ -37,12 +37,12 @@ namespace Lacjam.Framework.FP
         
         public void Foreach(Action<T> action)
         {
-            action(value);
+            action(Value);
         }
 
         public U Fold<U>(Func<T, U> some, Func<U> none)
         {
-            return some(value);
+            return some(Value);
         }
 
         public void OnEmpty(Action action)
@@ -52,9 +52,14 @@ namespace Lacjam.Framework.FP
 
         public void OnNonEmpty(Action<T> action)
         {
-            action(value);
+            action(Value);
         }
 
-        private readonly T value;
+        public T Value { get; set; }
+
+        public bool Exists
+        {
+            get { return true; }
+        }
     }
 }

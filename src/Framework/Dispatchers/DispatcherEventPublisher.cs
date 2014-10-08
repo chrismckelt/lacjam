@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.Windsor;
 using Iesi.Collections;
 using Newtonsoft.Json;
+using NHibernate.Util;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Handlers;
 using Lacjam.Framework.Logging;
@@ -15,7 +17,7 @@ namespace Lacjam.Framework.Dispatchers
     public class DispatcherEventPublisher : IDispatcherEventPublisher
     {
         public static List<Tuple<Type, MethodInfo, Type>> HandlerTuples; // handler, method to hit, event type param
-        public static ISet Handlers;
+        public static ArrayList Handlers;
         private readonly IHandlerSequenceRespository _handlerSequenceRespository;
         private readonly ILogWriter _logger;
         private readonly IWindsorContainer _container;
@@ -29,7 +31,7 @@ namespace Lacjam.Framework.Dispatchers
             _container = container;
         }
 
-        public void Publish<T>(T @event, long seq = -1, bool runImmediately = true) where T : IEvent
+        public void Publish<T>(T @event, long seq = -1, bool? runImmediately = true) where T : IEvent
         {
             try
             {
@@ -39,7 +41,7 @@ namespace Lacjam.Framework.Dispatchers
                 CheckHandlers();
                 DispatchToHandlers(@event, runImmediately);
 
-                if (seq > 0 || !runImmediately)
+                if (seq > 0 && runImmediately != true)
                     _handlerSequenceRespository.Save(seq, "Dispatcher");
             }
             catch (Exception e)
@@ -55,7 +57,7 @@ namespace Lacjam.Framework.Dispatchers
 
             HandlerTuples = new List<Tuple<Type, MethodInfo, Type>>();
 
-            var eventTypes = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Lacjam"))
+            var eventTypes = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Structerre"))
                 .SelectMany(assembly => assembly.GetExportedTypes())
                 .Where(type => !type.IsInterface)
                 .Where(x => typeof(IEvent).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
@@ -65,14 +67,12 @@ namespace Lacjam.Framework.Dispatchers
             {
                 var handlerTypes = typeof(IEventHandler<>).MakeGenericType(et);
 
-                if (Handlers == null) Handlers = new ListSet();
+                if (Handlers == null) Handlers = new ArrayList();
                 var arr = _container.ResolveAll(handlerTypes);
                 foreach (var ar in arr)
                 {
-                    object ar1 = ar;
-                    object ar2 = ar;
-                    FinallyGuarded.Apply(() => Handlers.Add(ar1),
-                        () => _logger.Warn(EventIds.Warn, "INVALID eventhandler - " + ar2));
+                    FinallyGuarded.Apply(() => Handlers.Add(ar),
+                        () => _logger.Warn(EventIds.Warn, "INVALID eventhandler - " + ar));
                 }
 
                 foreach (var handler in Handlers)
@@ -90,7 +90,7 @@ namespace Lacjam.Framework.Dispatchers
             }
         }
 
-        private void DispatchToHandlers(IEvent @event, bool runImmediately = true)
+        private void DispatchToHandlers(IEvent @event, bool? runImmediately = true)
         {
             var type = typeof(IEventHandler<>).MakeGenericType(@event.GetType());
             var handlers = _container.ResolveAll(type);
@@ -101,10 +101,12 @@ namespace Lacjam.Framework.Dispatchers
                 var et = @event.GetType();
                 var tuple = HandlerTuples.First(x => x.Item1 == ht && x.Item3 == et);
 
-                if (!tuple.Item1.GetCustomAttributes(typeof(ImmediateDispatchAttribute)).Any() == runImmediately)
-                {    // class level override
-                    if (!tuple.Item2.GetCustomAttributes(typeof(ImmediateDispatchAttribute)).Any() == runImmediately)
-                        continue; //method level
+                if (runImmediately.HasValue && 
+                    (tuple.Item1.GetCustomAttributes(typeof(ImmediateDispatchAttribute)).Any()    // class level
+                    || tuple.Item2.GetCustomAttributes(typeof(ImmediateDispatchAttribute)).Any()) // method level 
+                    != runImmediately)
+                {   
+                    continue;
                 }
 
                 if (ht != tuple.Item1 || et != tuple.Item3) continue;

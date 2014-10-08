@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Commands
 {
@@ -7,14 +8,14 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Commands
     {
         public MetadataBag()
         {
-            Selection = new List<Guid>();
+            Selection = new Guid[0];
         }
 
-        public MetadataBag(List<Guid> selections)
+        public MetadataBag(IEnumerable<Guid> selections)
         {
             Selection = selections;
         }
 
-        public List<Guid> Selection { get; private set; } 
+        public IEnumerable<Guid> Selection { get; private set; } 
     }
 }

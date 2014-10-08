@@ -5,17 +5,18 @@ namespace Lacjam.Dispatcher
 {
     class Program
     {
-
         static void Main()
         {
+            var mode = "";
             NHibernateProfilerBootstrapper.PreStart();
 
             HostFactory.Run(x =>
             {
+                x.AddCommandLineDefinition("mode", m=> {mode = m;});
                 x.Service<IDispatcher>(s =>
                 {
                     s.ConstructUsing(name => StartUp.GetDispatcher());
-                    s.WhenStarted(dispatcher => dispatcher.Start());
+                    s.WhenStarted(dispatcher => dispatcher.Start(mode));
                     s.WhenStopped(dispatcher => dispatcher.Stop());
                 });
                 x.RunAsLocalSystem();
@@ -29,8 +30,8 @@ namespace Lacjam.Dispatcher
                     r.SetResetPeriod(1);
                 });
 
-                x.SetDescription("Lacjam MetaStore Event Dispatcher");
-                x.SetDisplayName("Lacjam MetaStore Event Dispatcher");
+                x.SetDescription("Structerre MetaStore Event Dispatcher");
+                x.SetDisplayName("Structerre MetaStore Event Dispatcher");
                 x.SetServiceName("Lacjam.Dispatcher");
             });
         }

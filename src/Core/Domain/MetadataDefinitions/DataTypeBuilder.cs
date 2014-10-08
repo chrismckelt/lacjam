@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Linq;
+using Lacjam.Framework.Extensions;
 
 namespace Lacjam.Core.Domain.MetadataDefinitions
 {
@@ -6,25 +10,32 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
     {
         public static IDataType Create(string tag)
         {
-            switch (tag)
+            foreach (var dt in GetDataTypes().Where(dt => dt.Value.Tag != null && String.Equals(tag, dt.Value.Tag, StringComparison.InvariantCultureIgnoreCase)))
             {
-                case "YesNo":
-                    return new YesNo();
-                case "Character":
-                    return new Character();
-                case "ComboBox":
-                    return new ComboBox();
-                case "FloatingPoint":
-                    return new FloatingPoint();
-                case "Text":
-                    return new Text();
-                case "Integer":
-                    return new Integer();
-                case "PickList":
-                    return new PickList();
+                if (dt.Value != null)
+                    return Activator.CreateInstance(dt.Key).As<IDataType>();
+                return dt.Value;
             }
 
-            throw new Exception();
+            return null;
         }
+
+        public static IEnumerable<KeyValuePair<Type, IDataType>> GetDataTypes()
+        {
+            var results = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Structerre"))
+               .SelectMany(assembly => assembly.GetExportedTypes())
+               .Where(type => !type.IsInterface)
+               .Where(x => typeof(IDataType).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+
+            IDictionary<Type,IDataType>  dic = new Dictionary<Type, IDataType>();
+
+            foreach (var x in results)
+            {
+                dic.Add(new KeyValuePair<Type, IDataType>(x, Activator.CreateInstance(x).As<IDataType>()));
+            }
+
+            return dic;
+        }
+
     }
 }

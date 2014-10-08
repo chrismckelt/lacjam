@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Lacjam.Core.Infrastructure;
 using Lacjam.Framework.Exceptions;
@@ -13,15 +14,16 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
 
         protected MetadataDefinitionGroupState()
         {
+            _attributes = ImmutableHashSet.Create<Guid>();
         }
 
         public MetadataDefinitionGroupState(MetadataDefinitionGroupName name, MetadataDefinitionGroupDescription description)
         {
             if (name == null)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException(@"name");
 
             if (description == null)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException(@"description");
 
             _name = name;
             _description = description;
@@ -52,7 +54,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
 
         public MetadataDefinitionGroupState MarkDeleted()
         {
-            return new MetadataDefinitionGroupState(_name, _description, _attributes);
+            return new MetadataDefinitionGroupState(_name, _description, _attributes,true);
         }
 
         public MetadataDefinitionGroupState ChangeName(MetadataDefinitionGroupName name)
@@ -68,6 +70,16 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
         public MetadataDefinitionGroupState ClearAttributes()
         {
             return new MetadataDefinitionGroupState(_name, _description, ImmutableHashSet.Create<Guid>());
+        }
+
+        public MetadataDefinitionGroupState RemoveAttribute(Guid definitionIdentity)
+        {
+            return new MetadataDefinitionGroupState(_name, _description, _attributes.Remove(definitionIdentity));
+        }
+
+        public IEnumerable<Guid> GetSelectedDefintionIds()
+        {
+            return _attributes;
         }
     }
 

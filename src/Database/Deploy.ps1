@@ -1,1 +1,1 @@
-& .\Lacjam.Passport2.Database.exe $DatabaseAction $DatabaseTestDataPath | Write-Host
+& .\STRUCterre.Passport2.Database.exe $DatabaseAction $DatabaseTestDataPath | Write-Host

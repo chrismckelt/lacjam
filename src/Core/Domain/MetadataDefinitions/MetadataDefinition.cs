@@ -5,29 +5,33 @@ using Lacjam.Framework.Model;
 
 namespace Lacjam.Core.Domain.MetadataDefinitions
 {
-
     public class MetadataDefinition : AggregateRoot<MetadataDefinitionState>
     {
+        public static readonly string[] KeywordDefinitions = {"keywords", "description", "tags" };
+
+        protected MetadataDefinition(): base() // required for JSON
+        {
+        }
 
         public MetadataDefinition(Guid id, MetadataDefinitionName name, IDataType datatype)
         {
             ApplyChange(new MetadataDefinitionCreatedEvent(id, name, datatype));
         }
 
-        public MetadataDefinition(Guid id, MetadataDefinitionName name, IDataType datatype, string regex)
+        public MetadataDefinition(Guid id, MetadataDefinitionName name, MetadataDefinitionDescription description, IDataType datatype, string regex)
         {
-            ApplyChange(new MetadataDefinitionCreatedEvent(id, name, datatype, regex));
+            ApplyChange(new MetadataDefinitionCreatedEvent(id, name, datatype, regex, description));
         }
 
         protected void Apply(MetadataDefinitionCreatedEvent @event)
         {
             ApplyIdentity(@event.AggregateIdentity);
-            State = new MetadataDefinitionState(@event.Name, @event.DataType, @event.Regex);
+            var dt = DataTypeBuilder.Create(@event.DataType);
+            State = new MetadataDefinitionState(@event.Name, dt, @event.Regex);
         }
 
         public void ChangeRegularExpression(string regex)
         {
-            State.GuardRegex();
             ApplyChange(new MetadataDefinitionRegexChangedEvent(GetIdentity(), regex));
         }
 
@@ -39,7 +43,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
         public void AddAllowableValue(AllowableValue value)
         {
             if (value == null)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("value");
 
             ApplyChange(new MetadataDefinitionAddAllowableValueEvent(GetIdentity(), value));
         }
@@ -47,6 +51,16 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
         protected void Apply(MetadataDefinitionAddAllowableValueEvent @event)
         {
             State = State.AssignAllowableValue(@event.Value);
+        }
+
+        public void ClearValues()
+        {
+            ApplyChange(new MetadataDefinitionClearAllowableValuesEvent(GetIdentity()));
+        }
+
+        protected void Apply(MetadataDefinitionClearAllowableValuesEvent @event)
+        {
+            State = State.ClearAllowableValues();
         }
 
         public void Delete()
@@ -70,11 +84,46 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
             ApplyChange(new ReLabelMetadataDefinitionEvent(GetIdentity(), name.Name));
         }
 
+        public void ReLabel(MetadataDefinitionDescription description)
+        {
+            if (description == null)
+                throw new InvariantGuardFailureException("description");
+
+            ApplyChange(new ReLabelMetadataDefinitionDescriptionEvent(GetIdentity(), description.Description));
+        }
+
         protected void Apply(ReLabelMetadataDefinitionEvent @event)
         {
             State = State.ReLabel(new MetadataDefinitionName(@event.Name));
         }
+
+        protected void Apply(ReLabelMetadataDefinitionDescriptionEvent @event)
+        {
+            State = State.ReLabel(new MetadataDefinitionDescription(@event.Description));
+        }
+
+        public void ChangeDataType(string dataType)
+        {
+            var dt = DataTypeBuilder.Create(dataType);
+
+            if(dt == null)
+                throw new InvalidDataTypeException();
+
+            var regex = String.Empty;
+
+            if (dt is IRegexDataType)
+                regex = ((IRegexDataType)dt).Regex; // Copy Default
+
+            ApplyChange(new MetadataDefinitionDataTypeChangedEvent(GetIdentity(), dt.Tag, regex));
+
+        }
+
+        protected void Apply(MetadataDefinitionDataTypeChangedEvent @event)
+        {
+            var dt = DataTypeBuilder.Create(@event.DataType);
+            State = State.ChangeDataType(dt);
+        }
+
+        
     }
-
-
 }

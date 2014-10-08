@@ -18,8 +18,8 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Commands
 
             entity.Foreach(x =>
             {
-                x.ClearAttributes();
                 command.DefinitionIds.Each(x.AssociateAttribute);
+                x.RemoveNonExistentDefinitions(command.DefinitionIds);
             });
 
             _repository.Save(entity);

@@ -1,0 +1,1 @@
+﻿& .\Lacjam.BuildRunner.exe /u /c "data source=structerre.csae43ljslde.ap-southeast-2.rds.amazonaws.com;Initial Catalog=Lacjam;User Id=MetastoreUser;Password=MetastorePassword123;Connection Timeout=180; " | Write-Host

@@ -1,8 +1,8 @@
 using System;
-using Lacjam.Framework.FP;
-using Lacjam.Framework.Model;
+using Structerre.MetaStore.Framework.FP;
+using Structerre.MetaStore.Framework.Model;
 
-namespace Lacjam.Core.Domain.Entity
+namespace Structerre.MetaStore.Core.Domain.Entity
 {
     public class CreateEntityService : ICreateEntityService
     {

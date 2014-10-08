@@ -11,61 +11,15 @@ using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Mvc;
 
 namespace Lacjam.Framework.Extensions
 {
     public static class Extensions
     {
-        public static int CalculateAge(this DateTime dob)
+        public static T As<T>(this object value)
         {
-            return dob.CalculateAge(DateTime.Today);
+            return (T) value;
         }
-
-        public static int CalculateAge(this DateTime dob, DateTime atDate)
-        {
-            //Get difference in years
-            var years = atDate.Date.Year - dob.Year;
-
-            // subtract another year if we're before the
-            // birth day in the current year
-            if (atDate.Date.Month < dob.Month || (atDate.Date.Month == dob.Month && atDate.Date.Day < dob.Day))
-            {
-                --years;
-            }
-
-            return years;
-        }
-
-        public static TSource Second<TSource>(this IEnumerable<TSource> source)
-        {
-            if (source == null)
-            {
-                throw new ArgumentException("source");
-            }
-            else
-            {
-                var list = source as IList<TSource>;
-                if (list != null)
-                {
-                    if (list.Count > 1)
-                        return list[1];
-                }
-                else
-                {
-                    using (IEnumerator<TSource> enumerator = source.GetEnumerator())
-                    {
-                        if (enumerator.MoveNext())
-                        {
-                            enumerator.MoveNext();
-                            return enumerator.Current;
-                        }
-                    }
-                }
-                throw new ArgumentNullException();
-            }
-        }
-
 
         public static string ToLowerInvariantWithOutSpaces(this string s)
         {
@@ -185,6 +139,16 @@ namespace Lacjam.Framework.Extensions
             typeof(Convert)
         };
 
+        public static Guid IfGuidEmptyCreateNew(this Guid guid)
+        {
+            if (guid == Guid.Empty)
+            {
+                return Guid.NewGuid();
+            }
+
+            return guid;
+        }
+
 
         /// <summary>
         /// Relative formatting of DateTime (e.g. 2 hours ago, a month ago)
@@ -279,14 +243,6 @@ namespace Lacjam.Framework.Extensions
             return value ? 1 : 0;
         }
 
-        public static ExpandoObject ToExpando(this object anonymousObject)
-        {
-            IDictionary<string, object> anonymousDictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(anonymousObject);
-            IDictionary<string, object> expando = new ExpandoObject();
-            foreach (var item in anonymousDictionary)
-                expando.Add(item);
-            return (ExpandoObject)expando;
-        }
 
         public static string ToSentenceCase(this string str)
         {
@@ -308,10 +264,10 @@ namespace Lacjam.Framework.Extensions
             return Regex.Replace(text, "([a-z])([A-Z])", "$1 $2");
         }
 
-        public static MvcHtmlString ToMvcHtmlString(this string str)
-        {
-            return new MvcHtmlString(str);
-        }
+        //public static MvcHtmlString ToMvcHtmlString(this string str)
+        //{15
+        //    return new MvcHtmlString(str);
+        //}
 
         /// <summary>
         ///convert text to Pascal Case

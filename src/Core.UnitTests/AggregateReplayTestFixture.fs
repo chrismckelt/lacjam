@@ -15,7 +15,7 @@ module AggregateReplayTestFixture =
     let ``When loading an aggregate from stream it should not fail`` () =
 
     let identity = Guid.NewGuid()
-    let event = new MetadataDefinitionGroupCreatedEvent( identity, new MetadataDefinitionGroupName("Metadata Definition Group Name"), new MetadataDefinitionGroupDescription("Description") )
+    let event = new MetadataDefinitionGroupCreatedEvent( identity, new MetadataDefinitionGroupName("Metadata Definition Group Name"), new MetadataDefinitionGroupDescription("Description"))
 
     let events = Seq.ofList <| (event :> IEvent) :: []
 

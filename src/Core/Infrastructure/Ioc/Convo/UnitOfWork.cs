@@ -36,7 +36,7 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
 
         private ISession _session;
         private readonly ILogWriter _logWriter;
-        private IsolationLevel _level = IsolationLevel.ReadCommitted;
+        private IsolationLevel _level = IsolationLevel.ReadUncommitted;
         private bool _hasEnded = false;
 
         static UnitOfWork()
@@ -125,6 +125,12 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
             
         }
 
+        public override void Pause()
+        {
+            DoResume();
+            Commit(_session);
+        }
+
         public override void Abort()
         {
             DoAbort();
@@ -136,9 +142,9 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
             _hasEnded = true;
         }
 
-        private static void Commit(ISession session)
+        private void Commit(ISession session)
         {
-           if (session.Transaction == null || !session.Transaction.IsActive)
+            if (session.Transaction == null || !session.Transaction.IsActive)
                 return;
 
             try
@@ -150,11 +156,12 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
                 session.Transaction.Rollback();
                 throw;
             }
+
         }
 
-        private static void FlushAndCommit(ISession session)
+        private void FlushAndCommit(ISession session)
         {
-           if (session.Transaction == null || !session.Transaction.IsActive)
+            if (session.Transaction == null || !session.Transaction.IsActive)
                 return;
             try
             {
@@ -177,14 +184,14 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
 
         protected override void DoPause()
         {
-            UnitOfWork.Commit(_session);
+            Commit(_session);
         }
 
         protected override void DoFlushAndPause()
         {
             if (_session != null && _session.IsOpen)
             {
-                UnitOfWork.FlushAndCommit(Session);
+                FlushAndCommit(Session);
             }
         }
 
@@ -209,6 +216,10 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
 
         protected override void DoAbort()
         {
+
+            if (_session != null && _session.Transaction!=null)
+                _session.Transaction.Rollback();
+
             if (_session != null && _session.IsOpen)
                 _session.Close();
         }

@@ -9,7 +9,7 @@
     <ProjectGuid>94CEDE8A-6B70-4AE8-A9DE-04B0C60E302E</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Core.UnitTests</RootNamespace>
-    <AssemblyName>Lacjam.Core.UnitTests</AssemblyName>
+    <AssemblyName>Structerre.MetaStore.Core.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>Core.UnitTests</Name>
@@ -55,10 +55,13 @@
   <Import Project="$(FSharpTargetsPath)" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <ItemGroup>
+    <Compile Include="ReLabelMetadataDefinitionGroupCommandHandlerTestFixture.fs" />
     <None Include="packages.config" />
+    <Compile Include="AggregateReplayTestFixture.fs" />
     <Compile Include="DomainTestFixture.fs" />
     <None Include="app.config" />
     <Compile Include="MetadataDefinitionTestFixture.fs" />
+    <Compile Include="MetadataDefinitionGroupTestFixture.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
@@ -98,7 +101,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHamcrest">

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using log4net;
+using System.Runtime.CompilerServices;
+using Common.Logging;
+using Common.Logging.Factory;
 using log4net.Config;
 using log4net.Core;
+using log4net.Util;
+using ILog = log4net.ILog;
+using LogManager = log4net.LogManager;
 
 namespace Lacjam.Framework.Logging
 {
@@ -15,8 +21,8 @@ namespace Lacjam.Framework.Logging
     /// </summary>
     public class LogWriter : ILogWriter
     {
-        private static readonly ILog _logger = LogManager.GetLogger(typeof (LogWriter));
-
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static Type _callerStackBoundaryType;
         /// <summary>
         ///     Force log4net to load the configuration details.
         /// </summary>
@@ -38,10 +44,10 @@ namespace Lacjam.Framework.Logging
         ///     Logs the specified error message.
         /// </summary>
         /// <param name="message">The message.</param>
-       // [DebuggerStepThrough]
-        public void Error(string message)
+        [DebuggerStepThrough]
+        public void Error(string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Error(EventIds.Error, message, null);
+            Error(EventIds.Error, message, null, callerName,sourceFilePath,sourceLineNumber);
         }
 
         /// <summary>
@@ -50,9 +56,9 @@ namespace Lacjam.Framework.Logging
         /// <param name="eventId">The id of the event</param>
         /// <param name="message">The message.</param>
         [DebuggerStepThrough]
-        public void Error(int eventId, string message)
+        public void Error(int eventId, string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Error(eventId, message, null);
+            Error(eventId, message, null, callerName,sourceFilePath,sourceLineNumber);
         }
 
 
@@ -64,11 +70,11 @@ namespace Lacjam.Framework.Logging
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
         [DebuggerStepThrough]
-        public void Error(int eventId, string message, Exception exception)
+        public void Error(int eventId, string message, Exception exception,[CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsErrorEnabled)
             {
-                WriteLog(eventId, message, Level.Error, exception);
+                WriteLog(eventId, message, Level.Error, exception, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
@@ -78,9 +84,9 @@ namespace Lacjam.Framework.Logging
         /// <param name="eventId">The id of the event</param>
         /// <param name="message">The message.</param>
         [DebuggerStepThrough]
-        public void Fatal(int eventId, string message)
+        public void Fatal(int eventId, string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Fatal(eventId, message, null);
+            Fatal(eventId, message, null, callerName,sourceFilePath,sourceLineNumber);
         }
 
         /// <summary>
@@ -90,9 +96,9 @@ namespace Lacjam.Framework.Logging
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
         [DebuggerStepThrough]
-        public void Fatal(int eventId, string message, Exception exception)
+        public void Fatal(int eventId, string message, Exception exception, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            WriteLog(eventId, message, Level.Fatal, exception);
+            WriteLog(eventId, message, Level.Fatal, exception, callerName,sourceFilePath,sourceLineNumber);
         }
 
         /// <summary>
@@ -101,53 +107,45 @@ namespace Lacjam.Framework.Logging
         /// <param name="message">The message.</param>
         /// <param name="eventId">The id of the event</param>
         [DebuggerStepThrough]
-        public void Debug(int eventId, string message)
+        public void Debug(int eventId, string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsDebugEnabled)
             {
-                WriteLog(eventId, message, Level.Debug, null);
+                WriteLog(eventId, message, Level.Debug, null, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
         [DebuggerStepThrough]
-        public void Debug(string message)
+        public void Debug(string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsDebugEnabled)
             {
-                WriteLog(EventIds.Debug, message, Level.Debug, null);
+                WriteLog(EventIds.Debug, message, Level.Debug, null, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
         [DebuggerStepThrough]
-        public void Info(int eventId, string message)
+        public void Info(int eventId, string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsInfoEnabled)
             {
-                WriteLog(eventId, message, Level.Info, null);
+                WriteLog(eventId, message, Level.Info, null, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
         [DebuggerStepThrough]
-        private static void WriteLog(int eventId, string message, Level level, Exception exception)
+        private void WriteLog(int eventId, string message, Level level, Exception exception, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            string name = string.Empty;
+            var data = new LoggingEventData();
+            data.Level = level;
+            data.LocationInfo = new LocationInfo("", callerName, sourceFilePath,sourceLineNumber.ToString(CultureInfo.InvariantCulture));
+            data.Message = message;
+            data.Properties = new PropertiesDictionary();
+            data.Properties["EventID"] = eventId;
+            if (exception != null) data.ExceptionString = exception.ToString();
 
-            if (_logger.IsDebugEnabled)
-            {
-                var frame = new StackFrame(2, true);
-                if (frame != null)
-                {
-                    MethodBase method = frame.GetMethod();
-                    if (method != null) if (method.DeclaringType != null) name = method.DeclaringType.Name;
-                }
-            }
-
-            var loggingEvent = new LoggingEvent(_logger.GetType(), _logger.Logger.Repository, name, level, message,
-                exception);
-            loggingEvent.Properties["EventID"] = eventId;
-            _logger.Logger.Log(loggingEvent);
+            _logger.Logger.Log(new LoggingEvent(data));
         }
-
 
         /// <summary>
         ///     Logs the warning message if warning level is enabled.
@@ -155,11 +153,11 @@ namespace Lacjam.Framework.Logging
         /// <param name="eventId">Event Id to log</param>
         /// <param name="message">Message to log</param>
         [DebuggerStepThrough]
-        public void Warn(int eventId, string message)
+        public void Warn(int eventId, string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsWarnEnabled)
             {
-                WriteLog(eventId, message, Level.Warn, null);
+                WriteLog(eventId, message, Level.Warn, null, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
@@ -170,30 +168,32 @@ namespace Lacjam.Framework.Logging
         /// <param name="message">Message to log</param>
         /// <param name="exception">Exception to log</param>
         [DebuggerStepThrough]
-        public void Warn(int eventId, string message, Exception exception)
+        public void Warn(int eventId, string message, Exception exception, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             if (_logger.IsWarnEnabled)
             {
-                WriteLog(eventId, message, Level.Warn, exception);
+                WriteLog(eventId, message, Level.Warn, exception, callerName,sourceFilePath,sourceLineNumber);
             }
         }
 
         [DebuggerStepThrough]
-        public void Fatal(string message)
+        public void Fatal(string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Fatal(EventIds.Fatal, message);
+            Fatal(EventIds.Fatal, message, callerName,sourceFilePath,sourceLineNumber);
         }
 
         [DebuggerStepThrough]
-        public void Warn(string message)
+        public void Warn(string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Warn(EventIds.Warn, message);
+            Warn(EventIds.Warn, message, callerName,sourceFilePath,sourceLineNumber);
         }
 
         [DebuggerStepThrough]
-        public void Info(string message)
+        public void Info(string message, [CallerMemberName] string callerName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Info(EventIds.Info, message);
+            Info(EventIds.Info, message, callerName,sourceFilePath,sourceLineNumber);
         }
+      
+       
     }
 }

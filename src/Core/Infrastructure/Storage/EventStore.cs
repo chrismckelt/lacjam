@@ -116,6 +116,7 @@ namespace Lacjam.Core.Infrastructure.Storage
            
             return from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                    where @event.Header.AggregateId == streamId
+                   orderby @event.Seq ascending 
                    select @event.EventData;
 
         }

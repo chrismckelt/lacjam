@@ -4,15 +4,12 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using Microsoft.Ajax.Utilities;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Engine;
-using NHibernate.Impl;
 using Lacjam.Core.Domain.MetadataDefinitions;
 using Lacjam.Core.Infrastructure.Database;
 using Lacjam.Core.Infrastructure.Database.Conventions;
-using Lacjam.Core.Infrastructure.Ioc.Convo;
 using Lacjam.Framework.Converters;
 
 namespace Lacjam.Core.Infrastructure.Ioc
@@ -25,11 +22,13 @@ namespace Lacjam.Core.Infrastructure.Ioc
             Configuration configuration = new Configuration().Configure(configPath);
 
             FluentConfiguration cfg = Fluently.Configure(configuration)
-                .Database(MsSqlConfiguration.MsSql2012.IsolationLevel(IsolationLevel.ReadCommitted))
+                .Database(MsSqlConfiguration.MsSql2012.IsolationLevel(IsolationLevel.ReadUncommitted))
                 .Mappings(a =>
                     a.FluentMappings.AddFromAssemblyOf<MetadataDefinitionDescription>()
                         .AddFromAssemblyOf<InlineJson>()
-                        .Conventions.Add<EnumConvention>())
+                        .Conventions.Add<EnumConvention>()
+                        .Conventions.Add<CascadeConvention>()
+                        )
                 .CurrentSessionContext<HybridWebSessionContext>()
                 
                 ;

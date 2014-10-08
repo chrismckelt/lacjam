@@ -33,6 +33,15 @@ label {
   display: inline-block;
   margin-bottom: 5px;
   font-weight: bold;
+  font-size: 12px;
+  font-family: 'museo_sans500', sans-serif;
+}
+
+.cancel-link {
+  text-transform: uppercase;
+  display: inline-block;
+  padding: .5em 1em;
+  font-weight: bold;
 }
 
 
@@ -180,13 +189,30 @@ input[type="date"] {
 // horizontal forms, use the predefined grid classes.
 
 .form-group {
-  margin-bottom: 15px;
+  border-bottom: 1px solid @nav-base;
+
+  &.button-row {
+    border-bottom: 0 none;
+  }
 }
 
 
 // Checkboxes and radios
 //
 // Indent the labels to position radios/checkboxes as hanging controls.
+.fixed-height-checklist {
+  max-height: 200px;
+  overflow-y: auto;
+  display: block;
+  clear: left;
+
+  label.checkbox-inline {
+    width: 30%;
+    margin: 0;
+    padding-right: .5em;
+  }
+}
+
 
 .radio,
 .checkbox {
@@ -197,8 +223,14 @@ input[type="date"] {
   padding-left: 20px;
   label {
     display: inline;
-    font-weight: normal;
     cursor: pointer;
+  }
+  .pseudo-label {
+    display: inline-block;
+    width: 150px;
+  }
+  input:checked + .pseudo-label {
+    font-weight: bold;
   }
 }
 .radio input[type="radio"],
@@ -414,6 +446,8 @@ input[type="checkbox"],
   // Make form groups behave like rows
   .form-group {
     .make-row();
+    margin: 0;
+    padding: 15px 0;
   }
 
   .form-control-static {

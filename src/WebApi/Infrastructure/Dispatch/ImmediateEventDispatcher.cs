@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Lacjam.Core.Infrastructure.Ioc;
-using Lacjam.Framework.Events;
-using Lacjam.Framework.Extensions;
-using Lacjam.Framework.FP;
-using Lacjam.Framework.Handlers;
+using Structerre.MetaStore.Core.Infrastructure.Ioc;
+using Structerre.MetaStore.Framework.Events;
+using Structerre.MetaStore.Framework.Extensions;
+using Structerre.MetaStore.Framework.FP;
+using Structerre.MetaStore.Framework.Handlers;
 
-namespace Lacjam.WebApi.Infrastructure.Dispatch
+namespace Structerre.MetaStore.WebApi.Infrastructure.Dispatch
 {
     public class ImmediateEventDispatcher : IEventPublisher
     {

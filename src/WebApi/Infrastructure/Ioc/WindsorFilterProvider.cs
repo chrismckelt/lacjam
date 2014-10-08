@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Castle.MicroKernel;
 
-namespace Lacjam.WebApi.Infrastructure.Ioc
+namespace Structerre.MetaStore.WebApi.Infrastructure.Ioc
 {
     public class WindsorFilterProvider : FilterAttributeFilterProvider
     {

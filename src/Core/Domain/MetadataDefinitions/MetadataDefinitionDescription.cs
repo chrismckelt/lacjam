@@ -10,15 +10,15 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
         {
         }
 
-        public MetadataDefinitionDescription(string name)
+        public MetadataDefinitionDescription(string description)
         {
 
-            if (String.IsNullOrWhiteSpace(name))
-                throw new InvariantGuardFailureException();
+            if (String.IsNullOrWhiteSpace(description))
+                throw new InvariantGuardFailureException("description");
 
-            Name = name;
+            Description = description;
         }
 
-        public string Name { get; private set; }
+        public string Description { get; private set; }
     }
 }

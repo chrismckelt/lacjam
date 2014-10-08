@@ -2,7 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-namespace Lacjam.WebApi.Infrastructure.Ioc
+namespace Structerre.MetaStore.WebApi.Infrastructure.Ioc
 {
     public class ReadServicesInstaller : IWindsorInstaller
     {

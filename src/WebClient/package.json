@@ -1,0 +1,18 @@
+{
+	"name": "Testing",
+	"version": "0.0.0",
+	"description": "",
+	"main": "gruntfile.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-cli": "~0.1.0",
+		"grunt-contrib-less": "~0.9.0",
+		"grunt-contrib-watch": "~0.4.0",
+		"grunt-spritesmith": "x.x.x"
+	},
+	"license": "ISC"
+}

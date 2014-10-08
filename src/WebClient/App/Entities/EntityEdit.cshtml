@@ -1,0 +1,58 @@
+﻿<h1>Entity</h1>
+<div class="container-fluid pad" data-ng-controller="app.controllers.EntityEditController">
+    <form name="entityForm" class="form-horizontal" role="form" ng-if="model" ng-submit="save()" novalidate>
+        <h2 class="sectionHeader">
+            {{title}}
+        </h2>
+        <input type="hidden" ng-model="vm.model.identity">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="model.name" class="form-control"  auto-focus >
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Group</label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="model.definitionGroup" ui-select2="groupSelect2" style="width: 100%" >
+            </div>
+        </div>
+        
+        <div class="form-group" ng-repeat="def in model.definitionValues" ng-if="model.definitionGroup">
+            <label class="col-sm-2 control-label">{{def.name}}</label>
+            <div class="col-sm-8" ng-form="valueForm">
+                <input name="defValue" type="text" ng-init="def.values[0] = def.values[0].trim()" ng-model="def.values[0]" class="form-control" ng-pattern="regex(def)"
+                       ng-if="def.dataType == 'Text' || def.dataType == 'Integer' || def.dataType == 'FloatingPoint' || def.dataType=='Character'" />
+                <span class="error" ng-show="valueForm.defValue.$error.pattern">Not a valid value!</span>
+                
+                <input type="text" ng-model="def.select2Value" ui-select2="def.select2Options" ng-if="def.isSelection" style="width: 100%" />
+                <select ng-if="def.dataType == 'YesNo'" class="form-control">
+                    <option></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+        
+        <div ng-if="toBeDeletedValues.length > 0">
+            <h3>You will lose these existing fields</h3>
+            <div class="form-group" ng-repeat="val in toBeDeletedValues">
+                <label class="col-sm-2 control-label">{{val.name}}</label>
+                <div class="col-sm-8" ng-form="valueForm">
+                    <span>{{val.value}}</span>
+                </div>
+            </div>
+        </div>
+       
+        <div class="form-group button-row">
+            <div class="col-sm-offset-2 col-sm-10 ">
+                <input type="submit" class="btn btn-warning" value="Save" ng-disabled='entityForm.$invalid'/>
+                <button type="button" ng-click="doDelete()" class="btn btn-warning" ng-show="editMode">Delete</button>
+                <a href="#/entities" ng-click="cancel" class="cancel-link">Cancel</a>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- /.container-fluid -->

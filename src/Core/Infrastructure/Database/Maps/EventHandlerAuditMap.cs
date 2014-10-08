@@ -11,7 +11,7 @@ namespace Lacjam.Core.Infrastructure.Database.Maps
         {
             Table("EventAudit");
             Id(x => x.Id).GeneratedBy.Guid(); ;
-            Map(x => x.CreatedUtcDate).Default("GETUTCDATE()"); ;
+            Map(x => x.CreatedUtcDate).Default("GETUTCDATE()"); 
             Map(x => x.Seq);
             Map(x => x.EventId);
             Map(x => x.EventProcessedUtcDate);

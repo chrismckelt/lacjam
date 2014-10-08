@@ -11,7 +11,7 @@ module MetadataDefinitionGroupTestFixture =
     let createaggregrate () =
         let aggregateIdentity = Guid.NewGuid ()
 
-        let aggregate = new MetadataDefinitionGroup(aggregateIdentity, new MetadataDefinitionGroupName ("Name"), new MetadataDefinitionGroupDescription ("Description") )
+        let aggregate = new MetadataDefinitionGroup(aggregateIdentity, new MetadataDefinitionGroupName ("Name"), new MetadataDefinitionGroupDescription ("Description"))
 
         aggregate
 

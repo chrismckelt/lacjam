@@ -5,7 +5,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
         public FloatingPoint()
         {
             Tag = "FloatingPoint";
-            Regex = @"[-+]?[0-9]*\.?[0-9]+";
+            Regex = @"^[-+]?[0-9]*\.?[0-9]+$";
         }
     }
 }

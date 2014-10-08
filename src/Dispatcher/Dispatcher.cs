@@ -8,16 +8,16 @@ namespace Lacjam.Dispatcher
 {
     public class Dispatcher : IDispatcher
     {
-
         public Dispatcher(IDispatcherEngine dispatcherEngine)
         {
             _dispatcherEngine = dispatcherEngine;
         }
 
-        public void Start()
+        public void Start(string mode)
         {
             NHibernateProfiler.Initialize();
             Logger.Info("Dispatcher started");
+            Mode = mode;
             ParseCommandLine();
             ThreadPool.QueueUserWorkItem(x => Run());
         }
@@ -30,22 +30,40 @@ namespace Lacjam.Dispatcher
 
         private void ParseCommandLine()
         {
-            var arg = Environment.GetEnvironmentVariable(UITestEnvironmentVariable);
-            ExitAtEndOfStream = string.Equals(arg, "true", StringComparison.InvariantCultureIgnoreCase);
+            if (string.Equals(Mode, "uitest", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.WriteLine("======== UI Test Mode ========="); 
+                _includeImmediate = false;
+                ExitAtEndOfStream = true;    
+            }
+            else if (string.Equals(Mode, "recovery", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.WriteLine("======== RECOVERY MODE =========");
+                _includeImmediate = true;
+                ExitAtEndOfStream = true;
+            }
+            else
+            {
+                Console.WriteLine("======== Wather Mode ========="); 
+                _includeImmediate = false;
+                ExitAtEndOfStream = false;
+            }
+            
         }
 
         private void Run()
         {
             Logger.Info("Starting dispatcher");
             IsRunning = true;
-            _dispatcherEngine.Process(() => !IsRunning, ExitAtEndOfStream);
+            _dispatcherEngine.Process(() => !IsRunning, ExitAtEndOfStream, _includeImmediate);
         }
 
         public ILogger Logger { get; set; }
 
         private readonly IDispatcherEngine _dispatcherEngine;
-        private const string UITestEnvironmentVariable = "UITest";
+        private bool _includeImmediate;
         private bool IsRunning { get; set; }
         private bool ExitAtEndOfStream { get; set; }
+        public string Mode { get; set; }
     }
 }

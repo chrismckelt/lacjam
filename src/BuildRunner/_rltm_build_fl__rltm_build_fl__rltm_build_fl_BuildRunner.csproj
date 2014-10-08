@@ -7,8 +7,8 @@
     <ProjectGuid>{3C432D4F-A4C9-482C-88C9-3C8D082F4FE5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lacjam.BuildRunner</RootNamespace>
-    <AssemblyName>Lacjam.BuildRunner</AssemblyName>
+    <RootNamespace>Structerre.MetaStore.BuildRunner</RootNamespace>
+    <AssemblyName>Structerre.MetaStore.BuildRunner</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

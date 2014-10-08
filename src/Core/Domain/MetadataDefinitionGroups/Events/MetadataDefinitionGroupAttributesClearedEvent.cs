@@ -11,7 +11,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
         {
 
             if (aggregateIdentity == Guid.Empty)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("aggregateIdentity");
         }
 
     }

@@ -17,6 +17,7 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
         void Start();
         void Resume();
         void Abort();
+        void Pause();
         void End();
        
     }

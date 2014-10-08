@@ -1,9 +1,9 @@
 using NHibernate;
-using Lacjam.Core.Infrastructure.Database;
-using Lacjam.Core.Infrastructure.Ioc;
-using Lacjam.WebApi.Infrastructure.Ioc;
+using Structerre.MetaStore.Core.Infrastructure.Database;
+using Structerre.MetaStore.Core.Infrastructure.Ioc;
+using Structerre.MetaStore.WebApi.Infrastructure.Ioc;
 
-namespace Lacjam.WebApi.Infrastructure.Database
+namespace Structerre.MetaStore.WebApi.Infrastructure.Database
 {
     public static class NHibernateBootStrap
     {

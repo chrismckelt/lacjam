@@ -10,7 +10,6 @@ namespace Lacjam.Dispatcher
 {
     public class DispatcherEngine : IDispatcherEngine
     {
-
         public DispatcherEngine(ISequenceEventSelector sequencedEventSelector, IErrorQueueLoader errorQueueLoader, IHandlerExecutor handlerExecutor, IErrorReporter errorReporter)
         {
             _sequencedEventSelector = sequencedEventSelector;
@@ -19,11 +18,11 @@ namespace Lacjam.Dispatcher
             _errorReporter = errorReporter;
         }
 
-        public void Process(Func<bool> terminate, bool exitAtEndOfStream)
+        public void Process(Func<bool> terminate, bool exitAtEndOfStream, bool includeImmediate)
         {
             try
             {
-                EventLoop.Run(() => LoopBody(terminate, exitAtEndOfStream));
+                EventLoop.Run(() => LoopBody(terminate, exitAtEndOfStream, includeImmediate));
             }
             catch (Exception e)
             {
@@ -31,7 +30,7 @@ namespace Lacjam.Dispatcher
             }
         }
 
-        private bool LoopBody(Func<bool> terminate, bool exitAtEndOfStream)
+        private bool LoopBody(Func<bool> terminate, bool exitAtEndOfStream, bool includeImmediate)
         {
             try
             {
@@ -45,7 +44,7 @@ namespace Lacjam.Dispatcher
                     if (IsBadSequencedEvent(seq))
                         PushEventImmediatelyToErrorQueue(seq);
                     else
-                        ProcessEvent(exitAtEndOfStream, seq);
+                        ProcessEvent(exitAtEndOfStream, seq, includeImmediate);
                 });
 
                 sequencedEvent.OnEmpty(Sleep);
@@ -59,12 +58,12 @@ namespace Lacjam.Dispatcher
             }
         }
 
-        private void ProcessEvent(bool exitAtEndOfStream, SequencedEvent sequencedEvent)
+        private void ProcessEvent(bool exitAtEndOfStream, SequencedEvent sequencedEvent, bool includeImmediate)
         {
             if (FinishedReplayingEvents(exitAtEndOfStream, sequencedEvent))
                 Terminate();
 
-            Process(sequencedEvent);
+            Process(sequencedEvent, includeImmediate);
         }
 
         private void PushEventImmediatelyToErrorQueue(SequencedEvent sequencedEvent)
@@ -97,10 +96,10 @@ namespace Lacjam.Dispatcher
             return exitAtEndOfStream && sequencedEvent != null && !sequencedEvent.HasEvent();
         }
 
-        private void Process(SequencedEvent sequencedEvent)
+        private void Process(SequencedEvent sequencedEvent, bool includeImmediate)
         {
             if (sequencedEvent.AggregateId != LastBadAggregateId)
-                _errorReporter.ReportErrorForScope(sequencedEvent, () => _handlerExecutor.HandleSequencedEvent(sequencedEvent), UpdateLastFailedAggregateId);
+                _errorReporter.ReportErrorForScope(sequencedEvent, () => _handlerExecutor.HandleSequencedEvent(sequencedEvent, includeImmediate? (bool?)null: false), UpdateLastFailedAggregateId);
             else
                 _errorReporter.ReportErrorForScope(() => _errorQueueLoader.PushBack(sequencedEvent.Sequence));
         }

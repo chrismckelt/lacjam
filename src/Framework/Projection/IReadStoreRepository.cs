@@ -12,5 +12,6 @@ namespace Lacjam.Framework.Projection
         IMaybe<T> Get(Guid identity);
         IQueryable<T> ToQueryable();
         bool Exists(Guid identity);
+        T Reference(Guid identity);
     }
 }

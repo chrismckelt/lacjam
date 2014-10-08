@@ -1,4 +1,4 @@
-﻿namespace Lacjam.Core.Infrastructure.Database.SharedTypes
+﻿namespace Structerre.MetaStore.Core.Infrastructure.Database.SharedTypes
 {
     public class AddressMap : IAutoMappingOverride<Address>
     {

@@ -2,7 +2,7 @@ using System;
 
 namespace Lacjam.Framework.FP
 {
-    public interface IMaybe<out T>
+    public interface IMaybe<T>
     {
         IMaybe<U> Fmap<U>(Func<T,U> apply);
         IMaybe<U> Bind<U>(Func<T,IMaybe<U>> apply);
@@ -12,5 +12,7 @@ namespace Lacjam.Framework.FP
         U Fold<U> (Func<T,U> some, Func<U> none);
         void OnEmpty(Action action);
         void OnNonEmpty(Action<T> action);
+        T Value { get; set; }
+        bool Exists { get; }
     }
 }

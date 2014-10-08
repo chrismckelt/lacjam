@@ -1,4 +1,4 @@
-﻿/// <reference path="routes.ts" />
+﻿/// <reference path="../Scripts/typings/ng-grid/ng-grid-flexible-height.d.ts" />
 /// <reference path="../scripts/typings/underscore/underscore.d.ts" />
 /// <reference path="../scripts/typings/requirejs/require.d.ts" />
 /// <reference path="../scripts/typings/jquery/jquery.d.ts" />
@@ -22,12 +22,37 @@
 /// <reference path="../scripts/typings/angularlocalstorage/angularlocalstorage.d.ts" />
 /// <reference path="../scripts/typings/angular-ui-bootstrap/angular-ui-bootstrap.d.ts" />
 /// <reference path="../scripts/typings/bootstrap.datepicker/bootstrap.datepicker.d.ts" />
-/// <reference path="../scripts/typings/breeze/breeze.d.ts" />
+/// <reference path="../Scripts/typings/ng-grid/ng-grid.d.ts" />
+
+
+
 /// <reference path="app.ts" />
 /// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
-/// <reference path="Services/breezeService.ts" />
+/// <reference path="model.ts" />
+
+/// <reference path="metadatadefinitiongroups/metadatadefinitiongroupeditcontroller.ts" />
+
+/// <reference path="metadatadefinitions/metadatadefinitioncontroller.ts" />
+/// <reference path="MetadataDefinitions/MetadataDefinitionService.ts" />
+
+/// <reference path="metadatadefinitions/metadatadefinitioncontroller.ts" />
+
+/// <reference path="Index/IndexController.ts" />
+/// <reference path="MetadataDefinitionGroups/MetadataDefinitionGroupController.ts" />
+/// <reference path="MetadataDefinitionGroups/MetadataDefinitionGroupService.ts" />
+/// <reference path="routes.ts" />
+/// <reference path="metadatadefinitions/metadatadefinitionservice.ts" />
+/// <reference path="metadatadefinitions/metadatadefinitioneditcontroller.ts" />
+
+/// <reference path="metadatadefinitions/metadatadefinitioncontroller.ts" />
+
+/// <reference path="entities/EntityController.ts" />
+/// <reference path="entities/EntityEditController.ts" />
+/// <reference path="entities/EntityService.ts" />
+
+
 /// <autosync enabled="true" />
 declare var angular: ng.IAngularStatic;

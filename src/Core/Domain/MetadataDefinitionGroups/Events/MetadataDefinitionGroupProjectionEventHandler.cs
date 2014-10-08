@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
+using Lacjam.Core.Domain.MetadataDefinitions;
 using Lacjam.Core.Infrastructure;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.FP;
@@ -32,17 +34,15 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
             };
 
             _repository.Save(readmodel.ToMaybe());
-
         }
 
         [ImmediateDispatch]
         public void Handle(MetadataDefinitionGroupDeletedEvent @event)
         {
             var projection = from p in _repository.Get(@event.AggregateIdentity)    
-                             let trj = p.Tracking
-                             select p.WithTracking(SetTracking(trj));
+                             select p;
 
-            _repository.Save(projection);
+            _repository.Remove(projection);
         }
 
         private static Expression<Func<TrackingBase,Func<TrackingBase>>> SetTracking(TrackingBase trk)
@@ -78,6 +78,5 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
         }
 
         private readonly IReadStoreRepository<MetadataDefinitionGroupProjection> _repository;
-        
     }
 }

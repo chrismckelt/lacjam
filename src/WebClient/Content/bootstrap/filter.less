@@ -1,0 +1,52 @@
+.filter-container {
+	margin: 0 0 1em 0;
+	.clearfix();
+}
+.filter-group {
+	border: 1px solid @filter-border;
+	border-radius: 3px;
+	display: block;
+	float: left;
+	height: 32px;
+	margin: 0 8px 8px 0;
+
+	&.right {
+		float: right;
+	}
+	&.small {
+		display: inline-block;
+		float: none;
+		height: 22px;
+		overflow: hidden;
+	}
+
+	label {
+		background: @filter-bg;
+		border-right: 1px solid @filter-border;
+		float: left;
+		line-height: 30px;
+		font-weight: normal;
+		padding: 0 15px;
+		text-transform: uppercase;
+		font-family: 'museo_sans500';
+		font-size: 12px;
+	}
+
+	select {
+		border: none;
+		font-size: 12px;
+		height: 30px;
+		min-width: 100px;
+	}
+
+	input[type="text"] {
+		background: #fff;
+		border: none!important;
+		font-size: 12px;
+		height: 30px;
+		line-height: 30px;
+		padding-left: 5px;
+		width: auto;
+	}
+
+}

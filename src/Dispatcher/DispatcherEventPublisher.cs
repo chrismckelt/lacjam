@@ -2,14 +2,14 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Lacjam.Core.Infrastructure.Ioc;
-using Lacjam.Framework.Dispatchers;
-using Lacjam.Framework.Events;
-using Lacjam.Framework.FP;
-using Lacjam.Framework.Handlers;
-using Lacjam.Framework.Logging;
+using Structerre.MetaStore.Core.Infrastructure.Ioc;
+using Structerre.MetaStore.Framework.Dispatchers;
+using Structerre.MetaStore.Framework.Events;
+using Structerre.MetaStore.Framework.FP;
+using Structerre.MetaStore.Framework.Handlers;
+using Structerre.MetaStore.Framework.Logging;
 
-namespace Lacjam.Dispatcher
+namespace Structerre.MetaStore.Dispatcher
 {
     public class DispatcherEventPublisher : IDispatcherEventPublisher
     {

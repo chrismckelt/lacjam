@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using NHibernate.Linq;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Extensions;
 
@@ -22,7 +21,9 @@ namespace Lacjam.Framework.Model
         private static TState GetState()
         {
             var ctor = typeof(TState).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,null, new Type[]{},null );
-            return ctor.Invoke(new object[]{}).As<TState>();
+            if (ctor != null) return ctor.Invoke(new object[]{}).As<TState>();
+
+            return default(TState);
         }
 
         protected AggregateRoot(Guid identity, IEnumerable<IEvent> events)

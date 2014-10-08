@@ -1,16 +1,18 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using Lacjam.Core.Domain.MetadataDefinitionGroups.Commands;
 using Lacjam.Core.Domain.MetadataDefinitionGroups.Events;
 using Lacjam.Framework.Exceptions;
 using Lacjam.Framework.Model;
+using System;
 
 namespace Lacjam.Core.Domain.MetadataDefinitionGroups
 {
     public class MetadataDefinitionGroup : AggregateRoot<MetadataDefinitionGroupState>
     {
-
+        
         protected MetadataDefinitionGroup()
         {
-
         }
 
         public MetadataDefinitionGroup(Guid identity, MetadataDefinitionGroupName name, MetadataDefinitionGroupDescription description)
@@ -28,10 +30,10 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
         {
 
             if (attribute == Guid.Empty)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("attribute");
 
             if (State.AttributeExists(attribute))
-                throw new InvariantGuardFailureException();
+                return;
 
             ApplyChange(new MetadataDefinitionGroupAssociatedMetadataEvent(GetIdentity(), attribute));
 
@@ -44,7 +46,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
 
         public void Delete()
         {
-            if (State.IsDeleted)
+          if (State.IsDeleted)
                 throw new InvariantGuardFailureException();
 
             ApplyChange(new MetadataDefinitionGroupDeletedEvent(GetIdentity()));
@@ -91,6 +93,26 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
         protected virtual void Apply(MetadataDefinitionGroupAttributesClearedEvent @event)
         {
             State = State.ClearAttributes();
+        }
+
+        public virtual void RemoveNonExistentDefinitions(IEnumerable<Guid> definitionIds)
+        {
+            if (definitionIds == null || !definitionIds.Any())
+            {
+                ClearAttributes();
+                return;
+            }
+
+            foreach (var defn in State.GetSelectedDefintionIds())
+            {
+                if (definitionIds.Contains(defn)) continue;
+                ApplyChange(new MetadataDefinitionGroupAttributeRemovedEvent(GetIdentity(), defn));
+            }
+        }
+
+        protected virtual void Apply(MetadataDefinitionGroupAttributeRemovedEvent @event)
+        {
+            State = State.RemoveAttribute(@event.DefinitionIdentity);
         }
     }
 

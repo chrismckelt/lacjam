@@ -11,6 +11,13 @@ namespace Lacjam.Framework.FP
         {
             return new Just<T>(value);
         }
+        
+        public static bool IsNone<T>(this T value)
+        {
+            if (value.GetType() == typeof (None<>)) return true;
+
+            return false;
+        }
 
         [DebuggerStepThrough]
         public static IMaybe<T> ToMaybe<T>(this T value)

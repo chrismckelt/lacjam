@@ -7,8 +7,8 @@
     <ProjectGuid>{98808DBE-3230-44D5-87F8-98DBABF3AFED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lacjam.Core</RootNamespace>
-    <AssemblyName>Lacjam.Core</AssemblyName>
+    <RootNamespace>Structerre.MetaStore.Core</RootNamespace>
+    <AssemblyName>Structerre.MetaStore.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -110,6 +110,7 @@
     <Reference Include="System.Reactive.PlatformServices">
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.4\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -132,30 +133,57 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\uNhAddIns.Adapters.Castle.dll</HintPath>
     </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\MetadataDefinitionGroups\Commands\AssociateDefinitionsToMetadataDefinitionGroupCommand.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\Commands\AssociateDefinitionsToMetadataDefinitionGroupCommandHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\DeleteMetadataDefinitionGroupCommand.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\DeleteMetadataDefinitionGroupCommandHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\MetadataBag.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\ReLabelMetadataDefinitionGroupCommand.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\ReLabelMetadataDefinitionGroupCommandHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupAttributesClearedEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupBagProjectionEventHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroup.cs" />
-    <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupAllowableValuesProjection.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupAssociatedMetadataEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupBagProjection.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Commands\ReLabelMetadataDefinitionCommand.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Commands\UpdateMetadataDefinitionRegexCommand.cs" />
+    <Compile Include="Domain\MetadataDefinitions\DataTypeBuilder.cs" />
+    <Compile Include="Infrastructure\Database\Conventions\CascadeConvention.cs" />
+    <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionProjectionMap.cs" />
+    <Compile Include="Infrastructure\Database\Maps\EventHandlerAuditMap.cs" />
+    <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionGroupBagProjectionMap.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupMetadataProjection.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupCreatedEvent.cs" />
-    <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupEventHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupProjectionEventHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupDescription.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupName.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupProjection.cs" />
-    <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupProjectionMap.cs" />
+    <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionGroupProjectionMap.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupState.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\CreateMetadataDefinitionGroupCommand.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\CreateMetadataDefinitionGroupCommandHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupService.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Character.cs" />
+    <Compile Include="Domain\MetadataDefinitions\DataType.cs" />
+    <Compile Include="Domain\MetadataDefinitions\ComboBox.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionAddAllowableValueEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionRegexChangedEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionSetProjection.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionSetProjectionEventHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitions\FloatingPoint.cs" />
+    <Compile Include="Domain\MetadataDefinitions\IDataType.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Integer.cs" />
+    <Compile Include="Domain\MetadataDefinitions\IPredefinedValues.cs" />
+    <Compile Include="Domain\MetadataDefinitions\IRegexDataType.cs" />
+    <Compile Include="Domain\MetadataDefinitions\ISelectionDataType.cs" />
     <Compile Include="Domain\MetadataDefinitions\MetadataDefinition.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionCreatedEvent.cs" />
-    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionCreatedEventHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionProjectionEventHandler.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionDeletedEvent.cs" />
     <Compile Include="Domain\MetadataDefinitions\MetadataDefinitionDescription.cs" />
     <Compile Include="Domain\MetadataDefinitions\MetadataDefinitionName.cs" />
@@ -166,27 +194,31 @@
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupDeletedEvent.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupDescriptionChangedEvent.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupNameChangedEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\PickList.cs" />
+    <Compile Include="Domain\MetadataDefinitions\RegexDataType.cs" />
+    <Compile Include="Domain\MetadataDefinitions\SelectionDataType.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Text.cs" />
+    <Compile Include="Domain\MetadataDefinitions\YesNo.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\Database\Conventions\CustomForeignKeyConvention.cs" />
     <Compile Include="Infrastructure\Database\Conventions\EnumConvention.cs" />
     <Compile Include="Infrastructure\Database\Conventions\PrimaryKeyConvention.cs" />
     <Compile Include="Infrastructure\Database\HybridWebSessionContext.cs" />
-    <Compile Include="Infrastructure\Database\IAmAnNHibernateComponent.cs" />
-    <Compile Include="Infrastructure\Database\IAmExcludedFromNHibernateMapping.cs" />
     <Compile Include="Infrastructure\Database\INHibernateFluentConfiguration.cs" />
     <Compile Include="Infrastructure\Database\Maps\SettingMap.cs" />
     <Compile Include="Infrastructure\Database\NHibernateExtensions.cs" />
     <Compile Include="Infrastructure\Database\NHibernateFluentConfiguration.cs" />
+    <Compile Include="Infrastructure\Ioc\Convo\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\Ioc\CoreInstaller.cs" />
-    <Compile Include="Infrastructure\Ioc\Interceptors\AutoReleaseHandlerInterceptor.cs" />
     <Compile Include="Infrastructure\Ioc\Interceptors\TransactionInterceptor.cs" />
     <Compile Include="Infrastructure\Ioc\SessionManagementInstaller.cs" />
-    <Compile Include="Infrastructure\Ioc\UnitOfWork\Conversation.cs" />
-    <Compile Include="Infrastructure\Ioc\UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="Infrastructure\Ioc\Convo\UnitOfWork.cs" />
+    <Compile Include="Infrastructure\Projection\ReadStoreRepository.cs" />
     <Compile Include="Infrastructure\Settings\IConfigSetting.cs" />
     <Compile Include="Infrastructure\Settings\ISettingRepository.cs" />
     <Compile Include="Infrastructure\Settings\Setting.cs" />
     <Compile Include="Infrastructure\Settings\SettingRepository.cs" />
+    <Compile Include="Infrastructure\Storage\EventStore.cs" />
     <Compile Include="Infrastructure\TrackingBase.cs" />
     <Compile Include="Infrastructure\Ioc\Interceptors\ExceptionHandlerInterceptor.cs" />
     <Compile Include="Infrastructure\Ioc\Interceptors\InterceptionFacility.cs" />
@@ -199,7 +231,6 @@
     <Compile Include="Domain\MetadataDefinitionGroups\IMetadataDefinitionGroupService.cs" />
     <Compile Include="Domain\MetadataDefinitions\Commands\UpdateMetadataDefinitionCommand.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionEventHandler.cs" />
-    <Compile Include="Domain\MetadataDefinitions\Events\ReLabelMetadataDefinitionEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISchemaService.cs" />
     <Compile Include="Services\SchemaService.cs" />

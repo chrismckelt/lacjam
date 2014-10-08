@@ -1,7 +1,7 @@
 using System;
-using Lacjam.Framework.Events;
+using Structerre.MetaStore.Framework.Events;
 
-namespace Lacjam.Core.Domain.Entity.Events
+namespace Structerre.MetaStore.Core.Domain.Entity.Events
 {
     public class EntityAttributeAssociatedEvent : Event
     {

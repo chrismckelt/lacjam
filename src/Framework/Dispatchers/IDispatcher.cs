@@ -2,7 +2,7 @@
 {
     public interface IDispatcher
     {
-        void Start();
+        void Start(string mode);
         void Stop();
     }
 }

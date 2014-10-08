@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Exceptions;
 
@@ -12,13 +13,13 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
         {
 
             if (aggregateIdentity == Guid.Empty)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("aggregateIdentity");
 
             if (name == null)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("name");
 
             if (description == null)
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("description");
 
             Name = name;
             Description = description;

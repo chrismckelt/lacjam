@@ -1,0 +1,130 @@
+﻿<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Prototype</title>
+        <link rel="stylesheet" href="Content/bootstrap/bootstrap.css">
+    </head>
+    <body>
+
+        <nav class="sidebar">
+            <a href="#" class="logo">
+                <img src="../../Content/img/logo.png" alt="Metastore Logo">
+            </a>
+            <h2>Create New</h2>
+            <a href="entities-add.html" class="action">Entity</a>
+            <a href="definitions-add.html" class="action">Definition</a>
+            <a href="definition-groups-add.html" class="action">Definition Group</a>
+        </nav>
+    
+      <div id="container">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-c ollapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="entities.html">
+                            <span class="icon icon-entities"></span>
+                            Entities
+                        </a>
+                    </li>
+                    <li>
+                        <a href="definitions.html">
+                            <span class="icon icon-definitions"></span>
+                            Definitions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="definition-groups.html">
+                            <span class="icon icon-definition-groups"></span>
+                            Definition Groups
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Entities
+                            <a href="entities-add.html" class="btn btn-primary pull-right">Add Entity</a>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <!-- filter -->
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label>Search Entities</label>
+                        <input type="text" placeholder="Filter">
+                    </div>
+                </div>
+                <!-- / filter -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                      <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th>Definition Group</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ng-repeat -->
+                            <tr ng-click="#">
+                                <td>007.dxf</td>
+                                <td>Detail</td>
+                            </tr>
+                            <tr ng-click="#">
+                                <td>213.dxf</td>
+                                <td>Detail</td>
+                            </tr>
+                            <tr ng-click="#">
+                                <td>124.dxf</td>
+                                <td>Detail</td>
+                            </tr>
+                            <tr ng-click="#">
+                                <td>152.dxf</td>
+                                <td>Detail</td>
+                            </tr>
+                            <tr ng-click="#">
+                                <td>125.dxf</td>
+                                <td>Detail</td>
+                            </tr>
+                            <!-- / ng-repeat -->
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+        <script src="js/main.js"></script>
+    </body>
+</html>

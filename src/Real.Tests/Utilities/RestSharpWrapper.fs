@@ -21,7 +21,8 @@ open RestSharp
 module RestSharpWrapper =
 
     [<Literal>]
-    let serviceBaseUri = "http://metastore.Lacjam.local/api/"
+    let serviceBaseUri = "http://metastore.structerre.local/api/" // @"http://ec2-54-206-31-126.ap-southeast-2.compute.amazonaws.com:9090/api/" 
+    //let serviceBaseUri = @"http://ec2-54-206-31-126.ap-southeast-2.compute.amazonaws.com:9090/api/" 
 
     // -------------------- //
     // Public data types    //

@@ -49,13 +49,49 @@
     <Reference Include="FluentNHibernate">
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Analyzers">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Analyzers.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Core">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.FastVectorHighlighter">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.FastVectorHighlighter.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Highlighter">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Highlighter.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Memory">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Queries">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Queries.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Regex">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Regex.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.SimpleFacetedSearch">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.SimpleFacetedSearch.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Snowball">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Snowball.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.SpellChecker">
+      <HintPath>..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -74,10 +110,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
@@ -110,6 +145,7 @@
     <Reference Include="System.Reactive.PlatformServices">
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.4\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -137,6 +173,43 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Entities\Commands\EntityChangedGroupCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\CreateEntityCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\CreateEntityCommandHandler.cs" />
+    <Compile Include="Domain\Entities\Commands\DeleteEntityCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\DeleteEntityCommandHandler.cs" />
+    <Compile Include="Domain\Entities\Commands\EntityValueBag.cs" />
+    <Compile Include="Domain\Entities\Commands\ReLabelEntityCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\UpdateEntityCommandHandler.cs" />
+    <Compile Include="Domain\Entities\Commands\RemoveAllEntityValuesCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\RemoveAllEntityValuesCommandHandler.cs" />
+    <Compile Include="Domain\Entities\Commands\UpdateEntityValuesCommand.cs" />
+    <Compile Include="Domain\Entities\Commands\UpdateEntityValuesCommandHandler.cs" />
+    <Compile Include="Domain\Entities\Commands\ValueExtensionMethods.cs" />
+    <Compile Include="Domain\Entities\Entity.cs" />
+    <Compile Include="Domain\Entities\EntityCreationService.cs" />
+    <Compile Include="Domain\Entities\EntityName.cs" />
+    <Compile Include="Domain\Entities\EntityProjection.cs" />
+    <Compile Include="Domain\Entities\EntityState.cs" />
+    <Compile Include="Domain\Entities\EntityValueConverter.cs" />
+    <Compile Include="Domain\Entities\EntityValueProjection.cs" />
+    <Compile Include="Domain\Entities\EntityValueSetState.cs" />
+    <Compile Include="Domain\Entities\Events\EntityChangedGroupEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityCreatedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityDeletedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityIndexEventHandler.cs" />
+    <Compile Include="Domain\Entities\Events\EntityMetadataDefinitionRemovedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityMetadataRemovedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityProjectionEventHandler.cs" />
+    <Compile Include="Domain\Entities\Events\EntityRenamedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\EntityValueProjectionEventHandler.cs" />
+    <Compile Include="Domain\Entities\Events\EntityValueProvidedEvent.cs" />
+    <Compile Include="Domain\Entities\Events\UpdatedEntityMetadataDefinitionValueEvent.cs" />
+    <Compile Include="Domain\Entities\IEntityCreationService.cs" />
+    <Compile Include="Domain\Entities\IValue.cs" />
+    <Compile Include="Domain\Entities\MultiValue.cs" />
+    <Compile Include="Domain\Entities\SingleValue.cs" />
+    <Compile Include="Domain\Entities\SuppliedValue.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\AssociateDefinitionsToMetadataDefinitionGroupCommand.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\AssociateDefinitionsToMetadataDefinitionGroupCommandHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\DeleteMetadataDefinitionGroupCommand.cs" />
@@ -144,14 +217,30 @@
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\MetadataBag.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\ReLabelMetadataDefinitionGroupCommand.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Commands\ReLabelMetadataDefinitionGroupCommandHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Commands\ReLabelMetadataDefinitionDescriptionCommand.cs" />
+    <Compile Include="Domain\MetadataDefinitions\DataTypeConverter.cs" />
+    <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupAttributeRemovedEvent.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupAttributesClearedEvent.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupBagProjectionEventHandler.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroup.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\Events\MetadataDefinitionGroupAssociatedMetadataEvent.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupBagProjection.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Commands\ChangeMetadataDefinitionDataTypeCommand.cs" />
     <Compile Include="Domain\MetadataDefinitions\Commands\ReLabelMetadataDefinitionCommand.cs" />
     <Compile Include="Domain\MetadataDefinitions\Commands\UpdateMetadataDefinitionRegexCommand.cs" />
     <Compile Include="Domain\MetadataDefinitions\DataTypeBuilder.cs" />
+    <Compile Include="Domain\MetadataDefinitions\DataTypeValidator.cs" />
+    <Compile Include="Domain\MetadataDefinitions\MetadataDefinitionSearchResults.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionIndexEventHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\ReLabelMetadataDefinitionDescriptionEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionClearAllowableValuesEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionDataTypeChangedEvent.cs" />
+    <Compile Include="Domain\MetadataDefinitions\InvalidDataTypeException.cs" />
+    <Compile Include="Domain\MetadataDefinitions\SuppliedValueInvalidFormatException.cs" />
+    <Compile Include="Infrastructure\Database\Conventions\CascadeConvention.cs" />
+    <Compile Include="Infrastructure\Database\Maps\EntityProjectionMap.cs" />
+    <Compile Include="Infrastructure\Database\Maps\EntityValueProjectionMap.cs" />
+    <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionProjectionMap.cs" />
     <Compile Include="Infrastructure\Database\Maps\EventHandlerAuditMap.cs" />
     <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionGroupBagProjectionMap.cs" />
     <Compile Include="Domain\MetadataDefinitionGroups\MetadataDefinitionGroupMetadataProjection.cs" />
@@ -170,8 +259,8 @@
     <Compile Include="Domain\MetadataDefinitions\ComboBox.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionAddAllowableValueEvent.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionRegexChangedEvent.cs" />
-    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionSetProjection.cs" />
-    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionSetProjectionEventHandler.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionValueProjection.cs" />
+    <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionValueProjectionEventHandler.cs" />
     <Compile Include="Domain\MetadataDefinitions\FloatingPoint.cs" />
     <Compile Include="Domain\MetadataDefinitions\IDataType.cs" />
     <Compile Include="Domain\MetadataDefinitions\Integer.cs" />
@@ -202,9 +291,11 @@
     <Compile Include="Infrastructure\Database\Conventions\PrimaryKeyConvention.cs" />
     <Compile Include="Infrastructure\Database\HybridWebSessionContext.cs" />
     <Compile Include="Infrastructure\Database\INHibernateFluentConfiguration.cs" />
+    <Compile Include="Infrastructure\Database\Maps\MetadataDefinitionValueProjectionMap.cs" />
     <Compile Include="Infrastructure\Database\Maps\SettingMap.cs" />
     <Compile Include="Infrastructure\Database\NHibernateExtensions.cs" />
     <Compile Include="Infrastructure\Database\NHibernateFluentConfiguration.cs" />
+    <Compile Include="Services\EntityIndexer.cs" />
     <Compile Include="Infrastructure\Ioc\Convo\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\Ioc\CoreInstaller.cs" />
     <Compile Include="Infrastructure\Ioc\Interceptors\TransactionInterceptor.cs" />
@@ -229,7 +320,11 @@
     <Compile Include="Domain\MetadataDefinitions\Commands\UpdateMetadataDefinitionCommand.cs" />
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\Entities\EntitySearchResults.cs" />
+    <Compile Include="Services\IEntityIndexer.cs" />
+    <Compile Include="Services\IMetadataDefinitionIndexer.cs" />
     <Compile Include="Services\ISchemaService.cs" />
+    <Compile Include="Services\MetadataDefinitionIndexer.cs" />
     <Compile Include="Services\SchemaService.cs" />
     <Compile Include="Services\SchemaTransferObject.cs" />
   </ItemGroup>

@@ -11,6 +11,6 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
             Value = value;
         }
 
-        public AllowableValue Value { get; private set; }
+        public AllowableValue Value { get; protected set; }
     }
 }

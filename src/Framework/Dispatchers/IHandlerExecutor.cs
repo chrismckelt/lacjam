@@ -4,6 +4,6 @@ namespace Lacjam.Framework.Dispatchers
 {
     public interface IHandlerExecutor
     {
-        void HandleSequencedEvent(SequencedEvent sequencedEvent, bool runImmediately =  true);
+        void HandleSequencedEvent(SequencedEvent sequencedEvent, bool? runImmediately =  true);
     }
 }

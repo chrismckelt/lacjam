@@ -65,9 +65,9 @@
     <Reference Include="HibernatingRhinos.Profiler.Appender">
       <HintPath>..\packages\NHibernateProfiler.2.0.2237.0\lib\HibernatingRhinos.Profiler.Appender.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,9 +81,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -102,9 +101,10 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Abstractions" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -177,33 +177,41 @@
     <Folder Include="Infrastructure\Database\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NHibernateProfilerBootstrapper.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Entities\EntityController.cs" />
+    <Compile Include="Controllers\Entities\EntityListResource.cs" />
+    <Compile Include="Controllers\Entities\EntityMetadataDefintionResource.cs" />
+    <Compile Include="Controllers\Entities\EntityResource.cs" />
+    <Compile Include="Controllers\Entities\EntityResourceExtensions.cs" />
+    <Compile Include="Controllers\Entities\EntitySearchController.cs" />
+    <Compile Include="Controllers\Entities\IEntityReadService.cs" />
+    <Compile Include="Controllers\Entities\EntityReadService.cs" />
+    <Compile Include="Controllers\Entities\EntityDeltaExtensions.cs" />
+    <Compile Include="Controllers\MetadataDefinitionGroup\MetadataDefinitionGroupSelectResource.cs" />
     <Compile Include="Controllers\MetadataDefinitionGroup\IMetadataDefinitonGroupReadService.cs" />
     <Compile Include="Controllers\MetadataDefinitionGroup\MetadataDefinitionGroupDeltaExtensions.cs" />
     <Compile Include="Controllers\MetadataDefinitionGroup\MetadataDefinitonGroupReadService.cs" />
     <Compile Include="Controllers\MetadataDefinition\IMetadataDefinitionReadService.cs" />
     <Compile Include="Controllers\MetadataDefinition\MetadataDefinitionDeltaExtensions.cs" />
+    <Compile Include="Controllers\MetadataDefinition\MetadataDefinitionSelectResource.cs" />
     <Compile Include="Controllers\MetadataDefinition\MetadataDefinitonReadService.cs" />
+    <Compile Include="Controllers\PagedQuery.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Attributes\TransactionalAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\ValidateModelStateAttribute.cs" />
     <Compile Include="Infrastructure\CustomMultipartFormDataStreamProvider.cs" />
     <Compile Include="Infrastructure\Dispatch\CommandDispatcher.cs" />
     <Compile Include="Infrastructure\Ioc\ComponentActivatorException.cs" />
-    <Compile Include="Infrastructure\Ioc\ControllerFactory.cs" />
     <Compile Include="Infrastructure\Ioc\PerHttpApplicationLifestyleManager.cs" />
     <Compile Include="Infrastructure\Ioc\PerHttpApplicationLifestyleModule.cs" />
     <Compile Include="Infrastructure\Ioc\StartUp.cs" />
     <Compile Include="Infrastructure\Ioc\WebApiInstaller.cs" />
-    <Compile Include="Infrastructure\Ioc\WindsorActionInvoker.cs" />
     <Compile Include="Infrastructure\Ioc\WindsorCompositionRoot.cs" />
     <Compile Include="Infrastructure\Ioc\WindsorDependencyResolver.cs" />
     <Compile Include="Infrastructure\Ioc\WindsorExtensions.cs" />
-    <Compile Include="Infrastructure\Ioc\WindsorFilterProvider.cs" />
     <Compile Include="Controllers\MetadataDefinition\MetadataDefinitionController.cs" />
     <Compile Include="Controllers\MetadataDefinition\MetadataDefinitionResource.cs" />
     <Compile Include="Controllers\MetadataDefinition\MetadataDefinitionResourceExtensions.cs" />
@@ -251,7 +259,7 @@
   <ItemGroup>
     <Content Include="..\common\NHibernate.config">
       <Link>NHibernate.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -273,6 +281,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Deploy.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -291,9 +304,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49780</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://www.Lacjam.local</IISUrl>
+          <IISUrl>http://metastore.structerre.local/api</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://www.Lacjam.local</IISAppRootUrl>
+          <IISAppRootUrl>http://metastore.structerre.local/api</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -314,6 +327,11 @@
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <Import Project="..\packages\OctoPack.3.0.31\tools\OctoPack.targets" Condition="Exists('..\packages\OctoPack.3.0.31\tools\OctoPack.targets')" />
+  <Target Name="EnsureOctoPackImported" BeforeTargets="BeforeBuild" Condition="'$(OctoPackImported)' == ''">
+    <Error Condition="!Exists('..\packages\OctoPack.3.0.31\tools\OctoPack.targets') And ('$(RunOctoPack)' != '' And $(RunOctoPack))" Text="You are trying to build with OctoPack, but the NuGet targets file that OctoPack depends on is not available on this computer. This is probably because the OctoPack package has not been committed to source control, or NuGet Package Restore is not enabled. Please enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\OctoPack.3.0.31\tools\OctoPack.targets') And ('$(RunOctoPack)' != '' And $(RunOctoPack))" Text="OctoPack cannot be run because NuGet packages were restored prior to the build running, and the targets file was unavailable when the build started. Please build the project again to include these packages in the build. You may also need to make sure that your build server does not delete packages prior to each build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

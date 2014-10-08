@@ -7,8 +7,8 @@
     <ProjectGuid>{98808DBE-3230-44D5-87F8-98DBABF3AFED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lacjam.Core</RootNamespace>
-    <AssemblyName>Lacjam.Core</AssemblyName>
+    <RootNamespace>Structerre.MetaStore.Core</RootNamespace>
+    <AssemblyName>Structerre.MetaStore.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

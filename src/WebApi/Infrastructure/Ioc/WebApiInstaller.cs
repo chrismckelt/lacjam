@@ -17,7 +17,6 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
             container.Register(
                 Classes.FromThisAssembly()
                     .BasedOn<IHttpController>()
-                    .Configure(a => a.Interceptors<LoggingInterceptor>())
                     .Configure(a => a.Interceptors<ExceptionHandlerInterceptor>())
                     .ConfigureFor<ApiController>(c => c.PropertiesIgnore(x => x.Name == "Request"))
                     .LifestyleScoped()
@@ -31,8 +30,9 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
                     .LifestyleScoped());
                            
             container.Register(
-                Classes.From().InNamespace("Lacjam")
-                    .Where(x => x.Name.ToLowerInvariant().Contains("Lacjam"))
+                Classes.From().InNamespace("Structerre")
+                    .Where(x => x.Name.ToLowerInvariant().Contains("structerre"))
+                    .Configure(a => a.Interceptors<LoggingInterceptor>())
                     .WithServiceAllInterfaces()
                     .LifestyleScoped());
 

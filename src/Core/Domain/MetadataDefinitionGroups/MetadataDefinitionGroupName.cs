@@ -9,7 +9,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
         {
 
             if (String.IsNullOrWhiteSpace(name))
-                throw new InvariantGuardFailureException();
+                throw new InvariantGuardFailureException("name");
 
             Name = name;
         }

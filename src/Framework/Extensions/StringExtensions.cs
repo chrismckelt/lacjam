@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Lacjam.Framework.Extensions
@@ -27,7 +28,7 @@ namespace Lacjam.Framework.Extensions
         public static bool In(this string value, params string[] stringValues)
         {
             foreach (string otherValue in stringValues)
-                if (string.Compare(value, otherValue) == 0)
+                if (String.Compare(value, otherValue) == 0)
                     return true;
 
             return false;
@@ -67,7 +68,7 @@ namespace Lacjam.Framework.Extensions
         /// </returns>
         public static string Format(this string value, object arg0)
         {
-            return string.Format(value, arg0);
+            return String.Format(value, arg0);
         }
 
         /// <summary>
@@ -82,22 +83,56 @@ namespace Lacjam.Framework.Extensions
         /// </returns>
         public static string Format(this string value, params object[] args)
         {
-            return string.Format(value, args);
+            return String.Format(value, args);
         }
 
 
         public static string Base64Encode(this string plainText)
         {
-            if (string.IsNullOrWhiteSpace(plainText)) return null;
+            if (String.IsNullOrWhiteSpace(plainText)) return null;
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainTextBytes);
         }
 
         public static string Base64Decode(this string base64EncodedData)
         {
-            if (string.IsNullOrWhiteSpace(base64EncodedData)) return null;
+            if (String.IsNullOrWhiteSpace(base64EncodedData)) return null;
             byte[] base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        public static bool IsValidRegex(this string pattern)
+        {
+            if (String.IsNullOrEmpty(pattern)) return false;
+
+            try
+            {
+                Regex.Match("", pattern);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public static string ToCamelCase(this string str)
+        {
+            if (!String.IsNullOrEmpty(str))
+            {
+                if (str.Length < 2) return str.ToLowerInvariant();
+
+                return str.Substring(0, 1).ToLowerInvariant() + str.Substring(1);
+            }
+
+            return str;
+        }
+
+        public static bool EndsWithWhitespace(string q)
+        {
+            return Regex.IsMatch(q, "^.*\\s$");
         }
     }
 }

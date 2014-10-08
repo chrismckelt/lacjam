@@ -2,9 +2,7 @@
 
 module app.services {
     "use strict";
-
-
-    export interface ICommonService extends IService {
+     export interface ICommonService extends IService {
         $get;
         $log: ng.ILogService;
         $timeout: ng.ITimeoutService;
@@ -13,9 +11,8 @@ module app.services {
         broadcast(notice: any, args: any);
     }
 
-
     export class Common implements ICommonService {
-        public serviceId = "common";
+        public serviceUri = "common";
         public static $inject: string[] = ["$rootScope", "$log", "$timeout", "$http", "$q"];
         //public static $inject = ["$log", "$timeout", "$http", "$q", "$state"]
         private static throttles = [];
@@ -55,6 +52,17 @@ module app.services {
         public broadcast(notice: string, ...args: any[]) {
             return this.$rootScope.$broadcast(notice, args);
         }
-
     }
+}
+
+module Select2.util {
+    export declare var debounce;
+}
+
+
+module app.services {
+    angular.module("app.services")
+        .service({
+            "$debounce": () => Select2.util.debounce
+        });
 }

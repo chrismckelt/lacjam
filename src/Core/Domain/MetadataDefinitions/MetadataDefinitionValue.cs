@@ -3,17 +3,18 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
 
     public class AllowableValue
     {
-        public AllowableValue(string value)
+
+        public AllowableValue(string content)
         {
-            _value = value;
+            Content = content;
         }
 
         public string GetValue()
         {
-            return _value;
+            return Content;
         }
 
-        private string _value;
+        public string Content { get; protected set; }
     }
 
 }

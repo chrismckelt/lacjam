@@ -51,7 +51,7 @@ module EventPersistenceTestFixture =
         NHibernateProfiler.Initialize();
 
         let identity = Guid.NewGuid()
-        let event = new MetadataDefinitionGroupCreatedEvent( identity, new MetadataDefinitionGroupName("Metadata Definition Group Name"), new MetadataDefinitionGroupDescription("Description") )
+        let event = new MetadataDefinitionGroupCreatedEvent( identity, new MetadataDefinitionGroupName("Metadata Definition Group Name"), new MetadataDefinitionGroupDescription("Description"))
         let container = WindsorAccessor.Instance.WithSessionManagement().WithConversationPerThread().Container
         container.BeginScope() |> ignore
         let sessionfactory = container.Resolve<ISessionFactory>()

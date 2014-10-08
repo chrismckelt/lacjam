@@ -5,6 +5,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
         public Character()
         {
             Tag = "Character";
+            Regex = "^[A-z]$";
         }
     }
 }

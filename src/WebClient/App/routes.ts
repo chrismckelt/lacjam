@@ -11,33 +11,103 @@ module app {
         public static home: ng.ui.IState = {
             name: "home",
             url: "/",
-            templateUrl: "app/Index/view.cshtml",
-            controller: app.controllers.Index,
+            templateUrl: "app/Index/IndexView.cshtml",
+            controller: app.controllers.IndexController,
             data: {
                 isVisible: true,
-                nav: 2,
-                content: "<i class='home'></i> Home"
+            }
+        };
+
+        public static metadataDefinitionGroups: ng.ui.IState = {
+            name: "metadatadefinitiongroups",
+            url: "/metadatadefinitiongroups",
+            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupView.cshtml",
+            controller: app.controllers.MetadataDefinitionGroupController,
+            data: {
+                isVisible: true,
+            }
+        };
+
+        public static metadataDefinitionGroupsEdit: ng.ui.IState = {
+            name: "metadatadefinitiongroupsedit",
+            url: "/metadatadefinitiongroupsedit",
+            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupEdit.cshtml",
+            controller: app.controllers.MetadataDefinitionGroupEditController,
+            data: {
+                isVisible: true,
+            }
+        };
+
+        public static metadataDefinitionGroupsUpdate: ng.ui.IState = {
+            name: "metadataDefinitionGroupsupdate",
+            url: "/metadatadefinitiongroupsedit/{identity}",
+            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupEdit.cshtml",
+            controller: app.controllers.MetadataDefinitionGroupEditController,
+            data: {
+                isVisible: true,
             }
         };
 
 
+        public static metadataDefinitions: ng.ui.IState = {
+            name: "metadatadefinitions",
+            url: "/metadatadefinitions",
+            templateUrl: "app/metadatadefinitions/MetadataDefinitionView.cshtml",
+            controller: app.controllers.MetadataDefinitionController,
+            data: {
+                isVisible: true,
+            }
+        };
 
-        //public static admin: ng.ui.IState = {
-        //    name: "admin",
-        //    controller: app.controllers.Admin,
-        //    templateUrl: "app/admin/admin.cshtml",
-        //    data:
-        //    {
-        //        isVisible: true,
-        //        secure: true,
-        //        nav: 99,
-        //        content: '<i class=" fa fa-cog"></i> Settings'
-        //    }
+        public static metadataDefinitionEdit: ng.ui.IState = {
+            name: "metadatadefinitionsedit",
+            url: "/metadatadefinitionsedit",
+            templateUrl: "app/metadatadefinitions/MetadataDefinitionEdit.cshtml",
+            controller: app.controllers.MetadataDefinitionEditController,
+            data: {
+                isVisible: true,
+            }
+        };
 
-        //};
+        public static metadataDefinitionUpdate: ng.ui.IState = {
+            name: "metadatadefinitionsupdate",
+            url: "/metadatadefinitionsedit/{identity}",
+            templateUrl: "app/metadatadefinitions/MetadataDefinitionEdit.cshtml",
+            controller: app.controllers.MetadataDefinitionEditController,
+            data: {
+                isVisible: true,
+            }
+        };
 
+        public static entities: ng.ui.IState = {
+            name: "entities",
+            url: "/entities",
+            templateUrl: "app/entities/EntityView.cshtml",
+            controller: app.controllers.EntityController,
+            data: {
+                isVisible: true,
+            }
+        };
 
+        public static entityCreate: ng.ui.IState = {
+            name: "entitycreate",
+            url: "/entitycreate",
+            templateUrl: "app/entities/EntityEdit.cshtml",
+            controller: app.controllers.EntityEditController,
+            data: {
+                isVisible: true,
+            }
+        };
 
+        public static entityEdit: ng.ui.IState = {
+            name: "entityedit",
+            url: "/entityedit/{identity}",
+            templateUrl: "app/entities/EntityEdit.cshtml",
+            controller: app.controllers.EntityEditController,
+            data: {
+                isVisible: true,
+            }
+        };
 
         public static search: ng.ui.IState = {
             name: "search",
@@ -57,7 +127,15 @@ module app {
             //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
             list.push(
                 Routes.home,
-                Routes.search
+                Routes.metadataDefinitionGroups,
+                Routes.metadataDefinitionGroupsUpdate,
+                Routes.metadataDefinitionGroupsEdit,
+                Routes.metadataDefinitions,
+                Routes.metadataDefinitionEdit,
+                Routes.metadataDefinitionUpdate,
+                Routes.entities,
+                Routes.entityCreate,
+                Routes.entityEdit
             );
 
 

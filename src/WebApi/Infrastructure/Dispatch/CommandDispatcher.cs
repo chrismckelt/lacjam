@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Lacjam.Core.Infrastructure.Ioc;
-using Lacjam.Core.Infrastructure.Ioc.Convo;
 using Lacjam.Framework.Commands;
 using Lacjam.Framework.Dispatchers;
 using Lacjam.Framework.Extensions;

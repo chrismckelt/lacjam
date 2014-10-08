@@ -7,10 +7,6 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
     {
         public MetadataDefinitionGroupDescription(string description)
         {
-
-            if (String.IsNullOrWhiteSpace(description))
-                throw new InvariantGuardFailureException();
-
             Description = description;
         }
 

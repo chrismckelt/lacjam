@@ -1,7 +1,7 @@
 using System;
-using Lacjam.Framework.Events;
+using Structerre.MetaStore.Framework.Events;
 
-namespace Lacjam.Core.Domain.Attribute.Events
+namespace Structerre.MetaStore.Core.Domain.Attribute.Events
 {
     public class AttributeDeletedEvent : Event
     {

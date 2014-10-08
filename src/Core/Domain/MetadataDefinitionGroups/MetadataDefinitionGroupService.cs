@@ -15,7 +15,8 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups
         public void Create(Guid conceptIdentity, string name, string description, MetadataBag bag)
         {
             var concept = new MetadataDefinitionGroup(conceptIdentity, new MetadataDefinitionGroupName(name), new MetadataDefinitionGroupDescription(description));
-            bag.Selection.ForEach(concept.AssociateAttribute);
+            foreach(var selection in bag.Selection)
+                concept.AssociateAttribute(selection);
             _repository.Save(concept.ToMaybe());
         }
 

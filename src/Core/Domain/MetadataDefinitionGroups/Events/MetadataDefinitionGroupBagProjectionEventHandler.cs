@@ -9,7 +9,8 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
 {
     public class MetadataDefinitionGroupBagProjectionEventHandler : 
         IEventHandler<MetadataDefinitionGroupAssociatedMetadataEvent>,
-        IEventHandler<MetadataDefinitionGroupAttributesClearedEvent>
+        IEventHandler<MetadataDefinitionGroupAttributesClearedEvent>,
+        IEventHandler<MetadataDefinitionGroupAttributeRemovedEvent>
     {
         public MetadataDefinitionGroupBagProjectionEventHandler(IReadStoreRepository<MetadataDefinitionGroupBagProjection> repository)
         {
@@ -27,6 +28,15 @@ namespace Lacjam.Core.Domain.MetadataDefinitionGroups.Events
 
             _repository.Save(readmodel.ToMaybe());
 
+        }
+
+        [ImmediateDispatch]
+        public void Handle(MetadataDefinitionGroupAttributeRemovedEvent @event)
+        {
+            _repository.ToQueryable()
+                .Where(x => x.AggregateIdentity == @event.AggregateIdentity)
+                .Where(x => x.DefinitionId == @event.DefinitionIdentity)
+                .Each(x => _repository.Remove(x.ToMaybe()));
         }
 
         [ImmediateDispatch]

@@ -7,8 +7,8 @@
     <ProjectGuid>{440F2ED2-2A49-4172-9069-62265E819B96}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lacjam.Dispatcher</RootNamespace>
-    <AssemblyName>Lacjam.Dispatcher</AssemblyName>
+    <RootNamespace>Structerre.MetaStore.Dispatcher</RootNamespace>
+    <AssemblyName>Structerre.MetaStore.Dispatcher</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

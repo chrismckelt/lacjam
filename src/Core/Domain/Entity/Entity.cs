@@ -1,10 +1,10 @@
 using System;
-using Lacjam.Core.Domain.Attribute.Events;
-using Lacjam.Core.Domain.Entity.Events;
-using Lacjam.Framework.Exceptions;
-using Lacjam.Framework.Model;
+using Structerre.MetaStore.Core.Domain.Attribute.Events;
+using Structerre.MetaStore.Core.Domain.Entity.Events;
+using Structerre.MetaStore.Framework.Exceptions;
+using Structerre.MetaStore.Framework.Model;
 
-namespace Lacjam.Core.Domain.Entity
+namespace Structerre.MetaStore.Core.Domain.Entity
 {
     public class Entity : AggregateRoot<EntityState>
     {

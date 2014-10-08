@@ -240,3 +240,66 @@
   // Remove the top rounded corners here since there is a hard edge above the menu
   .border-top-radius(0);
 }
+
+
+
+// CUSTOM NAV OVERRIDES
+.navbar {
+  border-bottom: 1px solid @nav-border;
+
+  li {
+    border-top: 3px solid @nav-base;
+    border-right: 1px solid @nav-border;
+  }
+  li.active {
+    border-top-color: @nav-active-highlight;
+  }
+  a {
+    text-transform: uppercase;
+    font-size: 13px;
+    padding-bottom: 4px !important;
+    padding-top: 42px !important;
+    position: relative;
+    font-family: "helvetica_neue_lt_std45_light", sans-serif;
+  
+    .icon {
+      display: block;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      margin-left: -15px;
+    }
+  }
+  a:hover,
+  li.active a:hover {
+    color: @nav-text-hover !important;
+  }
+}
+
+.icon.icon-entities {
+  .sprite(@entities-normal);
+
+  a:hover & {
+    .sprite(@entities-hover);
+  }
+}
+
+
+.icon.icon-definitions {
+  .sprite(@definitions-normal);
+
+  a:hover & {
+    .sprite(@definitions-hover);
+  }
+}
+
+
+.icon.icon-definition-groups {
+  .sprite(@definition-groups-normal);
+
+  a:hover & {
+    .sprite(@definition-groups-hover);
+  }
+}

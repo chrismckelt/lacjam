@@ -8,7 +8,7 @@
     <ProjectGuid>57B47DED-C238-4469-B223-7239D7E9AAEB</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>WebApi.UnitTests</RootNamespace>
-    <AssemblyName>Lacjam.WebApi.UnitTests</AssemblyName>
+    <AssemblyName>Structerre.MetaStore.WebApi.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>WebApi.UnitTests</Name>
@@ -51,7 +51,7 @@
       </PropertyGroup>
     </Otherwise>
   </Choose>
-  <Import Project="$(FSharpTargetsPath)" />
+  <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

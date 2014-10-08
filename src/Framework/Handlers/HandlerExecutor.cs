@@ -17,7 +17,7 @@ namespace Lacjam.Framework.Handlers
             _auditRepository = auditRepository;
         }
 
-        public void HandleSequencedEvent(SequencedEvent sequencedEvent, bool runImmediately = true)
+        public void HandleSequencedEvent(SequencedEvent sequencedEvent, bool? runImmediately = true)
         {
 
             if (!sequencedEvent.HasEvent())
@@ -39,7 +39,7 @@ namespace Lacjam.Framework.Handlers
 
         }
 
-        private IDispatcherEventPublisher DispatcherEventPublisher(SequencedEvent sequencedEvent, bool runImmediately)
+        private IDispatcherEventPublisher DispatcherEventPublisher(SequencedEvent sequencedEvent, bool? runImmediately)
         {
             var publisher = _container.Resolve<IDispatcherEventPublisher>();
             publisher.Publish(sequencedEvent.Event.EventData.Event, sequencedEvent.Event.Seq, runImmediately);

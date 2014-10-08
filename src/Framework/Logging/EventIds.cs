@@ -9,6 +9,7 @@ namespace Lacjam.Framework.Logging
         public const int Warn = 2;
         public const int Error = 3;
         public const int Fatal = 4;
+        public const int GlobalAsax = 5;
 
         public const int NHibernateSession = 10;
 

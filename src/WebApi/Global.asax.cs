@@ -1,25 +1,17 @@
 ﻿using System.Linq;
-using System.Net.Http.Formatting;
 using System.Web;
+using System.Web.Http;
 using System.Web.Http.Filters;
-using System.Web.Http.ModelBinding;
 using Castle.MicroKernel.Lifestyle;
 using Castle.Windsor;
-using Iesi.Collections;
 using Newtonsoft.Json.Serialization;
 using Lacjam.Core.Infrastructure.Ioc;
 using Lacjam.Core.Infrastructure.Ioc.Convo;
 using Lacjam.Framework.Converters;
 using Lacjam.Framework.Logging;
-using Lacjam.WebApi.Infrastructure;
 using Lacjam.WebApi.Infrastructure.Attributes;
 using Lacjam.WebApi.Infrastructure.Ioc;
 using System;
-using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Routing;
-using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
-using IFilterProvider = System.Web.Mvc.IFilterProvider;
 
 namespace Lacjam.WebApi
 {
@@ -29,11 +21,7 @@ namespace Lacjam.WebApi
         {
             StartUp.Intitialize();
             SetupWebApi();
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            //SetupFilterProvider();
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-     
+        
         }
 
         private void SetupWebApi()
@@ -41,6 +29,8 @@ namespace Lacjam.WebApi
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             System.Web.Http.GlobalConfiguration.Configuration.Filters.Clear();
             GlobalConfiguration.Configuration.Filters.Add(new TransactionalAttribute()); //webapi
+            GlobalConfiguration.Configuration.Filters.Add(new ValidateModelStateAttribute()); //webapi
+
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
@@ -83,13 +73,56 @@ namespace Lacjam.WebApi
             var defaultprovider = providers.First(i => i is ActionDescriptorFilterProvider);
             GlobalConfiguration.Configuration.Services.Remove(typeof(IFilterProvider), defaultprovider);
 
-            GlobalConfiguration.Configuration.Services.Add(typeof(IFilterProvider),
-                                                           new WindsorFilterProvider(WindsorAccessor.Instance.Container.Kernel));
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            
+            WindsorAccessor.Instance.Container.Resolve<ILogWriter>().Info("Application_Error");
+            // Get the exception object.
+            Exception exc = Server.GetLastError();
+
+            WindsorAccessor.Instance.Container.Resolve<ILogWriter>().Warn(EventIds.GlobalAsax,"Application_Error", exc);
+            WindsorAccessor.Instance.Container.Resolve<IUnitOfWork>().Abort();
+
+            if (IsMaxRequestExceededException(exc))
+            {
+                this.Server.ClearError();
+                Response.Write(@"Request data is too large to process");
+                Response.End();
+            }
+
         }
+
+        const int TimedOutExceptionCode = -2147467259;
+        public static bool IsMaxRequestExceededException(Exception e)
+        {
+            // http://stackoverflow.com/questions/665453/catching-maximum-request-length-exceeded
+            Exception main;
+            var unhandled = e as HttpUnhandledException;
+
+            if (unhandled != null && unhandled.ErrorCode == TimedOutExceptionCode)
+            {
+                main = unhandled.InnerException;
+            }
+            else
+            {
+                main = e;
+            }
+
+            var http = main as HttpException;
+
+            if (http != null && http.ErrorCode == TimedOutExceptionCode)
+            {
+                // hack: no real method of identifying if the error is max request exceeded as 
+                // it is treated as a timeout exception
+                if (http.StackTrace.Contains("GetEntireRawContent"))
+                {
+                    // MAX REQUEST HAS BEEN EXCEEDED
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

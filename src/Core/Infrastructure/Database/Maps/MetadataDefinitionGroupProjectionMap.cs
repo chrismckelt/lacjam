@@ -1,4 +1,6 @@
-﻿using FluentNHibernate.Mapping;
+﻿using System;
+using System.Globalization;
+using FluentNHibernate.Mapping;
 using Lacjam.Core.Domain.MetadataDefinitionGroups;
 
 namespace Lacjam.Core.Infrastructure.Database.Maps
@@ -10,12 +12,10 @@ namespace Lacjam.Core.Infrastructure.Database.Maps
             Id(x => x.Identity).Column("[Identity]").GeneratedBy.Assigned();
             Map(x => x.Name);
             Map(x => x.Description);
-   
+
             Component(proj => proj.Tracking, track =>
             {
-                track.Map(x => x.IsActive);
-                track.Map(x => x.IsDeleted);
-                track.Map(x => x.CreatedUtcDate);
+                track.Map(x => x.CreatedUtcDate).Default(DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
                 track.Map(x => x.LastModifiedUtcDate);
             });
         }

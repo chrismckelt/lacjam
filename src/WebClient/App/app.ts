@@ -4,13 +4,17 @@
 
 "use strict";
 
-
 // Create and register modules
 var modules = ["app.directives", "app.filters", "app.services", "app.controllers"];
+angular.module("app.directives", []);
+angular.module("app.filters", []);
+angular.module("app.services", []);
+angular.module("app.controllers", []);
 
-modules.forEach((m) => angular.module(m, []));
+///modules.forEach((m) => angular.module(m, []));
 
 modules.push(
+    "ui",
     "ngCookies",
     "ngGrid",
     "ngCookies",
@@ -19,30 +23,10 @@ modules.push(
     "ngResource",
     "ui.router",
     "ui.bootstrap",
-    "ui.scrollfix",
-    "ui.select2",
-    "common.bootstrap",
-
-
-// 3rd Party Modules
-    "breeze.angular", // configures breeze for an angular app
-    "breeze.directives", // contains the breeze validation directive (zValidate)
-    "ui.bootstrap", // ui-bootstrap (ex: carousel, pagination, dialog) 
-    "LocalStorageModule", //Store data locally,
-
-
-//"kendo.directives", //Kendo angular
-    "multi-select", //multi-select control (eg 2 sets of boxes and pass data from one to other)
-    "ngGrid", //Used in settings screens
-    "yaru22.directives.hovercard", //Hovercard for displaying contacts etc https://github.com/yaru22/angular-hovercard
-    "angularFileUpload", //File upload https://github.com/danialfarid/angular-file-upload
-    "angularCharts", //Charts with D3 https://github.com/chinmaymk/angular-charts
-    "ui.select2", //Select more than 1 item in select dropdown https://github.com/angular-ui/ui-select2"
-    "ui.utils" //UI utility classes http://angular-ui.github.io/ui-utils/
-    , "ngzWip" // local storage and WIP module
-//   "angularSpinner"
-);
-
+    "dialogs.main",
+    "dialogs.default-translations",
+    "pascalprecht.translate"
+    );
 
 angular.module("app", modules)
     .config([
@@ -76,9 +60,6 @@ angular.module("app", modules)
                 // because we"ve returned nothing, no state change occurs
             });
 
-            app.registerServices();
-            app.registerControllers();
-
 
             // state provider
             app.log.debug("Registering routes with state provider");
@@ -91,12 +72,13 @@ angular.module("app", modules)
                 name: "404"
             });
 
+            app.global.angularModuleReference = this;
 
             app.log.debug("app.config finished...");
         }
     ])
     .run([
-        "$rootScope", "$log", "$http", "$state", "$stateParams", "$location", "$injector", "$q", "$timeout", "localStorageService", "$window",
+        "$rootScope", "$log", "$http", "$state", "$stateParams", "$location", "$injector", "$q", "$timeout", "$window", "$templateCache",
         ($rootScope: ng.IRootScopeService,
             $log: ng.ILogService,
             $http: ng.IHttpService,
@@ -106,9 +88,9 @@ angular.module("app", modules)
             $injector: ng.auto.IInjectorService,
             $q: ng.IQService,
             $timeout: ng.ITimeoutService,
-            localStorageService: ng.localStorage.ILocalStorageService,
-            $window: ng.IWindowService
-        ) => {
+            $window: ng.IWindowService,
+            $templateCache : ng.ITemplateCacheService
+            ) => {
 
             //$injector.invoke(($rootScope, $compile, $document) => {
             //    $compile($document)($rootScope);
@@ -124,64 +106,52 @@ angular.module("app", modules)
             app.global.typesCache.add("$location", $location);
             app.global.typesCache.add("$injector", $injector);
             app.global.typesCache.add("$timeout", $timeout);
-            app.global.typesCache.add("localStorageService", localStorageService);
             app.global.typesCache.add("$q", $q);
             app.global.typesCache.add("$window", $window);
 
 
             $rootScope.$on("$stateNotFound",
-            (event, unfoundState, fromState, fromParams) => {
-                app.log.debug("State not found"); // "lazy.state"
-                app.log.debug("$stateNotFound"); // "lazy.state"
-                app.log.debug(unfoundState.to); // "lazy.state"
-                app.log.debug(unfoundState.toParams); // {a:1, b:2}
-                app.log.debug(unfoundState.options); // {inherit:false} + default options
-            });
+                (event, unfoundState, fromState, fromParams) => {
+                    app.log.debug("State not found"); // "lazy.state"
+                    app.log.debug("$stateNotFound"); // "lazy.state"
+                });
             ///https://github.com/angular-ui/ui-router/wiki#state-change-events
             $rootScope.$on("$stateChangeStart",
-            (event, toState, toParams, fromState, fromParams) => {
-                app.log.debug("$stateChangeStart:" + toState.name);
-                app.spinStart();
-            });
+                (event, toState, toParams, fromState, fromParams) => {
+                    app.log.debug("$stateChangeStart:" + toState.name);
+                    app.fn.spinStart();
+                });
 
             $rootScope.$on('$stateChangeSuccess',
-            (event, toState, toParams, fromState, fromParams) => {
-                app.log.debug("$stateChangeStart:" + toState.name);
-                app.spinStop();
-            });
+                (event, toState, toParams, fromState, fromParams) => {
+                    app.log.debug("$stateChangeStart:" + toState.name);
+                    app.fn.spinStop();
+                });
 
             // app services init
             app.common = new app.services.Common($rootScope, $log, $timeout, $http, $q);
-            app.breezeService = new app.services.BreezeService(this.$rootScope);
-            app.storage = localStorageService;
+            app.rootScope = $rootScope;
 
             app.log.debug("activating services");
             angular.forEach(app.global.serviceNames, (service) => {
-                    var act = app.global.typesCache.getByKey(service);
-                    act.activate();
-                }
-            );
+                var act = app.global.typesCache.getByKey(service);
+                act.activate();});
 
-
-            if ($location.path() === "") $location.path("/home");
-
-            $state.href(app.Routes.home.name);
+            if ($location.path() === "") app.redirectToUrl(app.Routes.home.url); //$location.path("/#/");
 
             app.log.debug("app.run finished...");
             // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
 
-            //app.listAllServices(angular.module("app"));
-            app.listAllServices(angular.module("app.services"));
-            //app.listAllServices(angular.module("app.controllers"));
-
-
+            $timeout(() => {
+                app.log.info("-- ALL SERVICES --");
+                app.showRegistrations("app",null);
+            }, 5000
+                );
         }
     ]);
 
 
 module app {
-
-
     export class Item {
         constructor(public name: string, public object: any) {
         }
@@ -209,11 +179,117 @@ module app {
     }
 
 
-    export var common: app.services.Common;
-    export var breezeService: app.services.BreezeService;
-    export var storage: ng.localStorage.ILocalStorageService;
+    export var common: app.services.Common;    
+    export var rootScope: ng.IRootScopeService;
+
+    export class fn {
+
+        public static appUrl(url: string) {
+            return "/api/" + url;
+        }
+
+        public static createGuid() {
+            var d = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        public static getCurrentDate() {
+            return moment();
+        }
+
+        public static textContains(text: string, searchText: string) {
+            return text && -1 !== text.toLowerCase().indexOf(searchText.toLowerCase());
+        }
+
+        public static isNumber(val) {
+            // negative or positive
+            return /^[-]?\d+$/.test(val);
+        }
+
+        public addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(date.getDate() + days);
+            return result;
+        }
+
+        public makeModel<T>(controllerId: string) {
+            app.fn.safeApply(
+                () => {
+                    // if (typeof this.$scope.vm === "undefined") {
+                    app.log.debug("making model for " + controllerId);
+                    var name = app.fn.capitaliseFirstLetter(controllerId) + "Model";
+                    try {
+                        var made = InstanceLoader.getInstance<T>(app.controllers, name, []);
+                        return <T>made;
+
+                    } catch (ex) {
+                        app.log.error("makeModel error - " + controllerId, ex);
+                        return null;
+                    }
+                    //  }
+                });
+
+            return null;
+        }
+
+        public static copyProperties(source: any, target: any): void {
+            for (var prop in source) {
+                if (target[prop] !== undefined) {
+                    target[prop] = source[prop];
+                } else {
+                    console.error("Cannot set undefined property: " + prop);
+                }
+            }
+        }
+
+
+        public static capitaliseFirstLetter(str: string) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        public static spinStart(key= "spinner") {
+            app.common.broadcast("cc-spinner:spin", key);
+        }
+
+        public static spinStop(key= "spinner") {
+            app.common.broadcast("cc-spinner:stop", key);
+        }
+
+        public static replaceLocationUrlGuidWithId(id) {
+            // If the current Url is a Guid, then we replace 
+            // it with the passed in id. Otherwise, we exit.
+            var currentPath = app.resolveByName("$location").path();
+            var slashPos = currentPath.lastIndexOf("/", currentPath.length - 2);
+            var currentParameter = currentPath.substring(slashPos - 1);
+
+            if (app.fn.isNumber(currentParameter)) {
+                return;
+            }
+
+            var newPath = currentPath.substring(0, slashPos + 1) + id;
+            app.redirectToUrl(newPath);
+        }
+
+        public static safeApply(fn: () => any) {
+            var phase = app.rootScope.$root.$$phase;
+            if (phase == '$apply' || phase == '$digest') {
+                if (fn && (typeof (fn) === 'function')) {
+                    fn();
+                }
+            } else {
+                app.rootScope.$apply().$apply(fn);
+            }
+        }
+    }
 
     export class global {
+
+        public static angularModuleReference: ng.IModule;
         public static typesCache: Dictionary<any> = new Dictionary<any>();
         public static $injector = angular.injector(["ng"]);
 
@@ -261,417 +337,116 @@ module app {
             del: 46
         };
 
-
-        public static imageSettings = {
-            imageBasePath: "../content/images/",
-            imagePeoplePath: "../content/images/people/",
-            imageProjectsPath: "../content/images/projects/",
-            imageVendorsPath: "../content/images/vendors/",
-            unknownPersonImageSource: "unknown_person.jpg",
-            unknownProjectImageSource: "unknown_project.jpg",
-            unknownVendorImageSource: "unknown_company.jpg"
-        };
-
         public static events = {
             controllerActivateSuccess: "controller.activateSuccess",
-            hasChangesChanged: "datacontextService.hasChangesChanged",
-            spinnerToggle: "spinner.toggle",
-            entitiesChanged: "datacontextService.entitiesChanged",
         };
 
-        public static config = {
-            appErrorPrefix: "[JOS Error] ", //Configure the exceptionHandler decorator
-            docTitle: "JAXON JOS: ",
-            version: "2.1.0",
-            showToasts: false,
-            remoteServiceName: "api/breeze/Breeze" //// For use with the HotTowel-Angular-Breeze add-on that uses Breeze
-        };
-
-        // Define the functions and properties to reveal.
-        public static entityNames = {
-            address: "Address",
-            addressType: "AddressType",
-            annualHSEPerformanceDetail: "AnnualHSEPerformanceDetail",
-            approver: "Approver",
-            approvalItem: "ApprovalItem",
-            bankGuarantee: "BankGuarantee",
-            city: "City",
-            company: "Company",
-            companyAddress: "CompanyAddress",
-            companyContactDetail: "CompanyContactDetail",
-            companyPerson: "CompanyPerson",
-            companyRole: "CompanyRole",
-            companyTrade: "CompanyTrade",
-            completionStage: "CompletionStage",
-            //conditionOfSubcontract: "ConditionOfSubcontract",
-            contactType: "ContactType",
-            contractType: "ContractType",
-            dailyDiaryItem: "DailyDiaryItem",
-            equipmentModel: "EquipmentModel",
-            equipmentType: "EquipmentType",
-            formOfContract: "FormOfContract",
-            formOfSecurity: "FormOfSecurity",
-            generalQuestion: "GeneralQuestion",
-            hseHazardImpact: "HSEHazardImpact",
-            hseHazardImpactManagementType: "HSEHazardImpactManagementType",
-            hSEIncident: "HSEIncident",
-            hSEInjuryLocation: "HSEInjuryLocation",
-            hSEInjuryNature: "HSEInjuryNature",
-            hSEInjuryMechanism: "HSEInjuryMechanism",
-            hSEInjuryType: "HSEInjuryType",
-            hseSupplyPurchaseItem: "HSESupplyPurchaseItem",
-            inspection: "Inspection",
-            inspectionType: "InspectionType",
-            internalLabourItem: "InternalLabourItem",
-            jobRole: "JobRole",
-            labourItem: "LabourItem",
-            leadTimeItem: "LeadTimeItem",
-            lostTimeHours: "LostTimeHours",
-            marketSegment: "MarketSegment",
-            meeting: "Meeting",
-            meetingType: "MeetingType",
-            meetingTypeConstruction: "Construction",
-            meetingTypeHSE: "HSE",
-            paymentTerm: "PaymentTerm",
-            person: "Person",
-            personContactDetail: "PersonContactDetail",
-            plantEquipmentHire: "PlantEquipmentHire",
-            project: "Project",
-            projectAddress: "ProjectAddress",
-            projectCompany: "ProjectCompany",
-            projectCompanyPerson: "ProjectCompanyPerson",
-            projectPerson: "ProjectPerson",
-            projectType: "ProjectType",
-            projectVendor: "ProjectVendor",
-            qualityAccreditedSystem: "QualityAccreditedSystem",
-            ratingCategory: "RatingCategory",
-            ratingCategoryItem: "RatingCategoryItem",
-            region: "Region",
-            review: "Review",
-            reviewRating: "ReviewRating",
-            //scopeOfWork: "ScopeOfWork",
-            securityType: "SecurityType",
-            simpleProject: "SimpleProject",
-            trade: "Trade",
-            tradeCategory: "TradeCategory",
-            user: "User",
-            vendor: "Vendor",
-            vendorLabourItem: "VendorLabourItem",
-            vendorHSEHazardImpact: "VendorHSEHazardImpact",
-            vendorHSEHazardImpactManagementType: "VendorHSEHazardImpactManagementType",
-            vendorHSESupplyPurchaseItem: "VendorHSESupplyPurchaseItem",
-            vendorQuestionAnswer: "VendorQuestionAnswer",
-            workSafeNotice: "WorkSafeNotice"
-        };
-
-        public static vendorIds = {
-            internalId: 7
-        }
-
-        public static addressTypes = {
-            headOffice: 1
-        }
-
-        public static cityIds = {
-            perth: 1
-        }
-
-        public static companyRoles = {
-            clientId: 1,
-            consultantId: 2,
-            vendorId: 3
-        };
-
-        public static contractTypes = {
-            other: 4
-        };
-
-        public static formsOfContract = {
-            specify: 6
-        };
-
-        public static formsOfSecurity = {
-            cashRetention: 1,
-            bankGuarentee: 2,
-            insuranceBond: 3
-        };
-
-        public static hseInjuryTypes = {
-            fai: 1,
-            mti: 2,
-            lti: 3,
-            fatality: 4,
-            nmi: 5,
-            ei: 6,
-            pdi: 7
-        };
-
-        public static jobRoles = {
-            projectManager: 1,
-            generalManager: 2,
-            financeManager: 4,
-            other: 7,
-            ceo: 16,
-            hseq: 17,
-        };
-
-
-        public static getCurrentDate() {
-            return moment();
-        }
-
-        public static textContains(text: string, searchText: string) {
-            return text && -1 !== text.toLowerCase().indexOf(searchText.toLowerCase());
-        }
-
-        public static isNumber(val) {
-            // negative or positive
-            return /^[-]?\d+$/.test(val);
-        }
-
-        public addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(date.getDate() + days);
-            return result;
-        }
-
-        public static copyProperties(source: any, target: any): void {
-            for (var prop in source) {
-                if (target[prop] !== undefined) {
-                    target[prop] = source[prop];
-                } else {
-                    console.error("Cannot set undefined property: " + prop);
-                }
-            }
-        }
     }
 
-
-    export module controllers {
+    export module base {
 
         export interface IScopeBase extends ng.IScope {
             vm: any;
+            activator: ControllerBase
         }
 
         export class ModelBase {
-            //  routes = app.routes;
+            hasLoaded: boolean = false;
         }
 
-        export class ControllerBase<T extends ModelBase> {
-            public $rootScope: ng.IRootScopeService;
-            constructor(public controllerId: string, public $scope: IScopeBase) {
-                app.log.debug("ControllerBase -- ctor for " + this.controllerId);
+        export class ControllerBase {
+            public title : string;
+            public hasLoaded = false;
 
-                this.$rootScope = app.resolveByName("$rootScope");
-                this.$rootScope.$on(app.global.events.controllerActivateSuccess,
-                    (data, args) => {
-                        if (args[0].controllerId === this.controllerId) {
-                            this.activateControllerComplete(args[0]);
-                        }
-                    }
-                    );
-
-                app.log.debug("making model for " + this.controllerId);
-                var name = app.capitaliseFirstLetter(this.controllerId) + "Model";
-                try {
-                    var model = InstanceLoader.getInstance<T>(app.controllers, name, []);
-                    this.$scope.vm = model;
-                    app.log.debug("scope made for " + this.controllerId, this.$scope.vm);
-                } catch (ex) {
-                    app.log.error("ControllerBase - " + this.controllerId, ex);
-                }
-
-                try {
-                    this.activate();
-                } catch (e) {
-                    app.log.error("ControllerBase - activate", e);
-                }
-
-            }
-
+            public controllerId: string = typeof (this.constructor.prototype.name);
 
             public activate = () => {
                 app.log.debug("Base controller loaded for " + this.controllerId);
                 this.activateController([], this.controllerId);
+
             }
 
-            public activateController = (promises: any[], controllerId: string): any => {
+            public activateController(promises: any[], controllerId: string): ng.IPromise<any> {
 
-                app.common.$q.all(promises)
+                return app.common.$q.all(promises)
                     .then(eventArgs => {
                         app.log.debug("Controller loaded : " + this.controllerId);
                         //app.log.debug(eventArgs);
                         var data = { controllerId: this.controllerId, eventArgs: eventArgs };
                         app.common.broadcast(app.global.events.controllerActivateSuccess, data);
-                
+
+                    });
+            }
+        }
+
+        export class ServiceBase<T> implements IService
+        {
+            public entity: T;
+
+            constructor(public serviceUri: string,public entityName: string) {
+
+            }
+
+            public activate() { }
+
+            public getAll = () => {
+                return app.common.$http({ method: 'GET', url: app.fn.appUrl(this.serviceUri + '/list/all') });
+            }
+
+            public create = (model : T) => {
+                return app.common.$http({
+                    method: 'POST',
+                    url: app.fn.appUrl(this.serviceUri), 
+                    data : model
                 });
             }
 
-            /// promises completed
-            public activateControllerComplete = (...args: any[]) => {
-                app.log.debug("activateControllerComplete - " + this.controllerId);
+            public update = (model: T, identity: app.model.Guid) => {
+                return app.common.$http({
+                    method: 'PUT',
+                    url: app.fn.appUrl(this.serviceUri + '/' + identity),
+                    data: model
+                });
+            }
+
+             public get = (identity: app.model.Guid) => {
+                return app.common.$http({
+                    method: 'GET',
+                    url: app.fn.appUrl(this.serviceUri + '/' + identity)
+                });
+             }
+
+            public doDelete = (identity: app.model.Guid) => {
+                return app.common.$http({
+                    method: 'DELETE',
+                    url: app.fn.appUrl(this.serviceUri + '/' + identity)
+                });
             }
         }
-    }
-
-    // *** Modules need to be populated to be correctly defined, otherwise they will give warnings. null fixes this ***/
-
-    export module directives {
-        null;
-    } // put null in so compiler does not remove 
-    export module filters {
-        null;
     }
 
     export module model {
         null;
     }
 
+    export module filters {
+        null;
+    }
+
+    export module directives {
+        null;
+    }
+
+    export module controllers {
+        null;
+    }
+
     export module services {
-
-        export class Service<T> //implements IService
-            //export class Service implements  IService
-            {
-                public serviceId = "Service";
-                public entityName: string;
-                public entityAspect: breeze.EntityAspect;
-                public entityType: breeze.EntityType;
-                public orderBy = "name";
-                public zStorageWip: any;
-                public predicates = {
-                    isNotNullo: breeze.Predicate.create("id", "!=", 0),
-                    isNullo: breeze.Predicate.create("id", "==", 0)
-                };
-
-                constructor(public entity: T) {
-
-                }
-
-                public activate() {
-                    this.entityName = app.Describer.getName(this.entity);
-                    this.zStorageWip = app.resolveByName("zStorageWip");
-
-                }
-
-
-                //public getAll = () => {
-
-                //    return breeze.EntityQuery.from(this.entityName)
-                //        .using(app.breezeService.entityManager)
-                //        .execute()
-                //        .then(this.querySucceeded, this.queryFailed);
-
-                //}
-
-             public getAll = () => {
-                return breeze.EntityQuery.from("Lookups")
-                    .using(app.breezeService.entityManager)
-                //   .toType(resource)
-                    .execute();
-            }
-
-                public getAllLocal = (resource, ordering, predicate) => {
-                    return breeze.EntityQuery.from(resource)
-                        .orderBy(ordering)
-                        .where(predicate)
-                        .using(app.breezeService.entityManager)
-                        //   .toType(resource)
-                        .executeLocally();
-                }
-
-                public getEntityByIdOrFromWip = (val) => {
-                    // val could be an ID or a wipKey
-                    var wipEntityKey = val;
-                    var result: any;
-                    var importedEntity = this.zStorageWip.loadWipEntity(wipEntityKey);
-                    if (importedEntity) {
-                        // Need to re-validate the entity we are re-hydrating
-                        importedEntity.entityAspect.validateEntity();
-                        result = app.common.$q.when({ entity: importedEntity, key: wipEntityKey });
-                    }
-                    result = app.common.$q.reject({ error: "Couldn\"t find entity for WIP key " + wipEntityKey });
-
-                    return result;
-                }
-
-                public getByIdLocal = (resource, id) => {
-                    var results = breeze.EntityQuery.from(resource)
-                        .where("id", "eq", id)
-                        .using(app.breezeService.entityManager)
-                        .executeLocally();
-
-                    if (results && results.length === 1) {
-                        return results[0];
-                    }
-
-                    return null;
-                }
-
-
-                public getById(id, en: any, forceRemote: boolean= false) {
-                    var result: any;
-                    if (!forceRemote) {
-                        // check cache first
-                        var entity = app.breezeService.entityManager.getEntityByKey(app.global.entityNames.project, id);
-                        if (entity) {
-                            app.log.debug("Retrieved [" + entity.entityType + "] id:" + entity.entityAspect + " from cache.", entity, true);
-                            if (entity.entityAspect.entityState.isDeleted()) {
-                                entity = null; // hide session marked-for-delete
-                            }
-                            result = app.common.$q.when(entity);
-                        }
-                    }
-
-                    // Hit the server
-                    // It was not found in cache, so let"s query for it.
-                    result = app.breezeService.entityManager.fetchEntityByKey(en, id)
-                        .then(this.querySucceeded)
-                        .thenReject(toastr.error("Check console", "Error"));
-
-                    return result;
-                }
-
-                public querySucceeded(data) {
-
-                    if (!data.entity) {
-                        app.log.debug("Could not find [" + data.entity.entityType + "] id:" + data.entity.id, null, true);
-                        return null;
-                    }
-                    //  entity.isPartial = false;
-                    app.log.debug("Retrieved [" + data.entity.entityType + "] id " + data.entity.id
-                        + " from remote data source", data.entity, true);
-                    this.zStorageWip.save();
-                    return data.entity;
-                }
-
-
-                public getLocalEntityCount(resource) {
-                    var entities = breeze.EntityQuery.from(resource)
-                        .where(this.predicates.isNotNullo)
-                        .using(app.breezeService.entityManager)
-                        .executeLocally();
-                    return entities.length;
-                }
-
-                public getInlineCount(data) { return data.inlineCount; }
-
-                public queryFailed(error) {
-                    var msg = app.global.config.appErrorPrefix + "Error retrieving data." + error.message;
-                    app.common.$log.error(msg, error);
-                    throw error;
-                }
-
-                public setIsPartialTrue(entities) {
-                    for (var i = entities.length; i--;) {
-                        entities[i].isPartial = true;
-                    }
-                    return entities;
-                }
-            }
+        null;
     }
 
     export interface IController {
-        controllerId : string;
+
     }
 
     export interface IDirective extends ng.IDirective {
@@ -684,11 +459,9 @@ module app {
     }
 
     export interface IService {
-        serviceId: string;
+        serviceUri: string;
         activate: () => void;
     }
-
-
 
     /**
     * Register new controller.
@@ -697,15 +470,10 @@ module app {
     * @param services
     */
     export function registerController(className: string, ctor: any = null) {
-        //var controller = "app.controllers." + className;
-        //app.log.debug("Registering controller: " + controller);
-        //var ctrl: ng.IControllerService = InstanceLoader.getInstance<ng.IControllerService>(app.controllers, className, services);
-        //angular.module("app.controllers").controller(ctrl);
+        app.log.debug("controllers regististration for " + className);
         angular.module("app.controllers").controller(className, ctor);
 
     }
-
-    /**
 
     /**
      * Register new filter.
@@ -716,7 +484,7 @@ module app {
     export function registerFilter(className: string, services = []) {
         var filter = "app.filters." + className;
         app.log.debug("Registering filter: " + filter);
-        services.push(() => (new app.filters[className]()).filter);
+        services.push(new app.filters[className]().filter);
         angular.module("app.filters").filter(className, services);
     }
 
@@ -750,30 +518,13 @@ module app {
      * @param className
      * @param services
      */
-    ///ssssssssssssssssssssssssssssssssssssssss
     // export function registerService(className: string, services = []) {
     export function registerService(ctor: any, services = []) {
-
-        try {
-            //var neat = className[0].toUpperCase() + className.slice(1);
-            app.log.info(ctor);
-            var neat = app.Describer.getName(ctor);
-            app.global.serviceNames.push(neat);
-
-            var service = "app.services." + neat;
-            app.log.debug("Registering service: " + service);
-
-            var obj = InstanceLoader.getInstance(app.services, neat, services);
-            app.log.debug("Created :" + Describer.getName(obj));
-            app.global.typesCache.add(neat, obj);
-            services.push(obj);
-            angular.module("app.services").service(neat, services);
-            angular.module("app.services").service(service, services);
-
-
-        } catch (e) {
-            app.log.error("service registration failed - " + neat, e);
-        }
+        var name = app.Describer.getName(ctor);
+        var obj = app.InstanceLoader.getInstance(app.services, name);
+        app.global.typesCache.add(name, obj);
+        var arr = ["app.services"];
+        angular.module("app.services").service(name, arr);
     }
 
 
@@ -783,17 +534,7 @@ module app {
  * @param className
  * @param factory
  */
-    ///ssssssssssssssssssssssssssssssssssssssss
     export function registerFactory(ctor: any, services: any = []) {
-
-        //var neat = className[0].toUpperCase() + className.slice(1);
-        //app.global.serviceNames.push(neat);
-        //var service = "app.services." + className;
-        //app.log.debug("Registering factory: " + service);
-
-        //var neat = className[0].toUpperCase() + className.slice(1);
-
-        //      app.global.serviceNames.push(ctor);
 
 
         try {
@@ -836,13 +577,20 @@ module app {
     /// global functions
     ///-----------------------------------
 
+    export function showRegistrations(mod, r) {
+        var inj = angular.element(document).injector().get;
+        if (!r) r = {};
+        angular.forEach(angular.module(mod).requires, m => { showRegistrations(m, r); });
+        var queue: any = angular.module(mod);
+        angular.forEach(queue._invokeQueue, a => {
+            try {
+                 r[a[2][0]] = inj(a[2][0]);
+                app.log.debug(inj(a[2][0]));
 
-    export function listAllServices(mod, r = {}) {
-
-        angular.forEach(mod._invokeQueue, (x) => {
-            app.log.debug(x);
+            } catch (e) {
+                app.log.debug("Error",e);
+            }
         });
-
         return r;
     };
 
@@ -852,6 +600,10 @@ module app {
             var instance = Object.create(context[name].prototype);
             instance.constructor.apply(instance, args);
             return <T> instance;
+        }
+
+        static create<T>() {
+            return <any>{};
         }
     }
 
@@ -872,6 +624,10 @@ module app {
 
         public static error(message?: any, ...optionalParams: any[]) {
             console.error(message, optionalParams);
+        }
+
+        public static clear() {
+            console.log(new Array(24 + 1).join("\n"));
         }
     }
 
@@ -940,8 +696,6 @@ module app {
             }
             throw new EvalError(name + " Could (2) not be resolved");
         }
-
-
         throw new EvalError(name + " Could not be resolved - end if nigh ");
     }
 
@@ -959,52 +713,28 @@ module app {
             //var results = (funcNameRegex).exec((<any> inputClass).constructor.toString());
             //return (results && results.length > 1) ? results[1] : "";
         }
-
-
-    }
-
-    export function capitaliseFirstLetter(str: string) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
 
-    export function spinStart(key= "spinner") {
-        app.common.broadcast("cc-spinner:spin", key);
+    export function registerModels() {
+
+
     }
-
-
-    export function spinStop(key= "spinner") {
-        app.common.broadcast("cc-spinner:stop", key);
-    }
-
-
-    export function replaceLocationUrlGuidWithId(id) {
-        // If the current Url is a Guid, then we replace 
-        // it with the passed in id. Otherwise, we exit.
-        var currentPath = app.resolveByName("$location").path();
-        var slashPos = currentPath.lastIndexOf("/", currentPath.length - 2);
-        var currentParameter = currentPath.substring(slashPos - 1);
-
-        if (app.global.isNumber(currentParameter)) {
-            return;
-        }
-
-        var newPath = currentPath.substring(0, slashPos + 1) + id;
-        app.redirectToUrl(newPath);
-    }
-
 
     export function registerServices() {
         // services
         app.log.debug("Registering services");
-    }
 
+        app.registerService(app.services.Common);
+        //app.registerService(app.services.Dialog);
+        app.registerService(app.services.MetadataDefinitionGroupService);
+        app.registerService(app.services.MetadataDefinitionService);
+    }
 
     export function registerControllers() {
 
-
+        app.log.debug("Registering controllers");
+        app.registerController("app.controllers.MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController); // register 
     }
 
 }
-
-

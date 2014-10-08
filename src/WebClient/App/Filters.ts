@@ -21,3 +21,10 @@ module app.filters {
 
 app.registerFilter('RangeTo', []);
 app.registerFilter('Splice', []);
+
+
+angular.module("app").filter('stringArrayFilter', function () {
+    return function (myArray) {
+        return myArray.join(', ');
+    };
+});

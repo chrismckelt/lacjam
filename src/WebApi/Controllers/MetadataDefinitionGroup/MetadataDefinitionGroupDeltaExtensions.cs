@@ -1,4 +1,5 @@
-﻿using Lacjam.Core.Domain.MetadataDefinitionGroups;
+﻿using System.Linq;
+using Lacjam.Core.Domain.MetadataDefinitionGroups;
 using Lacjam.Core.Domain.MetadataDefinitionGroups.Commands;
 using Lacjam.Framework.Dispatchers;
 
@@ -15,7 +16,6 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
                 GenerateReLabelCommand(dispatcher, original, resource);
                 GenerateAssociationCommand(dispatcher, original, resource);
             });
-
         }
 
         private static void GenerateReLabelCommand(ICommandDispatcher dispatcher, MetadataDefinitionGroupResource original, MetadataDefinitionGroupResource updated)
@@ -23,7 +23,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
             if (original.DiscriptionMatches(updated))
                 return;
 
-            dispatcher.Dispatch(new ReLabelMetadataDefinitionGroupCommand(updated.Identity, new MetadataDefinitionGroupName(updated.Name), new MetadataDefinitionGroupDescription(updated.Description), updated));
+            dispatcher.Dispatch(new ReLabelMetadataDefinitionGroupCommand(updated.Identity, new MetadataDefinitionGroupName(updated.Name), new MetadataDefinitionGroupDescription(updated.Description), updated.Tracking));
         }
 
         private static void GenerateAssociationCommand(ICommandDispatcher dispatcher, MetadataDefinitionGroupResource original, MetadataDefinitionGroupResource updated)
@@ -31,7 +31,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
             if (original.DefinitionIdsMatch(updated))
                 return;
 
-            dispatcher.Dispatch(new AssociateDefinitionsToMetadataDefinitionGroupCommand(original.Identity, updated.SelectedDefinitionIds));
+            dispatcher.Dispatch(new AssociateDefinitionsToMetadataDefinitionGroupCommand(original.Identity, updated.Definitions.Select(x=> x.Id).ToArray()));
         }
     }
 }

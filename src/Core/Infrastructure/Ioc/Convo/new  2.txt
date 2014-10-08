@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using Castle.MicroKernel.Lifestyle;
 using NHibernate;
-using Lacjam.Core.Infrastructure.Database;
-using Lacjam.Framework.Logging;
+using Structerre.MetaStore.Core.Infrastructure.Database;
+using Structerre.MetaStore.Framework.Logging;
 using uNhAddIns.Adapters;
 using uNhAddIns.SessionEasier;
 using uNhAddIns.SessionEasier.Conversations;
 
-namespace Lacjam.Core.Infrastructure.Ioc.Convo
+namespace Structerre.MetaStore.Core.Infrastructure.Ioc.Convo
 {
     [PersistenceConversational]
     public class UnitOfWork : NhConversation, IUnitOfWork

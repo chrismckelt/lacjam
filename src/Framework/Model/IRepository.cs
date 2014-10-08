@@ -7,6 +7,6 @@ namespace Lacjam.Framework.Model
     {
         IMaybe<TAggregate> Get(Guid identity);
 
-        void Save(IMaybe<TAggregate> aggregrate, bool dispatchImmediately = false);
+        void Save(IMaybe<TAggregate> aggregrate, bool dispatchImmediately = true);
     }
 }
