@@ -110,9 +110,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\packages\NHibernate.4.0.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
@@ -295,7 +294,6 @@
     <Compile Include="Infrastructure\Database\Maps\SettingMap.cs" />
     <Compile Include="Infrastructure\Database\NHibernateExtensions.cs" />
     <Compile Include="Infrastructure\Database\NHibernateFluentConfiguration.cs" />
-    <Compile Include="Services\EntityIndexer.cs" />
     <Compile Include="Infrastructure\Ioc\Convo\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\Ioc\CoreInstaller.cs" />
     <Compile Include="Infrastructure\Ioc\Interceptors\TransactionInterceptor.cs" />
@@ -324,7 +322,6 @@
     <Compile Include="Services\IEntityIndexer.cs" />
     <Compile Include="Services\IMetadataDefinitionIndexer.cs" />
     <Compile Include="Services\ISchemaService.cs" />
-    <Compile Include="Services\MetadataDefinitionIndexer.cs" />
     <Compile Include="Services\SchemaService.cs" />
     <Compile Include="Services\SchemaTransferObject.cs" />
   </ItemGroup>

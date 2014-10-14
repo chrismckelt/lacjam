@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="STRUCterre.MetaStore.WebClient.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Lacjam.WebClient.Global" Language="C#" %>

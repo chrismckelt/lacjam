@@ -12,9 +12,9 @@ using BundleTransformer.UglifyJs;
 using BundleTransformer.UglifyJs.Configuration;
 using BundleTransformer.UglifyJs.Minifiers;
 using JavaScriptEngineSwitcher.V8;
-using Structerre.MetaStore.Framework.Extensions;
+using Lacjam.Framework.Extensions;
 
-namespace STRUCterre.MetaStore.WebClient
+namespace Lacjam.WebClient
 {
     /// <summary>
     ///     http://stackoverflow.com/questions/11980458/bundler-not-including-min-files

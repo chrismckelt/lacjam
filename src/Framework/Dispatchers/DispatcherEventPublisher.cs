@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.Windsor;
-using Iesi.Collections;
+
 using Newtonsoft.Json;
 using NHibernate.Util;
 using Lacjam.Framework.Events;

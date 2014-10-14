@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Web;
 using System.Web.Optimization;
-using Structerre.MetaStore.Core.Infrastructure.Ioc;
-using Structerre.MetaStore.Framework.Logging;
 
-namespace STRUCterre.MetaStore.WebClient
+namespace Lacjam.WebClient
 {
     public class Global : System.Web.HttpApplication
     {

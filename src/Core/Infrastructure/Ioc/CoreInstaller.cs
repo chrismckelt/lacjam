@@ -39,12 +39,7 @@ namespace Lacjam.Core.Infrastructure.Ioc
 
         private void RegisterIndexers(IWindsorContainer container)
         {
-            container.Register(
-                Classes.FromThisAssembly()
-                    .InSameNamespaceAs<EntityIndexer>()
-                    .If(x => x.Name.EndsWith("Indexer"))
-                    .WithServiceAllInterfaces()
-                    .LifestyleSingleton());
+
         }
 
         private static void RegisterDomainComponents(IWindsorContainer container)
