@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Data;
 using Newtonsoft.Json;
-using NHibernate;
-using NHibernate.SqlTypes;
-using NHibernate.UserTypes;
+
+
 using Lacjam.Framework.Serialization;
 
 namespace Lacjam.Framework.Events
 {
-    public class EventDataJsonType : IUserType
+    public class EventDataJsonType 
     {
         public SqlType[] SqlTypes
         {

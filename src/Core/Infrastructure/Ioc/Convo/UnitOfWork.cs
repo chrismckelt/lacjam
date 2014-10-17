@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using Castle.MicroKernel.Lifestyle;
-using NHibernate;
+
 using Lacjam.Core.Infrastructure.Database;
 using Lacjam.Framework.Logging;
 using uNhAddIns.Adapters;
@@ -12,18 +13,17 @@ using uNhAddIns.SessionEasier.Conversations;
 namespace Lacjam.Core.Infrastructure.Ioc.Convo
 {
     [PersistenceConversational]
-    public class UnitOfWork : AbstractConversation, IUnitOfWork, ISupportOutsidePersistentCall
+    public class UnitOfWork : IUnitOfWork
     {
-        public ISessionWrapper _wrapper { get; private set; }
+       
         public bool UseSupportForOutsidePersistentCall { get; set; }
-        public ISessionFactory SessionFactory { get; private set; }
 
-        public ISession Session
+        public DbContext Session
         {
             get
             {
                 if (_session == null) Start();
-                if (!_session.IsOpen || _session.IsConnected)
+                if (_session.Database.Connection ==null)
                 {
                     _logWriter.Debug("UnitOfWork - CheckSession");
                     CheckSession();
@@ -34,7 +34,7 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
             set { _session = value; }
         }
 
-        private ISession _session;
+        private DbContext _session;
         private readonly ILogWriter _logWriter;
         private IsolationLevel _level = IsolationLevel.ReadUncommitted;
         private bool _hasEnded = false;
@@ -43,11 +43,10 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
         {
         }
 
-        public UnitOfWork(ILogWriter logWriter, ISessionFactory sessionFactory, ISessionWrapper wrapper)
+        public UnitOfWork(ILogWriter logWriter, DbContext session)
             //: base(new uNhAddIns.SessionEasier.SessionFactoryProvider(provider), wrapper)
         {
-            SessionFactory = sessionFactory;
-            _wrapper = wrapper;
+            this.Session = session;
             _logWriter = logWriter;
             
         }
@@ -87,219 +86,220 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
 
         private void CheckSession()
         {
-            if (!_wrapper.IsWrapped(_session)) Bind();
+            //if (!_wrapper.IsWrapped(_session)) Bind();
 
-            if (_session != null && _session.IsOpen)
-            {
-                if (!_session.IsConnected)
-                    _session.Reconnect();
-            }
+            //if (_session != null && _session.IsOpen)
+            //{
+            //    if (!_session.IsConnected)
+            //        _session.Reconnect();
+            //}
 
-            _session.FlushMode = FlushMode.Auto;
+            //_session.FlushMode = FlushMode.Auto;
 
         }
 
         private void CheckTransaction()
         {
-            if (_session.Transaction == null || (!_session.Transaction.IsActive) && _session.IsOpen)
-            {
-                _session.BeginTransaction(_level);
-            }
+            //if (_session.Transaction == null || (!_session.Transaction.IsActive) && _session.IsOpen)
+            //{
+            //    _session.BeginTransaction(_level);
+            //}
         }
 
-        public override void Start()
+        public void Start()
         {
             if (_session == null)
             {
                 _logWriter.Debug("UnitOfWork - new session");
                 this.UseSupportForOutsidePersistentCall = true;
-                _session = SessionFactory.OpenSession();
+               // _session = SessionFactory.OpenSession();
                 Bind();
             }
             DoStart();
         }
 
-        public override void Resume()
+        public void Resume()
         {
            DoResume();
             
         }
 
-        public override void Pause()
+        public void Pause()
         {
             DoResume();
             Commit(_session);
         }
 
-        public override void Abort()
+        public void Abort()
         {
             DoAbort();
         }
 
-        public override void End()
+        public void End()
         {
              DoEnd();
             _hasEnded = true;
         }
 
-        private void Commit(ISession session)
+        private void Commit(DbContext session)
         {
-            if (session.Transaction == null || !session.Transaction.IsActive)
-                return;
+            //if (session.Transaction == null || !session.Transaction.IsActive)
+            //    return;
 
-            try
-            {
-                session.Transaction.Commit();
-            }
-            catch (Exception)
-            {
-                session.Transaction.Rollback();
-                throw;
-            }
+            //try
+            //{
+            //    session.Transaction.Commit();
+            //}
+            //catch (Exception)
+            //{
+            //    session.Transaction.Rollback();
+            //    throw;
+            //}
 
         }
 
-        private void FlushAndCommit(ISession session)
+        private void FlushAndCommit(DbContext session)
         {
-            if (session.Transaction == null || !session.Transaction.IsActive)
-                return;
-            try
-            {
-                session.Flush();
-                session.Transaction.Commit();
-            }
-            catch (Exception)
-            {
-                session.Transaction.Rollback();
-                throw;
-            }
+            //if (session.Transaction == null || !session.Transaction.IsActive)
+            //    return;
+            //try
+            //{
+            //    session.Flush();
+            //    session.Transaction.Commit();
+            //}
+            //catch (Exception)
+            //{
+            //    session.Transaction.Rollback();
+            //    throw;
+            //}
         }
 
 
-        protected override void DoStart()
+        protected  void DoStart()
         {
             WindsorAccessor.Instance.Container.RequireScope();
             this.DoResume();
         }
 
-        protected override void DoPause()
+        protected  void DoPause()
         {
             Commit(_session);
         }
 
-        protected override void DoFlushAndPause()
+        protected  void DoFlushAndPause()
         {
-            if (_session != null && _session.IsOpen)
-            {
-                FlushAndCommit(Session);
-            }
+            //if (_session != null && _session.IsOpen)
+            //{
+            //    FlushAndCommit(Session);
+            //}
         }
 
 
-        protected override void DoResume()
+        protected  void DoResume()
         {
             CheckSession();
             
             CheckTransaction();
         }
 
-        protected override void DoEnd()
+        protected  void DoEnd()
         {
             WindsorAccessor.Instance.Container.RequireScope();
-            FlushAndCommit(_session);
+            //FlushAndCommit(_session);
 
-            if (_session != null && _session.IsOpen)
-            {
-                _session.Close();
-            }
+            //if (_session != null && _session.IsOpen)
+            //{
+            //    _session.Close();
+            //}
         }
 
-        protected override void DoAbort()
+        protected  void DoAbort()
         {
 
-            if (_session != null && _session.Transaction!=null)
-                _session.Transaction.Rollback();
+            //if (_session != null && _session.Transaction!=null)
+            //    _session.Transaction.Rollback();
 
-            if (_session != null && _session.IsOpen)
-                _session.Close();
+            //if (_session != null && _session.IsOpen)
+            //    _session.Close();
         }
 
 
-        protected virtual ISession Wrap(ISession session)
+        protected virtual DbContext Wrap(DbContext session)
         {
-            if (this.UseSupportForOutsidePersistentCall)
-                return this._wrapper.WrapWithAutoTransaction(session, (SessionCloseDelegate)null, new SessionDisposeDelegate(this.Unbind));
-            else
-                return this._wrapper.Wrap(session, (SessionCloseDelegate)null, new SessionDisposeDelegate(this.Unbind));
+            //if (this.UseSupportForOutsidePersistentCall)
+            //    return this._wrapper.WrapWithAutoTransaction(session, (SessionCloseDelegate)null, new SessionDisposeDelegate(this.Unbind));
+            //else
+            //    return this._wrapper.Wrap(session, (SessionCloseDelegate)null, new SessionDisposeDelegate(this.Unbind));
+            return null;
         }
 
 
         public void Bind()
         {
-            ISessionFactory sessionFactory = _session.SessionFactory;
+            //DbContext sessionFactory = _session.SessionFactory;
             
-            this.DoBind(_session, sessionFactory);
+           // this.DoBind(_session, sessionFactory);
         }
 
-        private void CleanupAnyOrphanedSession(ISessionFactory factory)
+        private void CleanupAnyOrphanedSession(DbContext factory)
         {
-             this.DoUnbind(factory);
-             if (_session == null || !_session.IsOpen)
-                return;
-            _logWriter.Warn(EventIds.NHibernateSession,"Already session bound on call to Bind(); make sure you clean up your sessions!");
-            try
-            {
-                if (_session.Transaction != null)
-                {
-                    if (_session.Transaction.IsActive)
-                    {
-                        try
-                        {
-                            _session.Transaction.Rollback();
-                        }
-                        catch (Exception ex)
-                        {
-                            _logWriter.Warn(EventIds.NHibernateSession,"Unable to rollback transaction for orphaned session", ex);
-                        }
-                    }
-                }
-                _session.Close();
-            }
-            catch (Exception ex)
-            {
-                _logWriter.Warn(EventIds.NHibernateSession,"Unable to close orphaned session", ex);
-            }
+            // this.DoUnbind(factory);
+            // if (_session == null || !_session.IsOpen)
+            //    return;
+            //_logWriter.Warn(EventIds.NHibernateSession,"Already session bound on call to Bind(); make sure you clean up your sessions!");
+            //try
+            //{
+            //    if (_session.Transaction != null)
+            //    {
+            //        if (_session.Transaction.IsActive)
+            //        {
+            //            try
+            //            {
+            //                _session.Transaction.Rollback();
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                _logWriter.Warn(EventIds.NHibernateSession,"Unable to rollback transaction for orphaned session", ex);
+            //            }
+            //        }
+            //    }
+            //    _session.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logWriter.Warn(EventIds.NHibernateSession,"Unable to close orphaned session", ex);
+            //}
         }
 
-        private void DoUnbind(ISessionFactory factory)
+        private void DoUnbind(DbContext factory)
         {
-            HybridWebSessionContext.Unbind(factory);
+          //  HybridWebSessionContext.Unbind(factory);
           
         }
 
-        public void Unbind(ISession session)
+        public void Unbind(DbContext session)
         {
-            if (HybridWebSessionContext.HasBind(session.SessionFactory))
-            {
-                this.DoUnbind(session.SessionFactory);
-            }
-            else
-            {
-                CleanupAnyOrphanedSession(session.SessionFactory);
-            }
+            //if (HybridWebSessionContext.HasBind(session.SessionFactory))
+            //{
+            //    this.DoUnbind(session.SessionFactory);
+            //}
+            //else
+            //{
+            //    CleanupAnyOrphanedSession(session.SessionFactory);
+            //}
         }
 
-        private void DoBind(ISession session, ISessionFactory factory)
+        private void DoBind(DbContext session, DbContext factory)
         {
-            if (!HybridWebSessionContext.HasBind(factory))
-            {
-                HybridWebSessionContext.Bind(session);
-                this.Wrap(session);
-            }
+            //if (!HybridWebSessionContext.HasBind(factory))
+            //{
+            //    HybridWebSessionContext.Bind(session);
+            //    this.Wrap(session);
+            //}
            
         }
 
-        protected override void Dispose(bool disposing)
+        protected  void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -308,7 +308,7 @@ namespace Lacjam.Core.Infrastructure.Ioc.Convo
             }
             else
             {
-                Dispose();
+                
             }
         }
 

@@ -1,7 +1,8 @@
 using System;
+using System.Data.Entity;
 using System.Linq;
-using NHibernate;
-using NHibernate.Linq;
+
+
 using Lacjam.Core.Infrastructure.Database;
 using Lacjam.Core.Infrastructure.Ioc;
 using Lacjam.Core.Infrastructure.Ioc.Convo;
@@ -13,77 +14,79 @@ namespace Lacjam.Core.Infrastructure.Projection
     public class ReadStoreRepository<T> : IReadStoreRepository<T> where T : class 
     {
      
-        public ReadStoreRepository(ISessionFactory sessionFactory)
+        public ReadStoreRepository(DbContext sessionFactory)
         {
             _sessionFactory = sessionFactory;
         }
 
         public void Save(IMaybe<T> readmodel)
         {
-            var session = _sessionFactory.GetCurrentSessionOrOpen();
-            readmodel.Foreach(x =>
-            {
-                var ttt = x.GetType();
+            //var session = _sessionFactory;
+            //readmodel.Foreach(x =>
+            //{
+            //    var ttt = x.GetType();
 
-                foreach (var kkk in session.Statistics.EntityKeys)
-                {
-                    if (kkk.EntityName == ttt.FullName)
-                    {
-                        // 2 projection updates will blow up the session with a message - "a different object with the same identifier value was already associated with the session: }
+            //    foreach (var kkk in session.Statistics.EntityKeys)
+            //    {
+            //        if (kkk.EntityName == ttt.FullName)
+            //        {
+            //            // 2 projection updates will blow up the session with a message - "a different object with the same identifier value was already associated with the session: }
                        
-                        session.Evict(session.Get(kkk.EntityName, kkk.Identifier));
-                        //session.Merge(x);
-                    }
-                }
-                session.Save(x);
+            //            session.Evict(session.Get(kkk.EntityName, kkk.Identifier));
+            //            //session.Merge(x);
+            //        }
+            //    }
+            //    session.Save(x);
 
-            });
+            //});
 
-            session.Flush();
-            session.Clear();
+            //session.Flush();
+            //session.Clear();
         }
 
         public void Update(IMaybe<T> readmodel)  
         {
-            var session = _sessionFactory.GetCurrentSessionOrOpen();
-            readmodel.Foreach(x =>
-            {
-                var ttt = x.GetType();
+            //var session = _sessionFactory;
+            //readmodel.Foreach(x =>
+            //{
+            //    var ttt = x.GetType();
 
-                foreach (var kkk in session.Statistics.EntityKeys)
-                {
-                    if (kkk.EntityName == ttt.FullName)
-                    {
-                         // 2 projection updates will blow up the session with a message - "a different object with the same identifier value was already associated with the session: }
-                        //session.Save(x);
-                        //session.Flush();
-                        session.Evict(session.Get(kkk.EntityName, kkk.Identifier));
-                    }
-                }
+            //    foreach (var kkk in session.Statistics.EntityKeys)
+            //    {
+            //        if (kkk.EntityName == ttt.FullName)
+            //        {
+            //             // 2 projection updates will blow up the session with a message - "a different object with the same identifier value was already associated with the session: }
+            //            //session.Save(x);
+            //            //session.Flush();
+            //            session.Evict(session.Get(kkk.EntityName, kkk.Identifier));
+            //        }
+            //    }
 
-                session.Update(x);
+            //    session.Update(x);
 
-            });
+            //});
         }
 
         public void Remove(IMaybe<T> readmodel)
         {
-            readmodel.Foreach(x => _sessionFactory.GetCurrentSessionOrOpen().Delete(x));
+            return;
+            //readmodel.Foreach(x => _sessionFactory.Delete(x));
         }
 
         public T Reference(Guid identity)
         {
-            return _sessionFactory.GetCurrentSessionOrOpen().Load<T>(identity);
+            return null;
+            //return _sessionFactory.Load<T>(identity);
         }
 
         public IMaybe<T> Get(Guid identity)
         {
-            return _sessionFactory.GetCurrentSessionOrOpen().Get<T>(identity).ToMaybe();
+            return null; //_sessionFactory.<T>(identity).ToMaybe();
         }
 
         public IQueryable<T> ToQueryable()
         {
-            return _sessionFactory.GetCurrentSessionOrOpen().Query<T>();
+            return _sessionFactory.Set<T>();
         }
 
         public bool Exists(Guid identity)
@@ -91,6 +94,6 @@ namespace Lacjam.Core.Infrastructure.Projection
             return Get(identity).Fold(x => true, () => false);
         }
 
-        private readonly ISessionFactory _sessionFactory;
+        private readonly DbContext _sessionFactory;
     }
 }

@@ -1,4 +1,4 @@
-﻿using NHibernate.Linq;
+﻿
 using Lacjam.Framework.Dispatchers;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Extensions;

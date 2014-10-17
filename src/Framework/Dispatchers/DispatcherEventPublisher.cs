@@ -6,7 +6,7 @@ using System.Reflection;
 using Castle.Windsor;
 
 using Newtonsoft.Json;
-using NHibernate.Util;
+
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Handlers;
 using Lacjam.Framework.Logging;

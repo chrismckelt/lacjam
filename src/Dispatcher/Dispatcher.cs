@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Castle.Core.Logging;
-using HibernatingRhinos.Profiler.Appender.NHibernate;
+
 using Lacjam.Framework.Dispatchers;
 
 namespace Lacjam.Dispatcher
@@ -15,7 +15,7 @@ namespace Lacjam.Dispatcher
 
         public void Start(string mode)
         {
-            NHibernateProfiler.Initialize();
+           
             Logger.Info("Dispatcher started");
             Mode = mode;
             ParseCommandLine();

@@ -1,31 +1,32 @@
-﻿using System.Linq;
-using NHibernate;
-using NHibernate.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
+
+
 using Lacjam.Framework.FP;
 
 namespace Lacjam.Framework.Handlers
 {
     public class EventHandlerErrorRepository : IEventHandlerErrorRepository
     {
-        private readonly ISessionFactory _sessionFactory;
+        private readonly DbContext _sessionFactory;
 
-        public EventHandlerErrorRepository(ISessionFactory sessionFactory)
+        public EventHandlerErrorRepository(DbContext sessionFactory)
         {
             _sessionFactory = sessionFactory;
         }
 
         public void AddError(EventHandlerError error)
         {
-            _sessionFactory.GetCurrentSession().Save(error);
+            _sessionFactory.SaveChanges();
         }
         public void UpdateError(EventHandlerError error)
         {
-            _sessionFactory.GetCurrentSession().Update(error);
+            _sessionFactory.SaveChanges();
         }
 
         public IMaybe<EventHandlerError> GetLastError()
         {
-            return (from error in _sessionFactory.GetCurrentSession().Query<EventHandlerError>()
+            return (from error in _sessionFactory.Set<EventHandlerError>()
                     orderby error.CreatedUtcDate descending 
                     select error)
                     .Take(1)
@@ -35,8 +36,8 @@ namespace Lacjam.Framework.Handlers
 
         public long GetTotalErrors()
         {
-            return _sessionFactory.GetCurrentSession()
-                                  .Query<EventHandlerError>()
+            return _sessionFactory
+                                  .Set<EventHandlerError>()
                                   .Count();
         }
     }

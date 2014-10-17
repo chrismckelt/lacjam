@@ -6,8 +6,8 @@ using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using NHibernate;
-using NHibernate.Engine;
+
+
 using Lacjam.Core.Infrastructure.Database;
 using Lacjam.Core.Infrastructure.Ioc.Convo;
 using Lacjam.Core.Infrastructure.Ioc.Interceptors;
@@ -81,11 +81,11 @@ namespace Lacjam.Core.Infrastructure.Ioc
         {
             container.Kernel.AddFacility<TypedFactoryFacility>();
 
-            container.Register(Component.For<ISessionFactoryProvider>().AsFactory());
+            //container.Register(Component.For<DbContextProvider>().AsFactory());
 
-            container.Register(Component.For<INHibernateFluentConfiguration>().ImplementedBy<NHibernateFluentConfiguration>());
+            //container.Register(Component.For<INHibernateFluentConfiguration>().ImplementedBy<NHibernateFluentConfiguration>());
 
-            container.Register(Component.For<ISessionWrapper>().ImplementedBy<SessionWrapper>());
+            //container.Register(Component.For<DbContextWrapper>().ImplementedBy<SessionWrapper>());
 
 
         }

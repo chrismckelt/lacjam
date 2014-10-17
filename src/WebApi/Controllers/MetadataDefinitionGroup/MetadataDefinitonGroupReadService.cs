@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Linq;
+
 using Lacjam.Core.Domain.MetadataDefinitionGroups;
 using Lacjam.Core.Domain.MetadataDefinitions;
 using Lacjam.Core.Domain.MetadataDefinitions.Events;
@@ -82,15 +82,15 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
                             Regex = GetRegex(def.Regex, def.DataType)
                         }).ToArray();
 
-            foreach (var x in resources.Select(res => new {
-                        res,
-                        values = _definitionValueRepository.ToQueryable()
-                            .Where(v => v.DefinitionId == res.Identity)
-                            .Select(v => v.Value).ToFuture()
-                    }))
-            {
-                x.res.Values = new HashSet<string>(x.values);
-            }
+            //foreach (var x in resources.Select(res => new {
+            //            res,
+            //            values = _definitionValueRepository.ToQueryable()
+            //                .Where(v => v.DefinitionId == res.Identity)
+            //                .Select(v => v.Value).ToFuture()
+            //        }))
+            //{
+            //    x.res.Values = new HashSet<string>(x.values);
+            //}
             return resources;
         }
 

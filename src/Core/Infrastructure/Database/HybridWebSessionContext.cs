@@ -1,5 +1,5 @@
 ﻿using System;
-using NHibernate;
+
 using NHibernate.Context;
 using NHibernate.Engine;
 
@@ -7,13 +7,13 @@ namespace Lacjam.Core.Infrastructure.Database
 {
     public class HybridWebSessionContext : CurrentSessionContext
     {
-        private readonly ISessionFactoryImplementor _factory;
+        private readonly DbContextImplementor _factory;
         private const string _itemsKey = "HybridWebSessionContext";
         [ThreadStatic]
         private static ISession _threadSession;
 
         // This constructor should be kept, otherwise NHibernate will fail to create an instance of this class.
-        public HybridWebSessionContext(ISessionFactoryImplementor factory)
+        public HybridWebSessionContext(DbContextImplementor factory)
         {
             _factory = factory;
         }

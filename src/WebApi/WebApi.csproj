@@ -58,17 +58,6 @@
     <Reference Include="CommonServiceLocator.WindsorAdapter.Unofficial">
       <HintPath>..\packages\CommonServiceLocator.WindsorAdapter.Unofficial.3.2.1.4\lib\Net40\CommonServiceLocator.WindsorAdapter.Unofficial.dll</HintPath>
     </Reference>
-    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender">
-      <HintPath>..\packages\NHibernateProfiler.2.0.2237.0\lib\HibernatingRhinos.Profiler.Appender.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
@@ -80,9 +69,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -160,9 +146,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\uNhAddIns.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivator">
-      <HintPath>..\packages\WebActivator.1.4\lib\NETFramework40\WebActivator.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -177,7 +160,6 @@
     <Folder Include="Infrastructure\Database\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\NHibernateProfilerBootstrapper.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Entities\EntityController.cs" />
     <Compile Include="Controllers\Entities\EntityListResource.cs" />

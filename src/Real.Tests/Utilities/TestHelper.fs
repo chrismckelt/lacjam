@@ -14,7 +14,7 @@ open Lacjam.Framework.Storage
 open Lacjam.Core.Infrastructure
 open Lacjam.Core.Infrastructure.Ioc
 open Lacjam.Core.Infrastructure.Database
-open HibernatingRhinos.Profiler.Appender.NHibernate
+//open HibernatingRhinos.Profiler.Appender.NHibernate
 open RestSharp
 open System
 open System.Net

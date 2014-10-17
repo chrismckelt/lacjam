@@ -1,13 +1,14 @@
 using System;
 using System.Data;
-using NHibernate;
+using System.Data.Entity;
+
 
 namespace Lacjam.Core.Infrastructure.Ioc.Convo
 {
     public interface IUnitOfWork
     {
-        ISessionFactory SessionFactory { get; }
-        ISession Session { get; set; }
+       
+        DbContext Session { get; set; }
         IUnitOfWork WithIsolationLevel(IsolationLevel level);
         T Run<T>(Func<T> guardedBlock);
 

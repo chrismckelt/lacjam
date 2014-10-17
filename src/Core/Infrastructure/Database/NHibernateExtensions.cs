@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using NHibernate;
+
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Engine;
 using NHibernate.Engine.Query.Sql;
-using NHibernate.Util;
+
 using Lacjam.Core.Infrastructure.Ioc;
 using Lacjam.Core.Infrastructure.Ioc.Convo;
 
@@ -51,7 +51,7 @@ namespace Lacjam.Core.Infrastructure.Database
         }
 
 
-        public static ISession GetCurrentSessionOrOpen(this ISessionFactory sessionFactory)
+        public static ISession GetCurrentSessionOrOpen(this DbContext sessionFactory)
         {
             if (HybridWebSessionContext.HasBind(sessionFactory))
             {
