@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Optimization;
 
+
 namespace Lacjam.WebClient
 {
     public class Global : System.Web.HttpApplication

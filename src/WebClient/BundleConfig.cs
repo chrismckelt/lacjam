@@ -14,6 +14,7 @@ using BundleTransformer.UglifyJs.Minifiers;
 using JavaScriptEngineSwitcher.V8;
 using Lacjam.Framework.Extensions;
 
+
 namespace Lacjam.WebClient
 {
     /// <summary>
