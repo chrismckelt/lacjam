@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Structerre.MetaStore.Framework.Events;
+using Lacjam.Framework.Events;
 
-namespace Structerre.MetaStore.Framework.Handlers
+namespace Lacjam.Framework.Handlers
 {
     public interface IEventPublisher
     {

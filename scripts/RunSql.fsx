@@ -8,9 +8,9 @@ open System.Data
 open System.Data.Linq
 open Microsoft.FSharp.Data.TypeProviders
 open Microsoft.FSharp.Linq
-// test         = data source=structerre.csae43ljslde.ap-southeast-2.rds.amazonaws.com;Initial Catalog=STRUCterre.Passport2;User Id=STRUCterre.Passport2.Api;Password=DvcSL1dbzjvVqvjremA3;
+// test         = data source=Lacjam.csae43ljslde.ap-southeast-2.rds.amazonaws.com;Initial Catalog=Lacjam.Passport2;User Id=Lacjam.Passport2.Api;Password=DvcSL1dbzjvVqvjremA3;
 // production   = 
-type dbSchema = SqlDataConnection<"data source=structerre.csae43ljslde.ap-southeast-2.rds.amazonaws.com;Initial Catalog=STRUCterre.Passport2;User Id=STRUCterre.Passport2.Api;Password=DvcSL1dbzjvVqvjremA3;">
+type dbSchema = SqlDataConnection<"data source=Lacjam.csae43ljslde.ap-southeast-2.rds.amazonaws.com;Initial Catalog=Lacjam.Passport2;User Id=Lacjam.Passport2.Api;Password=DvcSL1dbzjvVqvjremA3;">
 let db = dbSchema.GetDataContext()
 // Enable the logging of database activity to the console.
 //db.DataContext.Log <- System.Console.Out

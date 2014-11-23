@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Web;
 using System.Web.Optimization;
-
+using Lacjam.Core.Infrastructure.Ioc;
+using Lacjam.Framework.Logging;
 
 namespace Lacjam.WebClient
 {

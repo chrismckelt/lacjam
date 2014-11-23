@@ -7,7 +7,8 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
 {
     public class MetadataDefinition : AggregateRoot<MetadataDefinitionState>
     {
-        public static readonly string[] KeywordDefinitions = {"keywords", "description", "tags" };
+        public const string DescriptionDefinition = "description";
+        public static readonly string[] KeywordDefinitions = { DescriptionDefinition, "keywords", "tags" };
 
         protected MetadataDefinition(): base() // required for JSON
         {

@@ -1,4 +1,4 @@
-﻿
+﻿using FluentNHibernate.MappingModel;
 using Lacjam.Core.Infrastructure;
 using Lacjam.Framework.Exceptions;
 using Lacjam.Framework.Extensions;

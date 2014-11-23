@@ -7,7 +7,7 @@ open System.Text.RegularExpressions
 open System.Linq
 
 module Capitalise =
-    let rootFolder = @"C:\dev\STRUCterre.MetaStore\src\WebClient\App\"
+    let rootFolder = @"C:\dev\Lacjam\src\WebClient\App\"
     let rec fix folder =
         Directory.EnumerateFiles(folder)
         |> Seq.iter (fun file-> if (Path.GetExtension(file)=".js") then

@@ -1,5 +1,13 @@
 ﻿using System;
 using System.Data;
+using FluentNHibernate.Conventions;
+using FluentNHibernate.Conventions.AcceptanceCriteria;
+using FluentNHibernate.Conventions.Helpers;
+using FluentNHibernate.Conventions.Inspections;
+using FluentNHibernate.Conventions.Instances;
+using FluentNHibernate.Mapping;
+using NHibernate.SqlTypes;
+using NHibernate.Type;
 
 namespace Lacjam.Core.Infrastructure.Database.Conventions
 {

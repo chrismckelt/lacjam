@@ -3,7 +3,7 @@ using NHibernate;
 using uNhAddIns.SessionEasier;
 using uNhAddIns.SessionEasier.Conversations;
 
-namespace Structerre.MetaStore.Core.Infrastructure.Ioc.Convo
+namespace Lacjam.Core.Infrastructure.Ioc.Convo
 {
 
     [Serializable]

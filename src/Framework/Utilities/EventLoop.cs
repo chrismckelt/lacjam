@@ -11,7 +11,7 @@ namespace Lacjam.Framework.Utilities
         {
             while (function())
             {
-                System.Threading.Thread.Sleep(5000);
+                //System.Threading.Thread.Sleep(5000);
             }
         }
     }

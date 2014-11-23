@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.Windsor;
-
 using Newtonsoft.Json;
-
+using NHibernate.Util;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.Handlers;
 using Lacjam.Framework.Logging;
@@ -57,7 +56,7 @@ namespace Lacjam.Framework.Dispatchers
 
             HandlerTuples = new List<Tuple<Type, MethodInfo, Type>>();
 
-            var eventTypes = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Structerre"))
+            var eventTypes = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Lacjam"))
                 .SelectMany(assembly => assembly.GetExportedTypes())
                 .Where(type => !type.IsInterface)
                 .Where(x => typeof(IEvent).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)

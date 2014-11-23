@@ -14,7 +14,6 @@ using BundleTransformer.UglifyJs.Minifiers;
 using JavaScriptEngineSwitcher.V8;
 using Lacjam.Framework.Extensions;
 
-
 namespace Lacjam.WebClient
 {
     /// <summary>
@@ -111,8 +110,10 @@ namespace Lacjam.WebClient
 
             var cssBundle = new StyleBundle("~/bundles/css");
 
-            cssBundle.IncludeDirectory("~/Content/", "*.css", true);
-
+            cssBundle.IncludeDirectory("~/Content/Bootstrap", "*.css", false);
+            cssBundle.IncludeDirectory("~/Content/", "*.css", false);
+            cssBundle.IncludeDirectory("~/Content/css", "*.css", false);
+            
             cssBundle.Builder = new DefaultBundleBuilder();
 
             cssBundle.Transforms.Add(cssTransformer);
@@ -120,6 +121,13 @@ namespace Lacjam.WebClient
             cssBundle.Orderer = new PushToTopOrderer("bootstrap");
 
             bundles.Add(cssBundle);
+
+            var publicCssBundle = new StyleBundle("~/bundles/public/css");
+            publicCssBundle.IncludeDirectory("~/Content/public", "*.css", true);
+            publicCssBundle.Builder = new DefaultBundleBuilder();
+            publicCssBundle.Transforms.Add(cssTransformer);
+            publicCssBundle.Orderer = new PushToTopOrderer("bootstrap");
+            bundles.Add(publicCssBundle);
         }
     }
 

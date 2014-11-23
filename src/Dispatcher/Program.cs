@@ -30,8 +30,8 @@ namespace Lacjam.Dispatcher
                     r.SetResetPeriod(1);
                 });
 
-                x.SetDescription("Structerre MetaStore Event Dispatcher");
-                x.SetDisplayName("Structerre MetaStore Event Dispatcher");
+                x.SetDescription("Lacjam Event Dispatcher");
+                x.SetDisplayName("Lacjam Event Dispatcher");
                 x.SetServiceName("Lacjam.Dispatcher");
             });
         }

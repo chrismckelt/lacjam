@@ -1,13 +1,14 @@
 ﻿/// <reference path="../_references.ts" />
 module app.controllers {
     export class EntityEditController extends app.base.ControllerBase {
-        public static $inject = ["$scope", "$stateParams", "$debounce", "dialogs"];
+        public static $inject = ["$scope", "$stateParams", "$state", "$debounce", "dialogs", "EntityService"];
         
-        private service = new app.services.EntityService();
         private groupService = new app.services.MetadataDefinitionGroupService();
         
-        constructor($scope: ng.IScope, public $stateParams, public $debounce, public $dialogs) {
+        constructor($scope: ng.IScope, public $stateParams, public $state, public $debounce, public $dialogs, public entityService: app.services.EntityService) {
             super();
+
+            var duplicate = $state.current.data.duplicate;
 
             var scope = {
                 title: "",
@@ -50,7 +51,7 @@ module app.controllers {
                     var dlg = this.$dialogs.confirm('Confirm', msg, opts);
                     dlg.result.then(btn => {
                         app.fn.spinStart();
-                        this.service.doDelete(scope.model.identity)
+                        entityService.doDelete(scope.model.identity)
                             .then(pro => {
                                     toastr.success(scope.originalName, "Deleted");
                                     app.fn.spinStop();
@@ -72,10 +73,26 @@ module app.controllers {
                         app.log.info("Delete metadata definition group cancelled");
                     });
                 },
+                hasSelectedValue: (select2Value) => {
+                    if (select2Value === undefined)
+                        return false;
+
+                    if ($.isArray(select2Value))
+                        return select2Value.length > 0;
+
+                    return select2Value.text != undefined && select2Value.text != '';
+                },
                 save: () => {
+                    var hasSelectionValidationErrors = false;
                     for (var d in scope.model.definitionValues) {
                         var def: any = scope.model.definitionValues[d];
                         if (def.isSelection) {
+                            if (!scope.hasSelectedValue(def.select2Value)) {
+                                toastr.error(def.name, "No Value Selected for field");
+                                hasSelectionValidationErrors = true;
+                                continue;
+                            }
+
                             if ($.isArray(def.select2Value)) {
                                 def.values = $.map(def.select2Value, x => x.text);
                             } else {
@@ -83,8 +100,11 @@ module app.controllers {
                             }
                         }
                     }
+                    
+                    if(hasSelectionValidationErrors)
+                        return;
 
-                    if (this.$stateParams.identity) {
+                    if (scope.editMode) {
                         scope.update();
                     } else {
                         scope.create();
@@ -93,7 +113,7 @@ module app.controllers {
                 create: () => {
                     app.fn.spinStart();
                     scope.model.identity = app.fn.createGuid();
-                    this.service.create(scope.model)
+                    entityService.create(scope.model)
                         .then(pro => {
                             toastr.success(scope.model.name, "Created");
                             app.fn.spinStop();
@@ -117,7 +137,7 @@ module app.controllers {
                 update: () => {
                     app.fn.spinStart();
 
-                    this.service.update(scope.model, this.$stateParams.identity)
+                    entityService.update(scope.model, this.$stateParams.identity)
                         .then(pro => {
                             toastr.success(scope.model.name, "Saved");
                             app.fn.spinStop();
@@ -140,30 +160,38 @@ module app.controllers {
                 },
                 originalValues: <app.model.EntityMetadataDefintionResource[]>[],
                 toBeDeletedValues: <{ name: string; value: string }[]>[]
-        };
+            };
 
             if ($stateParams.identity) {
-                scope.editMode = true;
-                this.service.get($stateParams.identity).then((res: any) => {
+                scope.editMode = !duplicate;
+                entityService.get($stateParams.identity).then((res: any) => {
                     scope.model = res.data;
-                    scope.title = "Editing " + scope.model.name;
+                    if (duplicate) {
+                        scope.title = "Create new entity";
+                        scope.model.name = "";
+                    } else {
+                        scope.title = scope.model.name;
+                    }
                     scope.originalName = scope.model.name;
                     scope.originalValues = scope.model.definitionValues;
                 });
             } else {
                 scope.title = "Create new entity";
-                scope.model = new app.model.EntityResource()
+                scope.model = new app.model.EntityResource();
                 scope.model.identity = app.fn.createGuid();
             }
             
+
+            
+
             scope = $.extend($scope, scope);
 
-            var loadGroup = (groupId: app.model.Guid) => {
+            var loadGroup = (groupId: app.model.Guid)=> {
                 if (groupId) {
                     var oldDefValues = $.extend([], scope.originalValues, scope.model.definitionValues);
                     scope.model.definitionValues = [];
 
-                    this.groupService.getDefinitions(scope.model.definitionGroup.id).then((res: any) => {
+                    this.groupService.getDefinitions(scope.model.definitionGroup.id).then((res: any)=> {
                         var definitions: app.model.MetadataDefinitionResource[] = res.data;
                         var definitionIds = $.map(definitions, d=> d.identity);
 
@@ -195,24 +223,31 @@ module app.controllers {
                             }
 
                             if (isSelection) {
-                                (() => {
+                                (()=> {
                                     var isMultiple = def.dataType === "PickList";
-                                    var select2Value = $.map(entityDef.values, x => { return { id: x, text: x }; });
-                                    var val = isMultiple? <any>select2Value : select2Value[0];
+                                    var select2Value = $.map(entityDef.values, x=> { return { id: x, text: x }; });
+                                    var val = isMultiple ? <any>select2Value : select2Value[0];
+                                    var values = $.map(def.values, s=> { return { id: s, text: s } });
+
+                                    var select2Options = <Select2Options>{
+                                        multiple: isMultiple,
+                                        initSelection: (data, callback)=> {
+                                            console.log(val);
+                                            callback(val);
+                                        }
+                                    }
+                                    if (isMultiple) {
+                                        select2Options.tags = values;
+                                    } else {
+                                        select2Options.data = values;
+                                    }
                                     $.extend(entityDef, {
-                                        select2Options: <Select2Options>{
-                                            data: $.map(def.values, s => { return { id: s, text: s } }),
-                                            multiple: isMultiple,
-                                            initSelection: (data, callback) => {
-                                                console.log(val);
-                                                callback(val);
-                                            }
-                                        },
+                                        select2Options: select2Options,
                                         select2Value: val
                                     });
                                 })();
                             }
-                            
+
                             scope.model.definitionValues.push(entityDef);
                         }
 
@@ -227,8 +262,10 @@ module app.controllers {
                             }
                         }
                     });
-                }    
-            }
+                }
+            };
+
+
 
             $scope.$watch("model.definitionGroup.id", loadGroup);
         }

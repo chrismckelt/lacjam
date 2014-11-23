@@ -39,9 +39,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60390</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://metastore.Lacjam.local</IISUrl>
+          <IISUrl>http://www.Lacjam.local</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://metastore.Lacjam.local</IISAppRootUrl>
+          <IISAppRootUrl>http://www.Lacjam.local</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Structerre.MetaStore.WebApi</RootNamespace>
-    <AssemblyName>Structerre.MetaStore.WebApi</AssemblyName>
+    <RootNamespace>Lacjam.WebApi</RootNamespace>
+    <AssemblyName>Lacjam.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
@@ -288,9 +288,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49780</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://metastore.structerre.local</IISUrl>
+          <IISUrl>http://www.Lacjam.local</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://metastore.structerre.local</IISAppRootUrl>
+          <IISAppRootUrl>http://www.Lacjam.local</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

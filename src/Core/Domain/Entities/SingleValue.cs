@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using NHibernate.Mapping;
 using Lacjam.Core.Domain.MetadataDefinitions;
 using Lacjam.Framework.Extensions;
 

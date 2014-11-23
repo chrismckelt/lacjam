@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Structerre.MetaStore.WebApi
+namespace Lacjam.WebApi
 {
     public class RouteConfig
     {

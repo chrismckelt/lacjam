@@ -1,15 +1,13 @@
-﻿
-
-using System.Data.Entity.ModelConfiguration;
+﻿using FluentNHibernate.Mapping;
 
 namespace Lacjam.Framework.Handlers
 {
-    public class HandlerSequenceMap : EntityTypeConfiguration<HandlerSequence>
+    public class HandlerSequenceMap : ClassMap<HandlerSequence>
     {
         public HandlerSequenceMap()
         {
-            //Id(x => x.Name, "Dispatcher");
-           // Map(x => x.Seq).Column("Pointer");
+            Id(x => x.Name, "Dispatcher");
+            Map(x => x.Seq).Column("Pointer");
         }
     }
 }

@@ -5,7 +5,7 @@ using Lacjam.Framework.Converters;
 
 namespace Lacjam.Framework.Serialization
 {
-    public static class StructerreSerializerSettings
+    public static class LacjamSerializerSettings
     {
         public static readonly JsonSerializerSettings Instance = GetJsonSerializerSettings();
 

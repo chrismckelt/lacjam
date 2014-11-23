@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-
+using NHibernate.Linq;
 using Lacjam.Core.Domain.MetadataDefinitionGroups;
 using Lacjam.Core.Domain.MetadataDefinitionGroups.Events;
 using Lacjam.Core.Domain.MetadataDefinitions;
@@ -18,6 +18,7 @@ namespace Lacjam.Core.Domain.Entities.Events
         IEventHandler<EntityChangedGroupEvent>,
         IEventHandler<EntityValueProvidedEvent>,
         IEventHandler<EntityMetadataRemovedEvent>,
+        IEventHandler<UpdatedEntityMetadataDefinitionValueEvent>,
         IEventHandler<EntityMetadataDefinitionRemovedEvent>,
         IEventHandler<MetadataDefinitionGroupNameChangedEvent>
     {
@@ -58,6 +59,11 @@ namespace Lacjam.Core.Domain.Entities.Events
             UpdateIndex(@event.AggregateIdentity);
         }
 
+        public void Handle(UpdatedEntityMetadataDefinitionValueEvent @event)
+        {
+            UpdateIndex(@event.AggregateIdentity);
+        }
+
         public void Handle(EntityMetadataRemovedEvent @event)
         {
             UpdateIndex(@event.AggregateIdentity);
@@ -82,14 +88,14 @@ namespace Lacjam.Core.Domain.Entities.Events
 
         private void UpdateIndex(Guid entityId)
         {
-            //var entities = _entityRepository.ToQueryable().Where(x => x.Identity == entityId).ToFuture();
-            //var values = _entityValueRepository.ToQueryable().Where(x => x.EntityIdentity == entityId).ToFuture();
+            var entities = _entityRepository.ToQueryable().Where(x => x.Identity == entityId).ToFuture();
+            var values = _entityValueRepository.ToQueryable().Where(x => x.EntityIdentity == entityId).ToFuture();
             
-            //foreach (var entity in entities)
-            //{
-            //    var group = _groupRepository.ToQueryable().FirstOrDefault(x => x.Identity == entity.MetadataDefinitionGroupIdentity);
-            //    _indexer.SaveIndex(entity, group, values);
-            //}
+            foreach (var entity in entities)
+            {
+                var group = _groupRepository.ToQueryable().FirstOrDefault(x => x.Identity == entity.MetadataDefinitionGroupIdentity);
+                _indexer.SaveIndex(entity, group, values);
+            }
         }
     }
 }

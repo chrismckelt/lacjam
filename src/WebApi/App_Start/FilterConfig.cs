@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Structerre.MetaStore.WebApi
+namespace Lacjam.WebApi
 {
     public class FilterConfig
     {

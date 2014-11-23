@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Lacjam.Framework.Extensions;
 
 namespace Lacjam.Core.Domain.MetadataDefinitions
@@ -22,7 +21,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions
 
         public static IEnumerable<KeyValuePair<Type, IDataType>> GetDataTypes()
         {
-            var results = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Structerre"))
+            var results = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("Lacjam"))
                .SelectMany(assembly => assembly.GetExportedTypes())
                .Where(type => !type.IsInterface)
                .Where(x => typeof(IDataType).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);

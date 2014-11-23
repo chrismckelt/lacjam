@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Remotion.Linq.Utilities;
 using Lacjam.Core.Domain.MetadataDefinitions;
 using Lacjam.Core.Domain.MetadataDefinitions.Commands;
 using Lacjam.Core.Services;
@@ -34,7 +35,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinition
             _logWriter.Info(String.Format("Beginning of processing creation of Definition : {0}", resource.Name));
 
             if (resource == null)
-                throw new ArgumentNullException("resource");
+                throw new ArgumentEmptyException("resource");
 
             _logWriter.Debug(resource.ToString());
 

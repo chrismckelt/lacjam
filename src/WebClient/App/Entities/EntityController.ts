@@ -3,15 +3,13 @@ module app.controllers {
     var rowHeight = 50;
 
     export class EntityController extends app.base.ControllerBase {
-        public static $inject = ["$scope", "$debounce"];
+        public static $inject = ["$scope", "$debounce", "EntityService"];
         
-        private service = new app.services.EntityService();
-        
-        constructor($scope: any, public $debounce) {
+        constructor($scope: any, public $debounce, public entityService) {
             super();
 
-            var textField = { field: 'text', resizable: true, displayName: 'Name', enableCellEdit: false };
-            var groupField = { field: 'group', resizable: true, width: '30%', displayName: 'Group', enableCellEdit: false };
+            var textField = { field: 'text', resizable: true, displayName: 'Name', enableCellEdit: false, cellTemplate:'<span ng-bind-html="COL_FIELD"></span>' };
+            var groupField = { field: 'group', resizable: true, width: '30%', displayName: 'Definition Group', enableCellEdit: false, cellTemplate: '<span ng-bind-html="COL_FIELD"></span>' };
             var editField = { field: 'id', width: '100px', displayName: 'Edit', enableCellEdit: false, cellTemplate: '<span class="glyphicon glyphicon-edit" ng-click="edit(COL_FIELD)">-</span>' };
 
             var scope = {
@@ -49,7 +47,7 @@ module app.controllers {
             app.fn.spinStart();
             
             var loadGrid = () => {
-                this.service.list(scope.q, scope.gridOptions.pagingOptions.currentPage, scope.gridOptions.pagingOptions.pageSize)
+                entityService.list(scope.q, scope.gridOptions.pagingOptions.currentPage, scope.gridOptions.pagingOptions.pageSize)
                     .then((x: any) => {
                         scope.entities = x.data.hits;
                         scope.totalHits = x.data.totalHits;
@@ -57,7 +55,7 @@ module app.controllers {
                     });
             }
 
-            $scope.$watch("q", $debounce(300,(newVal, oldVal) => {
+            $scope.$watch("q", $debounce(300, (newVal, oldVal) => {
                 if (newVal !== oldVal)
                     scope.gridOptions.pagingOptions.currentPage = 1;
                     loadGrid();
@@ -69,6 +67,8 @@ module app.controllers {
             }, true);
 
             loadGrid();
+
+            
         }
     }
 }

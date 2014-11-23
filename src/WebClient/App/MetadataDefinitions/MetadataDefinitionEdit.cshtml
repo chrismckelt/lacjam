@@ -36,7 +36,8 @@
             <label class="col-sm-2 control-label">{{vm.valueDisplay}}</label>
             <div class="col-sm-8">
                 <div ng-repeat="field in vm.model.values track by $index"  ng-init="outerIndex = $index">
-                    <input type="text" ng-if="vm.show($index)"  ng-model="vm.model.values[$index]" class="input-sm form-inline" auto-focus >
+                    <input type="text" ng-if="vm.show($index)"  ng-model="vm.model.values[$index]" class="input-sm form-inline" auto-focus>
+                    <p class="text-warning" ng-show="vm.isInvalidValue()">Not a valid value!</p>
                     <span class="glyphicon glyphicon-remove form-inline" ng-if="!vm.isSingleValue" ng-click="vm.removeItem($index)" onclick="this.style.display = 'none'"></span>
                 </div>
                 <a class="btn btn-sm pull-left" ng-click="vm.addLine()" ng-if="!vm.isSingleValue" >Add</a>                

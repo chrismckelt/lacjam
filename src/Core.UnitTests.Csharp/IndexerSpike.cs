@@ -6,9 +6,9 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using NUnit.Framework;
-using Structerre.MetaStore.Core.Domain.Entities;
-using Structerre.MetaStore.Core.Domain.MetadataDefinitionGroups;
-using Structerre.MetaStore.Core.Services;
+using Lacjam.Core.Domain.Entities;
+using Lacjam.Core.Domain.MetadataDefinitionGroups;
+using Lacjam.Core.Services;
 using Version = Lucene.Net.Util.Version;
 
 namespace Core.UnitTests.Csharp

@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using NHibernate.Util;
 
 namespace Lacjam.Core.Domain.Entities
 {

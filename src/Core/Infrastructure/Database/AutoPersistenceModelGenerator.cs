@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Structerre.MetaStore.Core.Infrastructure.Database.Conventions;
+using Lacjam.Core.Infrastructure.Database.Conventions;
 
-namespace Structerre.MetaStore.Core.Infrastructure.Database
+namespace Lacjam.Core.Infrastructure.Database
 {
     public class AutoPersistenceModelGenerator : IAutoPersistenceModelGenerator
     {

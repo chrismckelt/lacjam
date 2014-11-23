@@ -8,7 +8,7 @@
     <ProjectGuid>ef941d3f-f4b3-4b8a-b960-806c39eda435</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Framework.UnitTests</RootNamespace>
-    <AssemblyName>Structerre.MetaStore.Framework.UnitTests</AssemblyName>
+    <AssemblyName>Lacjam.Framework.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <Name>Framework.UnitTests</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

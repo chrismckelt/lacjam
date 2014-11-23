@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using Remotion.Linq.Utilities;
 using Lacjam.Core.Domain.MetadataDefinitionGroups.Commands;
 using Lacjam.Framework.Dispatchers;
 using Lacjam.Framework.Logging;
@@ -30,7 +30,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
         {
             
             if (resource == null)
-                throw new ArgumentNullException("resource");
+                throw new ArgumentEmptyException("resource");
 
             _logWriter.Info("Cleaning Record");
             resource.Clean();
@@ -85,7 +85,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
         {
 
             if (resource == null)
-                throw new ArgumentNullException("resource");
+                throw new ArgumentEmptyException("resource");
 
             _logWriter.Info("Cleaning Record");
             resource.Clean();

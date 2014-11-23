@@ -27,6 +27,7 @@
 
 
 /// <reference path="app.ts" />
+/// <reference path="publicApp.ts" />
 /// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
@@ -52,6 +53,8 @@
 /// <reference path="entities/EntityController.ts" />
 /// <reference path="entities/EntityEditController.ts" />
 /// <reference path="entities/EntityService.ts" />
+
+/// <reference path="Public/SearchController.ts" />
 
 
 /// <autosync enabled="true" />

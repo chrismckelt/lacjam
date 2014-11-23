@@ -12,5 +12,6 @@ namespace Lacjam.Core.Services
         EntitySearchResults SearchAllMetadata(string s, int pageSize, int page);
         void RenameGroup(MetadataDefinitionGroupProjection @group);
         void DeleteIndex(Guid id);
+        IEnumerable<EntitySearchResults.Hit> GetByNames(string[] names);
     }
 }

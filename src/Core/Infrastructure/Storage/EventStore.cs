@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-
-
+using NHibernate;
+using NHibernate.Linq;
 using Lacjam.Framework.Events;
 using Lacjam.Framework.FP;
 using Lacjam.Framework.Storage;
@@ -16,7 +15,7 @@ namespace Lacjam.Core.Infrastructure.Storage
     {
        
 
-        public EventStore(DbContext sessionFactory)
+        public EventStore(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
         }
@@ -24,7 +23,7 @@ namespace Lacjam.Core.Infrastructure.Storage
         public IEnumerable<EventDescriptor> GetErrorEventsMatchingAggregateIdFromSeq(long seq, Guid aggregateId)
         {
             
-            return _sessionFactory.Set<EventDescriptor>()
+            return _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                            .Where(x => x.Seq >= seq)
                            .Where(x => x.Header.AggregateId == aggregateId)
                            .ToList();
@@ -34,7 +33,7 @@ namespace Lacjam.Core.Infrastructure.Storage
         {
             
             var match =
-                _sessionFactory.Set<EventErrorDescriptor>().FirstOrDefault(a => a.Seq == seq);
+                _sessionFactory.GetCurrentSessionOrOpen().Query<EventErrorDescriptor>().FirstOrDefault(a => a.Seq == seq);
 
             if (match == null)
                 yield break;
@@ -43,7 +42,7 @@ namespace Lacjam.Core.Infrastructure.Storage
                 yield return match;
             else
             {
-                foreach (var item in _sessionFactory.Set<EventErrorDescriptor>()
+                foreach (var item in _sessionFactory.GetCurrentSessionOrOpen().Query<EventErrorDescriptor>()
                                                     .Where(x => x.Header.AggregateId == match.Header.AggregateId)
                                                     .ToList())
                 {
@@ -55,8 +54,9 @@ namespace Lacjam.Core.Infrastructure.Storage
         public IEnumerable<IEvent> GetBatch(int batchSize, int start)
         {
 
-            var result = (from @event in _sessionFactory.Set<EventDescriptor>()
+            var result = (from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                           where @event.Seq >= start
+
                           select @event.EventData)
                           .Take(batchSize);
 
@@ -66,8 +66,9 @@ namespace Lacjam.Core.Infrastructure.Storage
         public IMaybe<EventDescriptor> GetNextEvent(long seq)
         {
            
-            var result = (from @event in _sessionFactory.Set<EventDescriptor>()
+            var result = (from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                           where @event.Seq > seq
+                          orderby @event.Seq ascending
                           select @event)
                           .FirstOrDefault();
 
@@ -83,12 +84,12 @@ namespace Lacjam.Core.Infrastructure.Storage
                          let header = new EventHeader(@event.AggregateIdentity, version, DateTime.UtcNow, "Todo - Put Author here")
                          select new EventDescriptor(@event, header);
 
-            var session = _sessionFactory;
+            var session = _sessionFactory.GetCurrentSessionOrOpen();
             foreach (var descriptor in stream)
             {
                 // as we use the same GUIDs for IDs across multiple entities - NH will get confused & load the wrong query plan if we dont evict by ID from the current session
-               // session.Evict(descriptor);
-            //    session.SaveOrUpdate(descriptor);
+                session.Evict(descriptor);
+                session.SaveOrUpdate(descriptor);
             }
 
             CheckAggregateVersion(streamId, version);
@@ -98,7 +99,7 @@ namespace Lacjam.Core.Infrastructure.Storage
         {
             
             var currentVersion = (
-                                   from @event in _sessionFactory.Set<EventDescriptor>()
+                                   from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                                    where @event.Header.AggregateId == streamId
                                    orderby @event.Seq descending
                                    select @event.Header.Version
@@ -115,12 +116,12 @@ namespace Lacjam.Core.Infrastructure.Storage
         public IEnumerable<EventData> FetchStream(Guid streamId)
         {
            
-            return from @event in _sessionFactory.Set<EventDescriptor>()
+            return from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                    where @event.Header.AggregateId == streamId
                    orderby @event.Seq ascending 
                    select @event.EventData;
 
         }
-        private readonly DbContext _sessionFactory;
+        private readonly ISessionFactory _sessionFactory;
     }
 }

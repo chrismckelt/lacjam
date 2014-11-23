@@ -45,8 +45,9 @@ module app.controllers {
                                         if (this.datatypes[x].dataType == res.data.dataType) {
                                             $('#datatypeSelect').val(x.toLocaleString());
                                             this.selectedDataType = this.datatypes[x];
-                                            //this.dataTypeSelected();
                                             this.setIsSingleValue();
+                                            if (this.model.values.length == 0)
+                                                this.addLine();
                                         }
                                     }
                                 }
@@ -56,7 +57,7 @@ module app.controllers {
             } else {
                 this.title = 'Create new group ';
                 this.model.identity = app.fn.createGuid();
-                this.model.name = ''; //"test-" + app.fn.createGuid();
+                this.model.name = ''; 
                 this.model.description = '';
                 this.model.values = [];
                 this.model.values.push('');
@@ -69,6 +70,11 @@ module app.controllers {
                 return;
             }
 
+            if (this.isInvalidValue()) {
+                    toastr.warning('Default value does not match rules');
+                    return;
+            }
+            
             if (this.$stateParams.identity) {
                 this.update();
             } else {
@@ -196,7 +202,7 @@ module app.controllers {
         }
 
         public addLine = () => {
-            if (this.model.values)this.model.values.push(' ');
+            if (this.model.values)this.model.values.push('');
         }
 
         public removeItem(i: number) {
@@ -205,6 +211,9 @@ module app.controllers {
         }
 
         public show(i: number) {
+            if (this.isSingleValue)
+                return true;
+
             if (this.model.values[i] || this.model.values[i] ==='' ) {
                 return true;
             }
@@ -231,7 +240,6 @@ module app.controllers {
             } else {
                 this.valueDisplay = 'Value';
                 this.isSingleValue = true;
-                
             }
         }
 
@@ -240,6 +248,20 @@ module app.controllers {
                 return this.selectedDataType.regex;    
             }
             return "";
+        }
+
+        public isInvalidValue() {
+            if (!this.isSingleValue)
+                return false;
+
+            if (this.model.values[0] === '' || this.model.values[0] === undefined)
+                return false;
+
+            var regEx = this.model.regex;
+            if (regEx === "" || regEx === undefined)
+                regEx = this.getDefaultRegex();
+
+            return !( new RegExp(regEx).test(this.model.values[0]));
         }
     }
 }

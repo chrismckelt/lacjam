@@ -5,9 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Castle.Windsor;
-using Structerre.MetaStore.Framework.Utilities;
+using Lacjam.Framework.Utilities;
 
-namespace Structerre.MetaStore.WebApi.Infrastructure.Ioc
+namespace Lacjam.WebApi.Infrastructure.Ioc
 {
     public class ControllerFactory : DefaultControllerFactory
     {

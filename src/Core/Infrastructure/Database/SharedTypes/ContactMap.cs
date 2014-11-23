@@ -1,4 +1,4 @@
-﻿namespace Structerre.MetaStore.Core.Infrastructure.Database.SharedTypes
+﻿namespace Lacjam.Core.Infrastructure.Database.SharedTypes
 {
     public class ContactMap : IAutoMappingOverride<Contact>
     {

@@ -12,10 +12,10 @@ namespace Lacjam.Core.Domain.Entities
         {
             public Guid Id { get; set; }
             public string Text { get; set; }
-
-            public IDictionary<string, string[]> Metadata { get; set; }
-
             public string Group { get; set; }
+
+            public string Description { get; set; }
+            public string[] Tags { get; set; }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿using Remotion.Linq.Utilities;
 using Lacjam.Core.Domain.Entities.Commands;
 using Lacjam.Core.Services;
 using Lacjam.Framework.Dispatchers;
@@ -31,7 +31,7 @@ namespace Lacjam.WebApi.Controllers.Entities
             _logWriter.Info(String.Format("Beginning of processing creation of Entity : {0}", resource.Name));
 
             if (resource == null)
-                throw new ArgumentNullException("resource");
+                throw new ArgumentEmptyException("resource");
 
             _logWriter.Debug(resource.ToString());
 

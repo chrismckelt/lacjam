@@ -30,8 +30,8 @@ namespace Lacjam.WebApi.Infrastructure.Ioc
                     .LifestyleScoped());
                            
             container.Register(
-                Classes.From().InNamespace("Structerre")
-                    .Where(x => x.Name.ToLowerInvariant().Contains("structerre"))
+                Classes.From().InNamespace("Lacjam")
+                    .Where(x => x.Name.ToLowerInvariant().Contains("Lacjam"))
                     .Configure(a => a.Interceptors<LoggingInterceptor>())
                     .WithServiceAllInterfaces()
                     .LifestyleScoped());

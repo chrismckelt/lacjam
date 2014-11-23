@@ -1,9 +1,9 @@
 using System;
-using Structerre.MetaStore.Core.Domain.Attribute.Events;
-using Structerre.MetaStore.Framework.Exceptions;
-using Structerre.MetaStore.Framework.Model;
+using Lacjam.Core.Domain.Attribute.Events;
+using Lacjam.Framework.Exceptions;
+using Lacjam.Framework.Model;
 
-namespace Structerre.MetaStore.Core.Domain.Attribute
+namespace Lacjam.Core.Domain.Attribute
 {
     public class Attribute : AggregateRoot<AttributeState>
     {

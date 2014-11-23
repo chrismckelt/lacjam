@@ -5,11 +5,11 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Castle.MicroKernel.Lifestyle;
-using Structerre.MetaStore.Core.Infrastructure.Ioc.Convo;
-using Structerre.MetaStore.Framework.Logging;
+using Lacjam.Core.Infrastructure.Ioc.Convo;
+using Lacjam.Framework.Logging;
 using uNhAddIns.SessionEasier;
 
-namespace Structerre.MetaStore.Core.Infrastructure.Ioc
+namespace Lacjam.Core.Infrastructure.Ioc
 {
     public class NHibernateSessionModule : IHttpModule
     {

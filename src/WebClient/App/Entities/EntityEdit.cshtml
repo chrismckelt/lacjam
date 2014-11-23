@@ -3,7 +3,11 @@
     <form name="entityForm" class="form-horizontal" role="form" ng-if="model" ng-submit="save()" novalidate>
         <h2 class="sectionHeader">
             {{title}}
+            <span class="btn-group-sm">
+                <a class="btn btn-link" ng-show="editMode" ng-click="duplicate" ng-href="#/entityedit/{{model.identity}}/duplicate">Duplicate</a>
+            </span>
         </h2>
+       
         <input type="hidden" ng-model="vm.model.identity">
         <div class="form-group">
             <label class="col-sm-2 control-label">Name</label>
@@ -13,7 +17,7 @@
         </div>
         
         <div class="form-group">
-            <label class="col-sm-2 control-label">Group</label>
+            <label class="col-sm-2 control-label">Definition Group</label>
             <div class="col-sm-8">
                 <input type="text" ng-model="model.definitionGroup" ui-select2="groupSelect2" style="width: 100%" >
             </div>
@@ -24,7 +28,7 @@
             <div class="col-sm-8" ng-form="valueForm">
                 <input name="defValue" type="text" ng-init="def.values[0] = def.values[0].trim()" ng-model="def.values[0]" class="form-control" ng-pattern="regex(def)"
                        ng-if="def.dataType == 'Text' || def.dataType == 'Integer' || def.dataType == 'FloatingPoint' || def.dataType=='Character'" />
-                <span class="error" ng-show="valueForm.defValue.$error.pattern">Not a valid value!</span>
+                <p class="text-warning" ng-show="valueForm.defValue.$error.pattern">Not a valid value!</p>
                 
                 <input type="text" ng-model="def.select2Value" ui-select2="def.select2Options" ng-if="def.isSelection" style="width: 100%" />
                 <select ng-if="def.dataType == 'YesNo'" class="form-control">
@@ -32,14 +36,15 @@
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </select>
+                <p ng-if="def.isSelection" class="text-warning" ng-show="!hasSelectedValue(def.select2Value)">Must select a value!</p>
             </div>
         </div>
         
         <div ng-if="toBeDeletedValues.length > 0">
-            <h3>You will lose these existing fields</h3>
+            <h3>Fields to be removed</h3>
             <div class="form-group" ng-repeat="val in toBeDeletedValues">
                 <label class="col-sm-2 control-label">{{val.name}}</label>
-                <div class="col-sm-8" ng-form="valueForm">
+                <div class="col-sm-8" ng-form="valueForm" style="padding-top: 4px">
                     <span>{{val.value}}</span>
                 </div>
             </div>
@@ -47,7 +52,7 @@
        
         <div class="form-group button-row">
             <div class="col-sm-offset-2 col-sm-10 ">
-                <input type="submit" class="btn btn-warning" value="Save" ng-disabled='entityForm.$invalid'/>
+                <input type="submit" class="btn btn-warning" value="{{editMode?'Save': 'Create'}}" ng-disabled='entityForm.$invalid'/>
                 <button type="button" ng-click="doDelete()" class="btn btn-warning" ng-show="editMode">Delete</button>
                 <a href="#/entities" ng-click="cancel" class="cancel-link">Cancel</a>
             </div>
