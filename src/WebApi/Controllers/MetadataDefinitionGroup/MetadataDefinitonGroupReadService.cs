@@ -52,7 +52,7 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinitionGroup
 
         public IEnumerable<MetadataDefinitionGroupResource> GetAll()
         {
-            var all =  _metaDataDefinitionGroupProjectionRepository.ToQueryable();
+            var all =  _metaDataDefinitionGroupProjectionRepository.ToQueryable().OrderBy(x=> x.Name);
 
             return all.Select(proj => proj.ToMetadataDefinitionGroupResource());
         }

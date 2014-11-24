@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Args;
+using Lacjam.Core.Infrastructure.Ioc;
 using Lacjam.Database;
 using Lacjam.Framework.Utilities;
 
-namespace Structerre.MetaStore.BuildRunner
+namespace Lacjam.BuildRunner
 {
     class Program
     {

@@ -1,4 +1,10 @@
-﻿namespace Structerre.MetaStore.BuildRunner
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Lacjam.BuildRunner
 {
     public class CommandArgs
     {

@@ -18,6 +18,7 @@ namespace Lacjam.Core.Domain.Entities.Events
         IEventHandler<EntityChangedGroupEvent>,
         IEventHandler<EntityValueProvidedEvent>,
         IEventHandler<EntityMetadataRemovedEvent>,
+        IEventHandler<UpdatedEntityMetadataDefinitionValueEvent>,
         IEventHandler<EntityMetadataDefinitionRemovedEvent>,
         IEventHandler<MetadataDefinitionGroupNameChangedEvent>
     {
@@ -54,6 +55,11 @@ namespace Lacjam.Core.Domain.Entities.Events
         }
 
         public void Handle(EntityValueProvidedEvent @event)
+        {
+            UpdateIndex(@event.AggregateIdentity);
+        }
+
+        public void Handle(UpdatedEntityMetadataDefinitionValueEvent @event)
         {
             UpdateIndex(@event.AggregateIdentity);
         }

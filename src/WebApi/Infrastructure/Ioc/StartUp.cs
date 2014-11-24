@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
+using System.Web.Mvc;
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Lacjam.Core.Infrastructure.Ioc;

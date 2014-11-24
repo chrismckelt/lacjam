@@ -121,6 +121,6 @@ Global
 		{440F2ED2-2A49-4172-9069-62265E819B96} = {9BC3C0F4-0B8C-4CEA-9FDC-99D0861C919F}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = STRUCterre.MetaStore\STRUCterre.MetaStore.csproj
+		StartupItem = Lacjam\Lacjam.csproj
 	EndGlobalSection
 EndGlobal

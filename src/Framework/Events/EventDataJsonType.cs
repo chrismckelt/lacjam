@@ -49,7 +49,7 @@ namespace Lacjam.Framework.Events
         {
             try
             {
-                 return(IEvent)JsonConvert.DeserializeObject(eventDataSerialized, eventType, MetaStoreSerializerSettings.Instance);
+                 return(IEvent)JsonConvert.DeserializeObject(eventDataSerialized, eventType, LacjamSerializerSettings.Instance);
             }
             catch (Exception e)
             {
@@ -68,7 +68,7 @@ namespace Lacjam.Framework.Events
             var eventData = (EventData) value;
             var dynamicEvent = eventData.Event as DynamicEvent;
 
-            var eventDataSerialized = dynamicEvent != null ? dynamicEvent.Json : JsonConvert.SerializeObject(eventData.Event, MetaStoreSerializerSettings.Instance);
+            var eventDataSerialized = dynamicEvent != null ? dynamicEvent.Json : JsonConvert.SerializeObject(eventData.Event, LacjamSerializerSettings.Instance);
 
             NHibernateUtil.String.NullSafeSet(cmd, eventData.Type, index);
             NHibernateUtil.String.NullSafeSet(cmd, eventDataSerialized, index + 1);

@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Text;
 using NHibernate.Cfg;
 using NHibernate.Util;
-using Structerre.MetaStore.Framework.Logging;
+using Lacjam.Framework.Logging;
 
-namespace Structerre.MetaStore.Core.Infrastructure.Database
+namespace Lacjam.Core.Infrastructure.Database
 {
     public class FluentConfigurationProvider : AbstractConfigurationProvider
     {

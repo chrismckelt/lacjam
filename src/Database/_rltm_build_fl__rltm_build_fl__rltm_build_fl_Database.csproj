@@ -7,8 +7,8 @@
     <ProjectGuid>{48C0941B-9152-43F6-A571-38CA447A8C25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Structerre.MetaStore.Database</RootNamespace>
-    <AssemblyName>Structerre.MetaStore.Database</AssemblyName>
+    <RootNamespace>Lacjam.Database</RootNamespace>
+    <AssemblyName>Lacjam.Database</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

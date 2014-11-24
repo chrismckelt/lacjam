@@ -8,7 +8,7 @@ using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 
-namespace Structerre.MetaStore.Core.Infrastructure.Ioc.Interceptors
+namespace Lacjam.Core.Infrastructure.Ioc.Interceptors
 {
     [Transient]
     public class AutoReleaseHandlerInterceptor : IInterceptor

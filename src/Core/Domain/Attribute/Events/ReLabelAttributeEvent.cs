@@ -1,7 +1,7 @@
 using System;
-using Structerre.MetaStore.Framework.Events;
+using Lacjam.Framework.Events;
 
-namespace Structerre.MetaStore.Core.Domain.Attribute.Events
+namespace Lacjam.Core.Domain.Attribute.Events
 {
     public class ReLabelAttributeEvent : Event
     {

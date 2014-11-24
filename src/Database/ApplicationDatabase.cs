@@ -1,5 +1,4 @@
-﻿
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.IO;
 using FluentNHibernate.Cfg;
 using NHibernate;

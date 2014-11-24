@@ -39,9 +39,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60390</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://www.lacjam.local</IISUrl>
+          <IISUrl>http://www.Lacjam.local</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://www.lacjam.local</IISAppRootUrl>
+          <IISAppRootUrl>http://www.Lacjam.local</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -80,6 +80,8 @@
     <Content Include="App\Prototypes\definitions-add.html" />
     <Content Include="App\Prototypes\entities-add.html" />
     <Content Include="App\Prototypes\entities.html" />
+    <Content Include="App\publicApp.ts" />
+    <Content Include="App\Public\SearchController.ts" />
     <Content Include="App\types.js" />
     <Content Include="App\Index\Version.cshtml" />
     <Content Include="App\404.cshtml" />
@@ -90,9 +92,6 @@
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEdit.cshtml" />
     <Content Include="App\Entities\EntityView.cshtml" />
     <Content Include="App\Entities\EntityEdit.cshtml" />
-    <None Include="BundleTransformer.Configuration.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -107,6 +106,7 @@
     </None>
     <Content Include="Content\angular-ui.css" />
     <Content Include="Content\angular-ui.min.css" />
+    <Content Include="Content\public\search.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -180,6 +180,7 @@
     <Content Include="Scripts\angular-loader.min.js.map" />
     <Content Include="Scripts\angular-cookies.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
+    <Content Include="Public.cshtml" />
     <None Include="Scripts\angular-ui\ui-bootstrap.no" />
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\angular.js" />
@@ -528,7 +529,7 @@
       <HintPath>..\packages\BundleTransformer.CleanCss.1.8.30\lib\net40\BundleTransformer.CleanCss.dll</HintPath>
     </Reference>
     <Reference Include="BundleTransformer.Core">
-      <HintPath>..\..\packages\BundleTransformer.Core.1.9.24\lib\net40\BundleTransformer.Core.dll</HintPath>
+      <HintPath>..\packages\BundleTransformer.Core.1.8.32\lib\net40\BundleTransformer.Core.dll</HintPath>
     </Reference>
     <Reference Include="BundleTransformer.Less">
       <HintPath>..\packages\BundleTransformer.Less.1.8.33\lib\net40\BundleTransformer.Less.dll</HintPath>
@@ -547,7 +548,7 @@
     </Reference>
     <Reference Include="ClearScript, Version=5.3.11.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\JavaScriptEngineSwitcher.V8.1.2.0\lib\net40\ClearScript.dll</HintPath>
+      <HintPath>..\..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\ClearScript.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging">
@@ -559,19 +560,20 @@
     <Reference Include="CommonServiceLocator.WindsorAdapter.Unofficial">
       <HintPath>..\packages\CommonServiceLocator.WindsorAdapter.Unofficial.3.2.1.4\lib\Net40\CommonServiceLocator.WindsorAdapter.Unofficial.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\JavaScriptEngineSwitcher.Core.1.2.0\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
+      <HintPath>..\..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Jint">
-      <HintPath>..\..\packages\JavaScriptEngineSwitcher.Jint.1.2.0\lib\net40\JavaScriptEngineSwitcher.Jint.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.Core">
+      <HintPath>..\..\packages\JavaScriptEngineSwitcher.Core.1.2.0\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JavaScriptEngineSwitcher.V8">
-      <HintPath>..\..\packages\JavaScriptEngineSwitcher.V8.1.2.0\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
-    </Reference>
-    <Reference Include="Jint">
-      <HintPath>..\..\packages\JavaScriptEngineSwitcher.Jint.1.2.0\lib\net40\Jint.dll</HintPath>
+      <HintPath>..\..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -586,6 +588,9 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\packages\NHibernate.4.0.2.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -719,6 +724,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="BundleTransformer.Configuration.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="JavaScriptEngineSwitcher.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>

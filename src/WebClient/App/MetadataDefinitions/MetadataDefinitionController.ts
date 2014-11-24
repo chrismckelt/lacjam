@@ -10,9 +10,9 @@ module app.controllers {
         constructor(public $scope: ng.IScope, public $debounce) {
             super();
 
-            var nameField = { field: 'name', resizable: true, width: '20%', displayName: 'Name', enableCellEdit: false };
-            var descriptionField = { field: 'description', resizable: true, displayName: 'Description', enableCellEdit: false };
-            var dataTypeField = { field: 'dataType', resizable: true, width: '8%', displayName: 'Type', enableCellEdit: false };
+            var nameField = { field: 'name', resizable: true, width: '20%', displayName: 'Name', enableCellEdit: false, cellTemplate: '<span ng-bind-html="COL_FIELD"></span>' };
+            var descriptionField = { field: 'description', resizable: true, displayName: 'Description', enableCellEdit: false, cellTemplate: '<span ng-bind-html="COL_FIELD"></span>' };
+            var dataTypeField = { field: 'dataType', resizable: true, width: '8%', displayName: 'Type', enableCellEdit: false, cellTemplate: '<span ng-bind-html="COL_FIELD"></span>' };
             var editField = { field: 'id', width: '50px', displayName: 'Edit', enableCellEdit: false, cellTemplate: '<span class="glyphicon glyphicon-edit" ng-click="edit(COL_FIELD)">-</span>' };
         
             var scope = {

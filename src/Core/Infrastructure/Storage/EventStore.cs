@@ -56,6 +56,7 @@ namespace Lacjam.Core.Infrastructure.Storage
 
             var result = (from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                           where @event.Seq >= start
+
                           select @event.EventData)
                           .Take(batchSize);
 
@@ -67,6 +68,7 @@ namespace Lacjam.Core.Infrastructure.Storage
            
             var result = (from @event in _sessionFactory.GetCurrentSessionOrOpen().Query<EventDescriptor>()
                           where @event.Seq > seq
+                          orderby @event.Seq ascending
                           select @event)
                           .FirstOrDefault();
 

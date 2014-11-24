@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using Castle.Components.DictionaryAdapter;
-using Castle.Facilities.Logging;
+
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -39,7 +39,12 @@ namespace Lacjam.Core.Infrastructure.Ioc
 
         private void RegisterIndexers(IWindsorContainer container)
         {
-
+            //container.Register(
+            //    Classes.FromThisAssembly()
+            //        .InSameNamespaceAs<EntityIndexer>()
+            //        .If(x => x.Name.EndsWith("Indexer"))
+            //        .WithServiceAllInterfaces()
+            //        .LifestyleSingleton());
         }
 
         private static void RegisterDomainComponents(IWindsorContainer container)
@@ -65,7 +70,6 @@ namespace Lacjam.Core.Infrastructure.Ioc
 
         private static void AddWindsorLogging(IWindsorContainer container)
         {
-            container.AddFacility<LoggingFacility>(facility => facility.LogUsing(LoggerImplementation.Diagnostics));
             container.Register(Component.For<LoggingInterceptor>().LifestyleTransient());
             container.Register(Component.For<ExceptionHandlerInterceptor>().LifestyleTransient());            
         }

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Structerre.MetaStore.Database.Migrations.Schema
+namespace Lacjam.Database.Migrations.Schema
 {
 
     [Migration(5)]

@@ -109,6 +109,17 @@ module app {
             }
         };
 
+        public static entityDuplicate: ng.ui.IState = {
+            name: "entityduplicate",
+            url: "/entityedit/{identity}/duplicate",
+            templateUrl: "app/entities/EntityEdit.cshtml",
+            controller: app.controllers.EntityEditController,
+            data: {
+                isVisible: true,
+                duplicate: true
+            }
+        };
+
         public static search: ng.ui.IState = {
             name: "search",
             url: "/search",
@@ -135,7 +146,8 @@ module app {
                 Routes.metadataDefinitionUpdate,
                 Routes.entities,
                 Routes.entityCreate,
-                Routes.entityEdit
+                Routes.entityEdit,
+                Routes.entityDuplicate
             );
 
 
