@@ -180,6 +180,20 @@ var app;
             return /^[-]?\d+$/.test(val);
         };
 
+        fn.applyConstructor = function (constr, args) {
+            var obj = Object.create(constr.prototype);
+            var services = [];
+            angular.forEach(args, function (x) {
+                try  {
+                    services.push(app.resolveByName(x));
+                } catch (e) {
+                    services.push(x);
+                }
+            });
+            constr.apply(obj, services);
+            return obj;
+        };
+
         fn.prototype.addDays = function (date, days) {
             var result = new Date(date);
             result.setDate(date.getDate() + days);
@@ -476,13 +490,21 @@ var app;
     * @param services
     */
     // export function registerService(className: string, services = []) {
-    function registerService(ctor, services) {
+    function registerService(ctor, services, name) {
         if (typeof services === "undefined") { services = []; }
-        var name = app.Describer.getName(ctor);
-        var obj = app.InstanceLoader.getInstance(app.services, name);
-        app.global.typesCache.add(name, obj);
-        var arr = ["app.services"];
-        angular.module("app.services").service(name, arr);
+        if (typeof name === "undefined") { name = null; }
+        try  {
+            if (!name || name == "")
+                name = app.Describer.getName(ctor);
+            app.log.info("Registering Service -- " + name);
+            var obj = app.fn.applyConstructor(ctor, services);
+            services.push(function () {
+                return obj;
+            });
+            angular.module(app.global.appName).service(name, services);
+        } catch (e) {
+            app.log.error(e);
+        }
     }
     app.registerService = registerService;
 
@@ -494,17 +516,13 @@ var app;
     */
     function registerFactory(ctor, services) {
         if (typeof services === "undefined") { services = []; }
-        try  {
-            var neat = app.Describer.getName(ctor);
-            var obj = InstanceLoader.getInstance(app.services, neat, services);
-            services.push(obj); // dynamic class creation in typescript
-            app.log.debug("Created :" + neat);
-            angular.module("app.services").factory(neat, services);
-            app.global.typesCache.add(neat, obj);
-        } catch (e) {
-            app.log.error("factory registration failed - " + neat);
-            app.log.warn(e);
-        }
+        var name = app.Describer.getName(ctor);
+        var obj = app.InstanceLoader.getInstance(app.services, name);
+        obj.activate();
+        app.global.typesCache.add(name, obj);
+        app.log.info("Registering Factory -- " + name);
+        services.push(ctor);
+        angular.module(app.global.appServices).factory(name, services);
     }
     app.registerFactory = registerFactory;
 
@@ -701,27 +719,5 @@ var app;
         return Describer;
     })();
     app.Describer = Describer;
-
-    function registerModels() {
-    }
-    app.registerModels = registerModels;
-
-    function registerServices() {
-        // services
-        app.log.debug("Registering services");
-
-        app.registerService(app.services.Common);
-
-        //app.registerService(app.services.Dialog);
-        app.registerService(app.services.MetadataDefinitionGroupService);
-        app.registerService(app.services.MetadataDefinitionService);
-    }
-    app.registerServices = registerServices;
-
-    function registerControllers() {
-        app.log.debug("Registering controllers");
-        app.registerController("app.controllers.MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController); // register
-    }
-    app.registerControllers = registerControllers;
 })(app || (app = {}));
 //# sourceMappingURL=app.js.map

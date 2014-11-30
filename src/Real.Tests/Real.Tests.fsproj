@@ -58,11 +58,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator.Runner">
@@ -80,7 +80,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections">
-      <HintPath>..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
@@ -89,7 +89,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHamcrest">
@@ -97,7 +97,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\packages\NHibernate.4.0.2.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.4.0.2.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NSubstitute">
@@ -181,11 +181,6 @@
     <ProjectReference Include="..\Database\Database.csproj">
       <Name>Database (Database\Database)</Name>
       <Project>{48c0941b-9152-43f6-a571-38ca447a8c25}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Dispatcher\Dispatcher.csproj">
-      <Name>Dispatcher</Name>
-      <Project>{440f2ed2-2a49-4172-9069-62265e819b96}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Framework\Framework.csproj">

@@ -211,6 +211,20 @@ module app {
             return /^[-]?\d+$/.test(val);
         }
 
+        public static applyConstructor(constr, args) {
+            var obj = Object.create(constr.prototype);
+            var services: any[] = [];
+            angular.forEach(args, x => {
+                try {
+                    services.push(app.resolveByName(x));
+                } catch (e) {
+                    services.push(x);
+                }
+            });
+            constr.apply(obj, services);
+            return obj;
+        }
+
         public addDays(date, days) {
             var result = new Date(date);
             result.setDate(date.getDate() + days);
@@ -499,17 +513,19 @@ module app {
 
 
     /**
-     * Register new directive.
-     *
-     * @param className
-     * @param services
-     */
+        * Register new directive.
+        *
+        * @param className
+        * @param services
+        */
     export function registerDirective(className: string, services = []) {
         //var directive = className[0].toLowerCase() + className.slice(1);
         app.log.debug("Registering directive: " + className);
         services.push(() => new app.directives[className]());
         angular.module("app.directives").directive(className, () => new app.directives[className](services));
     }
+
+
 
 
     /**
@@ -519,12 +535,19 @@ module app {
      * @param services
      */
     // export function registerService(className: string, services = []) {
-    export function registerService(ctor: any, services = []) {
-        var name = app.Describer.getName(ctor);
-        var obj = app.InstanceLoader.getInstance(app.services, name);
-        app.global.typesCache.add(name, obj);
-        var arr = ["app.services"];
-        angular.module("app.services").service(name, arr);
+    export function registerService(ctor: any, services = [], name: string= null) {
+
+        try {
+            if (!name || name == "")
+                name = app.Describer.getName(ctor);
+            app.log.info("Registering Service -- " + name);
+            var obj = app.fn.applyConstructor(ctor, services);
+            services.push(() => obj);
+            angular.module(app.global.appName).service(name, services);
+        } catch (e) {
+            app.log.error(e);
+        }
+
     }
 
 
@@ -535,21 +558,13 @@ module app {
  * @param factory
  */
     export function registerFactory(ctor: any, services: any = []) {
-
-
-        try {
-            var neat = app.Describer.getName(ctor);
-            var obj = InstanceLoader.getInstance(app.services, neat, services);
-            services.push(obj); // dynamic class creation in typescript
-            app.log.debug("Created :" + neat);
-            angular.module("app.services").factory(neat, services);
-            app.global.typesCache.add(neat, obj);
-
-
-        } catch (e) {
-            app.log.error("factory registration failed - " + neat);
-            app.log.warn(e);
-        }
+        var name = app.Describer.getName(ctor);
+        var obj = app.InstanceLoader.getInstance<IService>(app.services, name);
+        obj.activate();
+        app.global.typesCache.add(name, obj);
+        app.log.info("Registering Factory -- " + name);
+        services.push(ctor);
+        angular.module(app.global.appServices).factory(name, services);
     }
 
 
@@ -713,28 +728,6 @@ module app {
             //var results = (funcNameRegex).exec((<any> inputClass).constructor.toString());
             //return (results && results.length > 1) ? results[1] : "";
         }
-    }
-
-
-    export function registerModels() {
-
-
-    }
-
-    export function registerServices() {
-        // services
-        app.log.debug("Registering services");
-
-        app.registerService(app.services.Common);
-        //app.registerService(app.services.Dialog);
-        app.registerService(app.services.MetadataDefinitionGroupService);
-        app.registerService(app.services.MetadataDefinitionService);
-    }
-
-    export function registerControllers() {
-
-        app.log.debug("Registering controllers");
-        app.registerController("app.controllers.MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController); // register 
     }
 
 }

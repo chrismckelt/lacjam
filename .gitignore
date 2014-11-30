@@ -188,3 +188,4 @@ FakesAssemblies/
 
 src/WebApi/logs/
 src/WebClient/logs/
+packages
