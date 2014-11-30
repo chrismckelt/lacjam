@@ -23,11 +23,11 @@
 /// <reference path="../scripts/typings/angular-ui-bootstrap/angular-ui-bootstrap.d.ts" />
 /// <reference path="../scripts/typings/bootstrap.datepicker/bootstrap.datepicker.d.ts" />
 /// <reference path="../Scripts/typings/ng-grid/ng-grid.d.ts" />
+/// <reference path="../scripts/typings/select2/select2.d.ts" />
 
 
 
 /// <reference path="app.ts" />
-/// <reference path="publicApp.ts" />
 /// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />

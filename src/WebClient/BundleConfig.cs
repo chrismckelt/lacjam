@@ -201,7 +201,7 @@ namespace Lacjam.WebClient
 
             var uptop = new List<string>
             {
-                "jquery-2.1.1",
+                "jquery-1.10.2",
                 "underscore",
                 "modernizr-2.6.2",
                 "q",

@@ -5,18 +5,17 @@
 var _this = this;
 // Create and register modules
 var modules = ["app.directives", "app.filters", "app.services", "app.controllers"];
-angular.module("app.directives", []);
-angular.module("app.filters", []);
-angular.module("app.services", []);
-angular.module("app.controllers", []);
+modules.forEach(function (m) {
+    return angular.module(m, []);
+});
 
-///modules.forEach((m) => angular.module(m, []));
 modules.push("ui", "ngCookies", "ngGrid", "ngCookies", "ngAnimate", "ngSanitize", "ngResource", "ui.router", "ui.bootstrap", "dialogs.main", "dialogs.default-translations", "pascalprecht.translate");
 
 angular.module("app", modules).config([
-    "$stateProvider", "$urlRouterProvider", "$injector", "$locationProvider", "$httpProvider",
-    function ($stateProvider, $urlRouterProvider, $injector, $locationProvider, $httpProvider) {
+    "$stateProvider", "$urlRouterProvider", "$injector", "$locationProvider", "$httpProvider", "$controllerProvider",
+    function ($stateProvider, $urlRouterProvider, $injector, $locationProvider, $httpProvider, $controllerProvider) {
         app.log.debug("app.config started...");
+        $controllerProvider.allowGlobals(); //http://www.lcube.se/angular-js-controller-error-argument-is-not-a-function/
 
         app.global.typesCache.add("$stateProvider", $stateProvider);
         app.global.typesCache.add("$urlRouterProvider", $urlRouterProvider);
@@ -98,9 +97,6 @@ angular.module("app", modules).config([
             var act = app.global.typesCache.getByKey(service);
             act.activate();
         });
-
-        if ($location.path() === "")
-            app.redirectToUrl(app.Routes.home.url); //$location.path("/#/");
 
         app.log.debug("app.run finished...");
 
@@ -434,8 +430,8 @@ var app;
     */
     function registerController(className, ctor) {
         if (typeof ctor === "undefined") { ctor = null; }
-        app.log.debug("controllers regististration for " + className);
-        angular.module("app.controllers").controller(className, ctor);
+        app.log.info("controllers regististration for " + className);
+        angular.module(app.global.appControllers).controller(className, ctor);
     }
     app.registerController = registerController;
 
@@ -594,7 +590,7 @@ var app;
             for (var _i = 0; _i < (arguments.length - 1); _i++) {
                 optionalParams[_i] = arguments[_i + 1];
             }
-            console.debug(message, optionalParams);
+            // console.debug(message, optionalParams);
         };
 
         log.info = function (message) {

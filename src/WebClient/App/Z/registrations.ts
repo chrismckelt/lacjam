@@ -4,7 +4,7 @@
 
 app.registerService(app.services.Common);
 
-app.log.debug("Registering services");
+app.log.info("Registering services");
 
 app.registerService(app.services.Common);
 //app.registerService(app.services.Dialog);
@@ -13,7 +13,7 @@ app.registerService(app.services.MetadataDefinitionService);
 
 
 
-app.log.debug("Registering controllers");
+app.log.info("Registering controllers");
 app.registerController("IndexController", app.controllers.IndexController); // register 
 app.registerController("MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController); // register 
 

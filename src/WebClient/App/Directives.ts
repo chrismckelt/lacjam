@@ -57,7 +57,7 @@ module app.directives {
 }
 
 //directives
-app.log.debug("Registering directives");
+app.log.info("Registering directives");
 app.registerDirective("ccSpinner", []);
 
 

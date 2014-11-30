@@ -6,12 +6,7 @@
 
 // Create and register modules
 var modules = ["app.directives", "app.filters", "app.services", "app.controllers"];
-angular.module("app.directives", []);
-angular.module("app.filters", []);
-angular.module("app.services", []);
-angular.module("app.controllers", []);
-
-///modules.forEach((m) => angular.module(m, []));
+modules.forEach((m) => angular.module(m, []));
 
 modules.push(
     "ui",
@@ -30,16 +25,18 @@ modules.push(
 
 angular.module("app", modules)
     .config([
-        "$stateProvider", "$urlRouterProvider", "$injector", "$locationProvider", "$httpProvider",
+        "$stateProvider", "$urlRouterProvider", "$injector", "$locationProvider", "$httpProvider", "$controllerProvider",
         (
             $stateProvider: ng.ui.IStateProvider,
             $urlRouterProvider: ng.ui.IUrlRouterProvider,
             $injector: ng.auto.IInjectorService,
             $locationProvider: ng.ILocationProvider,
-            $httpProvider: ng.IHttpProvider
+            $httpProvider: ng.IHttpProvider,
+            $controllerProvider : ng.IControllerProvider
         ) => {
 
             app.log.debug("app.config started...");
+            $controllerProvider.allowGlobals(); //http://www.lcube.se/angular-js-controller-error-argument-is-not-a-function/
 
             app.global.typesCache.add("$stateProvider", $stateProvider);
             app.global.typesCache.add("$urlRouterProvider", $urlRouterProvider);
@@ -137,7 +134,6 @@ angular.module("app", modules)
                 var act = app.global.typesCache.getByKey(service);
                 act.activate();});
 
-            if ($location.path() === "") app.redirectToUrl(app.Routes.home.url); //$location.path("/#/");
 
             app.log.debug("app.run finished...");
             // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
@@ -484,8 +480,8 @@ module app {
     * @param services
     */
     export function registerController(className: string, ctor: any = null) {
-        app.log.debug("controllers regististration for " + className);
-        angular.module("app.controllers").controller(className, ctor);
+        app.log.info("controllers regististration for " + className);
+        angular.module(app.global.appControllers).controller(className, ctor);
 
     }
 
@@ -626,7 +622,7 @@ module app {
     export class log {
 
         public static debug(message?: any, ...optionalParams: any[]) {
-            console.debug(message, optionalParams);
+           // console.debug(message, optionalParams);
         }
 
         public static info(message?: any, ...optionalParams: any[]) {

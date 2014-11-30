@@ -80,7 +80,6 @@
     <Content Include="App\Prototypes\definitions-add.html" />
     <Content Include="App\Prototypes\entities-add.html" />
     <Content Include="App\Prototypes\entities.html" />
-    <Content Include="App\publicApp.ts" />
     <Content Include="App\Public\SearchController.ts" />
     <Content Include="App\types.js" />
     <Content Include="App\Index\Version.cshtml" />
@@ -88,7 +87,7 @@
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupView.cshtml" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionView.cshtml" />
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEdit.cshtml" />
-    <Content Include="App\Z\registrations.ts" />
+    <TypeScriptCompile Include="App\Z\registrations.ts" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEdit.cshtml" />
     <Content Include="App\Entities\EntityView.cshtml" />
     <Content Include="App\Entities\EntityEdit.cshtml" />
@@ -175,7 +174,6 @@
     <Content Include="Scripts\angular-ui-router.min.js" />
     <Content Include="Scripts\angular-ui.js" />
     <Content Include="Scripts\angular-ui.min.js" />
-    <Content Include="Public.cshtml" />
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular-sanitize.min.js.map" />
     <Content Include="Scripts\angular-route.min.js.map" />
@@ -932,10 +930,9 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.1.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\ng-grid-flexible-height.js" />
     <Content Include="Scripts\ng-grid.js" />
@@ -1197,8 +1194,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.js.map">
       <DependentUpon>jquery-1.10.2.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
