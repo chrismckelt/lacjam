@@ -12,7 +12,7 @@ module app {
             name: "home",
             url: "/",
             templateUrl: "app/Index/IndexView.cshtml",
-        //    controller: app.controllers.IndexController,
+            controller: app.controllers.IndexController,
             data: {
                 isVisible: true,
             }

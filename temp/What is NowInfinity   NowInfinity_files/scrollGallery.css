@@ -1,0 +1,86 @@
+/*
+ * BMo-Design's ScrollGallery ExampleCSS
+ */
+.scrollgallery{
+	position:relative;/*has to be postion:relativ or static*/
+    width:800px; /*change this*/
+	font-family:"Arial";
+	font-size:14px;
+	line-height:20px;
+}
+.scrollgallery .imageareaContent img{
+    width:770px; /*change this*/
+}
+
+/*scrollGallery Design*/
+.scrollgallery{
+	margin:0px;
+	padding:0px;
+}
+
+.scrollgallery .scrollGalleryHead{
+	padding:10px 10px 0px 10px;
+	margin-top:20px;
+}
+
+.scrollgallery .scrollGalleryFoot{
+	padding:10px 10px 5px 10px;
+	margin-top:5px;
+}
+
+
+.scrollgallery .thumbarea{
+	overflow: auto; 
+	overflow-y: hidden; 
+	overflow-x: auto;
+	width:100%; 
+	margin:0px; 
+	padding:0px;
+}
+.scrollgallery .thumbareaContent{
+ 	white-space: nowrap;       /* important */	
+}
+.scrollgallery .thumbareaContent img{
+	padding:0px;
+    margin:0px;
+	margin-right:8px;
+	display: inline;
+	cursor:pointer;
+}
+.scrollgallery .imagearea{
+	overflow: auto; 
+	overflow-y: hidden; 
+	overflow-x: auto;
+	width:100%; 
+	margin:0px; 
+	padding:0px;
+}
+.scrollgallery .imageareaContent{
+ 	white-space: nowrap;       /* important */
+}
+.scrollgallery .imageareaContent img{
+    margin:0px;
+	padding:3px;
+	display:inline;
+	
+	background: url(../ajax-loader.gif) center center no-repeat;
+}
+
+/*Caption Version*/
+.scrollgallery .imageareaContent .caption_container{
+	position:relative;
+	display:inline;
+	margin:0px 5px 0px 5px;
+}
+.scrollgallery .imageareaContent .caption_container div{
+	position:absolute;
+	display:inline;
+	padding:5px 10px 5px 10px;
+	background-color:#fff;
+	margin:0px;
+	margin-top:-15px;
+	z-index:auto;
+	top:0px;
+	left:0px;
+	line-height:14px;
+}

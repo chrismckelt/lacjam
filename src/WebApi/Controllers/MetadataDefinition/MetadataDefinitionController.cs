@@ -20,12 +20,12 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinition
     public class MetadataDefinitionController : ApiController
     {
 
-        public MetadataDefinitionController(ICommandDispatcher dispatcher,IMetadataDefinitionReadService metadataDefinitonReadService, ILogWriter logWriter, IMetadataDefinitionIndexer indexer)
+        public MetadataDefinitionController(ICommandDispatcher dispatcher,IMetadataDefinitionReadService metadataDefinitonReadService, ILogWriter logWriter)
         {
             _dispatcher = dispatcher;
             _metadataDefinitonReadService = metadataDefinitonReadService;
             _logWriter = logWriter;
-            _indexer = indexer;
+         
         }
 
         [HttpPost, Transactional, ValidateModelState]
@@ -86,7 +86,8 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinition
         public IHttpActionResult List([FromUri]PagedQuery query)
         {
             _logWriter.Info(String.Format("Recieving request for Metadata Definition: {0}", "All"));
-            return Ok(_indexer.Search(query.Q, query.PageSize, query.Page));
+          //  return Ok(_indexer.Search(query.Q, query.PageSize, query.Page));
+            return Ok("aaaaaaaaaaaaa");
         }
 
 
@@ -158,6 +159,6 @@ namespace Lacjam.WebApi.Controllers.MetadataDefinition
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMetadataDefinitionReadService _metadataDefinitonReadService;
         private readonly ILogWriter _logWriter;
-        private readonly IMetadataDefinitionIndexer _indexer;
+  
     }
 }

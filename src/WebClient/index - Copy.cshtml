@@ -1,0 +1,140 @@
+﻿@using Lacjam.WebClient
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" data-framework="angularjs" lang="en" ng-app="app">
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Lacjam">
+    <meta name="keywords" content="Lacjam">
+	 <meta name="author" content="http://cherrybytesoftware.com/">
+    <title>Lacjam</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	  
+    <style>
+        .is-highlighted {
+          background: #ffff99 !important;
+        }
+    </style>
+
+    
+    <link href="/Content/Bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="/Content/angular-ui.css" rel="stylesheet" />
+    <link href="/Content/app.css" rel="stylesheet" />
+    <link href="/Content/dialogs.css" rel="stylesheet" />
+    <link href="/Content/font-awesome.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/media.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/mixins.css" rel="stylesheet" />
+    <link href="/Content/ng-grid.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/normalize.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/print.css" rel="stylesheet" />
+    <link href="/Content/css/select2.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/theme.css" rel="stylesheet" />
+    <link href="/Content/toastr.css" rel="stylesheet" />
+    <link href="/Content/Bootstrap/variables.css" rel="stylesheet" />
+
+
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-cloak>
+    <!--[if lte IE 8]>
+      <script>
+          document.createElement('ng-include');
+          document.createElement('ng-pluralize');
+          document.createElement('ng-view');
+          document.createElement('ng:include');
+          document.createElement('ng:pluralize');
+          document.createElement('ng:view');
+          document.createElement('delayedSearch');
+          document.createElement('st-date-picker');
+          document.createElement('st-error-span');
+          document.createElement('file-uploader');
+      </script>
+    <![endif]-->
+
+    <nav class="sidebar">
+        <a href="#" class="applogo">
+            <img src="../../Content/img/logo.png" alt="Lacjam Logo">
+        </a>
+        <a href="/#/metadatadefinitiongroups" class="action">Documents</a>
+        <a href="/#/metadatadefinitions" class="action">Workspace</a>
+        <a  href="/#/entities" class="action">New</a>
+    </nav>
+    <div id="container">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-c ollapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="">
+                <ul class="nav navbar-nav side-nav">
+                    <li>
+                        <a href="/#/metadatadefinitiongroups">
+                            <span class="icon icon-definition-groups"></span>
+                            Documents
+                        </a>
+                    </li>
+                    <li>
+                          <a href="/#/metadatadefinitions">
+                            <span class="icon icon-definitions"></span>
+                            Workspace
+                        </a>
+                    </li>
+                     <li>
+                          <a href="/#/entities">
+                            <span class="icon icon-entities"></span>
+                            New
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" ui-view>
+
+
+
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <hr/>
+    <div class="footer navbar-fixed-bottom text-right">
+        <footer class="panel-footer">
+            <ul class="list-inline">
+                <li>&copy; Lacjam 2014</li>
+                <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
+            </ul>
+        </footer>
+        <script src="/app/_References.js"></script>
+        @System.Web.Optimization.Scripts.Render("~/bundles/js")
+        @System.Web.Optimization.Scripts.Render("~/bundles/ts")
+    </div>
+    <div>
+        <span id="spinner" data-cc-spinner="{radius:30, width:3, length: 10, radius: 9, corners: 1, rotate: 29, speed: 1}" spinner-key="spinner" style="position: absolute; display: block; top: 50%; left: 50%;"></span>
+    </div>
+</body>
+</html>
+
+<!-- @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()  -->

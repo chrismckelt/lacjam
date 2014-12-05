@@ -22,18 +22,17 @@ namespace Lacjam.Core.Domain.Entities.Events
         IEventHandler<EntityMetadataDefinitionRemovedEvent>,
         IEventHandler<MetadataDefinitionGroupNameChangedEvent>
     {
-        private readonly IEntityIndexer _indexer;
         private readonly IReadStoreRepository<EntityProjection> _entityRepository;
         private readonly IReadStoreRepository<EntityValueProjection> _entityValueRepository;
         private readonly IReadStoreRepository<MetadataDefinitionGroupProjection> _groupRepository;
 
         public EntityIndexEventHandler(
-            IEntityIndexer indexer, 
+          
             IReadStoreRepository<EntityProjection> entityRepository,
             IReadStoreRepository<EntityValueProjection> entityValueRepository,
             IReadStoreRepository<MetadataDefinitionGroupProjection> groupRepository)
         {
-            _indexer = indexer;
+       
             _entityRepository = entityRepository;
             _entityValueRepository = entityValueRepository;
             _groupRepository = groupRepository;
@@ -46,7 +45,7 @@ namespace Lacjam.Core.Domain.Entities.Events
 
         public void Handle(EntityDeletedEvent @event)
         {
-            _indexer.DeleteIndex(@event.AggregateIdentity);
+           
         }
 
         public void Handle(EntityRenamedEvent @event)
@@ -83,7 +82,6 @@ namespace Lacjam.Core.Domain.Entities.Events
         {
             var group = _groupRepository.ToQueryable().FirstOrDefault(x => x.Identity == @event.AggregateIdentity);
 
-            _indexer.RenameGroup(group);
         }
 
         private void UpdateIndex(Guid entityId)
@@ -94,7 +92,7 @@ namespace Lacjam.Core.Domain.Entities.Events
             foreach (var entity in entities)
             {
                 var group = _groupRepository.ToQueryable().FirstOrDefault(x => x.Identity == entity.MetadataDefinitionGroupIdentity);
-                _indexer.SaveIndex(entity, group, values);
+                
             }
         }
     }

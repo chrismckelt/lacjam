@@ -298,8 +298,6 @@
     <Compile Include="Domain\MetadataDefinitions\Events\MetadataDefinitionEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\Entities\EntitySearchResults.cs" />
-    <Compile Include="Services\IEntityIndexer.cs" />
-    <Compile Include="Services\IMetadataDefinitionIndexer.cs" />
     <Compile Include="Services\ISchemaService.cs" />
     <Compile Include="Services\SchemaService.cs" />
     <Compile Include="Services\SchemaTransferObject.cs" />

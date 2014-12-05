@@ -16,12 +16,12 @@ namespace Lacjam.WebApi.Controllers.Entities
     [RoutePrefix("Entity")]
     public class EntityController : ApiController
     {
-        public EntityController(ICommandDispatcher dispatcher, IEntityReadService readService, ILogWriter logWriter, IEntityIndexer entityIndexer)
+        public EntityController(ICommandDispatcher dispatcher, IEntityReadService readService, ILogWriter logWriter)
         {
             _dispatcher = dispatcher;
             _readService = readService;
             _logWriter = logWriter;
-            _entityIndexer = entityIndexer;
+           
         }
 
         [HttpPost, Transactional]
@@ -106,12 +106,12 @@ namespace Lacjam.WebApi.Controllers.Entities
         [Route("List")]
         public IHttpActionResult List([FromUri]PagedQuery query)
         {
-            return Ok(_entityIndexer.SearchAllMetadata(query.Q, query.PageSize, query.Page));
+            return Ok("kk");
         }
 
         private readonly ICommandDispatcher _dispatcher;
         private readonly IEntityReadService _readService;
         private readonly ILogWriter _logWriter;
-        private readonly IEntityIndexer _entityIndexer;
+         
     }
 }

@@ -1,0 +1,98 @@
+﻿
+
+#applogo {
+    display: block;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+    vertical-align:bottom;
+    height:90px;
+    width:150px;
+    background : url("http://www.lacjam.local/content/img/logo.png") no-repeat 0 0;
+     -webkit-transition:background-image 0.5s;
+  
+    transition:background-image 0.5s;
+}
+
+
+i {
+  font-size:14px;
+}
+  
+footer {
+  margin-top:20px;
+  padding-top:20px;
+  padding-bottom:20px;
+  background-color:#efefef;
+}
+
+.navbar-brand {
+    max-width: 50%;
+}
+
+@bgDefault      : #ffffff;
+@bgHighlight    : #b5daff;
+@colDefault     : #5945a8;
+@colHighlight   : #4559a8;
+.navbar-default {
+	background-color: @bgDefault;
+	border-color: @bgHighlight;
+	.navbar-brand {
+		color: @colDefault;
+		&:hover, &:focus { 
+			color: @colHighlight; }}
+	.navbar-text {
+		color: @colDefault; }
+	.navbar-nav {
+		> li {
+			> a {
+				color: @colDefault;
+				&:hover,  &:focus {
+					color: @colHighlight; }}}
+		> .active {
+			> a, > a:hover, > a:focus {
+				color: @colHighlight;
+				background-color: @bgHighlight; }}
+		> .open {
+			> a, > a:hover, > a:focus {
+				color: @colHighlight;
+				background-color: @bgHighlight; }}}
+	.navbar-toggle {
+		border-color: @bgHighlight;
+		&:hover, &:focus {
+			background-color: @bgHighlight; }
+		.icon-bar {
+			background-color: @colDefault; }}
+	.navbar-collapse,
+	.navbar-form {
+		border-color: @colDefault; }
+	.navbar-link {
+		color: @colDefault;
+		&:hover {
+			color: @colHighlight; }}}
+@media (max-width: 767px) {
+	.navbar-default .navbar-nav .open .dropdown-menu {
+		> li > a {
+			color: @colDefault;
+			&:hover, &:focus {
+				color: @colHighlight; }}
+		> .active {
+			> a, > a:hover, > a:focus {
+				color: @colHighlight;
+				background-color: @bgHighlight; }}}
+}
+
+
+.navbar-fixed-top {
+  margin-bottom:10px;
+}
+
+  
+.footer {
+  margin-top:20px;
+  padding-top:20px;
+  padding-bottom:20px;
+  background-color:#efefef;
+}
+
+ 

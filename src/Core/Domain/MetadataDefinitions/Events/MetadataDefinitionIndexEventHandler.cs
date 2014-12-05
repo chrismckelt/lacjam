@@ -12,12 +12,12 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
         IEventHandler<ReLabelMetadataDefinitionDescriptionEvent>
     {
         private readonly IReadStoreRepository<MetadataDefinitionProjection> _repository;
-        private readonly IMetadataDefinitionIndexer _indexer;
+         
 
-        public MetadataDefinitionIndexEventHandler(IReadStoreRepository<MetadataDefinitionProjection> repository, IMetadataDefinitionIndexer indexer)
+        public MetadataDefinitionIndexEventHandler(IReadStoreRepository<MetadataDefinitionProjection> repository)
         {
             _repository = repository;
-            _indexer = indexer;
+         //   _indexer = indexer;
         }
 
         public void Handle(MetadataDefinitionCreatedEvent @event)
@@ -27,7 +27,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
 
         public void Handle(MetadataDefinitionDeletedEvent @event)
         {
-            _indexer.DeleteIndex(@event.AggregateIdentity);
+          //  _indexer.DeleteIndex(@event.AggregateIdentity);
         }
 
         public void Handle(ReLabelMetadataDefinitionEvent @event)
@@ -43,7 +43,7 @@ namespace Lacjam.Core.Domain.MetadataDefinitions.Events
         private void UpdateIndex(Guid aggregateIdentity)
         {
             var definition = _repository.Reference(aggregateIdentity);
-            _indexer.SaveIndex(definition);
+          //  _indexer.SaveIndex(definition);
         }
     }
 }

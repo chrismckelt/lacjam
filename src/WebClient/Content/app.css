@@ -1,0 +1,102 @@
+﻿#applogo {
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  height: 90px;
+  width: 150px;
+  background: url("http://www.lacjam.local/content/img/logo.png") no-repeat 0 0;
+  -webkit-transition: background-image 0.5s;
+  transition: background-image 0.5s;
+}
+i {
+  font-size: 14px;
+}
+footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #efefef;
+}
+.navbar-brand {
+  max-width: 50%;
+}
+.navbar-default {
+  background-color: #ffffff;
+  border-color: #b5daff;
+}
+.navbar-default .navbar-brand {
+  color: #5945a8;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #4559a8;
+}
+.navbar-default .navbar-text {
+  color: #5945a8;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #5945a8;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #4559a8;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #4559a8;
+  background-color: #b5daff;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #4559a8;
+  background-color: #b5daff;
+}
+.navbar-default .navbar-toggle {
+  border-color: #b5daff;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #b5daff;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #5945a8;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #5945a8;
+}
+.navbar-default .navbar-link {
+  color: #5945a8;
+}
+.navbar-default .navbar-link:hover {
+  color: #4559a8;
+}
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #5945a8;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #4559a8;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #4559a8;
+    background-color: #b5daff;
+  }
+}
+.navbar-fixed-top {
+  margin-bottom: 10px;
+}
+.footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #efefef;
+}
+/*# sourceMappingURL=app.css.map */
