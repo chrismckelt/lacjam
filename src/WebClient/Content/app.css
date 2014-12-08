@@ -1,17 +1,10 @@
 ﻿#applogo {
   display: block;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  vertical-align: bottom;
-  height: 90px;
-  width: 150px;
-  background: url("http://www.lacjam.local/content/img/logo.png") no-repeat 0 0;
-  -webkit-transition: background-image 0.5s;
-  transition: background-image 0.5s;
-}
-i {
-  font-size: 14px;
+  height: 150px;
+  width: 200px;
+  margin-left: 0;
+  margin-top: 0;
+  background: url("/content/img/logo.png") no-repeat 0 0;
 }
 footer {
   margin-top: 20px;
