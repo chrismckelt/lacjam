@@ -1,87 +1,54 @@
 ﻿
 #applogo {
     display: block;
-    height: 150px;
-    width: 200px;
+    height: 50px;
+    width: 101px;
+    vertical-align: top;
     margin-left: 0;
     margin-top: 0;
     background: url("/content/img/logo.png") no-repeat 0 0;
-}
-  
-footer {
-  margin-top:20px;
-  padding-top:20px;
-  padding-bottom:20px;
-  background-color:#efefef;
 }
 
 .navbar-brand {
     max-width: 50%;
 }
 
-@bgDefault      : #ffffff;
-@bgHighlight    : #b5daff;
-@colDefault     : #5945a8;
-@colHighlight   : #4559a8;
-.navbar-default {
-	background-color: @bgDefault;
-	border-color: @bgHighlight;
-	.navbar-brand {
-		color: @colDefault;
-		&:hover, &:focus { 
-			color: @colHighlight; }}
-	.navbar-text {
-		color: @colDefault; }
-	.navbar-nav {
-		> li {
-			> a {
-				color: @colDefault;
-				&:hover,  &:focus {
-					color: @colHighlight; }}}
-		> .active {
-			> a, > a:hover, > a:focus {
-				color: @colHighlight;
-				background-color: @bgHighlight; }}
-		> .open {
-			> a, > a:hover, > a:focus {
-				color: @colHighlight;
-				background-color: @bgHighlight; }}}
-	.navbar-toggle {
-		border-color: @bgHighlight;
-		&:hover, &:focus {
-			background-color: @bgHighlight; }
-		.icon-bar {
-			background-color: @colDefault; }}
-	.navbar-collapse,
-	.navbar-form {
-		border-color: @colDefault; }
-	.navbar-link {
-		color: @colDefault;
-		&:hover {
-			color: @colHighlight; }}}
-@media (max-width: 767px) {
-	.navbar-default .navbar-nav .open .dropdown-menu {
-		> li > a {
-			color: @colDefault;
-			&:hover, &:focus {
-				color: @colHighlight; }}
-		> .active {
-			> a, > a:hover, > a:focus {
-				color: @colHighlight;
-				background-color: @bgHighlight; }}}
+  
+element.style {
+}
+.navbar-default .navbar-nav > li > a {
+color: #5945a8;
+}
+.navbar-default .navbar-nav > li > a {
+color: #626e78;
+}
+
+.navbar-nav > li > a {
+padding-top: 10px;
+padding-bottom: 10px;
+line-height: 21px;
+}
+.nav > li > a {
+position: relative;
+display: block;
+padding: 10px 25px;
+}
+.navbar a {
+
+font-size: 13px;
+padding-bottom: 2px !important;
+padding-top: 4px !important;
+position: relative;
+font-family: "helvetica_neue_lt_std45_light", sans-serif;
 }
 
 
-.navbar-fixed-top {
-  margin-bottom:10px;
-}
+
 
   
-.footer {
+#footer {
   margin-top:20px;
   padding-top:20px;
   padding-bottom:20px;
   background-color:#efefef;
 }
-
- 
