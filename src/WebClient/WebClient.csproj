@@ -144,9 +144,11 @@
     <Content Include="Content\ng-grid.min.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="css\jasmine.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="karma.conf.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
@@ -937,6 +939,8 @@
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\typings\jasmine\jasmine-html.js" />
+    <Content Include="Scripts\typings\jasmine\jasmine.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -963,7 +967,6 @@
       <DependentUpon>TypeLite.Net4.tt</DependentUpon>
     </Content>
     <Content Include="Scripts\typings\angularLocalStorage\angularLocalStorage.d.ts" />
-    <Content Include="Scripts\typings\jasmine\jasmine.d.ts" />
     <TypeScriptCompile Include="App\Index\IndexController.ts" />
     <TypeScriptCompile Include="App\app.ts" />
     <TypeScriptCompile Include="App\directives.ts" />
@@ -982,14 +985,15 @@
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jasmine\jasmine.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\karma-jasmine\karma-jasmine.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\select2\select2.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\toastr\toastr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\underscore\underscore.d.ts" />
     <TypeScriptCompile Include="Tests\Accounts\ControllerTestFixture.ts" />
-    <TypeScriptCompile Include="Tests\app.ts" />
-    <TypeScriptCompile Include="Tests\test.ts" />
+    <TypeScriptCompile Include="Tests\appFixture.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
