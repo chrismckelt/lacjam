@@ -73,7 +73,7 @@ module app.controllers {
                 .then(pro => {
                     toastr.success(this.model.name, "Created");
                     app.fn.spinStop();
-                    app.redirectToRoute(app.Routes.metadataDefinitionGroups);
+                    app.redirectToRoute(app.Routes.documents);
                 },
                 (err => {
                     app.log.error(err);
@@ -100,7 +100,7 @@ module app.controllers {
                 .then(pro => {
                     toastr.success(this.model.name, "Saved");
                     app.fn.spinStop();
-                    app.redirectToRoute(app.Routes.metadataDefinitionGroups);
+                    app.redirectToRoute(app.Routes.documents);
                 },
                 (err => {
                     app.log.error(err);
@@ -139,7 +139,7 @@ module app.controllers {
                      .then(pro => {
                          toastr.success(this.originalName, "Deleted");
                          app.fn.spinStop();
-                         app.redirectToRoute(app.Routes.metadataDefinitionGroups);
+                         app.redirectToRoute(app.Routes.documents);
                          //  e.preventDefault();
                      },
                      (err => {
@@ -159,7 +159,7 @@ module app.controllers {
          }
 
         public cancel = (e) => {
-            app.redirectToRoute(app.Routes.metadataDefinitionGroups);
+            app.redirectToRoute(app.Routes.documents);
             e.preventDefault();
         }
 

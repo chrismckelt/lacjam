@@ -39,8 +39,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body ng-cloak>
-    <!--[if lte IE 8]>
+<body ng-cloak>    <!--[if lte IE 8]>
       <script>
           document.createElement('ng-include');
           document.createElement('ng-pluralize');
@@ -69,29 +68,23 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav side-nav">
-                    <li><a href="javascript:;"> <img id="applogo" /></a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-dashboard"></i> Dashboard</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-book"></i> Documents</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-heart"></i> Help</a></li>
-
+                    <li><img id="applogo" /></li>
+                    <li><a ui-sref="documents"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-pencil"></i> establish</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-heart"></i> health</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-heart"></i> help</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-user"></i> account..</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-log-out"></i> logout..</a></li>
                 </ul>
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                    <button type="submit" class="btn btn-sm">Go</button>
-                </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-user"></i> Account..</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-log-out"></i> Logout..</a></li>
+                   
                     <li class="dropdown">
                         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">more <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="javascript:void(0)">contact</a></li>
                             <li><a href="javascript:void(0)">blog</a></li>
-                            <li class="divider"></li>
                             <li><a href="javascript:void(0)">about</a></li>
                             <li><a href="javascript:void(0)">feature request</a></li>
                         </ul>
@@ -99,15 +92,11 @@
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div>
-
-      
-
     </nav>
 
     <!-- /Header -->
     <!-- Main -->
-    <div class="container">
-
+    <div class="container" ui-view>
         <!-- upper section -->
         <div class="row">
             <div class="col-sm-3">
@@ -116,13 +105,13 @@
                 <hr>
 
                 <ul class="nav nav-stacked">
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-link"></i> Links</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-book"></i> Books</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-time"></i> Real-time</a></li>
-                    <li><a href="javascript:;"><i class="glyphicon glyphicon-plus"></i> Advanced..</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-link"></i> Links</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> Books</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-time"></i> Real-time</a></li>
+                    <li><a href="/#/documents"><i class="glyphicon glyphicon-plus"></i> Advanced..</a></li>
                 </ul>
 
                 <hr>
@@ -133,7 +122,7 @@
                 <!-- column 2 -->
                 <h3><i class="glyphicon glyphicon-dashboard"></i> Dashboard</h3>
 
-                <hr>
+                <hr />
 
                 <div class="row">
                     <!-- center left-->
@@ -218,7 +207,6 @@
         <!-- /upper section -->
         <!-- lower section -->
         <div class="row">
-
             <div class="col-md-12">
                 <hr>
                 <a href="#"><strong><i class="glyphicon glyphicon-list-alt"></i> Reports</strong></a>
@@ -431,14 +419,44 @@
                 <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
             </ul>
         </footer>
-        <script src="/app/_References.js"></script>
-        @System.Web.Optimization.Scripts.Render("~/bundles/js")
-        @System.Web.Optimization.Scripts.Render("~/bundles/ts")
+  
     </div>
     <div>
         <span id="spinner" data-cc-spinner="{radius:30, width:3, length: 10, radius: 9, corners: 1, rotate: 29, speed: 1}" spinner-key="spinner" style="position: absolute; display: block; top: 50%; left: 50%;"></span>
     </div>
 </body>
 </html>
-
 <!-- @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()  -->
+
+<script src="/app/_References.js"></script>
+<script src="/scripts/jquery-1.10.2.js"></script>
+<script src="/scripts/underscore.js"></script>
+<script src="/scripts/modernizr-2.6.2.js"></script>
+<script src="/scripts/q.js"></script>
+<script src="/scripts/respond.js"></script>
+<script src="/scripts/angular.js"></script>
+<script src="/scripts/spin.js"></script>
+<script src="/scripts/toastr.js"></script>
+<script src="/scripts/angular-ui-router.js"></script>
+<script src="/scripts/angular-ui.js"></script>
+<script src="/scripts/bootstrap.js"></script>
+<script src="/scripts/select2.js"></script>
+<script src="/scripts/respond.matchmedia.addListener.js"></script>
+<script src="/scripts/angular-animate.js"></script>
+<script src="/scripts/angular-aria.js"></script>
+<script src="/scripts/angular-cookies.js"></script>
+<script src="/scripts/angular-loader.js"></script>
+<script src="/scripts/angular-messages.js"></script>
+<script src="/scripts/angular-resource.js"></script>
+<script src="/scripts/angular-route.js"></script>
+<script src="/scripts/angular-sanitize.js"></script>
+
+<script src="/scripts/angular-translate.js"></script>
+<script src="/scripts/angular-ui-ieshiv.js"></script>
+<script src="/scripts/angular-ui/ui-bootstrap-tpls.js"></script>
+<script src="/scripts/ng-grid-flexible-height.js"></script>
+<script src="/scripts/ng-grid.js"></script>
+
+<script src="/scripts/angular-dialog-service-5.1.2/dialogs-default-translations.js"></script>
+<script src="/scripts/angular-dialog-service-5.1.2/dialogs.js"></script>
+ @System.Web.Optimization.Scripts.Render("~/bundles/ts")

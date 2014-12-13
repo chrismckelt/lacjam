@@ -17,7 +17,7 @@ module app.controllers {
         }
 
          public edit = (id) => {
-            app.redirectToUrl(app.Routes.metadataDefinitionGroupsEdit.url + '/' + id);
+            app.redirectToUrl(app.Routes.documents.url + '/' + id);
         }
 
         public cancel = () => {

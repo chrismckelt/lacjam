@@ -18,37 +18,17 @@ module app {
             }
         };
 
-        public static metadataDefinitionGroups: ng.ui.IState = {
-            name: "metadatadefinitiongroups",
-            url: "/metadatadefinitiongroups",
-            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupView.cshtml",
-            controller: app.controllers.MetadataDefinitionGroupController,
+        public static documents: ng.ui.IState = {
+            name: "documents",
+            url: "/documents",
+            templateUrl: "app/documents/documentview.cshtml",
+            controller: app.controllers.DocumentController,
             data: {
                 isVisible: true,
             }
         };
 
-        public static metadataDefinitionGroupsEdit: ng.ui.IState = {
-            name: "metadatadefinitiongroupsedit",
-            url: "/metadatadefinitiongroupsedit",
-            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupEdit.cshtml",
-            controller: app.controllers.MetadataDefinitionGroupEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static metadataDefinitionGroupsUpdate: ng.ui.IState = {
-            name: "metadataDefinitionGroupsupdate",
-            url: "/metadatadefinitiongroupsedit/{identity}",
-            templateUrl: "app/metadatadefinitiongroups/MetadataDefinitionGroupEdit.cshtml",
-            controller: app.controllers.MetadataDefinitionGroupEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-
+    
         public static metadataDefinitions: ng.ui.IState = {
             name: "metadatadefinitions",
             url: "/metadatadefinitions",
@@ -138,9 +118,7 @@ module app {
             //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
             list.push(
                 Routes.home,
-                Routes.metadataDefinitionGroups,
-                Routes.metadataDefinitionGroupsUpdate,
-                Routes.metadataDefinitionGroupsEdit,
+                Routes.documents,
                 Routes.metadataDefinitions,
                 Routes.metadataDefinitionEdit,
                 Routes.metadataDefinitionUpdate,

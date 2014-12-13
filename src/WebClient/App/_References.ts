@@ -33,18 +33,13 @@
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
 /// <reference path="model.ts" />
-
-/// <reference path="metadatadefinitiongroups/metadatadefinitiongroupeditcontroller.ts" />
-
-/// <reference path="metadatadefinitions/metadatadefinitioncontroller.ts" />
-/// <reference path="MetadataDefinitions/MetadataDefinitionService.ts" />
-
-/// <reference path="metadatadefinitions/metadatadefinitioncontroller.ts" />
+/// <reference path="routes.ts" />
+/// <reference path="documents/documentcontroller.ts" />
 
 /// <reference path="Index/IndexController.ts" />
 /// <reference path="MetadataDefinitionGroups/MetadataDefinitionGroupController.ts" />
 /// <reference path="MetadataDefinitionGroups/MetadataDefinitionGroupService.ts" />
-/// <reference path="routes.ts" />
+
 /// <reference path="metadatadefinitions/metadatadefinitionservice.ts" />
 /// <reference path="metadatadefinitions/metadatadefinitioneditcontroller.ts" />
 

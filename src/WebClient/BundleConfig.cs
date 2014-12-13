@@ -30,6 +30,8 @@ namespace Lacjam.WebClient
             ignoreList.Ignore("*.debug.js", OptimizationMode.WhenEnabled);
             //   ignoreList.Ignore("*.min.js", OptimizationMode.WhenDisabled);
             ignoreList.Ignore("*.min.css", OptimizationMode.WhenDisabled);
+            ignoreList.Ignore("*jasmine-html.js*");
+            ignoreList.Ignore("*jasmine.js*");
         }
 
 

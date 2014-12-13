@@ -69,6 +69,7 @@
     <Content Include="App\Entities\EntityService.ts" />
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEditController.ts" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEditController.ts" />
+    <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
@@ -91,6 +92,8 @@
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEdit.cshtml" />
     <Content Include="App\Entities\EntityView.cshtml" />
     <Content Include="App\Entities\EntityEdit.cshtml" />
+    <Content Include="App\Documents\DocumentList.cshtml" />
+    <Content Include="App\Documents\DocumentView.cshtml" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
