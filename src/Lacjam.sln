@@ -24,23 +24,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5B554A2E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bus", "Bus", "{9BC3C0F4-0B8C-4CEA-9FDC-99D0861C919F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{98808DBE-3230-44D5-87F8-98DBABF3AFED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{98808DBE-3230-44D5-87F8-98DBABF3AFED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "src\Framework\Framework.csproj", "{B6847C60-20D7-4547-B3F3-1DBD78ABD88B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{B6847C60-20D7-4547-B3F3-1DBD78ABD88B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildRunner", "src\BuildRunner\BuildRunner.csproj", "{3C432D4F-A4C9-482C-88C9-3C8D082F4FE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildRunner", "BuildRunner\BuildRunner.csproj", "{3C432D4F-A4C9-482C-88C9-3C8D082F4FE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "src\Database\Database.csproj", "{48C0941B-9152-43F6-A571-38CA447A8C25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{48C0941B-9152-43F6-A571-38CA447A8C25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\WebApi\WebApi.csproj", "{8C13FADE-D6C3-42CB-BE09-A97652F15DA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{8C13FADE-D6C3-42CB-BE09-A97652F15DA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "src\WebClient\WebClient.csproj", "{1F8C2073-8EA8-4DD7-8A9B-611BBBF057E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{1F8C2073-8EA8-4DD7-8A9B-611BBBF057E5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebApi.UnitTests", "src\WebApi.UnitTests\WebApi.UnitTests.fsproj", "{57B47DED-C238-4469-B223-7239D7E9AAEB}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebApi.UnitTests", "WebApi.UnitTests\WebApi.UnitTests.fsproj", "{57B47DED-C238-4469-B223-7239D7E9AAEB}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Core.UnitTests", "src\Core.UnitTests\Core.UnitTests.fsproj", "{94CEDE8A-6B70-4AE8-A9DE-04B0C60E302E}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Core.UnitTests", "Core.UnitTests\Core.UnitTests.fsproj", "{94CEDE8A-6B70-4AE8-A9DE-04B0C60E302E}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Framework.UnitTests", "src\Framework.UnitTests\Framework.UnitTests.fsproj", "{EF941D3F-F4B3-4B8A-B960-806C39EDA435}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Framework.UnitTests", "Framework.UnitTests\Framework.UnitTests.fsproj", "{EF941D3F-F4B3-4B8A-B960-806C39EDA435}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
