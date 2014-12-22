@@ -42,6 +42,10 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Core.UnitTests", "Core.Unit
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Framework.UnitTests", "Framework.UnitTests\Framework.UnitTests.fsproj", "{EF941D3F-F4B3-4B8A-B960-806C39EDA435}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "WebApi.Azure", "WebApi.Azure\WebApi.Azure.ccproj", "{18170E55-69B7-4C29-83C1-E256E24A3C6D}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "WebClient.Azure", "WebClient.Azure\WebClient.Azure.ccproj", "{0D27C8AC-602C-4690-8953-CC9C4C02FA21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +88,14 @@ Global
 		{EF941D3F-F4B3-4B8A-B960-806C39EDA435}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF941D3F-F4B3-4B8A-B960-806C39EDA435}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF941D3F-F4B3-4B8A-B960-806C39EDA435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18170E55-69B7-4C29-83C1-E256E24A3C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18170E55-69B7-4C29-83C1-E256E24A3C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18170E55-69B7-4C29-83C1-E256E24A3C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18170E55-69B7-4C29-83C1-E256E24A3C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D27C8AC-602C-4690-8953-CC9C4C02FA21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D27C8AC-602C-4690-8953-CC9C4C02FA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D27C8AC-602C-4690-8953-CC9C4C02FA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D27C8AC-602C-4690-8953-CC9C4C02FA21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +112,8 @@ Global
 		{57B47DED-C238-4469-B223-7239D7E9AAEB} = {B3676C13-634D-4A68-AAB3-960538EC5526}
 		{94CEDE8A-6B70-4AE8-A9DE-04B0C60E302E} = {B3676C13-634D-4A68-AAB3-960538EC5526}
 		{EF941D3F-F4B3-4B8A-B960-806C39EDA435} = {B3676C13-634D-4A68-AAB3-960538EC5526}
+		{18170E55-69B7-4C29-83C1-E256E24A3C6D} = {CBC8BE62-DE68-4D45-9B26-9C8D1B1EE60D}
+		{0D27C8AC-602C-4690-8953-CC9C4C02FA21} = {CBC8BE62-DE68-4D45-9B26-9C8D1B1EE60D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Lacjam\Lacjam.csproj
