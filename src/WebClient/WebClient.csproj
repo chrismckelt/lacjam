@@ -1008,6 +1008,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\Directives\" />
+    <Folder Include="App\Documents\TrustDeed\" />
     <Folder Include="App\Search\" />
     <Folder Include="App\Services\" />
   </ItemGroup>

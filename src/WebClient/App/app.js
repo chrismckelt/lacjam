@@ -101,6 +101,8 @@ angular.module("app", modules).config([
         app.log.debug("app.run finished...");
 
         // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
+        app.redirectToRoute(app.Routes.documents);
+
         $timeout(function () {
             app.log.info("-- ALL SERVICES --");
             app.showRegistrations("app", null);
@@ -625,7 +627,7 @@ var app;
     app.log = log;
 
     function redirectToRoute(route) {
-        app.resolveByName("$state").go(route);
+        app.redirectToUrl(route.url);
     }
     app.redirectToRoute = redirectToRoute;
 
