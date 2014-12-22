@@ -1,60 +1,83 @@
 ﻿
-<div class="container-fluid"  >
-    <form class="form-horizontal" role="form">
+<div class="tabbable tabs-left">
+    <ul class="nav nav-tabs">
+        <li class="active" href="#trustdeed" data-toggle="tab">
+            Trust Deed
+        </li>
+        <li href="#abnandtfnregister" data-toggle="tab">
+            ABN and TFN registration
+        </li>
+        <li href="#trusteeminutes" data-toggle="tab">
+            Trustee Minutes
+        </li>
+        <li href="#investmentstrategy" data-toggle="tab">
+            Investment Strategy
+        </li>
+        <li href="#trusteedeclaration" data-toggle="tab">
+            Trustee Declaration
+        </li>
+        <li href="#annualfinancialstatement" data-toggle="tab">
+            Annual Financial Statement
+        </li>
+        <li href="#taxreturn" data-toggle="tab">
+            Tax Return
+        </li>
+        <li href="#audit" data-toggle="tab">
+            Audit
+        </li>
+        <li href="#superisorylevy" data-toggle="tab">
+            Supervisory levy
+        </li>
+    </ul>
 
-        <div class="form-button-row">
-            <div class="page-header pull-left">
-                <h1>{{title}}</h1>
-            </div>
-            <div class="sectionHeader pull-right">
-                <a href="#/DocumentsControllerEdit" class="cancel-link pull-right">New</a>
-            </div>
-            <input type="text" style="width: 100%" placeholder="Search" ng-model="q" ng-trim="false">
-        </div>
-        <div class="clearfix"></div>
-        <div class="row">
+    <div class="tab-content">
+        <div class="tab-pane active" id="trustdeed">
             <h2>1. Trust Deed</h2>
             <p>The ATO sets out the guidelines on what is required for a Trust Deed. Here is a <a title="Trust Deed" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/Trust-Deed-SWA3.doc" target="_blank">Trust Deed</a> we prepared, based on the requirements of the ATO. Download and amend if for free to suit you SMSF.</p>
             <p>Another option is to use a provider like <a href="http://www.cleardocs.com/home.html" target="_blank">Cleardocs</a> that charges $137,50 for their<em> SMSF Deeds or <a href="http://www.directdocs.com.au/">DirectDocs</a> whose set-up packs start at $265.</em></p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="abnandtfnregister">
             <h2>2. ABN and TFN registration</h2>
             <p>
                 The ATO is the regulator of SMSF’s and arrange for the registration of new Funds. You can apply for an ABN yourself from the Australian Business Register. The web address is:<br />
                 <a title="ABR Homepage" href="https://abr.gov.au/" target="_blank">https://abr.gov.au/</a>
             </p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="trusteeminutes">
             <h2>3. Trustee Minutes</h2>
             <p>The new Trustee and Beneficiaries have to attend a meeting and prepare minute noting the establishment of the new SMSF. Use the attached <a title="Initial Mutes for a new SMSF" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/03/Initial-Minutes1.doc" target="_blank">Initial Minutes</a> for this meeting and similar meetings the Trustees will conduct in future.</p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="investmentstrategy">
             <h2>4. Investment Strategy</h2>
             <p>The SMSF should have an investment strategy setting out what to invest in and the risk profile of investments. See this <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/07/Investment-Strategy.doc">Investment Strategy Template</a> you can amend for this purpose. Or use as is if it suits your Fund.</p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="trusteedeclaration">
             <h2>5. Trustee Declaration</h2>
             <p>Trustees should elect to be a complying SMSF in order to be taxed at the reduced tax rate of 15%. If you do not make this election the Trust will be taxed at a marginal tax rate of 49%. Download the <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/03/Trustee-Declaration.pdf">Trustee Declaration</a></p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="annualfinancialstatement">
             <h2>6. Annual Financial Statement</h2>
             <p>Trustees should keep records of all transaction the SMSF conduct throughout the year. Then prepare a set of financial statement. Here is a template you can use to prepare your <a title="SMSF 2011 Financial Statements." href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/financialstatements1.xls" target="_blank">SMSF 2011 Financial Statements.</a></p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="taxreturn">
             <h2>7. Tax Return</h2>
             <p>You should also prepare a tax return for your SMSF. All the information needed for the tax return will come from the template on the financial statement. This is similar to an individual tax return and if you have done your personal tax return before, you should be able to complete the Fund return. Click here to download:</p>
-            <p><a title="2014 Annual Return" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/09/2014-Tax-Return.pdf" target="_blank">SMSF 2014 return</a> and <a title="2014 Annual Return Instructions" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/09/2014-Tax-Return-Instructions.pdf" target="_blank">2014 Annual Return Instructions</a></p>
-            <p><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/05/Self-Managed-Super-Fund-Annual-Return-2013.pdf" target="_blank">SMSF 2013 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/05/Self-Managed-Super-Fund-Annual-Return-2013-Instructions.pdf" target="_blank">2013 Annual Return Instructions</a></p>
-            <p><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2012-return.pdf">SMSF 2012 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2012-instructions.pdf">2012 Annual Return instructions</a></p>
-            <p><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2011-return2.pdf">SMSF 2011 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2011-instructions1.pdf">2011 Annual Return instructions</a></p>
-            <p><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2010-return.pdf">SMSF 2010 return</a> and  <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2010instructions.pdf">2010 Annual Return instructions</a></p>
-            <p>&nbsp;</p>
+            <br /><a title="2014 Annual Return" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/09/2014-Tax-Return.pdf" target="_blank">SMSF 2014 return</a> and <a title="2014 Annual Return Instructions" href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/09/2014-Tax-Return-Instructions.pdf" target="_blank">2014 Annual Return Instructions</a>
+            <br /><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/05/Self-Managed-Super-Fund-Annual-Return-2013.pdf" target="_blank">SMSF 2013 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/05/Self-Managed-Super-Fund-Annual-Return-2013-Instructions.pdf" target="_blank">2013 Annual Return Instructions</a>
+            <br /><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2012-return.pdf">SMSF 2012 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2012-instructions.pdf">2012 Annual Return instructions</a>
+            <br /><a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2011-return2.pdf">SMSF 2011 return</a> and <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2011-instructions1.pdf">2011 Annual Return instructions</a>
+            <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/SMSF-2010-return.pdf">SMSF 2010 return</a> and  <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2012/01/2010instructions.pdf">2010 Annual Return instructions</a>
+
+        </div>
+        <div class="tab-pane" id="audit">
             <h2>8. Audit</h2>
             <p>The only function the Trustees can’t perform themselves is the annual audit. The Trustees can prepare financial statement and have the supporting documents ready. Attached below is the link with audit requirements. If you have all this in place, the audit should be without any issues. Our audit division, <a title="Audit Warehouse" href="http://www.auditwarehouse.com/index.html" target="_blank">Audit Warehouse</a>, offers fixed price audit of $450 (max) but this is usually $350 per audit. Or you can use any provider you prefer.</p>
             <p>The audit requirements that you should prepare prior to audit is attached in the <a href="http://www.superannuationwarehouse.com.au/wp-content/uploads/2014/09/Audit-Checklist-2014.pdf">SMSF Audit Checklist</a> (from the ATO).See Appendix A page 13 &#8211; 23 for all the requirements. We use this audit program as set out on <a title="Audit" href="http://www.superannuationwarehouse.com.au/audit/">the audit page.</a></p>
-            <p>&nbsp;</p>
+        </div>
+        <div class="tab-pane" id="superisorylevy">
             <h2>9. Supervisory levy</h2>
             <p>Don’t forget there’s a <a title="Super Levy" href="http://www.superannuationwarehouse.com.au/information/tax/">$180 supervisory levy </a>payable to the ATO. This is for the Fund, so if there’s more than one member in the SMSF, you will equally share this cost between beneficiaries. This is payable with the annual income tax to the ATO on behalf of your SMSF.</p>
-            <p>&nbsp;</p>
-
 
         </div>
-        <!-- /.row -->
-
-    </form>
+    </div>
 </div>
-<!-- /.container-fluid -->
