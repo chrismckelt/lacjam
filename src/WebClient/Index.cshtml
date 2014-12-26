@@ -39,7 +39,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body ng-cloak>    <!--[if lte IE 8]>
+<body ng-cloak>
+    <!--[if lte IE 8]>
       <script>
           document.createElement('ng-include');
           document.createElement('ng-pluralize');
@@ -69,12 +70,12 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav side-nav">
                     <li><img id="applogo" onclick="document.location.href ='/'" /></li>
-                    <li><a href="/#/documents"><i class="glyphicon glyphicon-home"></i> home</a></li>
+                    <li><a href="/"><i class="glyphicon glyphicon-home"></i> home</a></li>
                     <li><a href="/#/dashboard"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>             
                     <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
                     <li><a href="/#/clients"><i class="glyphicon glyphicon-cog"></i> clients</a></li>
-                    <li><a href="/#/documents"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
-                    <li><a href="/#/documents"><i class="glyphicon glyphicon-phone"></i> contact</a></li>  
+                    <li><a href="/#/tools"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
+                    <li><a href="/#/contact"><i class="glyphicon glyphicon-phone"></i> contact</a></li>  
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                    
@@ -456,4 +457,5 @@
 
 <script src="/scripts/angular-dialog-service-5.1.2/dialogs-default-translations.js"></script>
 <script src="/scripts/angular-dialog-service-5.1.2/dialogs.js"></script>
- @System.Web.Optimization.Scripts.Render("~/bundles/ts")
+ 
+@System.Web.Optimization.Scripts.Render("~/bundles/ts")

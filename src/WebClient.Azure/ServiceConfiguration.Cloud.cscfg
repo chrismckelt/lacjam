@@ -3,7 +3,7 @@
   <Role name="WebClient">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lacjam;AccountKey=Cc2ADkT/xAsECLukRJ31QojX43hZLRAId1aH/l5rTSsQhcoxLT/ZFy2oLJXukn5xCDphHnKijk5XAI3NCl4gUw==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

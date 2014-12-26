@@ -9,7 +9,7 @@ module app {
 
         // start page
         public static home: ng.ui.IState = {
-            name: "home",
+            name: "index",
             url: "/",
             templateUrl: "app/Index/IndexView.cshtml",
             controller: app.controllers.IndexController,

@@ -99,14 +99,13 @@ angular.module("app", modules).config([
         });
 
         app.log.debug("app.run finished...");
-
         // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
-        app.redirectToRoute(app.Routes.home);
-
-        $timeout(function () {
-            app.log.info("-- ALL SERVICES --");
-            app.showRegistrations("app", null);
-        }, 5000);
+        //     app.redirectToRoute(app.Routes.home);
+        //$timeout(() => {
+        //    app.log.info("-- ALL SERVICES --");
+        //    app.showRegistrations("app",null);
+        //}, 5000
+        //    );
     }
 ]);
 
@@ -718,3 +717,4 @@ var app;
     })();
     app.Describer = Describer;
 })(app || (app = {}));
+//# sourceMappingURL=app.js.map
