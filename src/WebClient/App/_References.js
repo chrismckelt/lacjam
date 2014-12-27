@@ -25,12 +25,14 @@
 /// <reference path="../Scripts/typings/ng-grid/ng-grid.d.ts" />
 /// <reference path="../scripts/typings/select2/select2.d.ts" />
 /// <reference path="app.ts" />
+/// <reference path="routes.ts" />
 /// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
 /// <reference path="model.ts" />
-/// <reference path="routes.ts" />
+/// <reference path="layout/footercontroller.ts" />
+/// <reference path="dashboard/dashboardcontroller.ts" />
 /// <reference path="documents/documentcontroller.ts" />
 /// <reference path="Index/IndexController.ts" />
 /// <reference path="MetadataDefinitionGroups/MetadataDefinitionGroupController.ts" />
@@ -42,4 +44,4 @@
 /// <reference path="entities/EntityEditController.ts" />
 /// <reference path="entities/EntityService.ts" />
 /// <reference path="Public/SearchController.ts" />
-//# sourceMappingURL=_References.js.map
+//# sourceMappingURL=_references.js.map

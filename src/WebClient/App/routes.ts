@@ -18,6 +18,16 @@ module app {
             }
         };
 
+        public static home: ng.ui.IState = {
+            name: "dashboard",
+            url: "/",
+            templateUrl: "app/Dashboard/DashboardView.cshtml",
+            controller: app.controllers.DashboardController,
+            data: {
+                isVisible: true,
+            }
+        };
+
         public static documents: ng.ui.IState = {
             name: "documents",
             url: "/documents",

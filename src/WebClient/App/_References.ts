@@ -28,12 +28,15 @@
 
 
 /// <reference path="app.ts" />
+/// <reference path="routes.ts" />
 /// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
 /// <reference path="model.ts" />
-/// <reference path="routes.ts" />
+/// <reference path="layout/footercontroller.ts" />
+
+/// <reference path="dashboard/dashboardcontroller.ts" />
 /// <reference path="documents/documentcontroller.ts" />
 
 /// <reference path="Index/IndexController.ts" />

@@ -73,7 +73,9 @@
     <Content Include="App\Entities\EntityService.ts" />
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEditController.ts" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEditController.ts" />
+    <TypeScriptCompile Include="App\Index\IndexController.ts" />
     <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
+    <Content Include="App\Layout\FooterController.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
@@ -87,7 +89,6 @@
     <Content Include="App\Prototypes\entities.html" />
     <Content Include="App\Public\SearchController.ts" />
     <Content Include="App\types.js" />
-    <Content Include="App\Index\Version.cshtml" />
     <Content Include="App\404.cshtml" />
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupView.cshtml" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionView.cshtml" />
@@ -102,6 +103,8 @@
       <Link>log4net.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="App\Index\IndexView.cshtml" />
+    <Content Include="App\Index\Version.cshtml" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -266,7 +269,7 @@
       <DependentUpon>TypeLite.Net4.tt</DependentUpon>
     </Content>
     <Content Include="Scripts\typings\angularLocalStorage\angularLocalStorage.d.ts" />
-    <TypeScriptCompile Include="App\Index\IndexController.ts" />
+    <TypeScriptCompile Include="App\Dashboard\DashboardController.ts" />
     <TypeScriptCompile Include="App\app.ts" />
     <TypeScriptCompile Include="App\directives.ts" />
     <TypeScriptCompile Include="App\filters.ts" />
@@ -478,7 +481,7 @@
     <None Include="JavaScriptEngineSwitcher.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="App\Index\IndexView.cshtml" />
+    <Content Include="App\Dashboard\DashboardView.cshtml" />
     <Content Include="Scripts\TypeLite.Net4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeLite.Net4.d.ts</LastGenOutput>

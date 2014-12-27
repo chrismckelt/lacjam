@@ -86,6 +86,8 @@ angular.module("app", modules).config([
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             app.log.debug("$stateChangeStart:" + toState.name);
             app.fn.spinStop();
+            app.global.stateCurrent = toState;
+            app.global.statePrevious = fromState;
         });
 
         // app services init
@@ -99,8 +101,11 @@ angular.module("app", modules).config([
         });
 
         app.log.debug("app.run finished...");
-        // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
-        //     app.redirectToRoute(app.Routes.home);
+        $timeout(function () {
+            return app.log.debug("timeout callback - state name : " + $state.current.name);
+        }, 5000);
+
+        app.redirectToRoute(app.Routes.home);
         //$timeout(() => {
         //    app.log.info("-- ALL SERVICES --");
         //    app.showRegistrations("app",null);

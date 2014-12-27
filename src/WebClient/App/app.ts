@@ -120,9 +120,11 @@ angular.module("app", modules)
                 });
 
             $rootScope.$on('$stateChangeSuccess',
-                (event, toState, toParams, fromState, fromParams) => {
+                (event, toState: ng.ui.IState, toParams, fromState, fromParams) => {
                     app.log.debug("$stateChangeStart:" + toState.name);
                     app.fn.spinStop();
+                    app.global.stateCurrent = toState;
+                    app.global.statePrevious = fromState;
                 });
 
             // app services init
@@ -136,9 +138,9 @@ angular.module("app", modules)
 
 
             app.log.debug("app.run finished...");
-            // $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
+            $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
 
-       //     app.redirectToRoute(app.Routes.home);
+            app.redirectToRoute(app.Routes.home);
 
             //$timeout(() => {
             //    app.log.info("-- ALL SERVICES --");
@@ -318,6 +320,8 @@ module app {
 
         public static appName: string = "app";
         public static spinner: Spinner;
+        public static stateCurrent: ng.ui.IState;
+        public static statePrevious: ng.ui.IState;
 
 
         public static appControllers: string = "app.controllers";
