@@ -18,9 +18,9 @@ module app {
             }
         };
 
-        public static home: ng.ui.IState = {
+        public static dashboard: ng.ui.IState = {
             name: "dashboard",
-            url: "/",
+            url: "/dashboard",
             templateUrl: "app/Dashboard/DashboardView.cshtml",
             controller: app.controllers.DashboardController,
             data: {
@@ -128,6 +128,7 @@ module app {
             //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
             list.push(
                 Routes.home,
+                Routes.dashboard,
                 Routes.documents,
                 Routes.metadataDefinitions,
                 Routes.metadataDefinitionEdit,
