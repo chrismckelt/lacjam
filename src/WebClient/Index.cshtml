@@ -18,8 +18,76 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
  
-    <link href="/Content/Bootstrap/bootstrap.css" rel="stylesheet" />
-      <link href="/Content/angular-ui.css" rel="stylesheet" />
+    <link><!-- Summernote -->
+    <link href="content/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="content/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+    <!-- Angular notify -->
+    <link href="content/css/plugins/angular-notify/angular-notify.min.css" rel="stylesheet">
+
+    <!-- Colorpicker -->
+    <link href="content/css/plugins/colorpicker/colorpicker.css" rel="stylesheet">
+
+    <!-- Font awesome -->
+    <link href="content/fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Bootstrap and Fonts -->
+    <link href="content/bootstrap/bootstrap.css" rel="stylesheet">
+
+    <!-- Full Calendar -->
+    <link href="content/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+
+    <!-- Morris -->
+    <link href="content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <!-- Style for wizard - based on Steps plugin-->
+    <link href="content/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+
+    <!-- FancyBox -->
+    <link href="scripts/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- iCheck -->
+    <link href="content/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <!-- Chosen Plugin -->
+    <link href="content/css/plugins/chosen/chosen.css" rel="stylesheet">
+
+    <!-- Dropzone style -->
+    <link href="content/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="content/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <!-- Switchery iOS style -->
+    <link href="content/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <!-- noUiSlider for Range Slider-->
+    <link href="content/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <!-- DataPicker -->
+    <link href="content/css/plugins/datapicker/angular-datapicker.css" rel="stylesheet">
+
+    <!-- Ion Range Slider -->
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <!-- Ng-Grid -->
+    <link href="scripts/plugins/nggrid/ng-grid.css" rel="stylesheet">
+
+    <!-- Code Mirror -->
+    <link href="content/css/plugins/codemirror/codemirror.css" rel="stylesheet">
+    <link href="content/css/plugins/codemirror/ambiance.css" rel="stylesheet">
+
+    <!-- ui Tree -->
+    <link href="content/css/plugins/uiTree/angular-ui-tree.min.css" rel="stylesheet">
+
+    <!-- Main Inspinia CSS files -->
+    <link href="content/css/animate.css" rel="stylesheet">
+    <link href="content/css/style.css" rel="stylesheet">
+
+
+
   
     <link href="/Content/dialogs.css" rel="stylesheet" />
     <link href="/Content/font-awesome.css" rel="stylesheet" />
@@ -56,50 +124,50 @@
     <![endif]-->
     <!-- Header -->
 
-    <nav class="navbar navbar-default" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-         
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav side-nav">
-                    <li><img id="applogo" onclick="document.location.href ='/'" /></li>
-                    <li><a href="/#/dashboard"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>
-                    <li><a href="/#/clients"><i class="glyphicon glyphicon-cog"></i> clients</a></li>
-                    <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
-                    <li><a href="/#/tools"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
-                    <li><a href="/#/contact"><i class="glyphicon glyphicon-phone"></i> contact</a></li>  
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                   
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">more <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/#/blog"><i class="glyphicon glyphicon-pencil"></i>blog</a></li>
-                            <li><a href="/#/about"><i class="glyphicon glyphicon-info-sign"></i> about</a></li>
-                            <li><a href="/#/featurequest"><i class="glyphicon glyphicon-question-sign"></i> feature request</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div>
-    </nav>
+    <!-- Wrapper-->
+    <div id="wrapper">
 
-    <!-- /Header -->
-    <!-- Main -->
-    <div class="container" ui-view>
-       
+        <!-- Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
 
-    </div><!--/container-->
-    <!-- /Main -->
-    <!-- script references -->
-    <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><img id="applogo" onclick="document.location.href ='/'" /></li>
+                        <li><a href="/#/dashboard"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>
+                        <li><a href="/#/clients"><i class="glyphicon glyphicon-cog"></i> clients</a></li>
+                        <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
+                        <li><a href="/#/tools"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
+                        <li><a href="/#/contact"><i class="glyphicon glyphicon-phone"></i> contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">more <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/#/blog"><i class="glyphicon glyphicon-pencil"></i>blog</a></li>
+                                <li><a href="/#/about"><i class="glyphicon glyphicon-info-sign"></i> about</a></li>
+                                <li><a href="/#/featurequest"><i class="glyphicon glyphicon-question-sign"></i> feature request</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div>
+        </nav>
+
+        <!-- Page wraper -->
+        <!-- ng-class with current state name give you the ability to extended customization your view -->
+        <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+
+             <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
   
            @if (HttpContext.Current.IsDebuggingEnabled)
            {
@@ -108,7 +176,7 @@
                 </ul>
     }
          
-        <footer class="panel-footer">
+        <footer class="footer">
             <ul class="list-inline">
                 <li>&copy; smsf minder 2014</li>
                 <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
@@ -116,6 +184,34 @@
         </footer>
 
     </div>
+
+            <!-- Main view  -->
+            <div ui-view></div>
+
+            <!-- Footer -->
+            <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
+
+                @if (HttpContext.Current.IsDebuggingEnabled)
+                {
+                    <ul class="list-inline">
+                        <li>{{footer.state.url}}</li>
+                    </ul>
+                }
+
+                <footer class="panel-footer">
+                    <ul class="list-inline">
+                        <li>&copy; smsf minder 2014</li>
+                        <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
+                    </ul>
+                </footer>
+
+            </div>
+        </div>
+        <!-- End page wrapper-->
+
+    </div>
+    <!-- End wrapper-->
+ 
     <div>
         <span id="spinner" data-cc-spinner="{radius:30, width:3, length: 10, radius: 9, corners: 1, rotate: 29, speed: 1}" spinner-key="spinner" style="position: absolute; display: block; top: 50%; left: 50%;"></span>
     </div>
