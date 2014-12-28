@@ -24,6 +24,7 @@
 /// <reference path="../scripts/typings/bootstrap.datepicker/bootstrap.datepicker.d.ts" />
 /// <reference path="../Scripts/typings/ng-grid/ng-grid.d.ts" />
 /// <reference path="../scripts/typings/select2/select2.d.ts" />
+/// <reference path="../scripts/typings/icheck/icheck.d.ts" />
 
 
 
