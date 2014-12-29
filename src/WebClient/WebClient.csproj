@@ -216,9 +216,7 @@
     <Content Include="Content\ng-grid.min.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
-    <Content Include="css\jasmine.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="karma.conf.js" />
     <Content Include="Scripts\angular-dialog-service-5.1.2\dialogs-default-translations.js" />
@@ -250,9 +248,6 @@
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.eot" />
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.ttf" />
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\angular-dialog-service-5.1.2\LICENSE" />
     <Content Include="Scripts\bootstrap\angular-bootstrap-checkbox.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
