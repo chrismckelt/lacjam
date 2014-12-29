@@ -722,4 +722,3 @@ var app;
     })();
     app.Describer = Describer;
 })(app || (app = {}));
-//# sourceMappingURL=app.js.map

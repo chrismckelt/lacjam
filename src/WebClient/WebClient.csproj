@@ -105,6 +105,12 @@
     </Content>
     <Content Include="App\Index\IndexView.cshtml" />
     <Content Include="App\Index\Version.cshtml" />
+    <Content Include="App\Common\Content.cshtml" />
+    <Content Include="App\Common\Footer.cshtml" />
+    <Content Include="App\Common\Ibox_tools.cshtml" />
+    <Content Include="App\Common\Navigation.cshtml" />
+    <Content Include="App\Common\Topnavbar.cshtml" />
+    <Content Include="App\Common\Notify.cshtml" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

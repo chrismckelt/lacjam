@@ -122,90 +122,27 @@
           document.createElement('file-uploader');
       </script>
     <![endif]-->
-    <!-- Header -->
+<!-- Header -->
 
     <!-- Wrapper-->
     <div id="wrapper">
 
         <!-- Navigation -->
-        <nav class="navbar navbar-default" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav side-nav">
-                        <li><img id="applogo" onclick="document.location.href ='/'" /></li>
-                        <li><a href="/#/dashboard"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>
-                        <li><a href="/#/clients"><i class="glyphicon glyphicon-cog"></i> clients</a></li>
-                        <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
-                        <li><a href="/#/tools"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
-                        <li><a href="/#/contact"><i class="glyphicon glyphicon-phone"></i> contact</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">more <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/#/blog"><i class="glyphicon glyphicon-pencil"></i>blog</a></li>
-                                <li><a href="/#/about"><i class="glyphicon glyphicon-info-sign"></i> about</a></li>
-                                <li><a href="/#/featurequest"><i class="glyphicon glyphicon-question-sign"></i> feature request</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div>
-        </nav>
+        <div ng-include="'app/common/navigation.cshtml'"></div>
 
         <!-- Page wraper -->
-        <!-- ng-class with current state name give you the ability to extended customization your view -->
+        <!-- ng-class with current state name give you the ability to have extended customization on views -->
         <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
 
-             <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
-  
-           @if (HttpContext.Current.IsDebuggingEnabled)
-           {
-                <ul class="list-inline">
-                    <li>{{footer.state.url}}</li>
-                </ul>
-    }
-         
-        <footer class="footer">
-            <ul class="list-inline">
-                <li>&copy; smsf minder 2014</li>
-                <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
-            </ul>
-        </footer>
-
-    </div>
+            <!-- Page wrapper -->
+            <div ng-include="'app/common/topnavbar.cshtml'"></div>
 
             <!-- Main view  -->
             <div ui-view></div>
 
             <!-- Footer -->
-            <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
+            <div ng-include="'app/common/footer.cshtml'"></div>
 
-                @if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    <ul class="list-inline">
-                        <li>{{footer.state.url}}</li>
-                    </ul>
-                }
-
-                <footer class="panel-footer">
-                    <ul class="list-inline">
-                        <li>&copy; smsf minder 2014</li>
-                        <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
-                    </ul>
-                </footer>
-
-            </div>
         </div>
         <!-- End page wrapper-->
 
