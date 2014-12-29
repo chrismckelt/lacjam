@@ -66,8 +66,4 @@ module app.services {
             "$debounce": () => Select2.util.debounce
         });
 
-    angular.module("publicApp.services")
-        .service({
-            "$debounce": () => Select2.util.debounce
-        });
 }

@@ -72,6 +72,10 @@
       <HintPath>..\packages\FsCheck.Xunit.1.0.4\lib\net45\FsCheck.Xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharp.Data">
+      <HintPath>..\packages\FSharp.Data.2.1.1\lib\net40\FSharp.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FSharp.Data.SqlClient">
       <HintPath>..\packages\FSharp.Data.SqlClient.1.5.5\lib\net40\FSharp.Data.SqlClient.dll</HintPath>
       <Private>True</Private>

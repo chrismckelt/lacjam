@@ -1,9 +1,8 @@
-﻿module BundlerCsFileGenerator
-                                    #if INTERACTIVE
+﻿#if INTERACTIVE
 namespace BundlerCs
 #endif
 
-module DatabaseBackup 
+module BundlerCsFileGenerator 
 
 
 #if INTERACTIVE
@@ -27,3 +26,20 @@ module DatabaseBackup
     open FSharp.IO
     open Microsoft.FSharp.Data.TypeProviders
     open Xunit
+
+
+    [<Literal>]
+    let connectionstring = "Data Source=localhost;Initial Catalog=Master;Integrated Security=SSPI;"
+
+    type LacjamPage = HtmlProvider<"http://www.lacjam.local/">
+   
+    type RestoreQuery = SqlProgrammabilityProvider<connectionstring>
+       
+    [<Fact>]
+    let ``Create bundler file`` () =  
+                                
+                                try
+                                    LacjamPage.Load("http://www.lacjam.local/").Html.Elements["script"]
+                                    |> printfn "%A"
+                                with
+                                    | exn -> printfn "Exception:\n%s" exn.Message
