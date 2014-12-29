@@ -133,10 +133,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="xunit">
-      <HintPath>..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Name>Core</Name>
       <Project>{98808dbe-3230-44d5-87f8-98dbabf3afed}</Project>
@@ -147,6 +143,10 @@
       <Project>{b6847c60-20d7-4547-b3f3-1dbd78abd88b}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -53,13 +53,14 @@
     <None Include="Script.fsx" />
     <Compile Include="DatabaseBackup.fs" />
     <Compile Include="DatabaseRestore.fs" />
-    <Compile Include="LightBlueRenameFilesToCorrectExtension.fs" />
+    <Compile Include="Mercury.fs" />
     <Compile Include="Logs.fs" />
     <Compile Include="Tests.fs" />
     <Content Include="app.config" />
     <Content Include="packages.config" />
     <None Include="SqlServerTypes\x86\SqlServerSpatial110.dll" />
     <None Include="SqlServerTypes\x64\SqlServerSpatial110.dll" />
+    <Compile Include="LightBlueRenameFilesToCorrectExtension.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsCheck">
