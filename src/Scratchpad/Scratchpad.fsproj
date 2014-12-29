@@ -61,6 +61,7 @@
     <None Include="SqlServerTypes\x86\SqlServerSpatial110.dll" />
     <None Include="SqlServerTypes\x64\SqlServerSpatial110.dll" />
     <Compile Include="LightBlueRenameFilesToCorrectExtension.fs" />
+    <Compile Include="BundlerCsFileGenerator.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsCheck">
