@@ -37,13 +37,24 @@ module DatabaseRestore
 
     let restoreSql dbname =  String.Format(
                                                     """  
+                                                            ALTER DATABASE [{1}] 
+                                                            SET SINGLE_USER
+                                                           
+                                                            WITH ROLLBACK IMMEDIATE
+                                                           
                                                             RESTORE DATABASE [{1}] FROM DISK =  '{0}\{1}.bak'  WITH REPLACE
+
+
+                                                            ALTER DATABASE [{1}] 
+                                                            SET MULTI_USER
+                                                            WITH ROLLBACK IMMEDIATE
                                                             
                                                     """,backupfolder,dbname)
    
     type RestoreQuery = SqlProgrammabilityProvider<connectionstring>
        
-    [<Fact(Skip="")>]
+    [<Fact>]
+    //[<Fact(Skip="")>]
     let ``Database restore`` () =  
                                 
                                 try

@@ -73,6 +73,7 @@ module DatabaseBackup
     type BackupQuery = SqlCommandProvider<backupSql, connectionstring>
 
     [<Fact(Skip="")>]
+    //[<Fact>]
     let ``Database backup`` () =  
                                 try
                                     let cmd = new BackupQuery()
