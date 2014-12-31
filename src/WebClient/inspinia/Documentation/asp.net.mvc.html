@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA Admin Theme Documentation</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+
+    <style>
+
+        .documentation .jumbotron .row {
+            padding-top: 60px;
+        }
+
+    </style>
+</head>
+<body class="documentation">
+
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">INSPINIA - Documentation</a>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="alert alert-info" style="margin-top:30px">
+            Please note that we are working on upgrade documentation.
+            All new topics with example for implementation plugins will be added in the next version.
+            If you currently not find answer to your question in the documentation, please feel free to write to us on support@webapplayers.com
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="img/mvc_logo.png" alt="mvc_logo" style="width: 200px">
+                <h2>Inspinia ASP.NET MVC5</h2>
+                <p>Thank you for purchasing INSPINIA admin theme. If you have any questions about the template, please feel free to contact us via email: <a href="mailto:support@webapplayers.com">support@webapplayers.com</a>.<br/>
+                    Thanks very much!</p>
+                <small>
+
+                    <strong>Documentation created:</strong> 10/12/2014<br/>
+                    <strong>Latest update:</strong> 12/12/2014<br/>
+                    <strong>By:</strong> WebAppLayers Team<br/>
+
+                </small>
+                <br/>
+                <small>
+                    For HTML/CSS documentation go to: <a href="index.html">Static HTML/CSS documentation.</a><br/>
+                    For AngularJS documentation go to: <a href="angular.html">AngularJS documentation.</a>
+                </small>
+            </div>
+            <div class="col-md-6">
+                <img src="img/preview.png" alt="screen" class="img-responsive"/>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>About the documentation</h3>
+            <p>
+                This documentation is focused on ASP.NET MVC5 version. It assumes a minimum knowledge of asp.net technology. It describe mainly files and structure in project. For any standard element and function of this theme like (fixed sidebar, fixed navbar, skins, footer etc) please go to HTML/CSS documentation on index.html file as this is the same on bouth version.
+                <i>Please note that this documentation is dedicated to the main element of the template. With each version, we will try to develop it. But if you have any questions going beyond what is described here don't hesitate to write to us.</i>
+            </p>
+            <div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+            <h3>Technology and structure</h3>
+              <p> <strong>Tool and Technologies used:</strong>
+                  <ul>
+                        <li>
+                            Visual Studio 2013
+                        </li>
+                        <li>
+                            .Net Framework 4.5.1.
+                        </li>
+                        <li>
+                            MVC 5
+                        </li>
+                        <li>
+                            Bootstrap 3 UI Framework.
+                        </li>
+                        <li>
+                            INSPINIA resources
+                        </li>
+                  </ul>
+              </p>
+
+                        <h4>Folders and files</h4>
+                        <p>INSPINIA ASP.NET MVC template consists project files for Visual Studio 2013 with below structure:</p>
+            <div><pre class="prettyprint linenums">
+<code>Inspinia_MVC5/
+├── <strong>App_Data/</strong>
+├── <strong>App_Start/</strong>
+├── <strong>bin/</strong>
+├── <strong>CodeTemplates/</strong>
+├── <strong>Content/</strong>
+├── <strong>Controllers/</strong>
+├── <strong>fonts/</strong>
+├── <strong>Helpers/</strong>
+├── <strong>Images/</strong>
+├── <strong>Models/</strong>
+├── <strong>obj/</strong>
+├── <strong>Properties/</strong>
+├── <strong>Scripts/</strong>
+├── <strong>Views/</strong>
+├── favicon.ico
+├── Global.asax
+├── Global.asax.cs
+├── Inspinia_MVC5.csproj
+├── Inspinia_MVC5.csproj.user
+├── packages.config
+├── Web.config
+├── Web.Debug.config
+├── Web.Release.config </code></pre></div>
+        </div>
+        <div class="col-md-6">
+            <h3>Main _Layout.cshtml</h3>
+            <p>Main layout are created with few main elements:</p>
+            <ol>
+                <li><code>_Navigation</code> left sidebar navigation.</li>
+                <li><code>_TopNavbar</code> top navigation with second menu.</li>
+                <li><code>@RenderBody</code> main container for page elements.</li>
+                <li><code>_Footer</code> footer element.</li>
+            </ol>
+
+            <a target="_blank" href="img/page_mvc.png"><img class="img-responsive" src="img/page_mvc.png" alt="page structure"></a>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-lg-12">
+            <h3>Page Head</h3>
+            <p>Page <code>&lt;head /&gt;</code> contains Metadata and CSS bundle files for theme. We use special section <b>AddLocalStyles</b>, to import styles for specific plugins on pages that need it.</p>
+            <pre class="prettyprint linenums">
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;INSPINIA | @ViewBag.Title&lt;/title&gt;
+    &lt;!-- Add local styles, mostly for plugins css file --&gt;
+    @if (IsSectionDefined("AddLocalStyles"))
+        {@RenderSection("AddLocalStyles", required: false)}
+
+    &lt;!-- Primary Inspinia style --&gt;
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/font-awesome/css")
+&lt;/head&gt;
+</pre>
+
+            <hr>
+            <h3>Main file structure</h3>
+            <p>IMPORTANT - Main stucture of _Layout.cshtml file.</p>
+            <pre class="prettyprint linenums">
+&lt;!-- Skin configuration box --&gt;
+@Html.Partial("_SkinConfig")
+
+&lt;!-- Wrapper--&gt;
+&lt;!-- PageClass give you ability to specify custom style for specific view based on action --&gt;
+&lt;div id="wrapper" class="@Html.PageClass()"&gt;
+
+    &lt;!-- Navigation --&gt;
+    @Html.Partial("_Navigation")
+
+    &lt;!-- Page wraper --&gt;
+    &lt;div id="page-wrapper" class="gray-bg @ViewBag.SpecialClass"&gt;
+
+        &lt;!-- Top Navbar --&gt;
+        @Html.Partial("_TopNavbar")
+
+        &lt;!-- Main view  --&gt;
+        @RenderBody()
+
+        &lt;!-- Footer --&gt;
+        @Html.Partial("_Footer")
+
+    &lt;/div&gt;
+    &lt;!-- End page wrapper--&gt;
+
+&lt;/div&gt;
+&lt;!-- End wrapper--&gt;
+            </pre>
+            <hr>
+            <h3>Page Script </h3>
+            <p>On bottom of file are bundle script located. _Layout.cshtml contains all major plugin scripts and Inspinia scripts.
+                In section <b>Scripts</b>, will be import scripts for specific plugins on pages that need it.
+            </p>
+            <pre class="prettyprint linenums">
+
+&lt;!-- Section for main scripts render --&gt;
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/plugins/slimScroll")
+@Scripts.Render("~/bundles/inspinia")
+
+&lt;!-- Skin config script - only for demo purpose--&gt;
+@Scripts.Render("~/bundles/skinConfig")
+
+&lt;!-- Handler for local scripts --&gt;
+@RenderSection("scripts", required: false)
+
+</pre>
+            <hr>
+
+            <h3>Adding Plugin (special styles file and scripts)</h3>
+            <p>To add for example iCheck plugin (plugin for custom checkbox input) at the bottom of page (view) you have to specifie <b>Styles</b> and <b>Scripts</b> with name plugin as example below. Or if you want to add it to entire app you can add it to _Layout file.  </p>
+            <pre class="prettyprint linenums">
+
+@section Styles {
+    @Styles.Render("~/plugins/iCheckStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+    &lt;script type="text/javascript"&gt;
+        $(document).ready(function () {
+
+            // Local scripts
+
+        });
+    &lt;/script&gt;
+}
+
+</pre>
+            <p>
+                <strong> If you need any help with render section feel free to write me at support@webapplayers.com.</strong>
+            </p>
+            <hr>
+
+            <h3>BundleConfig.cs</h3>
+            <p>Bundle contains all neccesery scripts and style. You can add it to any part of your app. With convention:<br/><br/>
+
+               <b>CSS styles:</b> @Styles.Render("~/plugins/<b>{PluginName}</b>Styles")
+                <br/>
+                <b>JS scripts:</b> @Scripts.Render("~/plugins/<b>{PluginName}</b>")
+            </p>
+            <br/>
+            <pre class="prettyprint linenums">
+
+ // CSS style (bootstrap/inspinia)
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/animate.css",
+                      "~/Content/style.css"));
+
+            // Font Awesome icons
+            bundles.Add(new StyleBundle("~/font-awesome/css").Include(
+                      "~/fonts/font-awesome/css/font-awesome.min.css"));
+
+            // jQuery
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-2.1.1.min.js"));
+
+            // jQueryUI CSS
+            bundles.Add(new ScriptBundle("~/bundles/jqueryuiStyles").Include(
+                        "~/Scripts/plugins/jquery-ui/jquery-ui.min.css"));
+
+            // jQueryUI
+            bundles.Add(new StyleBundle("~/bundles/jqueryui").Include(
+                        "~/Scripts/plugins/jquery-ui/jquery-ui.min.js"));
+
+            // Bootstrap
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.min.js"));
+
+            // Inspinia script
+            bundles.Add(new ScriptBundle("~/bundles/inspinia").Include(
+                      "~/Scripts/plugins/metisMenu/metisMenu.min.js",
+                      "~/Scripts/plugins/pace/pace.min.js",
+                      "~/Scripts/app/inspinia.min.js"));
+
+            // Inspinia skin config script
+            bundles.Add(new ScriptBundle("~/bundles/skinConfig").Include(
+                      "~/Scripts/app/skin.config.min.js"));
+
+            // SlimScroll
+            bundles.Add(new ScriptBundle("~/plugins/slimScroll").Include(
+                      "~/Scripts/plugins/slimscroll/jquery.slimscroll.min.js"));
+
+            // Peity
+            bundles.Add(new ScriptBundle("~/plugins/peity").Include(
+                      "~/Scripts/plugins/peity/jquery.peity.min.js"));
+
+            // Video responsible
+            bundles.Add(new ScriptBundle("~/plugins/videoResponsible").Include(
+                      "~/Scripts/plugins/video/responsible-video.js"));
+
+            // FancyBox gallery css styles
+            bundles.Add(new StyleBundle("~/plugins/fancyboxStyles").Include(
+                      "~/Scripts/plugins/fancybox/jquery.fancybox.css"));
+
+            // Morriss chart
+            bundles.Add(new ScriptBundle("~/plugins/fancybox").Include(
+                      "~/Scripts/plugins/fancybox/jquery.fancybox.js"));
+
+            // Sparkline
+            bundles.Add(new ScriptBundle("~/plugins/sparkline").Include(
+                      "~/Scripts/plugins/sparkline/jquery.sparkline.min.js"));
+
+            // Morriss chart css styles
+            bundles.Add(new StyleBundle("~/plugins/morrisStyles").Include(
+                      "~/Content/plugins/morris/morris-0.4.3.min.css"));
+
+            // Morriss chart
+            bundles.Add(new ScriptBundle("~/plugins/morris").Include(
+                      "~/Scripts/plugins/morris/raphael-2.1.0.min.js",
+                      "~/Scripts/plugins/morris/morris.js"));
+
+            // Flot chart
+            bundles.Add(new ScriptBundle("~/plugins/flot").Include(
+                      "~/Scripts/plugins/flot/jquery.flot.js",
+                      "~/Scripts/plugins/flot/jquery.flot.tooltip.min.js",
+                      "~/Scripts/plugins/flot/jquery.flot.resize.js",
+                      "~/Scripts/plugins/flot/jquery.flot.pie.js",
+                      "~/Scripts/plugins/flot/jquery.flot.spline.js"));
+
+            // Rickshaw chart
+            bundles.Add(new ScriptBundle("~/plugins/rickshaw").Include(
+                      "~/Scripts/plugins/rickshaw/vendor/d3.v3.js",
+                      "~/Scripts/plugins/rickshaw/rickshaw.min.js"));
+
+            // ChartJS chart
+            bundles.Add(new ScriptBundle("~/plugins/chartJs").Include(
+                      "~/Scripts/plugins/chartjs/Chart.min.js"));
+
+            // iCheck css styles
+            bundles.Add(new StyleBundle("~/plugins/iCheckStyles").Include(
+                      "~/Content/plugins/iCheck/custom.css"));
+
+            // iCheck
+            bundles.Add(new ScriptBundle("~/plugins/iCheck").Include(
+                      "~/Scripts/plugins/iCheck/icheck.min.js"));
+
+            // dataTables css styles
+            bundles.Add(new StyleBundle("~/plugins/dataTablesStyles").Include(
+                      "~/Content/plugins/dataTables/dataTables.bootstrap.css",
+                      "~/Content/plugins/dataTables/dataTables.responsive.css",
+                      "~/Content/plugins/dataTables/dataTables.tableTools.min.css"));
+
+            // dataTables
+            bundles.Add(new ScriptBundle("~/plugins/dataTables").Include(
+                      "~/Scripts/plugins/dataTables/jquery.dataTables.js",
+                      "~/Scripts/plugins/dataTables/dataTables.bootstrap.js",
+                      "~/Scripts/plugins/dataTables/dataTables.responsive.js",
+                      "~/Scripts/plugins/dataTables/dataTables.tableTools.min.js"));
+
+            // jeditable
+            bundles.Add(new ScriptBundle("~/plugins/jeditable").Include(
+                      "~/Scripts/plugins/jeditable/jquery.jeditable.js"));
+
+            // jqGrid styles
+            bundles.Add(new StyleBundle("~/plugins/jqGridStyles").Include(
+                      "~/Content/plugins/jqGrid/ui.jqgrid.css"));
+
+            // jqGrid
+            bundles.Add(new ScriptBundle("~/plugins/jqGrid").Include(
+                      "~/Scripts/plugins/jqGrid/i18n/grid.locale-en.js",
+                      "~/Scripts/plugins/jqGrid/jquery.jqGrid.min.js"));
+
+            // codeEditor styles
+            bundles.Add(new StyleBundle("~/plugins/codeEditorStyles").Include(
+                      "~/Content/plugins/codemirror/codemirror.css",
+                      "~/Content/plugins/codemirror/ambiance.css"));
+
+            // codeEditor
+            bundles.Add(new ScriptBundle("~/plugins/codeEditor").Include(
+                      "~/Scripts/plugins/codemirror/codemirror.js",
+                      "~/Scripts/plugins/codemirror/mode/javascript/javascript.js"));
+
+            // codeEditor
+            bundles.Add(new ScriptBundle("~/plugins/nestable").Include(
+                      "~/Scripts/plugins/nestable/jquery.nestable.js"));
+
+            // validate
+            bundles.Add(new ScriptBundle("~/plugins/validate").Include(
+                      "~/Scripts/plugins/validate/jquery.validate.min.js"));
+
+            // fullCalendar styles
+            bundles.Add(new StyleBundle("~/plugins/fullCalendarStyles").Include(
+                      "~/Content/plugins/fullcalendar/fullcalendar.css"));
+
+            // fullCalendar
+            bundles.Add(new ScriptBundle("~/plugins/fullCalendar").Include(
+                      "~/Scripts/plugins/fullcalendar/moment.min.js",
+                      "~/Scripts/plugins/fullcalendar/fullcalendar.min.js"));
+
+            // vectorMap
+            bundles.Add(new ScriptBundle("~/plugins/vectorMap").Include(
+                      "~/Scripts/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",
+                      "~/Scripts/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"));
+
+            // ionRange styles
+            bundles.Add(new StyleBundle("~/plugins/ionRangeStyles").Include(
+                      "~/Content/plugins/ionRangeSlider/ion.rangeSlider.css",
+                      "~/Content/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css"));
+
+            // ionRange
+            bundles.Add(new ScriptBundle("~/plugins/ionRange").Include(
+                      "~/Scripts/plugins/ionRangeSlider/ion.rangeSlider.min.js"));
+
+            // dataPicker styles
+            bundles.Add(new StyleBundle("~/plugins/dataPickerStyles").Include(
+                      "~/Content/plugins/datapicker/datepicker3.css"));
+
+            // dataPicker
+            bundles.Add(new ScriptBundle("~/plugins/dataPicker").Include(
+                      "~/Scripts/plugins/datapicker/bootstrap-datepicker.js"));
+
+            // nouiSlider styles
+            bundles.Add(new StyleBundle("~/plugins/nouiSliderStyles").Include(
+                      "~/Content/plugins/nouslider/jquery.nouislider.css"));
+
+            // nouiSlider
+            bundles.Add(new ScriptBundle("~/plugins/nouiSlider").Include(
+                      "~/Scripts/plugins/nouslider/jquery.nouislider.min.js"));
+
+            // jasnyBootstrap styles
+            bundles.Add(new StyleBundle("~/plugins/jasnyBootstrapStyles").Include(
+                      "~/Content/plugins/jasny/jasny-bootstrap.min.css"));
+
+            // jasnyBootstrap
+            bundles.Add(new ScriptBundle("~/plugins/jasnyBootstrap").Include(
+                      "~/Scripts/plugins/jasny/jasny-bootstrap.min.js"));
+
+            // switchery styles
+            bundles.Add(new StyleBundle("~/plugins/switcheryStyles").Include(
+                      "~/Content/plugins/switchery/switchery.css"));
+
+            // switchery
+            bundles.Add(new ScriptBundle("~/plugins/switchery").Include(
+                      "~/Scripts/plugins/switchery/switchery.js"));
+
+            // chosen styles
+            bundles.Add(new StyleBundle("~/plugins/chosenStyles").Include(
+                      "~/Content/plugins/chosen/chosen.css"));
+
+            // chosen
+            bundles.Add(new ScriptBundle("~/plugins/chosen").Include(
+                      "~/Scripts/plugins/chosen/chosen.jquery.js"));
+
+            // knob
+            bundles.Add(new ScriptBundle("~/plugins/knob").Include(
+                      "~/Scripts/plugins/jsKnob/jquery.knob.js"));
+
+            // wizardSteps styles
+            bundles.Add(new StyleBundle("~/plugins/wizardStepsStyles").Include(
+                      "~/Content/plugins/steps/jquery.steps.css"));
+
+            // wizardSteps
+            bundles.Add(new ScriptBundle("~/plugins/wizardSteps").Include(
+                      "~/Scripts/plugins/staps/jquery.steps.min.js"));
+
+            // dropZone styles
+            bundles.Add(new StyleBundle("~/plugins/dropZoneStyles").Include(
+                      "~/Content/plugins/dropzone/basic.css",
+                      "~/Content/plugins/dropzone/dropzone.css"));
+
+            // dropZone
+            bundles.Add(new ScriptBundle("~/plugins/dropZone").Include(
+                      "~/Scripts/plugins/dropzone/dropzone.js"));
+
+            // summernote styles
+            bundles.Add(new StyleBundle("~/plugins/summernoteStyles").Include(
+                      "~/Content/plugins/summernote/summernote.css",
+                      "~/Content/plugins/summernote/summernote-bs3.css"));
+
+            // summernote
+            bundles.Add(new ScriptBundle("~/plugins/summernote").Include(
+                      "~/Scripts/plugins/summernote/summernote.min.js"));
+
+</pre>
+
+            <hr>
+
+
+
+            <h3>CodeTemplates and Scaffolding</h3>
+            <p>In CodeTemplates we add special customized template for Scaffolding. If you run app and go to <b>Scaffolding</b> page then you will see a full generated code and views with customized look and feel for Inspinia theme.</p>
+
+            <div class="text-center">
+                <img src="img/scaffolding_page.png" alt="scaffolding" class="img-responsive">
+
+            </div>
+
+
+            <h3>Scaffolding Tutorial</h3>
+            <p>In this section we will show you have to go throw scaffolding with customized template on Inspinia MVC5 SeedProject.
+            </p>
+            <p>When you open Inspinia Seed Project you will see in Solution Explorer folder <b>CodeTemplates</b>.
+                This folder contains scaffolding templates. This folder must have the CodeTemplates name.
+                Entity framework first check for this folder in solution and if he find it he will use templates from there.</p>
+
+                <img src="img/scaff1.png" alt="scaffolding" class="img-responsive">
+
+            <p>
+                Lets add simple model for our demo purpose.
+            </p>
+                <img src="img/scaff2.png" alt="scaffolding" class="img-responsive">
+
+            <p> Select Empty controller </p>
+            <img src="img/scaff3.png" alt="scaffolding" class="img-responsive">
+
+
+            <p> Enter controller name </p>
+            <img src="img/scaff4.png" alt="scaffolding" class="img-responsive">
+
+            <p> Write bacis Person model with {Id, FirstName, LastName, Position} </p>
+            <img src="img/scaff5.png" alt="scaffolding" class="img-responsive">
+
+            <p> After save build project</p>
+            <img src="img/scaff7.1.png" alt="scaffolding" class="img-responsive">
+
+            <p> Next creat scaffolding controller and views</p>
+            <img src="img/scaff6.png" alt="scaffolding" class="img-responsive">
+
+            <p> Select MVC5 Controller with view, using Entity Framework</p>
+            <img src="img/scaff7.png" alt="scaffolding" class="img-responsive">
+
+            <p> Add name and use Person model </p>
+            <img src="img/scaff8.png" alt="scaffolding" class="img-responsive">
+
+            <p> Next click to New data context and set a name for context</p>
+            <img src="img/scaff9.png" alt="scaffolding" class="img-responsive">
+
+            <p> Once more build project to creat connection </p>
+            <img src="img/scaff10.png" alt="scaffolding" class="img-responsive">
+
+            <p> After that go to _Navigation file and add menu item to Person view as below </p>
+            <img src="img/scaff11.png" alt="scaffolding" class="img-responsive">
+
+            <p> When you run app go to Person menu and you will see a empty table. Click create new </p>
+            <img src="img/scaff12.png" alt="scaffolding" class="img-responsive">
+
+            <p> Add some example data </p>
+            <img src="img/scaff13.png" alt="scaffolding" class="img-responsive">
+
+            <p> After that you will have a first person in your database </p>
+            <img src="img/scaff14.png" alt="scaffolding" class="img-responsive">
+
+            <p>
+                <b>Using Scaffolding and Inspinia templates you can creat simple and fast basic app wtih nice look and feal writing only a model!!</b>
+            </p>
+
+            <hr>
+
+
+            <h3>MVC_Seed_Project</h3>
+            <p><strong> It is an application skeleton for a typical ASP.NET MVC5 web app. You can use it to quickly bootstrap your mvc webapp projects and dev environment for these projects.</strong></p>
+            <p>It is a best start for new app. It has needed scripts and style and CodeTemplates for Scaffolding.</p>
+
+
+
+            <h3>Any Questions? Need help ?</h3>
+        <p>Contact as with email: <a href="mailto:support@webapplayers.com">support@webapplayers.com</a> </p>
+            <hr>
+        </div>
+    </div>
+    </div>
+
+    <footer>
+        <p>&copy; WebAppLayers 2014 | INSPINIA Admin Theme</p>
+    </footer>
+</div>
+</div>
+
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/google-code-prettify/prettify.js"></script>
+
+<script>
+        $(function(){
+            window.prettyPrint && prettyPrint();
+        })
+</script>
+
+</body>
+</html>

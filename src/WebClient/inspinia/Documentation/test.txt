@@ -1,0 +1,18 @@
+@section Styles {
+    @Styles.Render("~/plugins/iCheckStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+    &lt;script type="text/javascript"&gt;
+        $(document).ready(function () {
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+        });
+    &lt;/script&gt;
+}

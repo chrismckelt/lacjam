@@ -203,7 +203,8 @@ namespace Lacjam.WebClient
 
             var uptop = new List<string>
             {
-                "jquery-1.10.2",
+                "jquery-2.1.1.min",
+                "jquery-ui-1.10.4.min",
                 "underscore",
                 "modernizr-2.6.2",
                 "q",
@@ -214,6 +215,12 @@ namespace Lacjam.WebClient
                 "toastr",
                 "angular-ui-router",
                 "angular-ui",
+                "angular-animate",
+                "angular-sanitize",
+                "angular-cookies",
+                "angular-loader",
+                "angular-messages",
+                "angular-resource",
                 "bootstrap",
                 "ui-utils",
                 "ui-utils-ieshiv",

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html ng-app="inspinia">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title set in pageTitle directive -->
+    <title page-title></title>
+
+    <!-- Summernote -->
+    <link href="content/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="content/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+    <!-- Angular notify -->
+    <link href="content/css/plugins/angular-notify/angular-notify.min.css" rel="stylesheet">
+
+    <!-- Colorpicker -->
+    <link href="content/css/plugins/colorpicker/colorpicker.css" rel="stylesheet">
+
+    <!-- Font awesome -->
+    <link href="content/fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Bootstrap and Fonts -->
+    <link href="content/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Full Calendar -->
+    <link href="content/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+
+    <!-- Morris -->
+    <link href="content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <!-- Style for wizard - based on Steps plugin-->
+    <link href="content/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+
+    <!-- FancyBox -->
+    <link href="scripts/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- iCheck -->
+    <link href="content/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <!-- Chosen Plugin -->
+    <link href="content/css/plugins/chosen/chosen.css" rel="stylesheet">
+
+    <!-- Dropzone style -->
+    <link href="content/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="content/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <!-- Switchery iOS style -->
+    <link href="content/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <!-- noUiSlider for Range Slider-->
+    <link href="content/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <!-- DataPicker -->
+    <link href="content/css/plugins/datapicker/angular-datapicker.css" rel="stylesheet">
+
+    <!-- Ion Range Slider -->
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <!-- Ng-Grid -->
+    <link href="scripts/plugins/nggrid/ng-grid.css" rel="stylesheet">
+
+    <!-- Code Mirror -->
+    <link href="content/css/plugins/codemirror/codemirror.css" rel="stylesheet">
+    <link href="content/css/plugins/codemirror/ambiance.css" rel="stylesheet">
+
+    <!-- ui Tree -->
+    <link href="content/css/plugins/uiTree/angular-ui-tree.min.css" rel="stylesheet">
+
+    <!-- Main Inspinia CSS files -->
+    <link href="content/css/animate.css" rel="stylesheet">
+    <link href="content/css/style.css" rel="stylesheet">
+
+	
+
+
+
+</head>
+
+<!-- ControllerAs syntax -->
+<!-- Main controller with serveral data used in Inspinia theme on diferent view -->
+<body ng-controller="MainCtrl as main">
+
+<!-- Wrapper-->
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <div ng-include="'views/common/navigation.html'"></div>
+
+    <!-- Page wraper -->
+    <!-- ng-class with current state name give you the ability to extended customization your view -->
+    <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+
+        <!-- Page wrapper -->
+        <div ng-include="'views/common/topnavbar.html'"></div>
+
+        <!-- Main view  -->
+        <div ui-view></div>
+
+        <!-- Footer -->
+        <div ng-include="'views/common/footer.html'"></div>
+
+    </div>
+    <!-- End page wrapper-->
+
+</div>
+<!-- End wrapper-->
+
+
+<!-- jQuery and Bootstrap -->
+<script src="/scripts/modernizr-2.6.2.js"></script>
+<script src="/scripts/respond.js"></script>
+<script src="/scripts/underscore.js"></script>
+<script src="/scripts/jquery/moment.min.js"></script>
+<script src="/scripts/jquery/jquery-2.1.1.min.js"></script>
+<script src="/scripts/jquery/jquery-ui-1.10.4.min.js"></script>
+<script src="/scripts/q.js"></script>
+<script src="/scripts/spin.js"></script>
+<script src="/scripts/toastr.js"></script>
+
+
+<!-- MetsiMenu -->
+<script src="scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- SlimScroll -->
+<script src="scripts/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Flot -->
+<script src="scripts/plugins/flot/jquery.flot.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.spline.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.resize.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.pie.js"></script>
+<script src="scripts/plugins/flot/curvedLines.js"></script>
+
+<!-- Peity -->
+<script src="scripts/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Morris -->
+<script src="scripts/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="scripts/plugins/morris/morris.js"></script>
+
+<!-- iCheck -->
+<script src="scripts/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Chosen -->
+<script src="scripts/plugins/chosen/chosen.jquery.js"></script>
+
+<!-- Peace JS -->
+<script src="scripts/plugins/pace/pace.min.js"></script>
+
+<!-- Fancy box -->
+<script src="scripts/plugins/fancybox/jquery.fancybox.js"></script>
+
+<!-- Rickshaw -->
+<script src="scripts/plugins/rickshaw/vendor/d3.v3.js"></script>
+<script src="scripts/plugins/rickshaw/rickshaw.min.js"></script>
+
+<!-- Ion Range Slider-->
+<script src="scripts/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+<!-- NouSlider -->
+<script src="scripts/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+<!-- Jvectormap -->
+<script src="scripts/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="scripts/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
+<!-- Input Mask-->
+<script src="scripts/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+<!-- Switchery -->
+<script src="scripts/plugins/switchery/switchery.js"></script>
+
+<!-- Data Tables -->
+<script src="scripts/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="scripts/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+<!-- EasyPIE -->
+<script src="scripts/plugins/easypiechart/easypiechart.js"></script>
+
+<!-- Sparkline -->
+<script src="scripts/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Dropzone -->
+<script src="scripts/plugins/dropzone/dropzone.js"></script>
+
+<!-- Cahrt JS -->
+<script src="scripts/plugins/chartJs/Chart.min.js"></script>
+
+<!-- Knob -->
+<script src="scripts/plugins/jsKnob/jquery.knob.js"></script>
+
+<!-- SUMMERNOTE -->
+<script src="scripts/plugins/summernote/summernote.min.js"></script>
+
+<!-- Full Calendar -->
+<script src="scripts/plugins/fullcalendar/fullcalendar.min.js"></script>
+
+<!-- Code Mirror -->
+<script src="scripts/plugins/codemirror/codemirror.js"></script>
+<script src="scripts/plugins/codemirror/mode/javascript/javascript.js"></script>
+
+
+
+<!-- Angular scripts-->
+
+<script src="/scripts/angular/angular.js"></script>
+<script src="/scripts/angular/angular-ui-router.js"></script>
+<script src="/scripts/angular/angular-ui.js"></script>
+<script src="/scripts/angular/angular-animate.js"></script>
+<script src="/scripts/angular/angular-aria.js"></script>
+<script src="/scripts/angular/angular-cookies.js"></script>
+<script src="/scripts/angular/angular-loader.js"></script>
+<script src="/scripts/angular/angular-messages.js"></script>
+<script src="/scripts/angular/angular-resource.js"></script>
+<script src="/scripts/angular/angular-sanitize.js"></script>
+
+<script src="scripts/bootstrap/ui-bootstrap-tpls-0.11.0.min.js"></script>
+
+<!-- Angular Dependiences -->
+<script src="scripts/plugins/peity/angular-peity.js"></script>
+<script src="scripts/plugins/easypiechart/angular.easypiechart.js"></script>
+<script src="scripts/plugins/flot/angular-flot.js"></script>
+<script src="scripts/plugins/rickshaw/angular-rickshaw.js"></script>
+<script src="scripts/plugins/summernote/angular-summernote.min.js"></script>
+<script src="scripts/bootstrap/angular-bootstrap-checkbox.js"></script>
+<script src="scripts/plugins/jsKnob/angular-knob.js"></script>
+<script src="scripts/plugins/switchery/ng-switchery.js"></script>
+<script src="scripts/plugins/nouslider/angular-nouislider.js"></script>
+<script src="scripts/plugins/datapicker/datePicker.js"></script>
+<script src="scripts/plugins/chosen/chosen.js"></script>
+<script src="scripts/plugins/dataTables/angular-datatables.min.js"></script>
+<script src="scripts/plugins/fullcalendar/gcal.js"></script>
+<script src="scripts/plugins/fullcalendar/calendar.js"></script>
+<script src="scripts/plugins/chartJs/angles.js"></script>
+<script src="scripts/plugins/uievents/event.js"></script>
+<script src="scripts/plugins/nggrid/ng-grid-2.0.3.min.js"></script>
+<script src="scripts/plugins/ui-codemirror/ui-codemirror.min.js"></script>
+<script src="scripts/plugins/uiTree/angular-ui-tree.min.js"></script>
+<script src="scripts/plugins/angular-notify/angular-notify.min.js"></script>
+<script src="scripts/plugins/colorpicker/bootstrap-colorpicker-module.js"></script>
+
+<!--
+ You need to include this script on any page that has a Google Map.
+ When using Google Maps on your own site you MUST signup for your own API key at:
+ https://developers.google.com/maps/documentation/javascript/tutorial#api_key
+ After your sign up replace the key in the URL below..
+-->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
+<script src="scripts/plugins/uimaps/ui-map.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="scripts/inspinia.js"></script>
+	
+<script src="/app/app.js"></script>
+<script src="/app/directives.js"></script>
+<script src="/app/filters.js"></script>
+<script src="/app/model.js"></script>
+<script src="/app/publicApp.js"></script>
+<script src="/app/routes.js"></script>
+<script src="/app/services.js"></script>
+<script src="/app/types.js"></script>
+<script src="/app/Common/common.js"></script>
+
+
+</body>
+</html>

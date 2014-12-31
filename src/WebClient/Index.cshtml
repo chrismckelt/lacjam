@@ -18,8 +18,76 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
  
-    <link href="/Content/Bootstrap/bootstrap.css" rel="stylesheet" />
-      <link href="/Content/angular-ui.css" rel="stylesheet" />
+    <link><!-- Summernote -->
+    <link href="content/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="content/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+    <!-- Angular notify -->
+    <link href="content/css/plugins/angular-notify/angular-notify.min.css" rel="stylesheet">
+
+    <!-- Colorpicker -->
+    <link href="content/css/plugins/colorpicker/colorpicker.css" rel="stylesheet">
+
+    <!-- Font awesome -->
+    <link href="content/fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Bootstrap and Fonts -->
+    <link href="content/bootstrap/bootstrap.css" rel="stylesheet">
+
+    <!-- Full Calendar -->
+    <link href="content/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+
+    <!-- Morris -->
+    <link href="content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <!-- Style for wizard - based on Steps plugin-->
+    <link href="content/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+
+    <!-- FancyBox -->
+    <link href="scripts/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- iCheck -->
+    <link href="content/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <!-- Chosen Plugin -->
+    <link href="content/css/plugins/chosen/chosen.css" rel="stylesheet">
+
+    <!-- Dropzone style -->
+    <link href="content/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="content/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <!-- Switchery iOS style -->
+    <link href="content/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <!-- noUiSlider for Range Slider-->
+    <link href="content/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <!-- DataPicker -->
+    <link href="content/css/plugins/datapicker/angular-datapicker.css" rel="stylesheet">
+
+    <!-- Ion Range Slider -->
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="content/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <!-- Ng-Grid -->
+    <link href="scripts/plugins/nggrid/ng-grid.css" rel="stylesheet">
+
+    <!-- Code Mirror -->
+    <link href="content/css/plugins/codemirror/codemirror.css" rel="stylesheet">
+    <link href="content/css/plugins/codemirror/ambiance.css" rel="stylesheet">
+
+    <!-- ui Tree -->
+    <link href="content/css/plugins/uiTree/angular-ui-tree.min.css" rel="stylesheet">
+
+    <!-- Main Inspinia CSS files -->
+    <link href="content/css/animate.css" rel="stylesheet">
+    <link href="content/css/style.css" rel="stylesheet">
+
+
+
   
     <link href="/Content/dialogs.css" rel="stylesheet" />
     <link href="/Content/font-awesome.css" rel="stylesheet" />
@@ -54,68 +122,33 @@
           document.createElement('file-uploader');
       </script>
     <![endif]-->
-    <!-- Header -->
+<!-- Header -->
 
-    <nav class="navbar navbar-default" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-         
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav side-nav">
-                    <li><img id="applogo" onclick="document.location.href ='/'" /></li>
-                    <li><a href="/#/dashboard"><i class="glyphicon glyphicon-dashboard"></i> dashboard</a></li>
-                    <li><a href="/#/clients"><i class="glyphicon glyphicon-cog"></i> clients</a></li>
-                    <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> documents</a></li>
-                    <li><a href="/#/tools"><i class="glyphicon glyphicon-briefcase"></i> tools</a></li>
-                    <li><a href="/#/contact"><i class="glyphicon glyphicon-phone"></i> contact</a></li>  
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                   
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">more <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/#/blog"><i class="glyphicon glyphicon-pencil"></i>blog</a></li>
-                            <li><a href="/#/about"><i class="glyphicon glyphicon-info-sign"></i> about</a></li>
-                            <li><a href="/#/featurequest"><i class="glyphicon glyphicon-question-sign"></i> feature request</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
+    <!-- Wrapper-->
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <div ng-include="'app/common/navigation.cshtml'"></div>
+
+        <!-- Page wraper -->
+        <!-- ng-class with current state name give you the ability to have extended customization on views -->
+        <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+
+            <!-- Page wrapper -->
+            <div ng-include="'app/common/topnavbar.cshtml'"></div>
+
+            <!-- Main view  -->
+            <div ui-view></div>
+
+            <!-- Footer -->
+            <div ng-include="'app/common/footer.cshtml'"></div>
+
         </div>
-    </nav>
-
-    <!-- /Header -->
-    <!-- Main -->
-    <div class="container" ui-view>
-       
-
-    </div><!--/container-->
-    <!-- /Main -->
-    <!-- script references -->
-    <div class="footer navbar-fixed-bottom text-right" ng-controller="app.controllers.FooterController as footer">
-  
-           @if (HttpContext.Current.IsDebuggingEnabled)
-           {
-                <ul class="list-inline">
-                    <li>{{footer.state.url}}</li>
-                </ul>
-    }
-         
-        <footer class="panel-footer">
-            <ul class="list-inline">
-                <li>&copy; smsf minder 2014</li>
-                <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()</a></li>
-            </ul>
-        </footer>
+        <!-- End page wrapper-->
 
     </div>
+    <!-- End wrapper-->
+ 
     <div>
         <span id="spinner" data-cc-spinner="{radius:30, width:3, length: 10, radius: 9, corners: 1, rotate: 29, speed: 1}" spinner-key="spinner" style="position: absolute; display: block; top: 50%; left: 50%;"></span>
     </div>
@@ -123,36 +156,145 @@
 </html>
 <!-- @System.Reflection.Assembly.GetAssembly(typeof(BundleConfig)).GetName().Version.ToString()  -->
 
-<script src="/app/_References.js"></script>
-<script src="/scripts/jquery-1.10.2.js"></script>
-<script src="/scripts/underscore.js"></script>
-<script src="/scripts/modernizr-2.6.2.js"></script>
-<script src="/scripts/q.js"></script>
+
+<!-- jQuery and Bootstrap -->
+@*<script src="/scripts/modernizr-2.6.2.js"></script>*@
 <script src="/scripts/respond.js"></script>
-<script src="/scripts/angular.js"></script>
+<script src="/scripts/underscore.js"></script>
+<script src="/scripts/jquery/moment.min.js"></script>
+<script src="/scripts/jquery/jquery-2.1.1.min.js"></script>
+<script src="/scripts/jquery/jquery-ui-1.10.4.min.js"></script>
+<script src="/scripts/q.js"></script>
 <script src="/scripts/spin.js"></script>
 <script src="/scripts/toastr.js"></script>
-<script src="/scripts/angular-ui-router.js"></script>
-<script src="/scripts/angular-ui.js"></script>
-<script src="/scripts/bootstrap.js"></script>
-<script src="/scripts/select2.js"></script>
-<script src="/scripts/respond.matchmedia.addListener.js"></script>
-<script src="/scripts/angular-animate.js"></script>
-<script src="/scripts/angular-aria.js"></script>
-<script src="/scripts/angular-cookies.js"></script>
-<script src="/scripts/angular-loader.js"></script>
-<script src="/scripts/angular-messages.js"></script>
-<script src="/scripts/angular-resource.js"></script>
-<script src="/scripts/angular-route.js"></script>
-<script src="/scripts/angular-sanitize.js"></script>
 
-<script src="/scripts/angular-translate.js"></script>
-<script src="/scripts/angular-ui-ieshiv.js"></script>
-<script src="/scripts/angular-ui/ui-bootstrap-tpls.js"></script>
-<script src="/scripts/ng-grid-flexible-height.js"></script>
-<script src="/scripts/ng-grid.js"></script>
+
+<!-- MetsiMenu -->
+<script src="scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- SlimScroll -->
+<script src="scripts/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Flot -->
+<script src="scripts/plugins/flot/jquery.flot.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.spline.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.resize.js"></script>
+<script src="scripts/plugins/flot/jquery.flot.pie.js"></script>
+<script src="scripts/plugins/flot/curvedLines.js"></script>
+
+<!-- Peity -->
+<script src="scripts/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Morris -->
+<script src="scripts/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="scripts/plugins/morris/morris.js"></script>
+
+<!-- iCheck -->
+<script src="scripts/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Chosen -->
+<script src="scripts/plugins/chosen/chosen.jquery.js"></script>
+
+<!-- Peace JS -->
+<script src="scripts/plugins/pace/pace.min.js"></script>
+
+<!-- Fancy box -->
+<script src="scripts/plugins/fancybox/jquery.fancybox.js"></script>
+
+<!-- Rickshaw -->
+<script src="scripts/plugins/rickshaw/vendor/d3.v3.js"></script>
+<script src="scripts/plugins/rickshaw/rickshaw.min.js"></script>
+
+<!-- Ion Range Slider-->
+<script src="scripts/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+<!-- NouSlider -->
+<script src="scripts/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+<!-- Jvectormap -->
+<script src="scripts/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="scripts/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
+<!-- Input Mask-->
+<script src="scripts/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+<!-- Switchery -->
+<script src="scripts/plugins/switchery/switchery.js"></script>
+
+<!-- Data Tables -->
+<script src="scripts/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="scripts/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+<!-- EasyPIE -->
+<script src="scripts/plugins/easypiechart/easypiechart.js"></script>
+
+<!-- Sparkline -->
+<script src="scripts/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Dropzone -->
+<script src="scripts/plugins/dropzone/dropzone.js"></script>
+
+<!-- Cahrt JS -->
+<script src="scripts/plugins/chartJs/Chart.min.js"></script>
+
+<!-- Knob -->
+<script src="scripts/plugins/jsKnob/jquery.knob.js"></script>
+
+<!-- SUMMERNOTE -->
+<script src="scripts/plugins/summernote/summernote.min.js"></script>
+
+<!-- Full Calendar -->
+<script src="scripts/plugins/fullcalendar/fullcalendar.min.js"></script>
+
+<!-- Code Mirror -->
+<script src="scripts/plugins/codemirror/codemirror.js"></script>
+<script src="scripts/plugins/codemirror/mode/javascript/javascript.js"></script>
+
+
+
+<!-- Angular scripts-->
+
+<script src="/scripts/angular/angular.js"></script>
+<script src="/scripts/angular/angular-ui-router.js"></script>
+<script src="/scripts/angular/angular-ui.js"></script>
+<script src="/scripts/angular/angular-animate.js"></script>
+<script src="/scripts/angular/angular-aria.js"></script>
+<script src="/scripts/angular/angular-cookies.js"></script>
+<script src="/scripts/angular/angular-loader.js"></script>
+<script src="/scripts/angular/angular-messages.js"></script>
+<script src="/scripts/angular/angular-resource.js"></script>
+<script src="/scripts/angular/angular-sanitize.js"></script>
+<script src="/scripts/angular/angular-translate.js"></script>
+
+<script src="scripts/bootstrap/ui-bootstrap-tpls-0.11.0.min.js"></script>
+
+<!-- Angular Dependiences -->
+<script src="scripts/plugins/peity/angular-peity.js"></script>
+<script src="scripts/plugins/easypiechart/angular.easypiechart.js"></script>
+<script src="scripts/plugins/flot/angular-flot.js"></script>
+<script src="scripts/plugins/rickshaw/angular-rickshaw.js"></script>
+<script src="scripts/plugins/summernote/angular-summernote.min.js"></script>
+<script src="scripts/bootstrap/angular-bootstrap-checkbox.js"></script>
+<script src="scripts/plugins/jsKnob/angular-knob.js"></script>
+<script src="scripts/plugins/switchery/ng-switchery.js"></script>
+<script src="scripts/plugins/nouslider/angular-nouislider.js"></script>
+<script src="scripts/plugins/datapicker/datePicker.js"></script>
+<script src="scripts/plugins/chosen/chosen.js"></script>
+<script src="scripts/plugins/dataTables/angular-datatables.min.js"></script>
+<script src="scripts/plugins/fullcalendar/gcal.js"></script>
+<script src="scripts/plugins/fullcalendar/calendar.js"></script>
+<script src="scripts/plugins/chartJs/angles.js"></script>
+<script src="scripts/plugins/uievents/event.js"></script>
+<script src="scripts/plugins/nggrid/ng-grid-2.0.3.min.js"></script>
+<script src="scripts/plugins/ui-codemirror/ui-codemirror.min.js"></script>
+<script src="scripts/plugins/uiTree/angular-ui-tree.min.js"></script>
+<script src="scripts/plugins/angular-notify/angular-notify.min.js"></script>
+<script src="scripts/plugins/colorpicker/bootstrap-colorpicker-module.js"></script>
 
 <script src="/scripts/angular-dialog-service-5.1.2/dialogs-default-translations.js"></script>
 <script src="/scripts/angular-dialog-service-5.1.2/dialogs.js"></script>
- 
+
+
+
 @System.Web.Optimization.Scripts.Render("~/bundles/ts")

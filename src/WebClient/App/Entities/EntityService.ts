@@ -35,6 +35,6 @@ module app.services {
     }
 
     angular.module("app.services").service({ EntityService: EntityService });
-    angular.module("publicApp.services").service({ EntityService: EntityService });
+
 }
 

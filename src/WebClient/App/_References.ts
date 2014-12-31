@@ -6,7 +6,6 @@
 /// <reference path="../scripts/typings/spin/spin.d.ts" />
 /// <reference path="../scripts/typings/toastr/toastr.d.ts" />
 /// <reference path="../scripts/typings/moment/moment.d.ts" />
-/// <reference path="../scripts/typings/underscore/underscore.d.ts" />
 /// <reference path="../scripts/typings/underscore.string/underscore.string.d.ts" />
 /// <reference path="../scripts/typings/angularjs/angular.d.ts" />
 /// <reference path="../scripts/typings/angularjs/angular-resource.d.ts" />
@@ -20,20 +19,17 @@
 /// <reference path="../scripts/typings/angular-ui-bootstrap/angular-ui-bootstrap.d.ts" />
 /// <reference path="../scripts/typings/bootstrap.datepicker/bootstrap.datepicker.d.ts" />
 /// <reference path="../scripts/typings/angularlocalstorage/angularlocalstorage.d.ts" />
-/// <reference path="../scripts/typings/angular-ui-bootstrap/angular-ui-bootstrap.d.ts" />
-/// <reference path="../scripts/typings/bootstrap.datepicker/bootstrap.datepicker.d.ts" />
 /// <reference path="../Scripts/typings/ng-grid/ng-grid.d.ts" />
 /// <reference path="../scripts/typings/select2/select2.d.ts" />
+/// <reference path="../scripts/typings/icheck/icheck.d.ts" />
 
 
 
 /// <reference path="app.ts" />
 /// <reference path="routes.ts" />
-/// <reference path="services.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
-/// <reference path="model.ts" />
 /// <reference path="layout/footercontroller.ts" />
 
 /// <reference path="dashboard/dashboardcontroller.ts" />
