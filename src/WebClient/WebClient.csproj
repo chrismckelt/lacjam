@@ -1085,6 +1085,7 @@
     <Content Include="Scripts\angular\errors.json" />
     <Content Include="Scripts\angular\version.json" />
     <None Include="smsfminder.pubxml" />
+    <Content Include="Tests\tests.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
