@@ -28,6 +28,26 @@ module app {
             }
         };
 
+        public static clients: ng.ui.IState = {
+            name: "clients",
+            url: "/clients",
+            templateUrl: "app/clients/clientsView.cshtml",
+            controller: app.controllers.DashboardController,
+            data: {
+                isVisible: true,
+            }
+        };
+
+        public static accounts: ng.ui.IState = {
+            name: "accounts",
+            url: "/accounts",
+            templateUrl: "app/accounts/accountView.cshtml",
+            controller: app.controllers.AccountController,
+            data: {
+                isVisible: true,
+            }
+        };
+
         public static documents: ng.ui.IState = {
             name: "documents",
             url: "/documents",
@@ -129,6 +149,8 @@ module app {
             list.push(
                 Routes.home,
                 Routes.dashboard,
+                Routes.clients,
+                Routes.accounts,
                 Routes.documents,
                 Routes.metadataDefinitions,
                 Routes.metadataDefinitionEdit,

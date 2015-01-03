@@ -73,9 +73,12 @@
     <Content Include="App\Entities\EntityService.ts" />
     <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEditController.ts" />
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEditController.ts" />
+    <TypeScriptCompile Include="App\Accounts\AccountController.ts" />
+    <TypeScriptCompile Include="App\Clients\ClientController.ts" />
+    <Content Include="App\Common\NavigationController.ts" />
     <TypeScriptCompile Include="App\Index\IndexController.ts" />
     <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
-    <Content Include="App\Layout\FooterController.ts" />
+    <Content Include="App\Common\FooterController.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
@@ -109,8 +112,10 @@
     <Content Include="App\Common\Footer.cshtml" />
     <Content Include="App\Common\Ibox_tools.cshtml" />
     <Content Include="App\Common\Navigation.cshtml" />
-    <Content Include="App\Common\Topnavbar.cshtml" />
+    <Content Include="App\Common\NavigationTop.cshtml" />
     <Content Include="App\Common\Notify.cshtml" />
+    <Content Include="App\Clients\ClientView.cshtml" />
+    <Content Include="App\Accounts\AccountView.cshtml" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

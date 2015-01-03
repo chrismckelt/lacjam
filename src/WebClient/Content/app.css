@@ -1,13 +1,13 @@
 ﻿#applogo {
-  display: block;
-  height: 50px;
-  width: 101px;
+  height: 169px;
+  width: 220px;
   vertical-align: top;
   margin-left: 0;
   margin-top: 0;
-  background: url("/content/img/logo.png") no-repeat 0 0;
-  z-index: 9999;
+  top: 0;
+  left: 0;
   position: absolute;
+  background: url("/content/img/logo.png") no-repeat 0 0;
 }
 .navbar-brand {
   max-width: 50%;

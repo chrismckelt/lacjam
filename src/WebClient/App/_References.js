@@ -27,7 +27,8 @@
 /// <reference path="filters.ts" />
 /// <reference path="model.ts" />
 /// <reference path="common/common.ts" />
-/// <reference path="layout/footercontroller.ts" />
+/// <reference path="common/navigationcontroller.ts" />
+/// <reference path="common/footercontroller.ts" />
 /// <reference path="dashboard/dashboardcontroller.ts" />
 /// <reference path="documents/documentcontroller.ts" />
 /// <reference path="Index/IndexController.ts" />
@@ -40,4 +41,4 @@
 /// <reference path="entities/EntityEditController.ts" />
 /// <reference path="entities/EntityService.ts" />
 /// <reference path="Public/SearchController.ts" />
-//# sourceMappingURL=_References.js.map
+//# sourceMappingURL=_references.js.map
