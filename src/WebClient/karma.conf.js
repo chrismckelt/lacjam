@@ -16,7 +16,8 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-          
+			'scripts/typings/jasmine/jasmine.js',
+            'scripts/typings/jasmine/jasmine-html.js',           
             'scripts/respond.js',
             'scripts/underscore.js',
             'scripts/jquery/moment.min.js',
@@ -95,8 +96,6 @@ module.exports = function(config) {
             'scripts/plugins/colorpicker/bootstrap-colorpicker-module.js',
             'scripts/angular-dialog-service-5.1.2/dialogs-default-translations.js',
             'scripts/angular-dialog-service-5.1.2/dialogs.js',
-            'scripts/typings/jasmine/jasmine-html.js',
-            'scripts/typings/jasmine/jasmine.js',
             'app/app.js',
             'app/Directives.js',
             'app/Filters.js',
@@ -106,9 +105,7 @@ module.exports = function(config) {
             'app/Services.js',
             'app/types.js',
             'app/Common/common.js',
-            'app/Public/SearchController.js',
             'app/Z/registrations.js',
-
             //'tests/appFixture.js',
             'tests/clients/clientcontrollertestfixture.js',
             { pattern: 'tests/*.js', watched: false, included: true, served: false }
@@ -152,7 +149,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
 
 
         // Continuous Integration mode

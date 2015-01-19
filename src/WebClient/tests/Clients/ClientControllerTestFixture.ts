@@ -11,7 +11,7 @@
     beforeEach(module("app.controllers"));
 
     beforeEach(inject(function ($injector) {
-        app.registerController("ClientController", app.controllers.ClientController);  
+       // app.registerController("ClientController", app.controllers.ClientController);  
 
         $rootScope = $injector.get('$rootScope');
         $controller = $injector.get('$controller');
