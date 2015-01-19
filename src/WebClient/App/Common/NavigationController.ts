@@ -23,7 +23,10 @@ module app.controllers {
                 });
         }
 
-        public isVisible(menuName:string) {
+        public isVisible(menuName: string) {
+
+            if (!app.global.stateCurrent) return false;
+
             if (app.global.stateCurrent.name === menuName) return true;
 
             return false;

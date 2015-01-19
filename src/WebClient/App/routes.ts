@@ -31,8 +31,8 @@ module app {
         public static clients: ng.ui.IState = {
             name: "clients",
             url: "/clients",
-            templateUrl: "app/clients/clientsView.cshtml",
-            controller: app.controllers.DashboardController,
+            templateUrl: "app/clients/clientView.cshtml",
+            controller: app.controllers.ClientController,
             data: {
                 isVisible: true,
             }

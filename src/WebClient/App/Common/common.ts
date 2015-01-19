@@ -40,7 +40,7 @@ module app.services {
                 app.log.debug("common -- contructor args not being set -  $log is undefined");
                 app.log.debug("common ----------- needs injection");
             }
-
+          
 
         }
 

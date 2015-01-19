@@ -15,5 +15,7 @@ app.log.info("Registering controllers");
 app.registerController("FooterController", app.controllers.FooterController);
 app.registerController("IndexController", app.controllers.IndexController); 
 app.registerController("DashboardController", app.controllers.DashboardController); 
-app.registerController("MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController); // register 
+app.registerController("MetadataDefinitionGroupController", app.controllers.MetadataDefinitionGroupController);  
+
+app.registerController("ClientController", app.controllers.ClientController);  
 

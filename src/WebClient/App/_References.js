@@ -41,4 +41,5 @@
 /// <reference path="entities/EntityEditController.ts" />
 /// <reference path="entities/EntityService.ts" />
 /// <reference path="Public/SearchController.ts" />
+/// <reference path="clients/clientcontroller.ts" />
 //# sourceMappingURL=_references.js.map

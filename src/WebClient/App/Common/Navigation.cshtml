@@ -7,26 +7,26 @@
 
                 </div>
             </li>
-            <li ng-if="$state.includes('dashboard')" ng-class="{active: $state.includes('dashboard')}">
+            <li ng-if="nav.isVisible('dashboard')" ng-class="{active: nav.isVisible('dashboard')}">
                 <a href="index.cshtml"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" ng-class="{in: $state.includes('dashboard')}">
+                <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('dashboard')}">
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">To do</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_2">Compliance</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_3">News</a></li>
                 </ul>
             </li>
-            <li ng-if="$state.includes('clients')" ng-class="{active: $state.includes('clients')}">
+            <li ng-if="nav.isVisible('clients')" ng-class="{active: nav.isVisible('clients')}">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
-                <ul class="nav nav-second-level" ng-class="{in: $state.includes('clients')}">
+                <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('clients')}">
                     <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Inbox</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.email_view">Email view</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.email_compose">Compose email</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.email_template">Email template</a></li>
                 </ul>
             </li>
-            <li ng-if="$state.includes('documents')" ng-class="{active: $state.includes('documents')}">
+            <li ng-if="nav.isVisible('documents')" ng-class="{active: nav.isVisible('documents')}">
                 <a ui-sref="documents"><i class="fa fa-envelope"></i> <span class="nav-label">Documents </span><span class="label label-warning pull-right">16/24</span></a>
-                <ul class="nav nav-second-level" ng-class="{in: $state.includes('documents')}">
+                <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('documents')}">
                     <li ui-sref-active="active"><a ui-sref="mailbox.trustdeed">Trust Deed</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.abnandtfnregister">ABN and TFN registration</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.trusteeminutes">Trustee Minutes</a></li>

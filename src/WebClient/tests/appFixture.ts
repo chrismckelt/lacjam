@@ -3,20 +3,20 @@
 /// <reference path="../scripts/typings/karma-jasmine/karma-jasmine.d.ts" />
 ///* tslint:disable */
 
-describe("Routes", () => {
+//describe("Routes", () => {
 
-    //beforeEach(module("app"));
-    it("should have routes", () => {
-       // beforeEach(module("app"));
-        //var appScope, scope;
-        //beforeEach(inject($controller => {
-        //    scope = {};
+//    //beforeEach(module("app"));
+//    it("should have routes", () => {
+//       // beforeEach(module("app"));
+//        //var appScope, scope;
+//        //beforeEach(inject($controller => {
+//        //    scope = {};
          
-        //}));
+//        //}));
 
-        var routes = app.Routes.getRoutes();
-        console.info('routes count = ' + routes.length);
-        expect(routes.length).toBeGreaterThan(0);
+//        var routes = app.Routes.getRoutes();
+//        console.info('routes count = ' + routes.length);
+//        expect(routes.length).toBeGreaterThan(0);
 
-    });
-});
+//    });
+//});

@@ -75,10 +75,10 @@
     <Content Include="App\MetadataDefinitions\MetadataDefinitionEditController.ts" />
     <TypeScriptCompile Include="App\Accounts\AccountController.ts" />
     <TypeScriptCompile Include="App\Clients\ClientController.ts" />
-    <Content Include="App\Common\NavigationController.ts" />
+    <TypeScriptCompile Include="App\Common\NavigationController.ts" />
     <TypeScriptCompile Include="App\Index\IndexController.ts" />
     <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
-    <Content Include="App\Common\FooterController.ts" />
+    <TypeScriptCompile Include="App\Common\FooterController.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
@@ -452,8 +452,6 @@
     <Content Include="Scripts\plugins\codemirror\mode\solr\solr.js" />
     <Content Include="Scripts\plugins\codemirror\mode\sparql\index.html" />
     <Content Include="Scripts\plugins\codemirror\mode\sparql\sparql.js" />
-    <Content Include="Scripts\plugins\codemirror\mode\sql\index.html" />
-    <Content Include="Scripts\plugins\codemirror\mode\sql\sql.js" />
     <Content Include="Scripts\plugins\codemirror\mode\stex\index.html" />
     <Content Include="Scripts\plugins\codemirror\mode\stex\stex.js" />
     <Content Include="Scripts\plugins\codemirror\mode\stex\test.js" />
@@ -688,9 +686,6 @@
     <Content Include="Scripts\plugins\morris\morris.js" />
     <Content Include="Scripts\plugins\morris\raphael-2.1.0.min.js" />
     <Content Include="Scripts\plugins\nggrid\.gitattributes" />
-    <Content Include="Scripts\plugins\nggrid\build\ng-grid.debug.js" />
-    <Content Include="Scripts\plugins\nggrid\build\ng-grid.js" />
-    <Content Include="Scripts\plugins\nggrid\build\ng-grid.min.js" />
     <Content Include="Scripts\plugins\nggrid\conf.js" />
     <Content Include="Scripts\plugins\nggrid\GruntFile.js" />
     <Content Include="Scripts\plugins\nggrid\lib\angular.js" />
@@ -874,6 +869,7 @@
     <TypeScriptCompile Include="Scripts\typings\underscore\underscore.d.ts" />
     <TypeScriptCompile Include="Tests\Accounts\ControllerTestFixture.ts" />
     <TypeScriptCompile Include="Tests\appFixture.ts" />
+    <TypeScriptCompile Include="Tests\Clients\ClientControllerTestFixture.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -888,6 +884,8 @@
     <Folder Include="App\Documents\TrustDeed\" />
     <Folder Include="App\Search\" />
     <Folder Include="App\Services\" />
+    <Folder Include="Scripts\plugins\codemirror\mode\sql\" />
+    <Folder Include="Scripts\plugins\nggrid\build\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">

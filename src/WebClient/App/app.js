@@ -105,7 +105,7 @@ angular.module("app", modules).config([
             return app.log.debug("timeout callback - state name : " + $state.current.name);
         }, 5000);
 
-        app.redirectToRoute(app.Routes.home);
+        app.redirectToRoute(app.Routes.clients);
         //$timeout(() => {
         //    app.log.info("-- ALL SERVICES --");
         //    app.showRegistrations("app",null);
@@ -436,8 +436,9 @@ var app;
     */
     function registerController(className, ctor) {
         if (typeof ctor === "undefined") { ctor = null; }
-        app.log.info("controllers regististration for " + className);
-        angular.module(app.global.appControllers).controller(className, ctor);
+        app.log.info("controllers registration for " + className);
+        var obj = angular.module("app").controller(className, ctor);
+        app.global.typesCache.add(name, obj);
     }
     app.registerController = registerController;
 

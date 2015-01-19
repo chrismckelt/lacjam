@@ -285,7 +285,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 }
 .logo-element {
   text-align: center;
-
+    padding-bottom: 100px;
 }
 .pace-done .navbar-static-side,
 .pace-done .nav-header,

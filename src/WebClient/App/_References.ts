@@ -52,6 +52,7 @@
 
 /// <reference path="Public/SearchController.ts" />
 
+/// <reference path="clients/clientcontroller.ts" />
 
 /// <autosync enabled="true" />
 declare var angular: ng.IAngularStatic;
