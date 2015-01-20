@@ -489,7 +489,7 @@ module app {
         app.log.info("controllers registration for " + className);
         var obj = angular.module("app").controller(className, ctor);
         app.global.typesCache.add(name, obj);
-            
+        return obj;
     }
 
     /**

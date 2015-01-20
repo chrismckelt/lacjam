@@ -106,6 +106,7 @@ module.exports = function(config) {
             'app/types.js',
             'app/Common/common.js',
             'app/Z/registrations.js',
+            'app/clients/ClientController.js',
             //'tests/appFixture.js',
             'tests/clients/clientcontrollertestfixture.js',
             { pattern: 'tests/*.js', watched: false, included: true, served: false }

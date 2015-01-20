@@ -2,7 +2,7 @@
     var $rootScope;
     var $controller;
     var $scope = new Object();
-    var controller:app.controllers.ClientController;
+    var controller;
 
     beforeEach(module("app"));
     beforeEach(module("app.filters"));
@@ -16,11 +16,11 @@
         $rootScope = $injector.get('$rootScope');
         $controller = $injector.get('$controller');
         $scope = $rootScope.$new();
-       
+        
 
     }));
     beforeEach(inject(function($controller) {
-        controller = app.resolveByName('ClientController');
+        controller = $controller("app.controllers.ClientController"); //app.registerController("ClientController", app.controllers.ClientController);  
     }));
 
     it("should be filled in 30 minute segments", () => {
