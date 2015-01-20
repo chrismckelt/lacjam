@@ -1,21 +1,26 @@
-describe("Slots", function () {
+﻿describe("Slots", function () {
     var $rootScope;
     var $controller;
     var $scope = new Object();
     var controller;
+
     beforeEach(module("app"));
     beforeEach(module("app.filters"));
     beforeEach(module("app.services"));
     beforeEach(module("app.directives"));
     beforeEach(module("app.controllers"));
+
     beforeEach(inject(function ($injector) {
-        // app.registerController("ClientController", app.controllers.ClientController);  
+        // app.registerController("ClientController", app.controllers.ClientController);
         $rootScope = $injector.get('$rootScope');
         $controller = $injector.get('$controller');
         $scope = $rootScope.$new();
     }));
     beforeEach(inject(function ($controller) {
-        controller = $controller("app.controllers.ClientController"); //app.registerController("ClientController", app.controllers.ClientController);  
+        controller = $controller("app.controllers.ClientController", {
+            $scope: $scope
+        });
+        controller.init();
     }));
     it("should be filled in 30 minute segments", function () {
         console.info('slots count = ' + controller.slots.length);

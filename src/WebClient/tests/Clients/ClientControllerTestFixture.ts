@@ -20,9 +20,11 @@
 
     }));
     beforeEach(inject(function($controller) {
-        controller = $controller("app.controllers.ClientController"); //app.registerController("ClientController", app.controllers.ClientController);  
+        controller = $controller("app.controllers.ClientController", {
+            $scope: $scope
+        });
+        controller.init();
     }));
-
     it("should be filled in 30 minute segments", () => {
         
         console.info('slots count = ' + controller.slots.length);
