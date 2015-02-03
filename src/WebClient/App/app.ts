@@ -140,7 +140,7 @@ angular.module("app", modules)
             app.log.debug("app.run finished...");
             $timeout(() => app.log.debug("timeout callback - state name : " + $state.current.name), 5000);
 
-            app.redirectToRoute(app.Routes.clients);
+            app.redirectToRoute(app.Routes.dashboard);
 
             //$timeout(() => {
             //    app.log.info("-- ALL SERVICES --");

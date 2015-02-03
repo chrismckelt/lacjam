@@ -1,27 +1,28 @@
-/// <reference path="_references.ts" />
+﻿/// <reference path="_references.ts" />
 /* tslint:disable */
 //https://gist.github.com/scottmcarthur/9051681
 "use strict";
 var _this = this;
 // Create and register modules
 var modules = ["app.directives", "app.filters", "app.services", "app.controllers"];
-modules.forEach(function (m) { return angular.module(m, []); });
+modules.forEach(function (m) {
+    return angular.module(m, []);
+});
+
 modules.push("ui", "ngCookies", "ngGrid", "ngCookies", "ngAnimate", "ngSanitize", "ngResource", "ui.router", "ui.bootstrap", "dialogs.main", "dialogs.default-translations", "pascalprecht.translate");
+
 angular.module("app", modules).config([
-    "$stateProvider",
-    "$urlRouterProvider",
-    "$injector",
-    "$locationProvider",
-    "$httpProvider",
-    "$controllerProvider",
+    "$stateProvider", "$urlRouterProvider", "$injector", "$locationProvider", "$httpProvider", "$controllerProvider",
     function ($stateProvider, $urlRouterProvider, $injector, $locationProvider, $httpProvider, $controllerProvider) {
         app.log.debug("app.config started...");
         $controllerProvider.allowGlobals(); //http://www.lcube.se/angular-js-controller-error-argument-is-not-a-function/
+
         app.global.typesCache.add("$stateProvider", $stateProvider);
         app.global.typesCache.add("$urlRouterProvider", $urlRouterProvider);
         app.global.typesCache.add("$injector", $injector);
         app.global.typesCache.add("$locationProvider", $locationProvider);
         app.global.typesCache.add("$httpProvider", $httpProvider);
+
         //  $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
         //// allow case insensitive urls
         $urlRouterProvider.rule(function ($injector, $location) {
@@ -33,36 +34,34 @@ angular.module("app", modules).config([
             }
             // because we"ve returned nothing, no state change occurs
         });
+
         // state provider
         app.log.debug("Registering routes with state provider");
+
         // routing
-        angular.forEach(app.Routes.getRoutes(), function (x) { return $stateProvider.state(x.name, x); });
+        angular.forEach(app.Routes.getRoutes(), function (x) {
+            return $stateProvider.state(x.name, x);
+        });
+
         $stateProvider.state("otherwise", {
             url: "*path",
             templateUrl: "app/404.cshtml",
             name: "404"
         });
+
         app.global.angularModuleReference = _this;
+
         app.log.debug("app.config finished...");
     }
 ]).run([
-    "$rootScope",
-    "$log",
-    "$http",
-    "$state",
-    "$stateParams",
-    "$location",
-    "$injector",
-    "$q",
-    "$timeout",
-    "$window",
-    "$templateCache",
+    "$rootScope", "$log", "$http", "$state", "$stateParams", "$location", "$injector", "$q", "$timeout", "$window", "$templateCache",
     function ($rootScope, $log, $http, $state, $stateParams, $location, $injector, $q, $timeout, $window, $templateCache) {
         //$injector.invoke(($rootScope, $compile, $document) => {
         //    $compile($document)($rootScope);
         //    $rootScope.$digest();
         //});
         app.log.debug("app.run started...");
+
         app.global.typesCache.add("$rootScope", $rootScope);
         app.global.typesCache.add("$log", $log);
         app.global.typesCache.add("$http", $http);
@@ -72,32 +71,41 @@ angular.module("app", modules).config([
         app.global.typesCache.add("$timeout", $timeout);
         app.global.typesCache.add("$q", $q);
         app.global.typesCache.add("$window", $window);
+
         $rootScope.$on("$stateNotFound", function (event, unfoundState, fromState, fromParams) {
             app.log.debug("State not found"); // "lazy.state"
             app.log.debug("$stateNotFound"); // "lazy.state"
         });
+
         ///https://github.com/angular-ui/ui-router/wiki#state-change-events
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
             app.log.debug("$stateChangeStart:" + toState.name);
             app.fn.spinStart();
         });
+
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             app.log.debug("$stateChangeStart:" + toState.name);
             app.fn.spinStop();
             app.global.stateCurrent = toState;
             app.global.statePrevious = fromState;
         });
+
         // app services init
         app.common = new app.services.Common($rootScope, $log, $timeout, $http, $q);
         app.rootScope = $rootScope;
+
         app.log.debug("activating services");
         angular.forEach(app.global.serviceNames, function (service) {
             var act = app.global.typesCache.getByKey(service);
             act.activate();
         });
+
         app.log.debug("app.run finished...");
-        $timeout(function () { return app.log.debug("timeout callback - state name : " + $state.current.name); }, 5000);
-        app.redirectToRoute(app.Routes.clients);
+        $timeout(function () {
+            return app.log.debug("timeout callback - state name : " + $state.current.name);
+        }, 5000);
+
+        app.redirectToRoute(app.Routes.dashboard);
         //$timeout(() => {
         //    app.log.info("-- ALL SERVICES --");
         //    app.showRegistrations("app",null);
@@ -105,6 +113,7 @@ angular.module("app", modules).config([
         //    );
     }
 ]);
+
 var app;
 (function (app) {
     var Item = (function () {
@@ -115,6 +124,7 @@ var app;
         return Item;
     })();
     app.Item = Item;
+
     var Dictionary = (function () {
         function Dictionary() {
             this.items = [];
@@ -123,28 +133,32 @@ var app;
             if (value && typeof value != "undefined") {
                 this.items.push(value);
                 this.items[key] = value;
-            }
-            else {
+            } else {
                 app.log.error("Failed to add item to app cache (null) - " + key);
             }
         };
+
         Dictionary.prototype.getByIndex = function (index) {
             return this.items[index];
         };
+
         Dictionary.prototype.getByKey = function (key) {
             return this.items[key];
         };
         return Dictionary;
     })();
     app.Dictionary = Dictionary;
+
     app.common;
     app.rootScope;
+
     var fn = (function () {
         function fn() {
         }
         fn.appUrl = function (url) {
             return "/api/" + url;
         };
+
         fn.createGuid = function () {
             var d = new Date().getTime();
             var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -154,104 +168,117 @@ var app;
             });
             return uuid;
         };
+
         fn.getCurrentDate = function () {
             return moment();
         };
+
         fn.textContains = function (text, searchText) {
             return text && -1 !== text.toLowerCase().indexOf(searchText.toLowerCase());
         };
+
         fn.isNumber = function (val) {
             // negative or positive
             return /^[-]?\d+$/.test(val);
         };
+
         fn.applyConstructor = function (constr, args) {
             var obj = Object.create(constr.prototype);
             var services = [];
             angular.forEach(args, function (x) {
-                try {
+                try  {
                     services.push(app.resolveByName(x));
-                }
-                catch (e) {
+                } catch (e) {
                     services.push(x);
                 }
             });
             constr.apply(obj, services);
             return obj;
         };
+
         fn.prototype.addDays = function (date, days) {
             var result = new Date(date);
             result.setDate(date.getDate() + days);
             return result;
         };
+
         fn.prototype.makeModel = function (controllerId) {
             app.fn.safeApply(function () {
                 // if (typeof this.$scope.vm === "undefined") {
                 app.log.debug("making model for " + controllerId);
                 var name = app.fn.capitaliseFirstLetter(controllerId) + "Model";
-                try {
+                try  {
                     var made = InstanceLoader.getInstance(app.controllers, name, []);
                     return made;
-                }
-                catch (ex) {
+                } catch (ex) {
                     app.log.error("makeModel error - " + controllerId, ex);
                     return null;
                 }
                 //  }
             });
+
             return null;
         };
+
         fn.copyProperties = function (source, target) {
             for (var prop in source) {
                 if (target[prop] !== undefined) {
                     target[prop] = source[prop];
-                }
-                else {
+                } else {
                     console.error("Cannot set undefined property: " + prop);
                 }
             }
         };
+
         fn.capitaliseFirstLetter = function (str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
+
         fn.spinStart = function (key) {
-            if (key === void 0) { key = "spinner"; }
+            if (typeof key === "undefined") { key = "spinner"; }
             app.common.broadcast("cc-spinner:spin", key);
         };
+
         fn.spinStop = function (key) {
-            if (key === void 0) { key = "spinner"; }
+            if (typeof key === "undefined") { key = "spinner"; }
             app.common.broadcast("cc-spinner:stop", key);
         };
+
         fn.replaceLocationUrlGuidWithId = function (id) {
-            // If the current Url is a Guid, then we replace 
+            // If the current Url is a Guid, then we replace
             // it with the passed in id. Otherwise, we exit.
             var currentPath = app.resolveByName("$location").path();
             var slashPos = currentPath.lastIndexOf("/", currentPath.length - 2);
             var currentParameter = currentPath.substring(slashPos - 1);
+
             if (app.fn.isNumber(currentParameter)) {
                 return;
             }
+
             var newPath = currentPath.substring(0, slashPos + 1) + id;
             app.redirectToUrl(newPath);
         };
+
         fn.safeApply = function (fn) {
             var phase = app.rootScope.$root.$$phase;
             if (phase == '$apply' || phase == '$digest') {
                 if (fn && (typeof (fn) === 'function')) {
                     fn();
                 }
-            }
-            else {
+            } else {
                 app.rootScope.$apply().$apply(fn);
             }
         };
         return fn;
     })();
     app.fn = fn;
+
     var global = (function () {
         function global() {
         }
         global.typesCache = new Dictionary();
         global.$injector = angular.injector(["ng"]);
+
         global.$scope = "$scope";
         global.$location = "$location";
         global.$log = "$log";
@@ -262,7 +289,9 @@ var app;
         global.$state = "$state";
         global.$timeout = "$q";
         global.$q = "$q";
+
         global.appName = "app";
+
         global.appControllers = "app.controllers";
         global.appDirectives = "app.directives";
         global.appServices = "app.services";
@@ -272,6 +301,7 @@ var app;
         global.serviceNames = [];
         global.nulloDate = new Date(1900, 0, 1);
         global.standardDateFormat = "DD/MM/YYYY";
+
         global.keyCodes = {
             backspace: 8,
             tab: 9,
@@ -289,13 +319,14 @@ var app;
             insert: 45,
             del: 46
         };
+
         global.events = {
-            controllerActivateSuccess: "controller.activateSuccess",
+            controllerActivateSuccess: "controller.activateSuccess"
         };
         return global;
     })();
     app.global = global;
-    var base;
+
     (function (base) {
         var ModelBase = (function () {
             function ModelBase() {
@@ -304,6 +335,7 @@ var app;
             return ModelBase;
         })();
         base.ModelBase = ModelBase;
+
         var ControllerBase = (function () {
             function ControllerBase() {
                 var _this = this;
@@ -318,6 +350,7 @@ var app;
                 var _this = this;
                 return app.common.$q.all(promises).then(function (eventArgs) {
                     app.log.debug("Controller loaded : " + _this.controllerId);
+
                     //app.log.debug(eventArgs);
                     var data = { controllerId: _this.controllerId, eventArgs: eventArgs };
                     app.common.broadcast(app.global.events.controllerActivateSuccess, data);
@@ -326,6 +359,7 @@ var app;
             return ControllerBase;
         })();
         base.ControllerBase = ControllerBase;
+
         var ServiceBase = (function () {
             function ServiceBase(serviceUri, entityName) {
                 var _this = this;
@@ -366,27 +400,34 @@ var app;
             return ServiceBase;
         })();
         base.ServiceBase = ServiceBase;
-    })(base = app.base || (app.base = {}));
-    var model;
+    })(app.base || (app.base = {}));
+    var base = app.base;
+
     (function (model) {
         null;
-    })(model = app.model || (app.model = {}));
-    var filters;
+    })(app.model || (app.model = {}));
+    var model = app.model;
+
     (function (filters) {
         null;
-    })(filters = app.filters || (app.filters = {}));
-    var directives;
+    })(app.filters || (app.filters = {}));
+    var filters = app.filters;
+
     (function (directives) {
         null;
-    })(directives = app.directives || (app.directives = {}));
-    var controllers;
+    })(app.directives || (app.directives = {}));
+    var directives = app.directives;
+
     (function (controllers) {
         null;
-    })(controllers = app.controllers || (app.controllers = {}));
-    var services;
+    })(app.controllers || (app.controllers = {}));
+    var controllers = app.controllers;
+
     (function (services) {
         null;
-    })(services = app.services || (app.services = {}));
+    })(app.services || (app.services = {}));
+    var services = app.services;
+
     /**
     * Register new controller.
     *
@@ -394,81 +435,91 @@ var app;
     * @param services
     */
     function registerController(className, ctor) {
-        if (ctor === void 0) { ctor = null; }
+        if (typeof ctor === "undefined") { ctor = null; }
         app.log.info("controllers registration for " + className);
         var obj = angular.module("app").controller(className, ctor);
         app.global.typesCache.add(name, obj);
         return obj;
     }
     app.registerController = registerController;
+
     /**
-     * Register new filter.
-     *
-     * @param className
-     * @param services
-     */
+    * Register new filter.
+    *
+    * @param className
+    * @param services
+    */
     function registerFilter(className, services) {
-        if (services === void 0) { services = []; }
+        if (typeof services === "undefined") { services = []; }
         var filter = "app.filters." + className;
         app.log.debug("Registering filter: " + filter);
         services.push(new app.filters[className]().filter);
         angular.module("app.filters").filter(className, services);
     }
     app.registerFilter = registerFilter;
-    /**
- * Register new value.
 
- */
+    /**
+    * Register new value.
+    
+    */
     function registerValue(name, obj) {
         app.global.typesCache.add(name, obj);
         angular.module("app").value(name, obj);
     }
     app.registerValue = registerValue;
+
     /**
-        * Register new directive.
-        *
-        * @param className
-        * @param services
-        */
+    * Register new directive.
+    *
+    * @param className
+    * @param services
+    */
     function registerDirective(className, services) {
-        if (services === void 0) { services = []; }
+        if (typeof services === "undefined") { services = []; }
         //var directive = className[0].toLowerCase() + className.slice(1);
         app.log.debug("Registering directive: " + className);
-        services.push(function () { return new app.directives[className](); });
-        angular.module("app.directives").directive(className, function () { return new app.directives[className](services); });
+        services.push(function () {
+            return new app.directives[className]();
+        });
+        angular.module("app.directives").directive(className, function () {
+            return new app.directives[className](services);
+        });
     }
     app.registerDirective = registerDirective;
+
     /**
-     * Register new service.
-     *
-     * @param className
-     * @param services
-     */
+    * Register new service.
+    *
+    * @param className
+    * @param services
+    */
     // export function registerService(className: string, services = []) {
     function registerService(ctor, services, name) {
-        if (services === void 0) { services = []; }
-        if (name === void 0) { name = null; }
-        try {
+        if (typeof services === "undefined") { services = []; }
+        if (typeof name === "undefined") { name = null; }
+        try  {
             if (!name || name == "")
                 name = app.Describer.getName(ctor);
             app.log.info("Registering Service -- " + name);
             var obj = app.fn.applyConstructor(ctor, services);
-            services.push(function () { return obj; });
+            services.push(function () {
+                return obj;
+            });
             angular.module(app.global.appName).service(name, services);
-        }
-        catch (e) {
+        } catch (e) {
             app.log.error(e);
         }
     }
     app.registerService = registerService;
+
     /**
- * Register new factory.
- *
- * @param className
- * @param factory
- */
+    * Register new factory.
+    *
+    * @param className
+    * @param factory
+    */
     function registerFactory(ctor, services) {
-        if (services === void 0) { services = []; }
+        if (typeof services === "undefined") { services = []; }
         var name = app.Describer.getName(ctor);
         var obj = app.InstanceLoader.getInstance(app.services, name);
         obj.activate();
@@ -478,12 +529,13 @@ var app;
         angular.module(app.global.appServices).factory(name, services);
     }
     app.registerFactory = registerFactory;
+
     /**
-   * Register new Provider.
-   *
-   * @param className
-   * @param services
-   */
+    * Register new Provider.
+    *
+    * @param className
+    * @param services
+    */
     ///ssssssssssssssssssssssssssssssssssssssss
     function registerProvider(className, obj) {
         var nice;
@@ -492,6 +544,7 @@ var app;
         angular.module(className + "Provider").provider(className, nice);
     }
     app.registerProvider = registerProvider;
+
     ///-----------------------------------
     /// global functions
     ///-----------------------------------
@@ -504,11 +557,10 @@ var app;
         });
         var queue = angular.module(mod);
         angular.forEach(queue._invokeQueue, function (a) {
-            try {
+            try  {
                 r[a[2][0]] = inj(a[2][0]);
                 app.log.debug(inj(a[2][0]));
-            }
-            catch (e) {
+            } catch (e) {
                 app.log.debug("Error", e);
             }
         });
@@ -516,70 +568,80 @@ var app;
     }
     app.showRegistrations = showRegistrations;
     ;
+
     var InstanceLoader = (function () {
         function InstanceLoader() {
         }
         InstanceLoader.getInstance = function (context, name) {
             var args = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                args[_i - 2] = arguments[_i];
+            for (var _i = 0; _i < (arguments.length - 2); _i++) {
+                args[_i] = arguments[_i + 2];
             }
             var instance = Object.create(context[name].prototype);
             instance.constructor.apply(instance, args);
             return instance;
         };
+
         InstanceLoader.create = function () {
             return {};
         };
         return InstanceLoader;
     })();
     app.InstanceLoader = InstanceLoader;
+
     // for application health logging  -- for business app logging use app.common.$log.error
     var log = (function () {
         function log() {
         }
         log.debug = function (message) {
             var optionalParams = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                optionalParams[_i - 1] = arguments[_i];
+            for (var _i = 0; _i < (arguments.length - 1); _i++) {
+                optionalParams[_i] = arguments[_i + 1];
             }
             // console.debug(message, optionalParams);
         };
+
         log.info = function (message) {
             var optionalParams = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                optionalParams[_i - 1] = arguments[_i];
+            for (var _i = 0; _i < (arguments.length - 1); _i++) {
+                optionalParams[_i] = arguments[_i + 1];
             }
             console.info(message, optionalParams);
         };
+
         log.warn = function (message) {
             var optionalParams = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                optionalParams[_i - 1] = arguments[_i];
+            for (var _i = 0; _i < (arguments.length - 1); _i++) {
+                optionalParams[_i] = arguments[_i + 1];
             }
             console.warn(message, optionalParams);
         };
+
         log.error = function (message) {
             var optionalParams = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                optionalParams[_i - 1] = arguments[_i];
+            for (var _i = 0; _i < (arguments.length - 1); _i++) {
+                optionalParams[_i] = arguments[_i + 1];
             }
             console.error(message, optionalParams);
         };
+
         log.clear = function () {
             console.log(new Array(24 + 1).join("\n"));
         };
         return log;
     })();
     app.log = log;
+
     function redirectToRoute(route) {
         app.redirectToUrl(route.url);
     }
     app.redirectToRoute = redirectToRoute;
+
     function redirectToUrl(url) {
         app.resolveByName("$location").path(url);
     }
     app.redirectToUrl = redirectToUrl;
+
     function resolveService(svc) {
         var neat = app.Describer.getName(svc);
         var cache = app.global.typesCache.getByKey(neat);
@@ -591,25 +653,27 @@ var app;
         return obj;
     }
     app.resolveService = resolveService;
+
     function resolveByName(name, services) {
-        if (services === void 0) { services = []; }
+        if (typeof services === "undefined") { services = []; }
         name = name[0].toUpperCase() + name.slice(1);
+
         app.log.debug("resolveByName:" + name);
         if (app.global.typesCache.getByKey(name)) {
             app.log.debug("Found in type cache " + name);
             return app.global.typesCache.getByKey(name);
         }
+
         app.log.debug("$injector resolving:" + name);
         if (app.global.$injector) {
-            try {
+            try  {
                 var found = app.global.$injector.get(name);
                 if (found) {
                     app.global.typesCache.add(name, found);
                     app.log.debug("Success");
                     return found;
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 console.warn(name + " not resolved");
                 var svc = app.services[name];
                 if (svc) {
@@ -619,9 +683,9 @@ var app;
                 }
                 throw new EvalError(name + " Could not be resolved");
             }
-        }
-        else {
+        } else {
             app.log.debug(name + " not resolved");
+
             var obj = InstanceLoader.getInstance(window, name, services);
             if (obj) {
                 app.log.debug(name + " resolved (finally)");
@@ -638,6 +702,7 @@ var app;
         throw new EvalError(name + " Could not be resolved - end if nigh ");
     }
     app.resolveByName = resolveByName;
+
     ///http://www.stevefenton.co.uk/Content/Blog/Date/201304/Blog/Obtaining-A-Class-Name-At-Runtime-In-TypeScript/
     var Describer = (function () {
         function Describer() {
@@ -645,10 +710,10 @@ var app;
         Describer.getName = function (ent) {
             if (typeof ent == "string")
                 return ent;
+
             if (ent.constructor && ent.constructor.name != "Function") {
                 return ent.constructor.name || (ent.toString().match(/function (.+?)\(/) || [, ''])[1];
-            }
-            else {
+            } else {
                 return ent.name;
             }
             //var funcNameRegex = /function (.{1,})\(/;
