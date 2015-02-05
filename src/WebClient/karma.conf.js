@@ -1,160 +1,76 @@
-
 // Karma configuration
-// Generated on Thu Jun 26 2014 21:20:13 GMT+0800 (W. Australia Standard Time)
+// Generated on Fri Dec 05 2014 16:49:29 GMT-0500 (EST)
 
 module.exports = function(config) {
-    config.set({
+  config.set({
 
-        // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
-
-
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine'],
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
 
 
-        // list of files / patterns to load in the browser
-        files: [
-			'scripts/typings/jasmine/jasmine.js',
-            'scripts/typings/jasmine/jasmine-html.js',           
-            'scripts/respond.js',
-            'scripts/underscore.js',
-            'scripts/jquery/moment.min.js',
-            'scripts/jquery/jquery-2.1.1.min.js',
-            'scripts/jquery/jquery-ui-1.10.4.min.js',
-            'scripts/q.js',
-            'scripts/spin.js',
-            'scripts/toastr.js',
-            'scripts/plugins/metisMenu/jquery.metisMenu.js',
-            'scripts/plugins/slimscroll/jquery.slimscroll.min.js',
-            'scripts/plugins/flot/jquery.flot.js',
-            'scripts/plugins/flot/jquery.flot.tooltip.min.js',
-            'scripts/plugins/flot/jquery.flot.spline.js',
-            'scripts/plugins/flot/jquery.flot.resize.js',
-            'scripts/plugins/flot/jquery.flot.pie.js',
-            'scripts/plugins/flot/curvedLines.js',
-            'scripts/plugins/peity/jquery.peity.min.js',
-            'scripts/plugins/morris/raphael-2.1.0.min.js',
-            'scripts/plugins/morris/morris.js',
-            'scripts/plugins/iCheck/icheck.min.js',
-            'scripts/plugins/chosen/chosen.jquery.js',
-            'scripts/plugins/pace/pace.min.js',
-            'scripts/plugins/fancybox/jquery.fancybox.js',
-            'scripts/plugins/rickshaw/vendor/d3.v3.js',
-            'scripts/plugins/rickshaw/rickshaw.min.js',
-            'scripts/plugins/ionRangeSlider/ion.rangeSlider.min.js',
-            'scripts/plugins/nouslider/jquery.nouislider.min.js',
-            'scripts/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js',
-            'scripts/plugins/jvectormap/jquery-jvectormap-world-mill-en.js',
-            'scripts/plugins/jasny/jasny-bootstrap.min.js',
-            'scripts/plugins/switchery/switchery.js',
-            'scripts/plugins/dataTables/jquery.dataTables.js',
-            'scripts/plugins/dataTables/dataTables.bootstrap.js',
-            'scripts/plugins/easypiechart/easypiechart.js',
-            'scripts/plugins/sparkline/jquery.sparkline.min.js',
-            'scripts/plugins/dropzone/dropzone.js',
-            'scripts/plugins/chartJs/Chart.min.js',
-            'scripts/plugins/jsKnob/jquery.knob.js',
-            'scripts/plugins/summernote/summernote.min.js',
-            'scripts/plugins/fullcalendar/fullcalendar.min.js',
-            'scripts/plugins/codemirror/codemirror.js',
-            'scripts/plugins/codemirror/mode/javascript/javascript.js',
-            'scripts/angular/angular.js',
-            'scripts/angular/angular-ui-router.js',
-            'scripts/angular/angular-ui.js',
-            'scripts/angular/angular-animate.js',
-            'scripts/angular/angular-aria.js',
-            'scripts/angular/angular-cookies.js',
-            'scripts/angular/angular-loader.js',
-            'scripts/angular/angular-messages.js',
-            'scripts/angular/angular-resource.js',
-            'scripts/angular/angular-sanitize.js',
-            'scripts/angular/angular-translate.js',
-            'scripts/angular/angular-mocks.js',
-            'scripts/bootstrap/ui-bootstrap-tpls-0.11.0.min.js',
-            'scripts/plugins/peity/angular-peity.js',
-            'scripts/plugins/easypiechart/angular.easypiechart.js',
-            'scripts/plugins/flot/angular-flot.js',
-            'scripts/plugins/rickshaw/angular-rickshaw.js',
-            'scripts/plugins/summernote/angular-summernote.min.js',
-            'scripts/bootstrap/angular-bootstrap-checkbox.js',
-            'scripts/plugins/jsKnob/angular-knob.js',
-            'scripts/plugins/switchery/ng-switchery.js',
-            'scripts/plugins/nouslider/angular-nouislider.js',
-            'scripts/plugins/datapicker/datePicker.js',
-            'scripts/plugins/chosen/chosen.js',
-            'scripts/plugins/dataTables/angular-datatables.min.js',
-            'scripts/plugins/fullcalendar/gcal.js',
-            'scripts/plugins/fullcalendar/calendar.js',
-            'scripts/plugins/chartJs/angles.js',
-            'scripts/plugins/uievents/event.js',
-            'scripts/plugins/nggrid/ng-grid-2.0.3.min.js',
-            'scripts/plugins/ui-codemirror/ui-codemirror.min.js',
-            'scripts/plugins/uiTree/angular-ui-tree.min.js',
-            'scripts/plugins/angular-notify/angular-notify.min.js',
-            'scripts/plugins/colorpicker/bootstrap-colorpicker-module.js',
-            'scripts/angular-dialog-service-5.1.2/dialogs-default-translations.js',
-            'scripts/angular-dialog-service-5.1.2/dialogs.js',
-            'app/app.js',
-            'app/Directives.js',
-            'app/Filters.js',
-            'app/model.js',
-            'app/publicApp.js',
-            'app/routes.js',
-            'app/Services.js',
-            'app/types.js',
-            'app/Common/common.js',
-            'app/Z/registrations.js',
-            'app/clients/ClientController.js',
-            //'tests/appFixture.js',
-            'tests/clients/clientcontrollertestfixture.js',
-            { pattern: 'tests/*.js', watched: false, included: true, served: false }
-        ],
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['jspm', 'jasmine'],
+
+    jspm: {
+      // Edit this to your needs
+      loadFiles: ['src/**/*.js', 'test/**/*.js']
+    },
 
 
-        // list of files to exclude
-        exclude: [
-            'scripts/angular-scenario.js',
-        ],
-
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {
-
-        },
+    // list of files / patterns to load in the browser
+    files: [],
 
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+    // list of files to exclude
+    exclude: [
+    ],
 
 
-        // web server port
-        port: 9876,
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+      'test/**/*.js': ['6to5'],
+      'src/**/*.js': ['6to5']
+    },
+    '6to5Preprocessor': {
+      options: {
+        sourceMap: 'inline',
+        modules: 'system',
+        moduleIds: false
+      }
+    },
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress'],
 
 
-        // enable / disable colors in the output (reporters and logs)
-        colors: true,
+    // web server port
+    port: 9876,
 
 
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
 
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
 
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
 
 
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false
-    });
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['Chrome'],
+
+
+    // Continuous Integration mode
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: false
+  });
 };

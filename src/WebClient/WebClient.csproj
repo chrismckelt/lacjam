@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="build/MSBuild.Node.props" />
+  <Import Project="build/MSBuild.Npm.props" />
+  <Import Project="build/MSBuild.Jspm.props" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProjectGuid>{1F8C2073-8EA8-4DD7-8A9B-611BBBF057E5}</ProjectGuid>
@@ -34,7 +39,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60390</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -116,6 +121,14 @@
     <Content Include="App\Common\Notify.cshtml" />
     <Content Include="App\Clients\ClientView.cshtml" />
     <Content Include="App\Accounts\AccountView.cshtml" />
+    <None Include="build\MSBuild.Gulp.props" />
+    <None Include="build\MSBuild.Gulp.targets" />
+    <None Include="build\MSBuild.Jspm.props" />
+    <None Include="build\MSBuild.Jspm.targets" />
+    <None Include="build\MSBuild.Node.props" />
+    <None Include="build\MSBuild.Node.targets" />
+    <None Include="build\MSBuild.Npm.props" />
+    <None Include="build\MSBuild.Npm.targets" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1056,9 +1069,6 @@
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="JavaScriptEngineSwitcher.Configuration.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="App\Dashboard\DashboardView.cshtml" />
     <Content Include="Scripts\TypeLite.Net4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -1127,4 +1137,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
+  <Import Project="build/MSBuild.Node.targets" />
+  <Import Project="build/MSBuild.Npm.targets" />
+  <Import Project="build/MSBuild.Jspm.targets" />
 </Project>
