@@ -189,3 +189,4 @@ FakesAssemblies/
 src/WebApi/logs/
 src/WebClient/logs/
 packages
+src/WebClient/jspm_packages/
