@@ -73,6 +73,7 @@
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="App\app.html" />
     <Content Include="App\Entities\EntityEditController.ts" />
     <Content Include="App\Entities\EntityController.ts" />
     <Content Include="App\Entities\EntityService.ts" />
@@ -141,6 +142,7 @@
     <None Include="ClearScript.V8\v8-x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="config.js" />
     <Content Include="Content\angular-ui.css" />
     <Content Include="Content\angular-ui.min.css" />
     <Content Include="Content\app.css">
@@ -237,6 +239,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="karma.conf.js" />
+    <Content Include="main.js" />
     <Content Include="Scripts\angular-dialog-service-5.1.2\dialogs-default-translations.js" />
     <Content Include="Scripts\angular-dialog-service-5.1.2\dialogs.js" />
     <Content Include="Content\toastr.scss" />

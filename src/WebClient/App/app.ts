@@ -5,7 +5,7 @@ export class App {
 
     constructor(private router: aur.Router) {
         this.router.configure((config) => {
-            config.title = "Aurelia VS/TS";
+            config.title = "smsf minder";
             config.map([
                 { route: ["", "welcome"], moduleId: "welcome", nav: true, title: "Welcome to VS/TS" },
                 { route: "flickr", moduleId: "flickr", nav: true },
