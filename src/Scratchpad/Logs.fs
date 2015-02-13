@@ -45,7 +45,7 @@ module Logs
 
     [<Literal>]
     let lightbluepath = @"C:\Users\chris.mckelt\AppData\Local\LightBlue\"
-    let files = Directory.GetFiles(lightbluepath,row.Filename,SearchOption.AllDirectories)
+    let files = Directory.GetFiles(lightbluepath,row.ApplicationId,SearchOption.AllDirectories)
     if (files <> null)  then
         let content = System.IO.File.ReadAllText (files.First())
         printfn "%s" content
