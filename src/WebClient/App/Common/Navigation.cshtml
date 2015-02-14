@@ -1,45 +1,64 @@
 <template>
-    <nav class="navbar-default navbar-static-side" role="navigation" ng-controller="app.controllers.NavigationController as nav">
+    <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
-    <ul side-navigation class="nav" id="side-menu">
-        <li class="nav-header">
-            <div class="logo-element">
-                <img id="applogo" onclick="document.location.href ='/'" alt="smsf minder" width="110"  height="69"/>
+            <ul side-navigation class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="logo-element">
+                        <img id="applogo" onclick="document.location.href ='/'" alt="smsf minder" width="110" height="69" />
 
-            </div>
-        </li>
-        <li ng-if="nav.isVisible('dashboard')" ng-class="{active: nav.isVisible('dashboard')}">
-            <a href="index.cshtml"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> <span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('dashboard')}">
-                <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">To do</a></li>
-                <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_2">Compliance</a></li>
-                <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_3">News</a></li>
+                    </div>
+                </li>
+                <li>
+                    <ul class="nav nav-second-level">
+                        <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+                            <a href.bind="row.href">${row.title}</a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav nav-second-level">
+                        <li class="loader" if.bind="router.isNavigating">
+                            <i class="fa fa-spinner fa-spin fa-2x"></i>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="index.cshtml"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">To do</a></li>
+                        <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_2">Compliance</a></li>
+                        <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_3">News</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
+                    <ul class="nav nav-second-level">
+                        <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Inbox</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.email_view">Email view</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.email_compose">Compose email</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.email_template">Email template</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a ui-sref="documents"><i class="fa fa-envelope"></i> <span class="nav-label">Documents </span><span class="label label-warning pull-right">16/24</span></a>
+                    <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('documents')}">
+                        <li ui-sref-active="active"><a ui-sref="mailbox.trustdeed">Trust Deed</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.abnandtfnregister">ABN and TFN registration</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.trusteeminutes">Trustee Minutes</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.investmentstrategy">Investment Strategy</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.trusteedeclaration">Trustee Declaration</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.annualfinancialstatement">Annual Financial Statement</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.taxreturn">Tax Return</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.audit">Audit</a></li>
+                        <li ui-sref-active="active"><a ui-sref="mailbox.superisorylevy">Supervisory levy</a></li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li ng-if="nav.isVisible('clients')" ng-class="{active: nav.isVisible('clients')}">
-            <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
-            <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('clients')}">
-                <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Inbox</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.email_view">Email view</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.email_compose">Compose email</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.email_template">Email template</a></li>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="loader" if.bind="router.isNavigating">
+                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                </li>
             </ul>
-        </li>
-        <li ng-if="nav.isVisible('documents')" ng-class="{active: nav.isVisible('documents')}">
-            <a ui-sref="documents"><i class="fa fa-envelope"></i> <span class="nav-label">Documents </span><span class="label label-warning pull-right">16/24</span></a>
-            <ul class="nav nav-second-level" ng-class="{in: nav.isVisible('documents')}">
-                <li ui-sref-active="active"><a ui-sref="mailbox.trustdeed">Trust Deed</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.abnandtfnregister">ABN and TFN registration</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.trusteeminutes">Trustee Minutes</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.investmentstrategy">Investment Strategy</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.trusteedeclaration">Trustee Declaration</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.annualfinancialstatement">Annual Financial Statement</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.taxreturn">Tax Return</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.audit">Audit</a></li>
-                <li ui-sref-active="active"><a ui-sref="mailbox.superisorylevy">Supervisory levy</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
+        </div>
     </nav>
 </template>

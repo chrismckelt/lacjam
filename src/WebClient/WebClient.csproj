@@ -57,7 +57,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>amd</TypeScriptModuleKind>
@@ -78,9 +78,10 @@
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="App\Accounts\AccountController.ts" />
     <TypeScriptCompile Include="App\Clients\ClientController.ts" />
+    <TypeScriptCompile Include="App\Common\NavigationTop.ts" />
     <TypeScriptCompile Include="App\Common\Navigation.ts" />
     <TypeScriptCompile Include="App\index.ts" />
-    <TypeScriptCompile Include="App\Index\IndexController.ts" />
+    <TypeScriptCompile Include="App\Index\Index.ts" />
     <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
     <TypeScriptCompile Include="App\Common\footer.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
@@ -98,12 +99,12 @@
       <Link>log4net.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="App\Index\IndexView.cshtml" />
+    <Content Include="App\Index\Index.cshtml" />
     <Content Include="App\Index\Version.cshtml" />
     <Content Include="App\Common\Content.cshtml" />
     <Content Include="App\Common\footer.cshtml" />
     <Content Include="App\Common\Ibox_tools.cshtml" />
-    <Content Include="App\Common\navigation.cshtml" />
+    <Content Include="App\Common\Navigation.cshtml" />
     <Content Include="App\Common\NavigationTop.cshtml" />
     <Content Include="App\Common\Notify.cshtml" />
     <Content Include="App\Clients\ClientView.cshtml" />
@@ -916,7 +917,7 @@
     </Content>
     <TypeScriptCompile Include="App\Dashboard\DashboardController.ts" />
     <TypeScriptCompile Include="App\services.ts" />
-    <TypeScriptCompile Include="App\_references.ts" />
+    <TypeScriptCompile Include="_references.ts" />
     <TypeScriptCompile Include="lacjam.ts" />
     <TypeScriptCompile Include="Scripts\typings\aurelia-amd\aurelia-amd.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\aurelia\aurelia.d.ts" />

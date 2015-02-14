@@ -4,15 +4,14 @@
     <div id="wrapper">
 
         <!-- Navigation -->
-        <import from='./app/common/navigation' as="nav-bar"></import>
+        <import from='./app/common/Navigation' as="nav-bar"></import>
         <nav-bar router.bind="router"></nav-bar>
-        <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+        <div id="page-wrapper" class="gray-bg">
 
-            <!-- Page wrlacjamer -->
-            <div ng-include="'/common/navigationtop.cshtml'"></div>
+          @RenderPage("app/common/NavigationTop.cshtml")
 
             <!-- Main view  -->
-            <div class="page-host">
+            <div class="col-md-10" style="padding: 0">
                 <router-view></router-view>
             </div>
 

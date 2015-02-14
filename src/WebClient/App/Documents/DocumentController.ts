@@ -1,4 +1,4 @@
-﻿/// <reference path="../_references.ts" />
+﻿/// <reference path="../../_references.ts" />
 "use strict";
 export class DocumentController
 //extends LacjamModule.Base.ControllerBase

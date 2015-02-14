@@ -13,7 +13,7 @@
 /// <reference path="common/footer.ts" />
 /// <reference path="dashboard/dashboardcontroller.ts" />
 /// <reference path="documents/documentcontroller.ts" />
-/// <reference path="Index/IndexController.ts" />
+/// <reference path="Index/Index.ts" />
 /// <reference path="clients/clientcontroller.ts" />
 /// <autosync enabled="true" />
 //# sourceMappingURL=_references.js.map

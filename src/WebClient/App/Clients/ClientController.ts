@@ -1,4 +1,4 @@
-﻿/// <reference path="../_references.ts" />
+﻿/// <reference path="../../_references.ts" />
 export class ClientController// extends LacjamModule.Base.ControllerBase
 {
     //public static $inject = ["$scope"];

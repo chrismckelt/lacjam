@@ -1,6 +1,6 @@
 /// Model.ts
 
-/// <reference path="_references.ts" />
+/// <reference path="../_references.ts" />
 
 module Model {
     export class MetadataDefinitionGroupResource {

@@ -1,4 +1,4 @@
-﻿/// <reference path="app/_references.ts" />
+﻿/// <reference path="_references.ts" />
 
 /* tslint:disable */
 //https://gist.github.com/scottmcarthur/9051681
@@ -584,9 +584,10 @@
 
 //define('LacjamModule', ["exports"], function (exports) {
 
-//    var lac = LacjamModule;
-//     declare var lacjam = lac;
+//    var lacjam = LacjamModule;
+     
 //});
+
 
 
 import lacjam = LacjamModule
