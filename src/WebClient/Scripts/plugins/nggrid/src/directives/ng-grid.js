@@ -36,7 +36,7 @@
                             // make a temporary copy of the data
                             grid.data = $.extend([], a);
                             grid.rowFactory.fixRowCache();
-                            angular.forEach(grid.data, function (item, j) {
+                            _.each(grid.data, function (item, j) {
                                 var indx = grid.rowMap[j] || j;
                                 if (grid.rowCache[indx]) {
                                     grid.rowCache[indx].ensureEntity(item);
@@ -100,7 +100,7 @@
                             })[0]);
                         } else {
                             var arr = $.extend(true, [], $scope.configGroups);
-                            angular.forEach(arr, $scope.groupBy);
+                            _.each(arr, $scope.groupBy);
                         }
                     };
                     // method for user to set the sort field programatically
@@ -126,7 +126,7 @@
                         $scope.adjustScrollLeft(0);
                     });
                     //initialize plugins.
-                    angular.forEach(options.plugins, function (p) {
+                    _.each(options.plugins, function (p) {
                         if (typeof p === 'function') {
                             p = p.call(this);
                         }

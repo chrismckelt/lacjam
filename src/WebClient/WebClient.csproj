@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="build/MSBuild.Node.props" />
   <Import Project="build/MSBuild.Npm.props" />
   <Import Project="build/MSBuild.Jspm.props" />
@@ -56,10 +57,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
     <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
     <IncludeIisSettings>true</IncludeIisSettings>
     <IncludeAppPool>true</IncludeAppPool>
@@ -73,39 +74,24 @@
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="App\app.html" />
-    <Content Include="App\Entities\EntityEditController.ts" />
-    <Content Include="App\Entities\EntityController.ts" />
-    <Content Include="App\Entities\EntityService.ts" />
-    <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEditController.ts" />
-    <Content Include="App\MetadataDefinitions\MetadataDefinitionEditController.ts" />
+    <Content Include="app.cshtml" />
+    <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="App\Accounts\AccountController.ts" />
     <TypeScriptCompile Include="App\Clients\ClientController.ts" />
-    <TypeScriptCompile Include="App\Common\NavigationController.ts" />
+    <TypeScriptCompile Include="App\Common\Navigation.ts" />
+    <TypeScriptCompile Include="App\index.ts" />
     <TypeScriptCompile Include="App\Index\IndexController.ts" />
     <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
-    <TypeScriptCompile Include="App\Common\FooterController.ts" />
+    <TypeScriptCompile Include="App\Common\footer.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
-    <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupService.ts" />
-    <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupController.ts" />
-    <Content Include="App\MetadataDefinitions\MetadataDefinitionController.ts" />
-    <Content Include="App\MetadataDefinitions\MetadataDefinitionService.ts" />
     <Content Include="App\Prototypes\definition-groups-add.html" />
     <Content Include="App\Prototypes\definitions-add.html" />
     <Content Include="App\Prototypes\entities-add.html" />
     <Content Include="App\Prototypes\entities.html" />
-    <Content Include="App\Public\SearchController.ts" />
     <Content Include="App\types.js" />
     <Content Include="App\404.cshtml" />
-    <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupView.cshtml" />
-    <Content Include="App\MetadataDefinitions\MetadataDefinitionView.cshtml" />
-    <Content Include="App\MetadataDefinitionGroups\MetadataDefinitionGroupEdit.cshtml" />
-    <TypeScriptCompile Include="App\Z\registrations.ts" />
-    <Content Include="App\MetadataDefinitions\MetadataDefinitionEdit.cshtml" />
-    <Content Include="App\Entities\EntityView.cshtml" />
-    <Content Include="App\Entities\EntityEdit.cshtml" />
     <Content Include="App\Documents\DocumentList.cshtml" />
     <Content Include="App\Documents\DocumentView.cshtml" />
     <Content Include="..\common\log4net.config">
@@ -115,9 +101,9 @@
     <Content Include="App\Index\IndexView.cshtml" />
     <Content Include="App\Index\Version.cshtml" />
     <Content Include="App\Common\Content.cshtml" />
-    <Content Include="App\Common\Footer.cshtml" />
+    <Content Include="App\Common\footer.cshtml" />
     <Content Include="App\Common\Ibox_tools.cshtml" />
-    <Content Include="App\Common\Navigation.cshtml" />
+    <Content Include="App\Common\navigation.cshtml" />
     <Content Include="App\Common\NavigationTop.cshtml" />
     <Content Include="App\Common\Notify.cshtml" />
     <Content Include="App\Clients\ClientView.cshtml" />
@@ -143,8 +129,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="config.js" />
-    <Content Include="Content\angular-ui.css" />
-    <Content Include="Content\angular-ui.min.css" />
     <Content Include="Content\app.css">
       <DependentUpon>app.less</DependentUpon>
     </Content>
@@ -218,10 +202,6 @@
     <Content Include="Content\img\sprite\entities-hover.png" />
     <Content Include="Content\img\sprite\entities-normal.png" />
     <Content Include="Content\public\search.css" />
-    <Content Include="Content\css\select2-spinner.gif" />
-    <Content Include="Content\css\select2.css" />
-    <Content Include="Content\css\select2.png" />
-    <Content Include="Content\css\select2x2.png" />
     <Content Include="Content\dialogs.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.svg" />
@@ -233,15 +213,64 @@
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\sprite.png" />
     <Content Include="Content\ng-grid.css" />
-    <Content Include="Content\ng-grid.min.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="jspm_packages\es6-module-loader.js" />
+    <Content Include="jspm_packages\es6-module-loader.src.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\.gitattributes" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\build\core-stable.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\core.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\core.min.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\library.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\library.min.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\shim.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\shim.min.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\Gruntfile.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\index.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\library.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\shim.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\%24for.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\array.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\array_statics.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\binding.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\common.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\console.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\date.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\delay.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\dict.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\dict_exp.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\dom_itarable.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es5.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es6.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es6_collections.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es6_promise.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es6_reflect.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es6_symbol.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es7.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\es7_refs.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\global.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\immediate.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\iterator.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\number.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\object.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\string.js" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\src\timers.js" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\css\font-awesome.css" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\css\font-awesome.min.css" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="jspm_packages\npm\process%400.10.0.js" />
+    <Content Include="jspm_packages\npm\process%400.10.0\browser.js" />
+    <Content Include="jspm_packages\npm\process%400.10.0\index.js" />
+    <Content Include="jspm_packages\system.js" />
+    <Content Include="jspm_packages\system.src.js" />
+    <Content Include="jspm_packages\traceur-runtime.js" />
+    <Content Include="jspm_packages\traceur-runtime.src.js" />
+    <Content Include="jspm_packages\traceur.js" />
+    <Content Include="jspm_packages\traceur.src.js" />
     <Content Include="karma.conf.js" />
-    <Content Include="main.js" />
-    <Content Include="Scripts\angular-dialog-service-5.1.2\dialogs-default-translations.js" />
-    <Content Include="Scripts\angular-dialog-service-5.1.2\dialogs.js" />
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\bootstrap\bootstrap.css.map">
       <DependentUpon>bootstrap.css</DependentUpon>
@@ -253,10 +282,65 @@
     <Content Include="Content\css\plugins\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\css\plugins\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\css\plugins\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Scripts\angular-ui\ui-bootstrap.no" />
-    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
-    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js" />
-    <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
+    <Content Include="jspm_packages\.loaderversions" />
+    <Content Include="jspm_packages\es6-module-loader.js.map" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\.jspm-hash" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\.jspm.json" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\.npmignore" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\bower.json" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\build\build.ls" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\build\config.ls" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\build\Gruntfile.ls" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\core.min.map" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\library.min.map" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\client\shim.min.map" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\package.json" />
+    <Content Include="jspm_packages\npm\core-js%400.4.8\README.md" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\.jspm-hash" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\.jspm.json" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\.npmignore" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\fonts\FontAwesome.otf" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\bordered-pulled.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\core.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\extras.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\fixed-width.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\font-awesome.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\icons.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\larger.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\list.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\mixins.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\path.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\rotated-flipped.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\spinning.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\stacked.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\less\variables.less" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\package.json" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\README.md" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\font-awesome.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_bordered-pulled.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_core.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_extras.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_fixed-width.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_icons.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_larger.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_list.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_mixins.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_path.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_rotated-flipped.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_spinning.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_stacked.scss" />
+    <Content Include="jspm_packages\npm\font-awesome%404.2.0\scss\_variables.scss" />
+    <Content Include="jspm_packages\npm\process%400.10.0\.jspm-hash" />
+    <Content Include="jspm_packages\npm\process%400.10.0\.jspm.json" />
+    <Content Include="jspm_packages\npm\process%400.10.0\LICENSE" />
+    <Content Include="jspm_packages\npm\process%400.10.0\package.json" />
+    <Content Include="jspm_packages\npm\process%400.10.0\README.md" />
+    <Content Include="jspm_packages\system.js.map" />
+    <Content Include="jspm_packages\traceur-runtime.js.map" />
+    <Content Include="jspm_packages\traceur.js.map" />
     <Content Include="Content\fonts\helveticaneueltstd-lt-webfont.eot" />
     <Content Include="Content\fonts\helveticaneueltstd-lt-webfont.ttf" />
     <Content Include="Content\fonts\helveticaneueltstd-lt-webfont.woff" />
@@ -269,40 +353,24 @@
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.eot" />
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.ttf" />
     <Content Include="Content\fonts\exljbris_-_museosans-500_0-webfont.woff" />
-    <Content Include="Scripts\angular-dialog-service-5.1.2\LICENSE" />
-    <Content Include="Scripts\angular\angular-animate.js" />
-    <Content Include="Scripts\angular\angular-animate.min.js" />
-    <Content Include="Scripts\angular\angular-aria.js" />
-    <Content Include="Scripts\angular\angular-aria.min.js" />
-    <Content Include="Scripts\angular\angular-cookies.js" />
-    <Content Include="Scripts\angular\angular-cookies.min.js" />
-    <Content Include="Scripts\angular\angular-csp.css" />
-    <Content Include="Scripts\angular\angular-loader.js" />
-    <Content Include="Scripts\angular\angular-loader.min.js" />
-    <Content Include="Scripts\angular\angular-messages.js" />
-    <Content Include="Scripts\angular\angular-messages.min.js" />
-    <Content Include="Scripts\angular\angular-mocks.js" />
-    <Content Include="Scripts\angular\angular-resource.js" />
-    <Content Include="Scripts\angular\angular-resource.min.js" />
-    <Content Include="Scripts\angular\angular-route.js" />
-    <Content Include="Scripts\angular\angular-route.min.js" />
-    <Content Include="Scripts\angular\angular-sanitize.js" />
-    <Content Include="Scripts\angular\angular-sanitize.min.js" />
-    <Content Include="Scripts\angular\angular-scenario.js" />
-    <Content Include="Scripts\angular\angular-touch.js" />
-    <Content Include="Scripts\angular\angular-touch.min.js" />
-    <Content Include="Scripts\angular\angular-translate.js" />
-    <Content Include="Scripts\angular\angular-ui-router.js" />
-    <Content Include="Scripts\angular\angular-ui-router.min.js" />
-    <Content Include="Scripts\angular\angular-ui.js" />
-    <Content Include="Scripts\angular\angular-ui.min.js" />
-    <Content Include="Scripts\angular\angular.js" />
-    <Content Include="Scripts\angular\angular.min.js" />
-    <Content Include="Scripts\angular\version.txt" />
+    <Content Include="main.js" />
+    <Content Include="Scripts\aurelia-bundle.js" />
     <Content Include="Scripts\bootstrap\angular-bootstrap-checkbox.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap\ui-bootstrap-tpls-0.11.0.min.js" />
+    <Content Include="Scripts\core-js\.gitattributes" />
+    <Content Include="Scripts\core-js\.gitignore" />
+    <Content Include="Scripts\core-js\client\core.js" />
+    <Content Include="Scripts\core-js\client\core.min.js" />
+    <Content Include="Scripts\core-js\client\library.js" />
+    <Content Include="Scripts\core-js\client\library.min.js" />
+    <Content Include="Scripts\core-js\client\shim.js" />
+    <Content Include="Scripts\core-js\client\shim.min.js" />
+    <Content Include="Scripts\core-js\Gruntfile.js" />
+    <Content Include="Scripts\core-js\index.js" />
+    <Content Include="Scripts\core-js\library.js" />
+    <Content Include="Scripts\core-js\shim.js" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\inspinia.js" />
     <Content Include="Scripts\jquery\jquery-2.1.1.min.js" />
@@ -831,22 +899,12 @@
     <Content Include="Scripts\plugins\uiMask\masks.js" />
     <Content Include="Scripts\plugins\uiTree\angular-ui-tree.min.js" />
     <Content Include="Scripts\plugins\validate\jquery.validate.min.js" />
-    <Content Include="Scripts\typings\jasmine\jasmine-html.js" />
-    <Content Include="Scripts\typings\jasmine\jasmine.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\ng-grid-flexible-height.js" />
-    <Content Include="Scripts\ng-grid.js" />
-    <Content Include="Scripts\ng-grid.min.js" />
     <Content Include="Scripts\q.js" />
     <Content Include="Scripts\q.min.js" />
     <Content Include="Scripts\r.js" />
-    <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\requirejs\require.js" />
     <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\select2.js" />
-    <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\spin.js" />
     <Content Include="Scripts\spin.min.js" />
     <Content Include="Scripts\toastr.js" />
@@ -856,25 +914,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeLite.Net4.tt</DependentUpon>
     </Content>
-    <Content Include="Scripts\typings\angularLocalStorage\angularLocalStorage.d.ts" />
     <TypeScriptCompile Include="App\Dashboard\DashboardController.ts" />
-    <TypeScriptCompile Include="App\app.ts" />
-    <TypeScriptCompile Include="App\directives.ts" />
-    <TypeScriptCompile Include="App\filters.ts" />
     <TypeScriptCompile Include="App\services.ts" />
     <TypeScriptCompile Include="App\_references.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angular-ui-bootstrap\angular-ui-bootstrap.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-resource.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-scenario.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="lacjam.ts" />
+    <TypeScriptCompile Include="Scripts\typings\aurelia-amd\aurelia-amd.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\aurelia\aurelia.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\breeze\breeze.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\icheck\icheck.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jasmine\jasmine.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
@@ -900,6 +949,7 @@
     <Folder Include="App\Documents\TrustDeed\" />
     <Folder Include="App\Search\" />
     <Folder Include="App\Services\" />
+    <Folder Include="App\Z\" />
     <Folder Include="Scripts\plugins\codemirror\mode\sql\" />
     <Folder Include="Scripts\plugins\nggrid\build\" />
   </ItemGroup>
@@ -1053,16 +1103,25 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\toastr.css.map" />
+    <Content Include="Scripts\typings\jasmine\jasmine-html.js" />
+    <Content Include="Scripts\typings\jasmine\jasmine.js" />
     <Content Include="Scripts\typings\moment\moment.d.ts" />
     <Content Include="Scripts\typings\ng-grid\ng-grid-flexible-height.d.ts" />
-    <Content Include="Scripts\typings\ng-grid\ng-grid.d.ts" />
     <Content Include="Scripts\typings\q\Q.d.ts" />
     <Content Include="Scripts\typings\spin\spin.d.ts" />
     <Content Include="Scripts\typings\underscore.string\underscore.string.d.ts" />
-    <Content Include="Scripts\ui-router\angular-ui-router.js" />
-    <Content Include="Scripts\ui-router\angular-ui-router.min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Scripts\webcomponentsjs\CustomElements.js" />
+    <Content Include="Scripts\webcomponentsjs\CustomElements.min.js" />
+    <Content Include="Scripts\webcomponentsjs\HTMLImports.js" />
+    <Content Include="Scripts\webcomponentsjs\HTMLImports.min.js" />
+    <Content Include="Scripts\webcomponentsjs\ShadowDOM.js" />
+    <Content Include="Scripts\webcomponentsjs\ShadowDOM.min.js" />
+    <Content Include="Scripts\webcomponentsjs\webcomponents-lite.js" />
+    <Content Include="Scripts\webcomponentsjs\webcomponents-lite.min.js" />
+    <Content Include="Scripts\webcomponentsjs\webcomponents.js" />
+    <Content Include="Scripts\webcomponentsjs\webcomponents.min.js" />
     <Content Include="Tests\_jsreferences.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -1078,28 +1137,31 @@
       <LastGenOutput>TypeLite.Net4.d.ts</LastGenOutput>
     </Content>
     <Content Include="Scripts\Manager.ttinclude" />
-    <Content Include="Scripts\respond.min.js.map">
-      <DependentUpon>respond.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\underscore.min.map" />
     <Content Include="Scripts\plugins\justified-gallery\README.md" />
     <Content Include="Scripts\plugins\nggrid\component.json" />
     <Content Include="Scripts\plugins\nggrid\package.json" />
     <Content Include="Scripts\plugins\nggrid\plugins\README.md" />
     <Content Include="Scripts\plugins\nggrid\README.md" />
-    <Content Include="Scripts\angular\angular-animate.min.js.map" />
-    <Content Include="Scripts\angular\angular-aria.min.js.map" />
-    <Content Include="Scripts\angular\angular-cookies.min.js.map" />
-    <Content Include="Scripts\angular\angular-loader.min.js.map" />
-    <Content Include="Scripts\angular\angular-messages.min.js.map" />
-    <Content Include="Scripts\angular\angular-resource.min.js.map" />
-    <Content Include="Scripts\angular\angular-route.min.js.map" />
-    <Content Include="Scripts\angular\angular-sanitize.min.js.map" />
-    <Content Include="Scripts\angular\angular-touch.min.js.map" />
-    <Content Include="Scripts\angular\angular-ui-router.min.js.map" />
-    <Content Include="Scripts\angular\angular.min.js.map" />
-    <Content Include="Scripts\angular\errors.json" />
-    <Content Include="Scripts\angular\version.json" />
+    <Content Include="Scripts\core-js\.bower.json" />
+    <Content Include="Scripts\core-js\.npmignore" />
+    <Content Include="Scripts\core-js\bower.json" />
+    <Content Include="Scripts\core-js\client\core.min.js.map" />
+    <Content Include="Scripts\core-js\client\core.min.map" />
+    <Content Include="Scripts\core-js\client\library.min.js.map" />
+    <Content Include="Scripts\core-js\client\library.min.map" />
+    <Content Include="Scripts\core-js\client\shim.min.js.map" />
+    <Content Include="Scripts\core-js\client\shim.min.map" />
+    <Content Include="Scripts\core-js\package.json" />
+    <Content Include="Scripts\core-js\README.md" />
+    <Content Include="Scripts\typings\jasmine\jasmine.js.map" />
+    <Content Include="Scripts\requirejs\.bower.json" />
+    <Content Include="Scripts\requirejs\bower.json" />
+    <Content Include="Scripts\requirejs\README.md" />
+    <Content Include="Scripts\webcomponentsjs\.bower.json" />
+    <Content Include="Scripts\webcomponentsjs\bower.json" />
+    <Content Include="Scripts\webcomponentsjs\package.json" />
+    <Content Include="Scripts\webcomponentsjs\README.md" />
     <None Include="smsfminder.pubxml" />
     <Content Include="Tests\tests.cshtml" />
     <None Include="web.Debug.config">
@@ -1134,7 +1196,6 @@
       <Name>Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\Tools\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />

@@ -1,4 +1,4 @@
-var angles = angular.module("angles", []);
+var angles =//  angular.module("angles", []);
 
 angles.chart = function (type) {
     return {

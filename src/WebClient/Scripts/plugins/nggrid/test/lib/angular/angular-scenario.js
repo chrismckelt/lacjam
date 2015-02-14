@@ -9476,7 +9476,7 @@ var /** holds major version number for IE or NaN for real browsers */
 
 /**
  * @ngdoc function
- * @name angular.forEach
+ * @name _.each
  * @function
  *
  * @description
@@ -9485,12 +9485,12 @@ var /** holds major version number for IE or NaN for real browsers */
  * is the value of an object property or an array element and `key` is the object property key or
  * array element index. Specifying a `context` for the function is optional.
  *
- * Note: this function was previously known as `angular.foreach`.
+ * Note: this function was previously known as `_.each`.
  *
    <pre>
      var values = {name: 'misko', gender: 'male'};
      var log = [];
-     angular.forEach(values, function(value, key){
+     _.each(values, function(value, key){
        this.push(key + ': ' + value);
      }, log);
      expect(log).toEqual(['name: misko', 'gender:male']);
@@ -24164,7 +24164,7 @@ angular.scenario.dsl = angular.scenario.dsl || function(name, fn) {
         return result;
       var self = this;
       var chain = angular.extend({}, result);
-      angular.forEach(chain, function(value, name) {
+      _.each(chain, function(value, name) {
         if (angular.isFunction(value)) {
           chain[name] = function() {
             return executeStatement.call(self, value, arguments);
@@ -24230,7 +24230,7 @@ angular.scenario.setUpAndRun = function(config) {
     output = config.scenario_output.split(',');
   }
 
-  angular.forEach(angular.scenario.output, function(fn, name) {
+  _.each(angular.scenario.output, function(fn, name) {
     if (!output.length || indexOf(output,name) != -1) {
       var context = body.append('<div></div>').find('div:last');
       context.attr('id', name);
@@ -24670,7 +24670,7 @@ angular.scenario.Describe = function(descName, parent) {
   var beforeEachFns = this.beforeEachFns;
   this.setupBefore = function() {
     if (parent) parent.setupBefore.call(this);
-    angular.forEach(beforeEachFns, function(fn) { fn.call(this); }, this);
+    _.each(beforeEachFns, function(fn) { fn.call(this); }, this);
   };
 
   /**
@@ -24678,7 +24678,7 @@ angular.scenario.Describe = function(descName, parent) {
    */
   var afterEachFns = this.afterEachFns;
   this.setupAfter  = function() {
-    angular.forEach(afterEachFns, function(fn) { fn.call(this); }, this);
+    _.each(afterEachFns, function(fn) { fn.call(this); }, this);
     if (parent) parent.setupAfter.call(this);
   };
 };
@@ -24786,14 +24786,14 @@ angular.scenario.Describe.prototype.xit = angular.noop;
  */
 angular.scenario.Describe.prototype.getSpecs = function() {
   var specs = arguments[0] || [];
-  angular.forEach(this.children, function(child) {
+  _.each(this.children, function(child) {
     child.getSpecs(specs);
   });
-  angular.forEach(this.its, function(it) {
+  _.each(this.its, function(it) {
     specs.push(it);
   });
   var only = [];
-  angular.forEach(specs, function(it) {
+  _.each(specs, function(it) {
     if (it.only) {
       only.push(it);
     }
@@ -24890,7 +24890,7 @@ angular.scenario.ObjectModel = function(runner) {
     var block = self.value,
         definitions = [];
 
-    angular.forEach(self.getDefinitionPath(spec), function(def) {
+    _.each(self.getDefinitionPath(spec), function(def) {
       if (!block.children[def.name]) {
         block.children[def.name] = {
           id: def.id,
@@ -25008,7 +25008,7 @@ angular.scenario.ObjectModel.prototype.emit = function(eventName) {
       eventName = eventName.toLowerCase();
 
   if (this.listeners[eventName]) {
-    angular.forEach(this.listeners[eventName], function(listener) {
+    _.each(this.listeners[eventName], function(listener) {
       listener.apply(self, args);
     });
   }
@@ -25134,7 +25134,7 @@ angular.scenario.Runner = function($window) {
     beforeEach: this.beforeEach,
     afterEach: this.afterEach
   };
-  angular.forEach(this.api, angular.bind(this, function(fn, key) {
+  _.each(this.api, angular.bind(this, function(fn, key) {
     this.$window[key] = angular.bind(this, fn);
   }));
 };
@@ -25151,7 +25151,7 @@ angular.scenario.Runner.prototype.emit = function(eventName) {
   eventName = eventName.toLowerCase();
   if (!this.listeners[eventName])
     return;
-  angular.forEach(this.listeners[eventName], function(listener) {
+  _.each(this.listeners[eventName], function(listener) {
     listener.apply(self, args);
   });
 };
@@ -25287,7 +25287,7 @@ angular.scenario.Runner.prototype.run = function(application) {
   var self = this;
   var $root = angular.injector(['ng']).get('$rootScope');
   angular.extend($root, this);
-  angular.forEach(angular.scenario.Runner.prototype, function(fn, name) {
+  _.each(angular.scenario.Runner.prototype, function(fn, name) {
     $root[name] = angular.bind(self, fn);
   });
   $root.application = application;
@@ -25295,17 +25295,17 @@ angular.scenario.Runner.prototype.run = function(application) {
   asyncForEach(this.rootDescribe.getSpecs(), function(spec, specDone) {
     var dslCache = {};
     var runner = self.createSpecRunner_($root);
-    angular.forEach(angular.scenario.dsl, function(fn, key) {
+    _.each(angular.scenario.dsl, function(fn, key) {
       dslCache[key] = fn.call($root);
     });
-    angular.forEach(angular.scenario.dsl, function(fn, key) {
+    _.each(angular.scenario.dsl, function(fn, key) {
       self.$window[key] = function() {
         var line = callerFile(3);
         var scope = runner.$new();
 
         // Make the dsl accessible on the current chain
         scope.dsl = {};
-        angular.forEach(dslCache, function(fn, key) {
+        _.each(dslCache, function(fn, key) {
           scope.dsl[key] = function() {
             return dslCache[key].apply(scope, arguments);
           };
@@ -25453,12 +25453,12 @@ angular.scenario.SpecRunner.prototype.addFutureAction = function(name, behavior,
         var args = Array.prototype.slice.call(arguments, 1);
         selector = (self.selector || '') + ' ' + (selector || '');
         selector = _jQuery.trim(selector) || '*';
-        angular.forEach(args, function(value, index) {
+        _.each(args, function(value, index) {
           selector = selector.replace('$' + (index + 1), value);
         });
         var result = $document.find(selector);
         if (selector.match(NG)) {
-          angular.forEach(['[ng-','[data-ng-','[x-ng-'], function(value, index){
+          _.each(['[ng-','[data-ng-','[x-ng-'], function(value, index){
             result = result.add(selector.replace(NG, value), $document);
           });
         }
@@ -25856,7 +25856,7 @@ angular.scenario.dsl('element', function() {
     });
   };
 
-  angular.forEach(KEY_VALUE_METHODS, function(methodName) {
+  _.each(KEY_VALUE_METHODS, function(methodName) {
     chain[methodName] = function(name, value) {
       var args = arguments,
           futureName = (args.length == 1)
@@ -25870,7 +25870,7 @@ angular.scenario.dsl('element', function() {
     };
   });
 
-  angular.forEach(VALUE_METHODS, function(methodName) {
+  _.each(VALUE_METHODS, function(methodName) {
     chain[methodName] = function(value) {
       var args = arguments,
           futureName = (args.length == 0)
@@ -26061,7 +26061,7 @@ angular.scenario.output('html', function(context, runner, model) {
    */
   function findContext(spec) {
     var currentContext = context.find('#specs');
-    angular.forEach(model.getDefinitionPath(spec), function(defn) {
+    _.each(model.getDefinitionPath(spec), function(defn) {
       var id = 'describe-' + defn.id;
       if (!context.find('#' + id).length) {
         currentContext.find('> .test-children').append(
@@ -26131,7 +26131,7 @@ angular.scenario.output('xml', function(context, runner, model) {
    * @param {Object} tree node to serialize
    */
   function serializeXml(context, tree) {
-     angular.forEach(tree.children, function(child) {
+     _.each(tree.children, function(child) {
        var describeContext = $('<describe></describe>');
        describeContext.attr('id', child.id);
        describeContext.attr('name', child.name);
@@ -26140,14 +26140,14 @@ angular.scenario.output('xml', function(context, runner, model) {
      });
      var its = $('<its></its>');
      context.append(its);
-     angular.forEach(tree.specs, function(spec) {
+     _.each(tree.specs, function(spec) {
        var it = $('<it></it>');
        it.attr('id', spec.id);
        it.attr('name', spec.name);
        it.attr('duration', spec.duration);
        it.attr('status', spec.status);
        its.append(it);
-       angular.forEach(spec.steps, function(step) {
+       _.each(spec.steps, function(step) {
          var stepContext = $('<step></step>');
          stepContext.attr('name', step.name);
          stepContext.attr('duration', step.duration);
@@ -26177,7 +26177,7 @@ var $runner = new angular.scenario.Runner(window),
     script = scripts[scripts.length - 1],
     config = {};
 
-angular.forEach(script.attributes, function(attr) {
+_.each(script.attributes, function(attr) {
   var match = attr.name.match(/ng[:\-](.*)/);
   if (match) {
     config[match[1]] = attr.value || true;

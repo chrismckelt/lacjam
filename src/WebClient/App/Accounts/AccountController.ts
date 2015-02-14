@@ -1,11 +1,9 @@
 ﻿/// <reference path="../_references.ts" />
-module app.controllers {
+export class AccountController //extends LacjamModule.Base.ControllerBase
+{
+    public static $inject = ["$scope"];
 
-    export class AccountController extends app.base.ControllerBase {
-        public static $inject = ["$scope"];
-
-        constructor($scope: any) {
-            super();
-        }
+    constructor($scope: any) {
+        // super();
     }
 }

@@ -94,7 +94,7 @@ if (WebComponents.flags.shadow) {
     var nativePrototypeTable = new WeakMap();
     var wrappers = Object.create(null);
     function detectEval() {
-      if (typeof chrome !== "undefined" && chrome.app && chrome.app.runtime) {
+      if (typeof chrome !== "undefined" && chrome.lacjam && chrome.lacjam.runtime) {
         return false;
       }
       if (navigator.getDeviceStorage) {

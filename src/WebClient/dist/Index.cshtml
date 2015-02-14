@@ -17,22 +17,29 @@
     <meta name="author" content="http://cherrybytesoftware.com/">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="jspm_packages/github/twbs/bootstrap@3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="jspm_packages/npm/font-awesome@4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+      <!-- Main Inspinia CSS files -->
+    <link href="content/css/animate.css" rel="stylesheet">
+    <link href="content/css/style.css" rel="stylesheet">
+
+    <link href="/Content/dialogs.css" rel="stylesheet" />
+
+
+    <link href="/Content/toastr.css" rel="stylesheet" />
+    <link href="/Content/app.css" rel="stylesheet" />
+
   </head>
-<body aurelia-main>
+
+<body aurelia-app="app" es5>
     <div class="splash">
         <div class="message">smsf minder</div>
         <i class="fa fa-spinner fa-spin"></i>
     </div>
-    <script src="jspm_packages/system.js"></script>
-    <script src="config.js"></script>
-    <script>
-        //System.baseUrl = '/';  //NOTE: You can move this into the config.js file, if you like.
-        System.import('./app');
-        System.import('aurelia-bootstrapper').catch(console.error.bind(console));
-    </script>
+    <script src="scripts/core-js/client/core.js "></script>
+    <script src="scripts/requirejs/require.js" data-main="main"></script>
+
+
+
+
 </body>
 </html>
 

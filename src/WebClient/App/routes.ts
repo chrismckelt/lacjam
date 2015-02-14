@@ -1,149 +1,67 @@
 ﻿/// <reference path="_references.ts" />
 "use strict";
 
-module app {
-
-
-    ///https://github.com/angular-ui/ui-router/wiki
-    export class Routes {
+///https://github.com/angular-ui/ui-router/wiki
+ export class Routes {
 
         // start page
-        public static home: ng.ui.IState = {
+        public static home: any = {
             name: "index",
             url: "/",
             templateUrl: "app/Index/IndexView.cshtml",
-            controller: app.controllers.IndexController,
+           // controller: lacjam.controllers.IndexController,
             data: {
                 isVisible: true,
             }
         };
 
-        public static dashboard: ng.ui.IState = {
+        public static dashboard: any = {
             name: "dashboard",
             url: "/dashboard",
             templateUrl: "app/Dashboard/DashboardView.cshtml",
-            controller: app.controllers.DashboardController,
+//controller: lacjam.controllers.DashboardController,
             data: {
                 isVisible: true,
             }
         };
 
-        public static clients: ng.ui.IState = {
+        public static clients: any = {
             name: "clients",
             url: "/clients",
             templateUrl: "app/clients/clientView.cshtml",
-            controller: app.controllers.ClientController,
+          //  controller: lacjam.controllers.ClientController,
             data: {
                 isVisible: true,
             }
         };
 
-        public static accounts: ng.ui.IState = {
+        public static accounts: any = {
             name: "accounts",
             url: "/accounts",
             templateUrl: "app/accounts/accountView.cshtml",
-            controller: app.controllers.AccountController,
+           // controller: lacjam.controllers.AccountController,
             data: {
                 isVisible: true,
             }
         };
 
-        public static documents: ng.ui.IState = {
+        public static documents: any = {
             name: "documents",
             url: "/documents",
             templateUrl: "app/documents/documentview.cshtml",
-            controller: app.controllers.DocumentController,
+          //  controller: lacjam.controllers.DocumentController,
             data: {
                 isVisible: true,
             }
         };
 
     
-        public static metadataDefinitions: ng.ui.IState = {
-            name: "metadatadefinitions",
-            url: "/metadatadefinitions",
-            templateUrl: "app/metadatadefinitions/MetadataDefinitionView.cshtml",
-            controller: app.controllers.MetadataDefinitionController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static metadataDefinitionEdit: ng.ui.IState = {
-            name: "metadatadefinitionsedit",
-            url: "/metadatadefinitionsedit",
-            templateUrl: "app/metadatadefinitions/MetadataDefinitionEdit.cshtml",
-            controller: app.controllers.MetadataDefinitionEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static metadataDefinitionUpdate: ng.ui.IState = {
-            name: "metadatadefinitionsupdate",
-            url: "/metadatadefinitionsedit/{identity}",
-            templateUrl: "app/metadatadefinitions/MetadataDefinitionEdit.cshtml",
-            controller: app.controllers.MetadataDefinitionEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static entities: ng.ui.IState = {
-            name: "entities",
-            url: "/entities",
-            templateUrl: "app/entities/EntityView.cshtml",
-            controller: app.controllers.EntityController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static entityCreate: ng.ui.IState = {
-            name: "entitycreate",
-            url: "/entitycreate",
-            templateUrl: "app/entities/EntityEdit.cshtml",
-            controller: app.controllers.EntityEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static entityEdit: ng.ui.IState = {
-            name: "entityedit",
-            url: "/entityedit/{identity}",
-            templateUrl: "app/entities/EntityEdit.cshtml",
-            controller: app.controllers.EntityEditController,
-            data: {
-                isVisible: true,
-            }
-        };
-
-        public static entityDuplicate: ng.ui.IState = {
-            name: "entityduplicate",
-            url: "/entityedit/{identity}/duplicate",
-            templateUrl: "app/entities/EntityEdit.cshtml",
-            controller: app.controllers.EntityEditController,
-            data: {
-                isVisible: true,
-                duplicate: true
-            }
-        };
-
-        public static search: ng.ui.IState = {
-            name: "search",
-            url: "/search",
-            templateUrl: 'app/Search/Search.cshtml',
-            data:
-            {
-                isVisible: true,
-            }
-        };
 
 
-        public static getRoutes(): Array<ng.ui.IState> {
 
-            var list = new Array<ng.ui.IState>();
+        public static getRoutes(): Array<any> {
+
+            var list = new Array<any>();
 
             //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
             list.push(
@@ -151,14 +69,8 @@ module app {
                 Routes.dashboard,
                 Routes.clients,
                 Routes.accounts,
-                Routes.documents,
-                Routes.metadataDefinitions,
-                Routes.metadataDefinitionEdit,
-                Routes.metadataDefinitionUpdate,
-                Routes.entities,
-                Routes.entityCreate,
-                Routes.entityEdit,
-                Routes.entityDuplicate
+                Routes.documents
+   
             );
 
 
@@ -169,7 +81,7 @@ module app {
             //            name: route.config.title,
             //            url: "/" + route.url,
             //            templateUrl: route.config.templateUrl,
-            //            controller: app.controllers[route.config.title],
+            //            controller: lacjam.controllers[route.config.title],
             //            params: route.config.settings,
             //        };
 
@@ -180,10 +92,10 @@ module app {
 
 
             //  });
-            app.log.debug("total routes -> " + list.length.toLocaleString());
+            //lacjam.log.debug("total routes -> " + list.length.toLocaleString());
             return list;
 
         }
 
     }
-}
+

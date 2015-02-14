@@ -1,0 +1,46 @@
+@using Lacjam.WebClient
+<template>
+    <!-- wrapper start-->
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <import from='./app/common/navigation' as="nav-bar"></import>
+        <nav-bar router.bind="router"></nav-bar>
+        <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+
+            <!-- Page wrlacjamer -->
+            <div ng-include="'/common/navigationtop.cshtml'"></div>
+
+            <!-- Main view  -->
+            <div class="page-host">
+                <router-view></router-view>
+            </div>
+
+            <!-- Footer -->
+            <section>
+                <div class="footer">
+
+                    @if (HttpContext.Current.IsDebuggingEnabled)
+                    {
+                    <ul class="list-inline">
+                        <li>{{footer.state.url}}</li>
+                    </ul>
+                    }
+
+                    <footer class="pull-right">
+                        <ul class="list-inline">
+                            <li>&copy; smsf minder 2014</li>
+                            <li><a href="/#/version">Version @System.Reflection.Assembly.GetAssembly(typeof (BundleConfig)).GetName().Version.ToString()</a></li>
+                        </ul>
+                    </footer>
+                </div>
+            </section>
+        </div>
+
+    </div>
+    <!-- Wrlacjamer end-->
+
+    <div>
+        <span id="spinner" data-cc-spinner="{radius:30, width:3, length: 10, radius: 9, corners: 1, rotate: 29, speed: 1}" spinner-key="spinner" style="position: absolute; display: block; top: 50%; left: 50%;"></span>
+    </div>
+</template>

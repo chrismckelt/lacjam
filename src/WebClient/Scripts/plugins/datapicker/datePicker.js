@@ -505,7 +505,7 @@
         };
     }]);
 
-    angular.module("datePicker").run(["$templateCache", function($templateCache) {
+   //  angular.module("datePicker").run(["$templateCache", function($templateCache) {
 
         $templateCache.put("templates/datepicker.html",
             "<div ng-switch=\"view\">\r" +

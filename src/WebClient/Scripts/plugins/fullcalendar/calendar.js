@@ -157,7 +157,7 @@ angular.module('ui.calendar', [])
             angular.extend(config, uiCalendarConfig);
             angular.extend(config, calendarSettings);
 
-            angular.forEach(config, function(value,key){
+            _.each(config, function(value,key){
                 if (typeof value === 'function'){
                     config[key] = wrapFunctionWithScopeApply(config[key]);
                 }

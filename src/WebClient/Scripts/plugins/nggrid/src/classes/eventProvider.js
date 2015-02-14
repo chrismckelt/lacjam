@@ -38,7 +38,7 @@
         if (!grid.config.jqueryUIDraggable) {
             //Fix for FireFox. Instead of using jQuery on('dragstart', function) on find, we have to use addEventListeners for each column.
             var columns = grid.$root.find('.ngHeaderSortColumn'); //have to iterate if using addEventListener
-            angular.forEach(columns, function(col){
+            _.each(columns, function(col){
                 col.setAttribute('draggable', 'true');
                 //jQuery 'on' function doesn't have  dataTransfer as part of event in handler unless added to event props, which is not recommended
                 //See more here: http://api.jquery.com/category/events/event-object/

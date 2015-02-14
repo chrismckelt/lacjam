@@ -53,7 +53,7 @@ var ngAggregate = function (aggEntity, rowFactory, rowHeight) {
             var i = 0;
             var recurse = function(cur) {
                 if (cur.aggChildren.length > 0) {
-                    angular.forEach(cur.aggChildren, function(a) {
+                    _.each(cur.aggChildren, function(a) {
                         recurse(a);
                     });
                 } else {

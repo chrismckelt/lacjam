@@ -21,7 +21,7 @@ var path = {
     typescript: 'app/**/*.ts',
     sourceMaps: 'app/**/*.map',
     html: '*.cshtml',
-    output: 'dist/',
+    output: '',
     doc: './doc'
 };
 
@@ -70,6 +70,7 @@ gulp.task('copy-typescript-output', function () {
 gulp.task('build-html', function () {
     return gulp.src(path.html)
       .pipe(changed(path.output, { extension: '.cshtml' }))
+      .pipe(changed(path.output, { extension: '.html' }))
       .pipe(gulp.dest(path.output))
       .pipe(browserSync.reload({ stream: true }));
 });

@@ -6,7 +6,7 @@
     //Setup map events from a google map object to trigger on a given element too,
     //then we just use ui-event to catch events from an element
     function bindMapEvents(scope, eventsStr, googleObject, element) {
-        angular.forEach(eventsStr.split(' '), function (eventName) {
+        _.each(eventsStr.split(' '), function (eventName) {
             //Prefix all googlemap events with 'map-', so eg 'click'
             //for the googlemap doesn't interfere with a normal 'click' event
             window.google.maps.event.addListener(googleObject, eventName, function (event) {

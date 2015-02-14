@@ -2,23 +2,23 @@
 
 /// <reference path="_references.ts" />
 
-module app.model {
+module Model {
     export class MetadataDefinitionGroupResource {
-        identity: app.model.Guid;
+        identity: any;
         name: string;
         description: string;
-        tracking: app.model.TrackingBase;
+        tracking: any;
         definitions: Array<any>;
     }
 
     export class MetadataDefinitionResource {
-        identity: app.model.Guid;
+        identity: any;
         name: string;
         description: string;
         dataType: string;
         regex: string;
         values: Array<string>;
-        tracking: app.model.TrackingBase;
+        tracking: any;
     }
 
     export interface Guid extends String {
@@ -49,7 +49,7 @@ module app.model {
     }
 
     export class EntityMetadataDefintionResource {
-        metadataDefinitionIdentity: app.model.Guid;
+        metadataDefinitionIdentity: any;
         name: string;
         dataType: string;
         regex: string;
@@ -57,5 +57,5 @@ module app.model {
     }
 }
 
-app.registerValue('metadataDefinitionGroupResource', app.model.MetadataDefinitionGroupResource);
-app.registerValue('trackingBase', app.model.TrackingBase);
+//lacjam.registerValue('metadataDefinitionGroupResource', lacjam.model.MetadataDefinitionGroupResource);
+//lacjam.registerValue('trackingBase', any);

@@ -330,7 +330,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         if (columnDefs.length > 0) {
             var indexOffset = self.config.showSelectionCheckbox ? self.config.groups.length + 1 : self.config.groups.length;
             $scope.configGroups.length = 0;
-            angular.forEach(columnDefs, function(colDef, i) {
+            _.each(columnDefs, function(colDef, i) {
                 i += indexOffset;
                 var column = new ngColumn({
                     colDef: colDef,
@@ -363,7 +363,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             asteriskNum = 0,
             totalWidth = 0;
         totalWidth += self.config.showSelectionCheckbox ? 25 : 0;
-        angular.forEach(cols, function(col, i) {
+        _.each(cols, function(col, i) {
                 i += indexOffset;
                 var isPercent = false, t = undefined;
                 //if width is not defined, set it to a single star
@@ -411,7 +411,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             // calculate the weight of each asterisk rounded down
             var asteriskVal = Math.floor(remainigWidth / asteriskNum);
             // set the width of each column based on the number of stars
-            angular.forEach(asterisksArray, function(col) {
+            _.each(asterisksArray, function(col) {
                 var t = col.width.length;
                 $scope.columns[col.index].width = asteriskVal * t;
                 //check if we are on the last column
@@ -432,7 +432,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         // Now we check if we saved any percentage columns for calculating last
         if (percentArray.length > 0) {
             // do the math
-            angular.forEach(percentArray, function(col) {
+            _.each(percentArray, function(col) {
                 var t = col.width;
                 $scope.columns[col.index].width = Math.floor(self.rootDim.outerWidth * (parseInt(t.slice(0, -1), 10) / 100));
             });
@@ -447,7 +447,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         self.styleProvider = new ngStyleProvider($scope, self, domUtilityService);
         $scope.$watch('configGroups', function(a) {
           var tempArr = [];
-          angular.forEach(a, function(item) {
+          _.each(a, function(item) {
             tempArr.push(item.field || item);
           });
           self.config.groups = tempArr;
@@ -474,7 +474,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         // we calculate the longest data.
         var longest = col.minWidth;
         var arr = $utils.getElementsByClassName('col' + col.index);
-        angular.forEach(arr, function(elem, index) {
+        _.each(arr, function(elem, index) {
             var i;
             if (index === 0) {
                 var kgHeaderText = $(elem).find('.ngHeaderText');
@@ -527,7 +527,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             };
             if (isArr) {
                 self.clearSortingData();
-                angular.forEach(col, function (c, i) {
+                _.each(col, function (c, i) {
                     c.sortPriority = i + 1;
                     push(c);
                 });
@@ -547,7 +547,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         } else {
             self.config.sortInfo.columns = [];
         }
-        angular.forEach($scope.columns, function(c) {
+        _.each($scope.columns, function(c) {
             var i = self.config.sortInfo.fields.indexOf(c.field);
             if (i != -1) {
                 c.sortDirection = self.config.sortInfo.directions[i] || 'asc';
@@ -559,12 +559,12 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     self.sortActual = function() {
         if (!self.config.useExternalSorting) {
             var tempData = self.data.slice(0);
-            angular.forEach(tempData, function(item, i) {
+            _.each(tempData, function(item, i) {
                 item.preSortSelected = self.rowCache[self.rowMap[i]].selected;
                 item.preSortIndex = i;
             });
             sortService.Sort(self.config.sortInfo, tempData);
-            angular.forEach(tempData, function(item, i) {
+            _.each(tempData, function(item, i) {
                 self.rowCache[i].entity = item;
                 self.rowCache[i].selected = item.preSortSelected;
                 self.rowMap[item.preSortIndex] = i;
@@ -576,13 +576,13 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
 
     self.clearSortingData = function (col) {
         if (!col) {
-            angular.forEach(self.lastSortedColumns, function (c) {
+            _.each(self.lastSortedColumns, function (c) {
                 c.sortDirection = "";
                 c.sortPriority = null;
             });
             self.lastSortedColumns = [];
         } else {
-            angular.forEach(self.lastSortedColumns, function (c) {
+            _.each(self.lastSortedColumns, function (c) {
                 if (col.index != c.index) {
                     c.sortDirection = "";
                     c.sortPriority = null;
@@ -601,7 +601,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         }
     };
     self.fixGroupIndexes = function() {
-        angular.forEach($scope.configGroups, function(item, i) {
+        _.each($scope.configGroups, function(item, i) {
             item.groupIndex = i + 1;
         });
     };

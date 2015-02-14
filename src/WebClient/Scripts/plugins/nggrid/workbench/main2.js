@@ -25,7 +25,7 @@ function userController($scope, $timeout) {
     };
 	
 	$scope.callMethod = function(){
-		angular.forEach($scope.myData, function(item, index){
+		_.each($scope.myData, function(item, index){
 			if(typeof item == 'object' && item.hasOwnProperty('SeasonCode')){
 				if(item.SeasonCode.hasOwnProperty('test') && item.SeasonCode.test == 'nestedObject2'){
 					$scope.selections.push(item);

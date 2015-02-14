@@ -71,7 +71,7 @@ var /** holds major version number for IE or NaN for real browsers */
 
 /**
  * @ngdoc function
- * @name angular.forEach
+ * @name _.each
  * @function
  *
  * @description
@@ -80,12 +80,12 @@ var /** holds major version number for IE or NaN for real browsers */
  * is the value of an object property or an array element and `key` is the object property key or
  * array element index. Specifying a `context` for the function is optional.
  *
- * Note: this function was previously known as `angular.foreach`.
+ * Note: this function was previously known as `_.each`.
  *
    <pre>
      var values = {name: 'misko', gender: 'male'};
      var log = [];
-     angular.forEach(values, function(value, key){
+     _.each(values, function(value, key){
        this.push(key + ': ' + value);
      }, log);
      expect(log).toEqual(['name: misko', 'gender:male']);

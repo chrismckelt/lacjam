@@ -15,14 +15,14 @@
             gridWidth: self.scope.totalRowWidth(),
             data: []
         };
-        angular.forEach(self.scope.columns, function (col) {
+        _.each(self.scope.columns, function (col) {
             if (col.visible) {
                 ret.columns.push(col.displayName);
                 ret.columnWidths.push(col.width);
             }
         });
-        angular.forEach(self.grid.filteredRows, function (item) {
-            angular.forEach(self.scope.columns, function (col) {
+        _.each(self.grid.filteredRows, function (item) {
+            _.each(self.scope.columns, function (col) {
                 if (col.visible) {
                     var obj = ng.utils.evalProperty(item, col.field);
                     var val = null;

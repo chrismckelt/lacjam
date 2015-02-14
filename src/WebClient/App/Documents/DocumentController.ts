@@ -1,19 +1,18 @@
 ﻿/// <reference path="../_references.ts" />
-module app.controllers {
-    "use strict";
-    export class DocumentController
-        extends app.base.ModelBase
-        implements IController {
+"use strict";
+export class DocumentController
+//extends LacjamModule.Base.ControllerBase
+// implements LacjamModule.IController
+{
 
-        public static $inject = ["$scope", "$location"];
-  
-        constructor(
-            public $scope: any,
-            public $location: ng.ILocationService
-            ) {
+    public static $inject = ["$scope", "$location"];
 
-            super();
+    constructor(
+        public $scope: any,
+        public $location: any
+        ) {
 
-        }
+        //  super();
+
     }
 }

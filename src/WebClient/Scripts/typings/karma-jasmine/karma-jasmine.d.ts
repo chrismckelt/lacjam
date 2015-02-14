@@ -1,4 +1,3 @@
-/// <reference path="../angularjs/angular-scenario.d.ts" />
 // Type definitions for karma-jasmine plugin
 // Project: https://github.com/karma-runner/karma-jasmine
 // Definitions by: Michel Salib <https://github.com/michelsalib>

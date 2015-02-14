@@ -32,6 +32,7 @@ namespace Lacjam.WebClient
             ignoreList.Ignore("*.min.css", OptimizationMode.WhenDisabled);
             ignoreList.Ignore("*jasmine-html.js*");
             ignoreList.Ignore("*jasmine.js*");
+            ignoreList.Ignore("*angular*");
         }
 
 
@@ -86,8 +87,9 @@ namespace Lacjam.WebClient
 
 
             var typeScriptBundle = new CustomScriptBundle("~/bundles/ts");    //// Typescript generatred locally via visual studio and checked in - not done on the fly
-
+            typeScriptBundle.Include("~/lacjam.js");
             typeScriptBundle.IncludeDirectory("~/app", "*.js", true);
+        
 
             typeScriptBundle.Transforms.Add(jsTransformer);
 
@@ -203,24 +205,9 @@ namespace Lacjam.WebClient
 
             var uptop = new List<string>
             {
-                "jquery-2.1.1.min",
-                "jquery-ui-1.10.4.min",
-                "underscore",
-                "modernizr-2.6.2",
-                "q",
-                "respond",
                 "moment",
-                "angular",
                 "spin",
                 "toastr",
-                "angular-ui-router",
-                "angular-ui",
-                "angular-animate",
-                "angular-sanitize",
-                "angular-cookies",
-                "angular-loader",
-                "angular-messages",
-                "angular-resource",
                 "bootstrap",
                 "ui-utils",
                 "ui-utils-ieshiv",

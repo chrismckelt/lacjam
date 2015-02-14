@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html ng-app="myApp">
     <head lang="en">
         <meta charset="utf-8">
@@ -20,7 +20,7 @@
         <script type="text/javascript">
             // main.js
             var app = angular.module('myApp', ['ngGrid']);
-            app.controller('MyCtrl', function($scope) {
+            lacjam.controller('MyCtrl', function($scope) {
                 csvOpts = { columnOverrides: { obj: function(o) { return o.a + '|' +  o.b; } } }
                 hgtOpts = { minHeight: 200 }  ;
                 $scope.myDataSmall = [ {hasThing: false,  obj: {a:5, b:6}, name: "Moroni", age: 50, ln: 'sdf'}
