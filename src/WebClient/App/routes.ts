@@ -1,7 +1,6 @@
 ﻿/// <reference path="../_references.ts" />
 "use strict";
 
-///https://github.com/angular-ui/ui-router/wiki
  export class Routes {
 
         // start page

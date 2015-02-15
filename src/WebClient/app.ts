@@ -12,7 +12,8 @@ export class App {
       config.map([
         { route: ["", "home"],    moduleId: "app/index",               nav: true,  title: "home" },
         { route: "login",         moduleId: "app/login",              nav: false, title: "login" },
-        { route: "accounts", moduleId: routes.Routes.accounts.moduleId,  nav: true,  title: routes.Routes.accounts.title}
+        { route: "accounts", moduleId: routes.Routes.accounts.moduleId, nav: true, title: routes.Routes.accounts.title },
+        routes.Routes.dashboard
 
       ]);
     });
