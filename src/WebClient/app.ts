@@ -8,13 +8,8 @@ export class App {
 
   constructor(private router: aur.Router) {
     this.router.configure((config) => {
-      config.title = "Aurelia demo";
-      config.map([
-        { route: ["", "home"],    moduleId: "app/index",               nav: true,  title: "home" },
-        { route: "login",         moduleId: "app/login",              nav: false, title: "login" },
-        { route: "accounts", moduleId: routes.Routes.accounts.moduleId,  nav: true,  title: routes.Routes.accounts.title}
-
-      ]);
+      config.title = "smsf minder";
+      config.map(routes.Routes.getRoutes());
     });
   }
 }

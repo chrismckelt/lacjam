@@ -43,6 +43,9 @@
     "vinyl-paths": "^1.0.0"
   },
   "jspm": {
+    "directories": {
+      "lib": "lib"
+    },
     "dependencies": {
       "aurelia-bootstrapper": "^0.9.1",
       "aurelia-http-client": "^0.4.3",

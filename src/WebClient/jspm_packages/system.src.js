@@ -1,5 +1,5 @@
 /*
- * SystemJS v0.12.1
+ * SystemJS v0.13.2
  */
 
 (function($__global) {
@@ -307,7 +307,7 @@ function meta(loader) {
 function register(loader) {
   if (typeof indexOf == 'undefined')
     indexOf = Array.prototype.indexOf;
-  if (typeof __eval == 'undefined')
+  if (typeof __eval == 'undefined' || typeof document != 'undefined' && !document.addEventListener)
     __eval = 0 || eval; // uglify breaks without the 0 ||
 
   loader._extensions = loader._extensions || [];
@@ -862,28 +862,26 @@ function es6(loader) {
 
   loader._extensions.push(es6);
 
-  var parser, parserName, parserModule, parserRuntimeModule, parserRuntimeGlobal;
+  var transpiler, transpilerName, transpilerModule, transpilerRuntimeModule, transpilerRuntimeGlobal;
 
   var isBrowser = typeof window != 'undefined';
 
-  function setParser(name) {
-    parser = name;
-    parserName = this.parser == '6to5' ? 'to5' : parser;
-    parserModule = '@' + parser;
-    if (parserName == 'traceur') {
-      parserRuntimeModule = '@' + parser + '-runtime';
-      parserRuntimeGlobal = '$' + parserName + 'Runtime';
-    }
+  function setTranspiler(name) {
+    transpiler = name;
+    transpilerName = transpiler == '6to5' ? 'to5' : transpiler;
+    transpilerModule = '@' + transpiler;
+    transpilerRuntimeModule = '@' + transpiler + '-runtime';
+    transpilerRuntimeGlobal = (transpilerName == 'to5' ? transpilerName : '$' + transpilerName) + 'Runtime';
 
-    // auto-detection of paths to loader parser files
+    // auto-detection of paths to loader transpiler files
     if (typeof $__curScript != 'undefined') {
-      if (!loader.paths[parserModule])
-        loader.paths[parserModule] = $__curScript.getAttribute('data-' + loader.parser + '-src')
+      if (!loader.paths[transpilerModule])
+        loader.paths[transpilerModule] = $__curScript.getAttribute('data-' + loader.transpiler + '-src')
           || ($__curScript.src ? $__curScript.src.substr(0, $__curScript.src.lastIndexOf('/') + 1)
             : loader.baseURL + (loader.baseURL.lastIndexOf('/') == loader.baseURL.length - 1 ? '' : '/')
-            ) + loader.parser + '.js';
-      if (parserRuntimeModule && !loader.paths[parserRuntimeModule])
-        loader.paths[parserRuntimeModule] = $__curScript.getAttribute('data-' + loader.parser + '-runtime-src') || loader.paths[parserModule].replace(/\.js$/, '-runtime.js');
+            ) + loader.transpiler + '.js';
+      if (!loader.paths[transpilerRuntimeModule])
+        loader.paths[transpilerRuntimeModule] = $__curScript.getAttribute('data-' + loader.transpiler + '-runtime-src') || loader.paths[transpilerModule].replace(/\.js$/, '-runtime.js');
     }
   }
 
@@ -892,31 +890,30 @@ function es6(loader) {
 
   var loaderTranslate = loader.translate;
   loader.translate = function(load) {
-    // update parser info if necessary
-    if (this.parser !== parser)
-      setParser(this.parser);
+    // update transpiler info if necessary
+    if (this.transpiler !== transpiler)
+      setTranspiler(this.transpiler);
 
     var loader = this;
 
-    if (load.name == parserModule || load.name == parserRuntimeModule)
+    if (load.name == transpilerModule || load.name == transpilerRuntimeModule)
       return loaderTranslate.call(loader, load);
 
     // detect ES6
     else if (load.metadata.format == 'es6' || !load.metadata.format && load.source.match(es6RegEx)) {
       load.metadata.format = 'es6';
 
-      // dynamically load parser for ES6 if necessary
-      if (isBrowser && !loader.global[parserName]) {
-        return loader['import'](parserModule).then(function() {
+      // dynamically load transpiler for ES6 if necessary
+      if (isBrowser && !loader.global[transpilerName])
+        return loader['import'](transpilerModule).then(function() {
           return loaderTranslate.call(loader, load);
         });
-      }
     }
 
-    // dynamically load parser runtime if necessary
-    if (isBrowser && parserRuntimeGlobal && !loader.global[parserRuntimeGlobal] && load.source.indexOf(parserRuntimeGlobal) != -1) {
+    // dynamically load transpiler runtime if necessary
+    if (isBrowser && !loader.global[transpilerRuntimeGlobal] && load.source.indexOf(transpilerRuntimeGlobal) != -1) {
       var System = $__global.System;
-      return loader['import'](parserRuntimeModule).then(function() {
+      return loader['import'](transpilerRuntimeModule).then(function() {
         // traceur runtme annihilates System global
         $__global.System = System;
         return loaderTranslate.call(loader, load);
@@ -926,11 +923,11 @@ function es6(loader) {
     return loaderTranslate.call(loader, load);
   }
 
-  // always load parser as a global
+  // always load transpiler as a global
   var loaderInstantiate = loader.instantiate;
   loader.instantiate = function(load) {
     var loader = this;
-    if (isBrowser && (load.name == parserModule || load.name == parserRuntimeModule)) {
+    if (isBrowser && (load.name == transpilerModule || load.name == transpilerRuntimeModule)) {
       loader.__exec(load);
       return {
         deps: [],
@@ -1710,7 +1707,7 @@ function plugins(loader) {
         else
           return Promise.resolve(loader.locate(load))
           .then(function(address) {
-            return address.substr(0, address.length - 3);
+            return address.replace(/\.js$/, '');
           });
       });
     }
@@ -1736,7 +1733,7 @@ function plugins(loader) {
     var loader = this;
     if (load.metadata.plugin && load.metadata.plugin.translate)
       return Promise.resolve(load.metadata.plugin.translate.call(loader, load)).then(function(result) {
-        if (result)
+        if (typeof result == 'string')
           load.source = result;
         return loaderTranslate.call(loader, load);
       });
@@ -2077,8 +2074,7 @@ function versions(loader) {
 
     // strip the version before applying map config
     var stripVersion, stripSubPathLength;
-    var pluginIndex = name.lastIndexOf('!');
-    var versionIndex = (pluginIndex == -1 ? name : name.substr(0, pluginIndex)).lastIndexOf('@');
+    var versionIndex = name.indexOf('!') != -1 ? 0 : name.lastIndexOf('@');
     if (versionIndex > 0) {
       var parts = name.substr(versionIndex + 1, name.length - versionIndex - 1).split('/');
       stripVersion = parts[0];
@@ -2089,7 +2085,7 @@ function versions(loader) {
     // run all other normalizers first
     return Promise.resolve(loaderNormalize.call(this, name, parentName, parentAddress)).then(function(normalized) {
       
-      var index = normalized.indexOf('@');
+      var index = normalized.indexOf('!') != -1 ? 0 : normalized.indexOf('@');
 
       // if we stripped a version, and it still has no version, add it back
       if (stripVersion && (index == -1 || index == 0)) {

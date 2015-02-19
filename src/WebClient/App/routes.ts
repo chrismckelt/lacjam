@@ -19,26 +19,26 @@
             title: "dashboard"
         };
 
-        public static clients: any = {
-            route: "clients",
-            moduleId: "/clients",
-            nav: true,
-            title: "clients"
-        };
+        //public static clients: any = {
+        //    route: "clients",
+        //    moduleId: "/clients",
+        //    nav: true,
+        //    title: "clients"
+        //};
 
-        public static accounts: any = {
-            route: "accounts",
-            moduleId: "/accounts",
-            nav: true,
-            title: "accounts"
-        };
+        //public static accounts: any = {
+        //    route: "accounts",
+        //    moduleId: "/accounts",
+        //    nav: true,
+        //    title: "accounts"
+        //};
 
-        public static documents: any = {
-            route: "documents",
-            moduleId: "/documents",
-            nav: true,
-            title: "documents"
-        };
+        //public static documents: any = {
+        //    route: "documents",
+        //    moduleId: "/documents",
+        //    nav: true,
+        //    title: "documents"
+        //};
 
 
         public static getRoutes(): Array<any> {
@@ -49,9 +49,9 @@
             list.push(
                 Routes.home,
                 Routes.dashboard,
-                Routes.clients,
-                Routes.accounts,
-                Routes.documents
+                //Routes.clients,
+                //Routes.accounts,
+                //Routes.documents
    
             );
 
