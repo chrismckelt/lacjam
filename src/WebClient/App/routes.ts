@@ -1,7 +1,6 @@
 ﻿/// <reference path="../_references.ts" />
 "use strict";
 
-///https://github.com/angular-ui/ui-router/wiki
  export class Routes {
 
         // start page
@@ -48,7 +47,7 @@
             //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
             list.push(
                 Routes.home,
-                Routes.dashboard,
+                Routes.dashboard
                 //Routes.clients,
                 //Routes.accounts,
                 //Routes.documents
