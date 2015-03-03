@@ -1,4 +1,4 @@
-/// <reference path="../app/_references.ts"/>
+
 /// <reference path="../scripts/typings/jasmine/jasmine.ts" />
 /// <reference path="../scripts/typings/karma-jasmine/karma-jasmine.d.ts" />
 ///* tslint:disable */

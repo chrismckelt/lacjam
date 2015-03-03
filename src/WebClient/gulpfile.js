@@ -1,9 +1,8 @@
-/// <vs AfterBuild='vs-build-Debug' Clean='clean' />
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
-var to5 = require('gulp-6to5');
+var tsc = require('gulp-typescript-compiler');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var yuidoc = require("gulp-yuidoc");
@@ -14,15 +13,13 @@ var bump = require('gulp-bump');
 var browserSync = require('browser-sync');
 var changed = require('gulp-changed');
 var plumber = require('gulp-plumber');
-var replace = require('gulp-replace');
+var tools = require('aurelia-tools');
 
 var path = {
-    source: 'app/**/*.js',
-    typescript: 'app/**/*.ts',
-    sourceMaps: 'app/**/*.map',
-    html: '*.cshtml',
-    output: '',
-    doc: './doc'
+    sourceTS: './app/**/*.ts',
+    html: './app/**/*.cshtml',
+    style: './content/**/*.css',
+    output: './'
 };
 
 var compilerOptions = {
@@ -36,79 +33,39 @@ var compilerOptions = {
     sourceFileName: '',
     sourceRoot: '',
     moduleRoot: '',
-    amdModuleIds: false,
+    moduleIds: false,
     runtime: false,
-    comments: false,
-    experimental: false
+    experimental: false,
+    format: {
+        comments: false,
+        compact: false,
+        indent: {
+            parentheses: true,
+            adjustMultilineComment: true,
+            style: "  ",
+            base: 0
+        }
+    }
 };
 
 var jshintConfig = { esnext: true };
 
-gulp.task('clean', function () {
-    return gulp.src([path.output])
-       .pipe(vinylPaths(del));
-});
-
 gulp.task('build-amd', function () {
-    return gulp.src(path.source)
-      .pipe(plumber())
-      .pipe(changed(path.output, { extension: '.js' }))
-      .pipe(to5(assign({}, compilerOptions, { modules: 'amd' })))
-      .pipe(gulp.dest(path.output))
-      .pipe(browserSync.reload({ stream: true }));
-});
-
-gulp.task('copy-typescript-output', function () {
-    return gulp.src(path.source)
-      .pipe(plumber())
-      .pipe(changed(path.output, { extension: '.js' }))
-      .pipe(replace('sourceMappingURL=', 'sourceMappingURL=../src/'))
-      .pipe(gulp.dest(path.output))
-      .pipe(browserSync.reload({ stream: true }));
-});
-
-gulp.task('build-html', function () {
-    return gulp.src(path.html)
-      .pipe(changed(path.output, { extension: '.cshtml' }))
-      .pipe(changed(path.output, { extension: '.html' }))
-      .pipe(gulp.dest(path.output))
-      .pipe(browserSync.reload({ stream: true }));
-});
-
-gulp.task('lint', function () {
-    return gulp.src(path.source)
-      .pipe(jshint(jshintConfig))
-      .pipe(jshint.reporter(stylish));
-});
-
-gulp.task('doc', function () {
-    return gulp.src(path.source)
-      .pipe(yuidoc.parser(null, 'api.json'))
-      .pipe(gulp.dest(path.doc));
-});
-
-gulp.task('bump-version', function () {
-    return gulp.src(['./package.json'])
-      .pipe(bump({ type: 'patch' })) //major|minor|patch|prerelease
-      .pipe(gulp.dest('./'));
-});
-
-gulp.task('changelog', function (callback) {
-    var pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
-
-    return changelog({
-        repository: pkg.repository.url,
-        version: pkg.version,
-        file: path.doc + '/CHANGELOG.md'
-    }, function (err, log) {
-        fs.writeFileSync(path.doc + '/CHANGELOG.md', log);
-    });
+    return gulp.src(path.sourceTS)
+        .pipe(plumber())
+        .pipe(tsc({
+            module: 'amd',
+            target: 'ES5',
+            sourcemap: false,
+            logErrors: true
+        }))
+        .pipe(gulp.dest(path.output))
+        .pipe(browserSync.reload({ stream: true }));
 });
 
 gulp.task('build', function (callback) {
     return runSequence(
-      'clean',
-      ['copy-typescript-output', 'build-html'],
+      'build-amd',
       callback
     );
 });
@@ -127,27 +84,12 @@ gulp.task('serve', ['build'], function (done) {
     }, done);
 });
 
+function reportChange(event) {
+    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+}
+
 gulp.task('watch', ['serve'], function () {
-    var watcher = gulp.watch([path.source, path.html], ['build']);
-    watcher.on('change', function (event) {
-        console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-    });
-});
-
-gulp.task('vs-build-Debug', ['build'], function () {
-    var watcher = gulp.watch([path.source, path.html], ['build']);
-    watcher.on('change', function (event) {
-        console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-    });
-});
-
-gulp.task('prepare-release', function (callback) {
-    return runSequence(
-      'build',
-      'lint',
-      'bump-version',
-      'doc',
-      'changelog',
-      callback
-    );
+    gulp.watch(path.sourceTS, ['build-amd', browserSync.reload]).on('change', reportChange);
+    gulp.watch(path.html, [browserSync.reload]).on('change', reportChange);
+    gulp.watch(path.style, [browserSync.reload]).on('change', reportChange);
 });

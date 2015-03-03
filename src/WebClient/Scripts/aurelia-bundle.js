@@ -566,7 +566,7 @@ define('aurelia-loader-default',["exports", "aurelia-metadata", "aurelia-loader"
         key,
         exportedValue;
 
-    if (target.__useDefault) {
+    if (target && target.__useDefault) {
       target = target["default"];
     }
 

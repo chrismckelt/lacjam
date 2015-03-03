@@ -6,35 +6,35 @@
         // start page
         public static home: any = {
             route: "index",
-            moduleId: "app/Index/IndexView.cshtml",
+            moduleId: "app/Index/Index",
             nav: true,
             title: "Home"
         };
 
         public static dashboard: any = {
             route: "dashboard",
-            moduleId: "app/Dashboard/DashboardView.cshtml", 
+            moduleId: "app/Dashboard/DashboardView", 
             nav: true,
             title: "dashboard"
         };
 
         public static clients: any = {
             route: "clients",
-            moduleId: "/clients",
+            moduleId: "app/clients/clientview",
             nav: true,
             title: "clients"
         };
 
         public static accounts: any = {
             route: "accounts",
-            moduleId: "/accounts",
+            moduleId: "app/Accounts/AccountView",
             nav: true,
             title: "accounts"
         };
 
         public static documents: any = {
             route: "documents",
-            moduleId: "/documents",
+            moduleId: "app/documents/documentsview",
             nav: true,
             title: "documents"
         };
@@ -44,13 +44,13 @@
 
             var list = new Array<any>();
 
-            //http://www.ng-newsletter.com/posts/angular-ui-router.cshtml
+            //http://www.ng-newsletter.com/posts/angular-ui-router
             list.push(
                 Routes.home,
                 Routes.dashboard,
-                Routes.clients,
-                Routes.accounts,
-                Routes.documents
+                Routes.clients
+              //  Routes.accounts,
+              //  Routes.documents
    
             );
 

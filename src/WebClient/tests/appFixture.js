@@ -1,4 +1,3 @@
-/// <reference path="../app/_references.ts"/>
 /// <reference path="../scripts/typings/jasmine/jasmine.ts" />
 /// <reference path="../scripts/typings/karma-jasmine/karma-jasmine.d.ts" />
 ///* tslint:disable */
@@ -14,5 +13,5 @@
 //        console.info('routes count = ' + routes.length);
 //        expect(routes.length).toBeGreaterThan(0);
 //    });
-//});
+//}); 
 //# sourceMappingURL=appFixture.js.map
