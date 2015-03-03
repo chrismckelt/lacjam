@@ -5,7 +5,7 @@
 
         // start page
         public static home: any = {
-            route: "index",
+            route: "",
             moduleId: "./app/Index/Index",
             nav: true,
             title: "Home"
