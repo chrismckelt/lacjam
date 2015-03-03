@@ -14,12 +14,6 @@
                             <a href.bind="row.href">${row.title}</a>
                         </li>
                     </ul>
-
-                    <ul class="nav nav-second-level">
-                        <li class="loader" if.bind="router.isNavigating">
-                            <i class="fa fa-spinner fa-spin fa-2x"></i>
-                        </li>
-                    </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -28,5 +22,9 @@
                 </li>
             </ul>
         </div>
+        <div class="page-host">
+            <router-view></router-view>
+        </div>
+
     </nav>
 </template>

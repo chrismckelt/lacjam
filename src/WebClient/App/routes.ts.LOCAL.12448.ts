@@ -6,7 +6,7 @@
         // start page
         public static home: any = {
             route: "index",
-            moduleId: "./app/Index/Index",
+            moduleId: "app/Index/Index",
             nav: true,
             title: "Home"
         };
@@ -27,14 +27,14 @@
 
         public static accounts: any = {
             route: "accounts",
-            moduleId: "./app/Accounts",
+            moduleId: "app/Accounts/AccountView",
             nav: true,
             title: "accounts"
         };
 
         public static documents: any = {
             route: "documents",
-            moduleId: "./app/documents",
+            moduleId: "app/documents/documentsview",
             nav: true,
             title: "documents"
         };
@@ -46,9 +46,9 @@
 
             //http://www.ng-newsletter.com/posts/angular-ui-router
             list.push(
-                Routes.home
-                //Routes.dashboard,
-               // Routes.clients
+                Routes.home,
+                Routes.dashboard,
+                Routes.clients
               //  Routes.accounts,
               //  Routes.documents
    
