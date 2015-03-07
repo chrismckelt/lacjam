@@ -46,11 +46,11 @@
 
             //http://www.ng-newsletter.com/posts/angular-ui-router
             list.push(
-                Routes.home
-                //Routes.dashboard,
-               // Routes.clients
-              //  Routes.accounts,
-              //  Routes.documents
+                Routes.home,
+                Routes.dashboard,
+                Routes.clients,
+                Routes.accounts,
+                Routes.documents
    
             );
 
