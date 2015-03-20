@@ -5,7 +5,6 @@ define(["require", "exports"], function(require, exports) {
             this.heading = "Welcome to smsf minder!";
             this.firstName = "chris";
             this.lastName = "mckelt";
-            alert('boom index');
         }
         Object.defineProperty(Index.prototype, "fullName", {
             get: function () {

@@ -1,5 +1,5 @@
 ﻿/// <reference path="../../_references.ts" />
-export class ClientController// extends LacjamModule.Base.ControllerBase
+export class Login// extends LacjamModule.Base.ControllerBase
 {
     //public static $inject = ["$scope"];
     //public startTime = moment("12/12/2015 6:00 AM")

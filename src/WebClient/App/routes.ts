@@ -13,30 +13,30 @@
 
         public static dashboard: any = {
             route: "dashboard",
-            moduleId: "app/Dashboard/DashboardView", 
+            moduleId: "./app/Dashboards/Dashboard", 
             nav: true,
-            title: "dashboard"
+            title: "Dashboard"
         };
 
         public static clients: any = {
             route: "clients",
-            moduleId: "app/clients/clientview",
+            moduleId: "./app/clients/client",
             nav: true,
-            title: "clients"
+            title: "Clients"
         };
 
         public static accounts: any = {
             route: "accounts",
-            moduleId: "./app/Accounts",
+            moduleId: "./app/Accounts/account",
             nav: true,
-            title: "accounts"
+            title: "Accounts"
         };
 
         public static documents: any = {
             route: "documents",
-            moduleId: "./app/documents",
+            moduleId: "./app/documents/document",
             nav: true,
-            title: "documents"
+            title: "Documents"
         };
 
 

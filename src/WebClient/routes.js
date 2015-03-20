@@ -8,7 +8,7 @@ define(["require", "exports"], function(require, exports) {
             var list = new Array();
 
             //http://www.ng-newsletter.com/posts/angular-ui-router
-            list.push(Routes.home, Routes.dashboard, Routes.clients);
+            list.push(Routes.home, Routes.dashboard, Routes.clients, Routes.accounts, Routes.documents);
 
             //_.each(this.getRoutes(), (route: any) => {
             //    app.log("routes -> " + route.config.title);
@@ -29,38 +29,38 @@ define(["require", "exports"], function(require, exports) {
             return list;
         };
         Routes.home = {
-            route: "index",
-            moduleId: "app/Index/Index",
+            route: "",
+            moduleId: "./app/Index/Index",
             nav: true,
             title: "Home"
         };
 
         Routes.dashboard = {
             route: "dashboard",
-            moduleId: "app/Dashboard/DashboardView",
+            moduleId: "./app/Dashboards/Dashboard",
             nav: true,
-            title: "dashboard"
+            title: "Dashboard"
         };
 
         Routes.clients = {
             route: "clients",
-            moduleId: "app/clients/clientview",
+            moduleId: "./app/clients/client",
             nav: true,
-            title: "clients"
+            title: "Clients"
         };
 
         Routes.accounts = {
             route: "accounts",
-            moduleId: "app/Accounts/AccountView",
+            moduleId: "./app/Accounts/account",
             nav: true,
-            title: "accounts"
+            title: "Accounts"
         };
 
         Routes.documents = {
             route: "documents",
-            moduleId: "app/documents/documentsview",
+            moduleId: "./app/documents/document",
             nav: true,
-            title: "documents"
+            title: "Documents"
         };
         return Routes;
     })();

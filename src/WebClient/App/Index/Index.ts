@@ -8,7 +8,7 @@
         this.heading = "Welcome to smsf minder!";
         this.firstName = "chris";
         this.lastName = "mckelt";
-        alert('boom index');
+ 
     }
 
     get fullName() {

@@ -76,14 +76,15 @@
   <ItemGroup>
     <Content Include="app.cshtml" />
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="App\Accounts\AccountController.ts" />
-    <TypeScriptCompile Include="App\Clients\ClientController.ts" />
+    <TypeScriptCompile Include="App\Accounts\Account.ts" />
+    <TypeScriptCompile Include="App\Clients\Client.ts" />
     <TypeScriptCompile Include="App\Common\NavigationTop.ts" />
     <TypeScriptCompile Include="App\Common\Navigation.ts" />
     <TypeScriptCompile Include="App\index.ts" />
     <TypeScriptCompile Include="App\Index\Index.ts" />
-    <TypeScriptCompile Include="App\Documents\DocumentController.ts" />
+    <TypeScriptCompile Include="App\Documents\Document.ts" />
     <TypeScriptCompile Include="App\Common\footer.ts" />
+    <TypeScriptCompile Include="App\Logins\Login.ts" />
     <TypeScriptCompile Include="App\routes.ts" />
     <TypeScriptCompile Include="App\Common\Common.ts" />
     <TypeScriptCompile Include="App\model.ts" />
@@ -93,7 +94,7 @@
     <Content Include="App\Prototypes\entities.html" />
     <Content Include="App\types.js" />
     <Content Include="App\404.cshtml" />
-    <Content Include="App\Documents\DocumentList.cshtml" />
+    <Content Include="App\Documents\Document.cshtml" />
     <Content Include="App\Documents\DocumentView.cshtml" />
     <Content Include="..\common\log4net.config">
       <Link>log4net.config</Link>
@@ -107,8 +108,9 @@
     <Content Include="App\Common\Navigation.cshtml" />
     <Content Include="App\Common\NavigationTop.cshtml" />
     <Content Include="App\Common\Notify.cshtml" />
-    <Content Include="App\Clients\ClientView.cshtml" />
-    <Content Include="App\Accounts\AccountView.cshtml" />
+    <Content Include="App\Clients\Client.cshtml" />
+    <Content Include="App\Accounts\Account.cshtml" />
+    <Content Include="App\Logins\Login.cshtml" />
     <None Include="build\MSBuild.Gulp.props" />
     <None Include="build\MSBuild.Gulp.targets" />
     <None Include="build\MSBuild.Jspm.props" />
@@ -915,7 +917,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TypeLite.Net4.tt</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="App\Dashboard\DashboardController.ts" />
+    <TypeScriptCompile Include="App\Dashboards\Dashboard.ts" />
     <TypeScriptCompile Include="App\services.ts" />
     <TypeScriptCompile Include="_references.ts" />
     <TypeScriptCompile Include="lacjam.ts" />
@@ -1132,7 +1134,7 @@
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="App\Dashboard\DashboardView.cshtml" />
+    <Content Include="App\Dashboards\Dashboard.cshtml" />
     <Content Include="Scripts\TypeLite.Net4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeLite.Net4.d.ts</LastGenOutput>
