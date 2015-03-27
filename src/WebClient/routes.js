@@ -44,21 +44,21 @@ define(["require", "exports"], function(require, exports) {
 
         Routes.clients = {
             route: "clients",
-            moduleId: "./app/clients/client",
+            moduleId: "./app/Clients/Client",
             nav: true,
             title: "Clients"
         };
 
         Routes.accounts = {
             route: "accounts",
-            moduleId: "./app/Accounts/account",
+            moduleId: "./app/Accounts/Account",
             nav: true,
             title: "Accounts"
         };
 
         Routes.documents = {
             route: "documents",
-            moduleId: "./app/documents/document",
+            moduleId: "./app/Documents/Document",
             nav: true,
             title: "Documents"
         };

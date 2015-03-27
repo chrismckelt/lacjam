@@ -1,317 +1,345 @@
 ﻿<template>
+    <div class="container">
 
-<div class="container">
-    <!-- upper section -->
-    <div class="row">
-        <div class="col-sm-3">
-            <!-- left -->
-            <h3><i class="glyphicon glyphicon-briefcase"></i> Toolbox</h3>
-            <hr>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Tabs & Panels</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="index.html">Clients</a>
+                    </li>
+                    <li>
+                        <a>UI Elements</a>
+                    </li>
+                    <li class="active">
+                        <strong>Tabs & Panels</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
 
-            <ul class="nav nav-stacked">
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-link"></i> Links</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-book"></i> Books</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-time"></i> Real-time</a></li>
-                <li><a href="/#/documents"><i class="glyphicon glyphicon-plus"></i> Advanced..</a></li>
-            </ul>
-
-            <hr>
-
-        </div><!-- /span-3 -->
-        <div class="col-sm-9">
-
-            <!-- column 2 -->
-            <h3><i class="glyphicon glyphicon-dashboard"></i> Dashboard</h3>
-
-            <hr />
-
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeIn">
             <div class="row">
-                <!-- center left-->
-                <div class="col-md-7">
-                    <div class="well">Inbox Messages <span class="badge pull-right">3</span></div>
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>
+                                Basic IN+ Panel
+                                <small class="m-l-sm">This is custom panel</small>
+                            </h5>
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            <h2>
+                                This is standard IN+ Panel<br />
+                            </h2>
 
-                    <hr>
+                            <p>
+                                <strong>Lorem ipsum dolor</strong>
+                                Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque
+                                eu, pretium quis, sem. Nulla consequat massa quis enim.
+                            </p>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h4>Processing Status</h4></div>
+                            <p>
+                                <small>
+                                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
+                                    Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel blank-panel ui-tab">
+
+                        <div class="panel-heading">
+                            <div class="panel-title m-b-md"><h4>Blank Panel with text tabs</h4></div>
+                        </div>
+
+                        <div class="panel-body">
+                            <tabset>
+                                <tab heading="First Tab">
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
+
+                                    <p>
+                                        A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.
+                                    </p>
+
+                                    <p>
+                                        I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.
+                                    </p>
+                                </tab>
+                                <tab heading="Second Tab">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>
+                                        Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath
+                                    </p>
+
+                                    <p>
+                                        I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.
+                                    </p>
+
+                                </tab>
+                            </tabset>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="panel blank-panel ui-tab">
+
+                        <div class="panel-heading">
+                            <div class="panel-title m-b-md"><h4>Blank Panel with icons tabs</h4></div>
+                        </div>
+
                         <div class="panel-body">
 
-                            <small>Complete</small>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%">
-                                    <span class="sr-only">72% Complete</span>
-                                </div>
-                            </div>
-                            <small>In Progress</small>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                    <span class="sr-only">20% Complete</span>
-                                </div>
-                            </div>
-                            <small>At Risk</small>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                    <span class="sr-only">80% Complete</span>
-                                </div>
-                            </div>
-                        </div><!--/panel-body-->
-                    </div><!--/panel-->
+                            <tabset>
+                                <tab>
+                                    <tab-heading>
+                                        <i class="fa fa-laptop"></i>
+                                    </tab-heading>
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
 
-                </div><!--/col-->
-                <!--center-right-->
-                <div class="col-md-5">
+                                    <p>
+                                        A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.
+                                    </p>
 
-                    <ul class="nav nav-justified">
-                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-heart"></i></a></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><span class="count">3</span></a><ul class="dropdown-menu" role="menu"><li><a href="#">1. Is there a way..</a></li><li><a href="#">2. Hello, admin. I would..</a></li><li><a href="#"><strong>All messages</strong></a></li></ul></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-user"></i></a></li>
-                        <li><a title="Add Widget" href="#addWidgetModal"><span class="glyphicon glyphicon-plus-sign"></span></a></li>
-                    </ul>
+                                    <p>
+                                        I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.
+                                    </p>
+                                </tab>
+                                <tab>
+                                    <tab-heading>
+                                        <i class="fa fa-desktop"></i>
+                                    </tab-heading>
+                                    <strong>Donec quam felis</strong>
 
-                    <hr>
+                                    <p>
+                                        Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath
+                                    </p>
 
-                    <p>
-                        This is a responsive dashboard-style layout that uses <a href="http://www.getbootstrap.com">Bootstrap 3</a>. You can use this template as a starting point to create something more unique.
-                    </p>
-                    <p>
-                        Visit the Bootstrap Playground at <a href="http://www.bootply.com">Bootply</a> to tweak this layout, or discover 1000's of Bootstrap code examples and snippets.
-                    </p>
+                                    <p>
+                                        I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.
+                                    </p>
 
-                    <hr>
+                                </tab>
+                                <tab>
+                                    <tab-heading>
+                                        <i class="fa fa-bar-chart"></i>
+                                    </tab-heading>
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
 
-                    <div class="btn-group btn-group-justified">
-                        <a href="#" class="btn btn-info col-sm-3">
-                            <i class="glyphicon glyphicon-plus"></i><br>
-                            Service
-                        </a>
-                        <a href="#" class="btn btn-info col-sm-3">
-                            <i class="glyphicon glyphicon-cloud"></i><br>
-                            Cloud
-                        </a>
-                        <a href="#" class="btn btn-info col-sm-3">
-                            <i class="glyphicon glyphicon-cog"></i><br>
-                            Tools
-                        </a>
-                        <a href="#" class="btn btn-info col-sm-3">
-                            <i class="glyphicon glyphicon-question-sign"></i><br>
-                            Help
-                        </a>
+                                    <p>
+                                        A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.
+                                    </p>
+
+                                    <p>
+                                        I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.
+                                    </p>
+                                </tab>
+                                <tab>
+                                    <tab-heading>
+                                        <i class="fa fa-bar-chart-o"></i>
+                                    </tab-heading>
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>
+                                        Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath
+                                    </p>
+
+                                    <p>
+                                        I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.
+                                    </p>
+
+                                </tab>
+                            </tabset>
+
+                        </div>
+
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>
+                                Bootstrap Panels
+                                <small>Custom background colors.</small>
+                            </h5>
+                        </div>
+                        <div class="ibox-content">
 
-                </div><!--/col-span-6-->
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Default Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
 
-            </div><!--/row-->
-        </div><!--/col-span-9-->
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            Primary Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            Success Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Info Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
 
-    </div><!--/row-->
-    <!-- /upper section -->
-    <!-- lower section -->
-    <div class="row">
-        <div class="col-md-12">
-            <hr>
-            <a href="#"><strong><i class="glyphicon glyphicon-list-alt"></i> Reports</strong></a>
-            <hr>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-warning"></i> Warning Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            Danger Panel with Footer
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et,
+                                                fringilla augue.
+                                            </p>
+                                        </div>
+                                        <div class="panel-footer">
+                                            Panel Footer
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Collaps panels</h5>
+
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="panel-body">
+                                <div class="panel-group">
+
+                                    <label class="checkbox">
+                                        <input type="checkbox" ng-model="oneAtATime">
+                                        Open only one at a time
+                                    </label>
+                                    <accordion close-others="oneAtATime">
+                                        <accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+                                            This content is straight in the template.
+                                        </accordion-group>
+                                        <accordion-group heading="{{group.title}}" ng-repeat="group in main.groups">
+                                            {{group.content}}
+                                        </accordion-group>
+                                        <accordion-group heading="Dynamic Body Content">
+                                            <p>The body of the accordion group grows to fit the contents</p>
+                                        </accordion-group>
+                                        <accordion-group is-open="status.open">
+                                            <accordion-heading>
+                                                I can have markup, too! <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                            </accordion-heading>
+                                            This is just some content to illustrate fancy headings.
+                                        </accordion-group>
+                                    </accordion>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="jumbotron">
+                        <h1>Jumbotron</h1>
+
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue. Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+
+                        <p>
+                            <a role="button" class="btn btn-primary btn-lg">Learn more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
 
-            <table class="table table-striped">
-                <thead>
-                    <tr><th>Visits</th><th>ROI</th><th>Source</th><th>Description and Notes</th></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>45</td>
-                        <td>2.45%</td>
-                        <td>Direct</td>
-                        <td>
-                            Sam sapien massa, aliquam in cursus ut, ullamcorper in tortor.
-                            Aliquam mauris arcu, tristique a lobortis vitae, condimentum feugiat justo.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>289</td>
-                        <td>56.2%</td>
-                        <td>Referral</td>
-                        <td>
-                            After RWD massa, aliquam in cursus ut, ullamcorper in tortor.
-                            Aliquam mauris arcu, tristique a lobortis vitae, condimentum feugiat justo.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>98</td>
-                        <td>25%</td>
-                        <td>Type</td>
-                        <td>
-                            Wil sapien massa, aliquam in cursus ut, ullamcorper in tortor.
-                            Liquam mauris arcu, tristique a lobortis vitae, condimentum feugiat justo.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>109</td>
-                        <td>8%</td>
-                        <td>..</td>
-                        <td>
-                            Forfoot aliquam in cursus ut, ullamcorper in tortor.
-                            Okma mauris arcu, tristique a lobortis vitae, condimentum feugiat justo.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>34</td>
-                        <td>14%</td>
-                        <td>..</td>
-                        <td>
-                            Mikel sapien massa, aliquam in cursus ut, ullamcorper in tortor.
-                            Maliquam mauris arcu, tristique a lobortis vitae, condimentum feugiat justo.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    </div>
 
-            <hr>
-
-            <!--tabs-->
-            <div class="container">
-                <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
-                    <li><a href="#messages" data-toggle="tab">Messages</a></li>
-                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="profile">
-                        <h4><i class="glyphicon glyphicon-user"></i></h4>
-                        Lorem profile dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-                        <p>
-                            Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
-                            dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-                            Aliquam in felis sit amet augue.
-                        </p>
-                    </div>
-                    <div class="tab-pane" id="messages">
-                        <h4><i class="glyphicon glyphicon-comment"></i></h4>
-                        Message ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-                        <p>
-                            Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
-                            dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-                            Aliquam in felis sit amet augue.
-                        </p>
-                    </div>
-                    <div class="tab-pane" id="settings">
-                        <h4><i class="glyphicon glyphicon-cog"></i></h4>
-                        Lorem settings dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-                        <p>
-                            Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
-                            dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-                            Aliquam in felis sit amet augue.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <!--/tabs-->
-
-            <hr>
-
-            <div class="panel panel-default">
-                <div class="panel-heading"><h4>New Requests</h4></div>
-                <div class="panel-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item active">Hosting virtual mailbox serv..</a>
-                        <a href="#" class="list-group-item">Dedicated server doesn't..</a>
-                        <a href="#" class="list-group-item">RHEL 6 install on new..</a>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="alert alert-info">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                Please remember to <a href="#">Logout</a> for classified security.
-            </div>
-
-        </div>
-        <div class="col-md-4">
-
-            <ul class="nav nav-pills nav-stacked">
-                <li class="nav-header"></li>
-                <li><a href="#"><i class="glyphicon glyphicon-list"></i> Layouts &amp; Templates</a></li>
-                <li class="divider"></li>
-                <li><a href="#"><i class="glyphicon glyphicon-briefcase"></i> Toolbox</a></li>
-                <li><a href="#"><i class="glyphicon glyphicon-link"></i> Widgets</a></li>
-                <li><a href="#"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
-                <li><a href="#"><i class="glyphicon glyphicon-book"></i> Pages</a></li>
-                <li class="divider"></li>
-                <li><a href="#"><i class="glyphicon glyphicon-star"></i> Social Media</a></li>
-            </ul>
-
-            <hr>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <i class="glyphicon glyphicon-wrench pull-right"></i>
-                        <h4>Submit Request</h4>
-                    </div>
-                </div>
-                <div class="panel-body">
-
-                    <form class="form form-vertical">
-                        <div class="control-group">
-                            <label>Name</label>
-                            <div class="controls">
-                                <input type="text" class="form-control" placeholder="Enter Name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Title</label>
-                            <div class="controls">
-                                <input type="password" class="form-control" placeholder="Password">
-
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Details</label>
-                            <div class="controls">
-                                <textarea class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Select</label>
-                            <div class="controls">
-                                <select class="form-control"><option>General Question</option><option>Server Issues</option><option>Billing Question</option></select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label></label>
-                            <div class="controls">
-                                <button type="submit" class="btn btn-primary">
-                                    Post
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
-
-
-                </div><!--/panel content-->
-            </div><!--/panel-->
-
-            <div class="panel panel-default">
-                <div class="panel-heading"><div class="panel-title"><h4>Engagement</h4></div></div>
-                <div class="panel-body">
-                    <div class="col-xs-4 text-center"><img src="http://placehold.it/80/BBBBBB/FFF" class="img-circle img-responsive"></div>
-                    <div class="col-xs-4 text-center"><img src="http://placehold.it/80/EFEFEF/555" class="img-circle img-responsive"></div>
-                    <div class="col-xs-4 text-center"><img src="http://placehold.it/80/EEEEEE/222" class="img-circle img-responsive"></div>
-                </div>
-            </div><!--/panel-->
-
-        </div><!--/col-->
-
-    </div><!--/row-->
-</div>
 
 </template>

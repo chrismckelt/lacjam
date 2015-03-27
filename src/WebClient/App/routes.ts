@@ -20,21 +20,21 @@
 
         public static clients: any = {
             route: "clients",
-            moduleId: "./app/clients/client",
+            moduleId: "./app/Clients/Client",
             nav: true,
             title: "Clients"
         };
 
         public static accounts: any = {
             route: "accounts",
-            moduleId: "./app/Accounts/account",
+            moduleId: "./app/Accounts/Account",
             nav: true,
             title: "Accounts"
         };
 
         public static documents: any = {
             route: "documents",
-            moduleId: "./app/documents/document",
+            moduleId: "./app/Documents/Document",
             nav: true,
             title: "Documents"
         };

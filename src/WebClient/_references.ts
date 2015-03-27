@@ -19,13 +19,13 @@
 
 /// <reference path="app/common/footer.ts" />
 
-/// <reference path="app/dashboard/dashboardcontroller.ts" />
-/// <reference path="app/documents/documentcontroller.ts" />
+/// <reference path="app/dashboards/dashboard.ts" />
+/// <reference path="app/documents/document.ts" />
 
 /// <reference path="app/Index/Index.ts" />
 
 
-/// <reference path="app/clients/clientcontroller.ts" />
+/// <reference path="app/clients/client.ts" />
 
 /// <autosync enabled="true" />
 
